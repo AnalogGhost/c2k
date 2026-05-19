@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CtoK</string>
+    <string name="app_name">C2K</string>
 
     <!-- Programs -->
     <string name="program_c25k">Couch to 5K</string>
@@ -9,7 +9,7 @@
     <string name="program_c210k_desc">14-week program to run 10K without stopping</string>
 
     <!-- Home screen -->
-    <string name="home_title">CtoK</string>
+    <string name="home_title">C2K</string>
     <string name="home_choose_program">Choose a program</string>
     <string name="home_recent_workouts">Recent workouts</string>
     <string name="home_no_workouts">No workouts yet. Start a program to begin!</string>
@@ -48,10 +48,10 @@
     <string name="notification_action_pause">Pause</string>
     <string name="notification_action_resume">Resume</string>
     <string name="notification_action_stop">Stop</string>
-    <string name="notification_title">CtoK Workout</string>
+    <string name="notification_title">C2K Workout</string>
 
     <!-- Permissions -->
-    <string name="permission_location_rationale">CtoK can track your distance and pace using GPS. This is optional — the workout timer works without it.</string>
+    <string name="permission_location_rationale">C2K can track your distance and pace using GPS. This is optional — the workout timer works without it.</string>
     <string name="permission_location_deny">Skip GPS</string>
     <string name="permission_location_allow">Allow GPS</string>
 
@@ -64,7 +64,7 @@
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Battery Optimization</string>
-    <string name="battery_opt_message">For reliable workouts, allow CtoK to run in the background. Tap to open battery settings.</string>
+    <string name="battery_opt_message">For reliable workouts, allow C2K to run in the background. Tap to open battery settings.</string>
     <string name="battery_opt_open_settings">Open Settings</string>
     <string name="battery_opt_dismiss">Dismiss</string>
 

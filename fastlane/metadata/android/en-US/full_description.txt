@@ -1,4 +1,4 @@
-CtoK is a free, open-source running trainer for Android that guides you from the couch to running 5K or 10K — with no Google services, no tracking, and no ads.
+C2K is a free, open-source running trainer for Android that guides you from the couch to running 5K or 10K — with no Google services, no tracking, and no ads.
 
 Features:
 • Couch to 5K (C25K) — 9-week program, 3 runs per week
@@ -16,4 +16,4 @@ Permissions:
 • ACCESS_FINE_LOCATION — optional GPS for distance/pace tracking (you can skip this)
 • POST_NOTIFICATIONS — workout notification with pause/stop controls
 
-CtoK is free software released under the GNU General Public License v3.
+C2K is free software released under the GNU General Public License v3.

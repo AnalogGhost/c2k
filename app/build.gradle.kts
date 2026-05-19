@@ -14,11 +14,11 @@ val localProps = Properties().apply {
 }
 
 android {
-    namespace = "org.ctok"
+    namespace = "org.c2k"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "org.ctok"
+        applicationId = "org.c2k"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

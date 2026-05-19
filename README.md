@@ -1,4 +1,4 @@
-# CtoK — Couch to 5K & 10K
+# C2K — Couch to 5K & 10K
 
 Free, open-source running trainer for Android. No Google services. No tracking. No ads.
 
@@ -25,8 +25,8 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 ### Clone and build (debug)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ctok.git
-cd ctok
+git clone https://github.com/YOUR_USERNAME/c2k.git
+cd c2k
 echo "sdk.dir=$HOME/Android/Sdk" > local.properties
 ./gradlew assembleDebug
 ```
@@ -63,8 +63,8 @@ F-Droid builds from source and applies their own signature — no keystore neede
 
 ```bash
 keytool -genkeypair -v \
-  -keystore ~/ctok-release.jks \
-  -alias ctok \
+  -keystore ~/c2k-release.jks \
+  -alias c2k \
   -keyalg RSA -keysize 4096 \
   -validity 10000
 ```
@@ -73,9 +73,9 @@ keytool -genkeypair -v \
 
 ```properties
 sdk.dir=/home/YOUR_USER/Android/Sdk
-storeFile=/home/YOUR_USER/ctok-release.jks
+storeFile=/home/YOUR_USER/c2k-release.jks
 storePassword=YOUR_STORE_PASS
-keyAlias=ctok
+keyAlias=c2k
 keyPassword=YOUR_KEY_PASS
 ```
 
@@ -90,7 +90,7 @@ APK: `app/build/outputs/apk/release/app-release.apk`
 ## F-Droid submission
 
 1. Fork the [fdroiddata](https://gitlab.com/fdroid/fdroiddata) repository
-2. Add `metadata/org.ctok.yml` describing the build
+2. Add `metadata/org.c2k.yml` describing the build
 3. Tag a release: `git tag v1.0.0 && git push --tags`
 4. Open a merge request to fdroiddata
 
@@ -110,7 +110,7 @@ No `INTERNET` permission — the app is fully offline.
 ## Project structure
 
 ```
-app/src/main/kotlin/org/ctok/
+app/src/main/kotlin/org/c2k/
 ├── data/
 │   ├── model/        # C25K & C210K program definitions, interval types
 │   ├── db/           # Room database — sessions and GPS route points
