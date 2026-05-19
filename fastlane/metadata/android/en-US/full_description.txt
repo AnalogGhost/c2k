@@ -1,0 +1,19 @@
+CtoK is a free, open-source running trainer for Android that guides you from the couch to running 5K or 10K — with no Google services, no tracking, and no ads.
+
+Features:
+• Couch to 5K (C25K) — 9-week program, 3 runs per week
+• Couch to 10K (C210K) — 14-week program
+• Audible voice prompts — "Start running", "Walk for 90 seconds", countdown warnings
+• Background workout timer — continues with screen off
+• GPS tracking (optional) — records distance and pace; works without GPS too
+• Progress tracking — remembers which weeks and days you've completed
+• Works offline — no internet permission required
+• No Google Play Services required — compatible with GrapheneOS and de-Googled devices
+
+Permissions:
+• FOREGROUND_SERVICE — keeps the workout timer running with screen off
+• WAKE_LOCK — prevents the CPU sleeping mid-workout
+• ACCESS_FINE_LOCATION — optional GPS for distance/pace tracking (you can skip this)
+• POST_NOTIFICATIONS — workout notification with pause/stop controls
+
+CtoK is free software released under the GNU General Public License v3.

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Simple running figure silhouette -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,20 A6,6 0 1,0 54,8 A6,6 0 0,0 54,20Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:pathData="M54,22 L50,40 L40,55 M54,22 L62,38 L72,50 M50,40 L44,60 L36,72 M62,38 L68,58 L76,68" />
+</vector>

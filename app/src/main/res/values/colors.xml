@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="seed">#FF6B35</color>
+    <color name="run_color">#FF6B35</color>
+    <color name="walk_color">#4A90D9</color>
+    <color name="warmup_color">#7BC67E</color>
+    <color name="cooldown_color">#7BC67E</color>
+</resources>

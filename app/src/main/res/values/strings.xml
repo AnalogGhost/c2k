@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CtoK</string>
+
+    <!-- Programs -->
+    <string name="program_c25k">Couch to 5K</string>
+    <string name="program_c210k">Couch to 10K</string>
+    <string name="program_c25k_desc">9-week program to run 5K without stopping</string>
+    <string name="program_c210k_desc">14-week program to run 10K without stopping</string>
+
+    <!-- Home screen -->
+    <string name="home_title">CtoK</string>
+    <string name="home_choose_program">Choose a program</string>
+    <string name="home_recent_workouts">Recent workouts</string>
+    <string name="home_no_workouts">No workouts yet. Start a program to begin!</string>
+
+    <!-- Program select screen -->
+    <string name="program_week_label">Week %1$d</string>
+    <string name="program_day_label">Day %1$d</string>
+    <string name="program_completed_badge">Done</string>
+    <string name="program_start_workout">Start Workout</string>
+
+    <!-- Workout screen -->
+    <string name="workout_interval_run">RUN</string>
+    <string name="workout_interval_walk">WALK</string>
+    <string name="workout_interval_warmup">WARM UP</string>
+    <string name="workout_interval_cooldown">COOL DOWN</string>
+    <string name="workout_pause">Pause</string>
+    <string name="workout_resume">Resume</string>
+    <string name="workout_stop">Stop</string>
+    <string name="workout_elapsed">Elapsed</string>
+    <string name="workout_distance_km">%1$.2f km</string>
+    <string name="workout_pace">%1$s / km</string>
+    <string name="workout_acquiring_gps">Acquiring GPS…</string>
+    <string name="workout_gps_unavailable">GPS unavailable</string>
+    <string name="workout_complete_title">Workout Complete!</string>
+    <string name="workout_complete_message">Great job! Keep up the good work.</string>
+
+    <!-- History screen -->
+    <string name="history_title">History</string>
+    <string name="history_empty">No completed workouts yet.</string>
+    <string name="history_week_day">Week %1$d, Day %2$d</string>
+    <string name="history_duration">%1$s</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">Workout</string>
+    <string name="notification_channel_desc">Active workout timer</string>
+    <string name="notification_action_pause">Pause</string>
+    <string name="notification_action_resume">Resume</string>
+    <string name="notification_action_stop">Stop</string>
+    <string name="notification_title">CtoK Workout</string>
+
+    <!-- Permissions -->
+    <string name="permission_location_rationale">CtoK can track your distance and pace using GPS. This is optional — the workout timer works without it.</string>
+    <string name="permission_location_deny">Skip GPS</string>
+    <string name="permission_location_allow">Allow GPS</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_tts_enabled">Voice announcements</string>
+    <string name="settings_gps_enabled">GPS tracking</string>
+    <string name="settings_countdown_warnings">Countdown warnings (10s, 5s)</string>
+    <string name="settings_keep_screen_on">Keep screen on during workout</string>
+
+    <!-- Battery optimization warning -->
+    <string name="battery_opt_title">Battery Optimization</string>
+    <string name="battery_opt_message">For reliable workouts, allow CtoK to run in the background. Tap to open battery settings.</string>
+    <string name="battery_opt_open_settings">Open Settings</string>
+    <string name="battery_opt_dismiss">Dismiss</string>
+
+    <!-- TTS unavailable warning -->
+    <string name="tts_unavailable">Text-to-speech is not available on this device. Voice announcements are disabled.</string>
+</resources>

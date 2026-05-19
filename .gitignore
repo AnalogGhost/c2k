@@ -1,0 +1,22 @@
+# Build outputs
+/build/
+app/build/
+/captures/
+
+# Gradle caches — never commit these
+.gradle/
+gradle/wrapper/gradle-wrapper-shared.jar  # extracted from dist, not the project bootstrap jar
+
+# Android Studio / IntelliJ
+*.iml
+.idea/
+*.DS_Store
+app/schemas/
+
+# Local machine config — contains SDK path and signing secrets
+local.properties
+
+# Signing keystores — never commit
+*.keystore
+*.jks
+release/
