@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -35,14 +36,18 @@ class ProgramSelectViewModel(
 
     private val programId: String = savedStateHandle["programId"]!!
     private val plan = Programs.byId(programId)
+    private val repo = (app as C2KApp).sessionRepository
 
     val uiState: StateFlow<ProgramSelectUiState> =
-        (app as C2KApp).sessionRepository
-            .observeCompletedDays(programId)
+        repo.observeCompletedDays(programId)
             .map { completed -> ProgramSelectUiState(plan = plan, completedDays = completed) }
             .stateIn(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(5_000),
                 ProgramSelectUiState(plan = plan)
             )
+
+    fun resetProgress() {
+        viewModelScope.launch { repo.resetProgress(programId) }
+    }
 }

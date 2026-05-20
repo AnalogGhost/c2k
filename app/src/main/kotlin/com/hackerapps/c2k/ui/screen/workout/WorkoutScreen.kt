@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.engine.WorkoutState
@@ -74,6 +75,9 @@ fun WorkoutScreen(
     val keepScreenOn by vm.keepScreenOn.collectAsStateWithLifecycle()
     val showBatteryPrompt by vm.showBatteryPrompt.collectAsStateWithLifecycle()
     val serviceRunning by WorkoutService.isRunning.collectAsStateWithLifecycle()
+    val gpsActive by vm.gpsActive.collectAsStateWithLifecycle()
+    val hasGpsLock by vm.hasGpsLock.collectAsStateWithLifecycle()
+    val personalBest by vm.personalBest.collectAsStateWithLifecycle()
 
     var permissionResolved by remember { mutableStateOf(false) }
     var showStopDialog by remember { mutableStateOf(false) }
@@ -82,7 +86,6 @@ fun WorkoutScreen(
         runCatching { Programs.byId(programId).displayName }.getOrDefault(programId)
     }
 
-    // Request location permission before starting the workout
     if (!permissionResolved) {
         RequestLocationPermission { permissionResolved = true }
     }
@@ -91,7 +94,6 @@ fun WorkoutScreen(
         if (permissionResolved) vm.startWorkout(programId, week, day)
     }
 
-    // System back → show stop dialog instead of navigating away
     BackHandler {
         if (workoutState is WorkoutState.Completed) onFinished()
         else showStopDialog = true
@@ -164,6 +166,8 @@ fun WorkoutScreen(
                     state = s,
                     distanceMeters = distanceMeters,
                     pace = pace,
+                    gpsActive = gpsActive,
+                    hasGpsLock = hasGpsLock,
                     onPause = { vm.pause() },
                     onStop = { showStopDialog = true }
                 )
@@ -175,9 +179,10 @@ fun WorkoutScreen(
                 is WorkoutState.Completed -> CompletedContent(
                     state = s,
                     distanceMeters = distanceMeters,
+                    personalBest = personalBest,
                     onDone = onFinished
                 )
-                else -> Text(if (serviceRunning) "Reconnecting…" else "Starting…")
+                else -> Text(if (serviceRunning) stringResource(R.string.workout_reconnecting) else stringResource(R.string.workout_starting))
             }
         }
     }
@@ -188,6 +193,8 @@ private fun ActiveWorkoutContent(
     state: WorkoutState.Active,
     distanceMeters: Float,
     pace: String?,
+    gpsActive: Boolean,
+    hasGpsLock: Boolean,
     onPause: () -> Unit,
     onStop: () -> Unit
 ) {
@@ -218,32 +225,55 @@ private fun ActiveWorkoutContent(
         }
     }
 
-    Spacer(Modifier.height(24.dp))
+    Spacer(Modifier.height(12.dp))
+
+    // Next interval hint
+    state.nextInterval?.let { next ->
+        val nextLabel = intervalLabel(next.type)
+        val nextColor = intervalColor(next.type)
+        Text(
+            stringResource(R.string.workout_next_interval, nextLabel, formatTime(next.durationSeconds)),
+            style = MaterialTheme.typography.bodyMedium,
+            color = nextColor.copy(alpha = 0.75f)
+        )
+    }
+
+    Spacer(Modifier.height(12.dp))
 
     Text(
-        "Elapsed: ${formatTime(state.elapsedSessionSeconds)}",
+        stringResource(R.string.workout_elapsed, formatTime(state.elapsedSessionSeconds)),
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
     )
     Text(
-        "Interval ${state.intervalIndex + 1} of ${state.totalIntervals}",
+        stringResource(R.string.workout_interval_progress, state.intervalIndex + 1, state.totalIntervals),
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
     )
 
-    if (distanceMeters > 0f) {
-        Spacer(Modifier.height(4.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text(
-                stringResource(R.string.workout_distance_km, distanceMeters / 1000f),
-                style = MaterialTheme.typography.bodyLarge
-            )
-            if (pace != null) {
+    when {
+        distanceMeters > 0f -> {
+            Spacer(Modifier.height(4.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
-                    stringResource(R.string.workout_pace, pace),
+                    stringResource(R.string.workout_distance_km, distanceMeters / 1000f),
                     style = MaterialTheme.typography.bodyLarge
                 )
+                if (pace != null) {
+                    Text(
+                        stringResource(R.string.workout_pace, pace),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
             }
+        }
+        gpsActive && !hasGpsLock -> {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                stringResource(R.string.workout_acquiring_gps),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+            )
         }
     }
 
@@ -280,30 +310,29 @@ private fun PausedWorkoutContent(
     )
     Spacer(Modifier.height(24.dp))
 
-    Box(contentAlignment = Alignment.Center) {
-        IntervalRing(
-            progress = intervalProgress.coerceIn(0f, 1f),
-            ringColor = ringColor,
-            contentDescription = "Paused: $label"
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    formatTime(state.secondsRemainingInInterval),
-                    fontSize = 42.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+    IntervalRing(
+        progress = intervalProgress.coerceIn(0f, 1f),
+        ringColor = ringColor,
+        contentDescription = "Paused: $label"
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
+            Spacer(Modifier.height(4.dp))
+            Text(
+                formatTime(state.secondsRemainingInInterval),
+                fontSize = 42.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 
     Spacer(Modifier.height(16.dp))
-    Text("PAUSED", style = MaterialTheme.typography.headlineMedium,
+    Text(stringResource(R.string.workout_paused_label),
+        style = MaterialTheme.typography.headlineMedium,
         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f))
     Spacer(Modifier.height(8.dp))
     Text(
-        "Elapsed: ${formatTime(state.elapsedSessionSeconds)}",
+        stringResource(R.string.workout_elapsed, formatTime(state.elapsedSessionSeconds)),
         style = MaterialTheme.typography.bodyLarge
     )
     Spacer(Modifier.height(32.dp))
@@ -326,6 +355,7 @@ private fun PausedWorkoutContent(
 private fun CompletedContent(
     state: WorkoutState.Completed,
     distanceMeters: Float,
+    personalBest: WorkoutSessionEntity?,
     onDone: () -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -341,7 +371,7 @@ private fun CompletedContent(
         )
         Spacer(Modifier.height(24.dp))
         Text(
-            "Time: ${formatTime(state.elapsedSessionSeconds)}",
+            stringResource(R.string.workout_complete_time, formatTime(state.elapsedSessionSeconds)),
             style = MaterialTheme.typography.titleLarge
         )
         if (distanceMeters > 0f) {
@@ -351,9 +381,29 @@ private fun CompletedContent(
                 style = MaterialTheme.typography.titleLarge
             )
         }
+
+        // Personal best comparison
+        if (personalBest != null) {
+            Spacer(Modifier.height(16.dp))
+            val prevTime = formatTime(personalBest.durationSeconds)
+            val isFaster = state.elapsedSessionSeconds < personalBest.durationSeconds
+            if (isFaster) {
+                Text(
+                    stringResource(R.string.workout_new_best),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = WarmCoolGreen
+                )
+            }
+            Text(
+                stringResource(R.string.workout_previous_best, prevTime),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+            )
+        }
+
         Spacer(Modifier.height(32.dp))
         Button(onClick = onDone) {
-            Text("Done")
+            Text(stringResource(R.string.workout_done))
         }
     }
 }

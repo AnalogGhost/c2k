@@ -7,6 +7,7 @@ class NoOpLocationProvider : LocationProvider {
     override val updates: Flow<LocationUpdate> = emptyFlow()
     override val isAvailable: Boolean = false
     override val totalDistanceMeters: Float = 0f
+    override val hasValidFix: Boolean = false
     override fun start() {}
     override fun stop() {}
 }

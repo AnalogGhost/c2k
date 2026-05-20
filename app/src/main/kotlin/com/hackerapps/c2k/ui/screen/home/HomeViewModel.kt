@@ -21,7 +21,8 @@ data class NextWorkout(
     val programId: String,
     val displayName: String,
     val week: Int,
-    val day: Int
+    val day: Int,
+    val workoutDay: com.hackerapps.c2k.data.model.WorkoutDay
 )
 
 data class HomeUiState(
@@ -74,7 +75,8 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             for (dayIdx in days.indices) {
                 val week = weekIdx + 1; val day = dayIdx + 1
                 if ((week to day) !in completedDays) {
-                    return NextWorkout(plan.programId, plan.displayName, week, day)
+                    return NextWorkout(plan.programId, plan.displayName, week, day,
+                        plan.weeks[weekIdx][dayIdx])
                 }
             }
         }

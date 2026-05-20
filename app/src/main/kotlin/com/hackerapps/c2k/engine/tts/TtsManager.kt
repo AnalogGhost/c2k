@@ -59,8 +59,17 @@ class TtsManager(
     private fun buildText(announcement: TtsAnnouncement): String = when (announcement) {
         is TtsAnnouncement.IntervalStart    -> announcement.interval.announcement
         is TtsAnnouncement.CountdownWarning -> "${announcement.secondsRemaining} seconds remaining"
+        is TtsAnnouncement.NextInterval     -> nextIntervalText(announcement.interval)
         TtsAnnouncement.WorkoutComplete     -> "Workout complete. Great job!"
         TtsAnnouncement.Halfway             -> "Halfway there, keep it up!"
         TtsAnnouncement.LastRunInterval     -> "Last run, finish strong!"
     }
+
+    private fun nextIntervalText(interval: com.hackerapps.c2k.data.model.Interval): String =
+        when (interval.type) {
+            com.hackerapps.c2k.data.model.IntervalType.RUN      -> "Get ready to run"
+            com.hackerapps.c2k.data.model.IntervalType.WALK     -> "Get ready to walk"
+            com.hackerapps.c2k.data.model.IntervalType.WARMUP   -> "Get ready to warm up"
+            com.hackerapps.c2k.data.model.IntervalType.COOLDOWN -> "Begin your cool-down soon"
+        }
 }

@@ -21,14 +21,18 @@ class GpsLocationProvider(private val context: Context) : LocationProvider {
     override val isAvailable: Boolean
         get() = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
+    private var _hasValidFix = false
+    override val hasValidFix: Boolean get() = _hasValidFix
+
     private var lastLocation: Location? = null
     private var _totalDistance = 0f
     override val totalDistanceMeters: Float get() = _totalDistance
 
     private val listener = LocationListener { location ->
-        lastLocation?.let { prev ->
-            _totalDistance += prev.distanceTo(location)
-        }
+        // Skip inaccurate fixes (cold-start drift can add 50–100 m to distance)
+        if (location.hasAccuracy() && location.accuracy > 25f) return@LocationListener
+        if (!_hasValidFix) _hasValidFix = true
+        lastLocation?.let { prev -> _totalDistance += prev.distanceTo(location) }
         lastLocation = location
         _updates.tryEmit(
             LocationUpdate(
@@ -45,8 +49,8 @@ class GpsLocationProvider(private val context: Context) : LocationProvider {
         if (!isAvailable) return
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
-            2000L,   // min time ms
-            5f,      // min distance metres
+            2000L,
+            5f,
             listener,
             Looper.getMainLooper()
         )

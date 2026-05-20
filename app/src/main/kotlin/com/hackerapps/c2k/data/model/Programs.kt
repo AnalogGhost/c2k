@@ -112,7 +112,8 @@ object Programs {
             continuousRun(9, 1800)    // 30 min
         )
         return WorkoutPlan(ID_C25K, "Couch to 5K",
-            "9-week program to run 5K. Start here — no fitness required.", weeks)
+            "9-week program to run 5K. Start here — no fitness required.", weeks,
+            prerequisite = null)
     }
 
     // ── C210K ─────────────────────────────────────────────────────────────────
@@ -138,7 +139,8 @@ object Programs {
             continuousRun(14, 3600)    // 60 min
         )
         return WorkoutPlan(ID_C210K, "Couch to 10K",
-            "14-week program to run 10K. Continues where C25K ends.", weeks)
+            "14-week program to run 10K. Continues where C25K ends.", weeks,
+            prerequisite = "After completing C25K")
     }
 
     // ── B210K — Bridge to 10K ─────────────────────────────────────────────────
@@ -173,7 +175,8 @@ object Programs {
             continuousRun(6, 3600)   // 60 min — 10K pace for most runners
         )
         return WorkoutPlan(ID_B210K, "Bridge to 10K",
-            "6-week bridge for C25K graduates not ready to jump straight to C210K.", weeks)
+            "6-week bridge for C25K graduates not ready to jump straight to C210K.", weeks,
+            prerequisite = "After completing C25K")
     }
 
     // ── One Hour Runner ───────────────────────────────────────────────────────
@@ -198,7 +201,8 @@ object Programs {
         )
         val weeks = runDurations.mapIndexed { i, secs -> continuousRun(i + 1, secs) }
         return WorkoutPlan(ID_OHR, "One Hour Runner",
-            "13-week progression from 30 to 60 minutes of continuous running.", weeks)
+            "13-week progression from 30 to 60 minutes of continuous running.", weeks,
+            prerequisite = "After completing B210K or C25K")
     }
 
     // ── 5K Improver ──────────────────────────────────────────────────────────
@@ -242,6 +246,7 @@ object Programs {
             continuousRun(8, 1800)
         )
         return WorkoutPlan(ID_5KI, "5K Improver",
-            "8-week speed and stamina program for runners who can already complete 5K.", weeks)
+            "8-week speed and stamina program for runners who can already complete 5K.", weeks,
+            prerequisite = "For runners who can already complete 5K")
     }
 }

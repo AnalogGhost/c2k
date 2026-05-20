@@ -76,6 +76,7 @@ class WorkoutService : Service() {
     inner class LocalBinder : Binder() {
         fun getEngine(): WorkoutEngine = engine
         fun getLocationProvider(): LocationProvider = locationProvider
+        fun isGpsActive(): Boolean = ::locationProvider.isInitialized && locationProvider.isAvailable
     }
 
     private val binder = LocalBinder()
@@ -169,8 +170,9 @@ class WorkoutService : Service() {
                         }
                         is WorkoutState.Paused -> updateNotificationPaused()
                         is WorkoutState.Completed -> {
+                            if (vibrationEnabled) vibrateCompletion()
                             app.sessionRepository.finishSession(
-                                sessionId = sessionId,
+                                sessionId = state.sessionId,
                                 durationSeconds = state.elapsedSessionSeconds,
                                 distanceMeters = locationProvider.totalDistanceMeters,
                                 completed = true
@@ -178,10 +180,7 @@ class WorkoutService : Service() {
                             cleanup()
                             stopSelf()
                         }
-                        is WorkoutState.Idle -> {
-                            cleanup()
-                            stopSelf()
-                        }
+                        is WorkoutState.Idle -> { /* initial state — no action needed */ }
                     }
                 }
             }
@@ -208,16 +207,18 @@ class WorkoutService : Service() {
             is WorkoutState.Paused -> state.snapshot.elapsedSessionSeconds
             else -> 0
         }
+
+        // stop() cancels the tick loop without emitting Idle, so the state collector
+        // won't race with the finishSession coroutine below.
         engine.stop()
+        cleanup()
 
         if (sessionId < 0) {
-            cleanup()
             stopSelf()
             return
         }
 
         val app = application as C2KApp
-        cleanup()
         serviceScope.launch {
             app.sessionRepository.finishSession(
                 sessionId = sessionId,
@@ -258,6 +259,15 @@ class WorkoutService : Service() {
 
     private fun vibrate() {
         val effect = VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
+        doVibrate(effect)
+    }
+
+    private fun vibrateCompletion() {
+        val effect = VibrationEffect.createWaveform(longArrayOf(0, 300, 150, 300, 150, 500), -1)
+        doVibrate(effect)
+    }
+
+    private fun doVibrate(effect: VibrationEffect) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             (getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager)
                 .defaultVibrator.vibrate(effect)
@@ -309,7 +319,9 @@ class WorkoutService : Service() {
     private fun updateNotification(state: WorkoutState.Active) {
         val mins = state.secondsRemainingInInterval / 60
         val secs = state.secondsRemainingInInterval % 60
-        val text = "${intervalLabel(state.currentInterval.type)}  %d:%02d".format(mins, secs)
+        val time = "%d:%02d".format(mins, secs)
+        val progress = "${state.intervalIndex + 1}/${state.totalIntervals}"
+        val text = "${intervalLabel(state.currentInterval.type)}  $time  •  $progress"
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.notify(NOTIFICATION_ID, buildNotification(text))
     }

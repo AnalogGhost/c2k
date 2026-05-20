@@ -8,6 +8,7 @@ sealed class WorkoutState {
 
     data class Active(
         val currentInterval: Interval,
+        val nextInterval: Interval?,
         val intervalIndex: Int,
         val totalIntervals: Int,
         val secondsRemainingInInterval: Int,

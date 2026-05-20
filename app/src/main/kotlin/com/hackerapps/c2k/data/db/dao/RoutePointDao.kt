@@ -18,6 +18,9 @@ interface RoutePointDao {
     @Query("SELECT * FROM route_points WHERE sessionId = :sessionId ORDER BY recordedAt ASC")
     fun observeRoute(sessionId: Long): Flow<List<RoutePointEntity>>
 
+    @Query("SELECT * FROM route_points WHERE sessionId = :sessionId ORDER BY recordedAt ASC")
+    suspend fun getRoute(sessionId: Long): List<RoutePointEntity>
+
     @Query("SELECT COUNT(*) FROM route_points WHERE sessionId = :sessionId")
     suspend fun countForSession(sessionId: Long): Int
 }

@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import com.hackerapps.c2k.C2KApp
+import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.location.LocationProvider
@@ -48,11 +50,28 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
+    // true once the GPS provider has received a valid, accurate fix
+    val hasGpsLock: StateFlow<Boolean> = _locationUpdate
+        .map { it != null }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    // true if the service is using a real GPS provider (not NoOp)
+    private val _gpsActive = MutableStateFlow(false)
+    val gpsActive: StateFlow<Boolean> = _gpsActive.asStateFlow()
+
     val keepScreenOn: StateFlow<Boolean> = prefs.keepScreenOn
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
 
     private val _showBatteryPrompt = MutableStateFlow(false)
     val showBatteryPrompt: StateFlow<Boolean> = _showBatteryPrompt.asStateFlow()
+
+    private val _personalBest = MutableStateFlow<WorkoutSessionEntity?>(null)
+    val personalBest: StateFlow<WorkoutSessionEntity?> = _personalBest.asStateFlow()
+
+    // Stored when startWorkout is called so CompletedContent can look up prior best
+    private var currentProgramId: String = ""
+    private var currentWeek: Int = 0
+    private var currentDay: Int = 0
 
     private var locationProvider: LocationProvider = NoOpLocationProvider()
     private var isBound = false
@@ -60,9 +79,15 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
             val lb = binder as WorkoutService.LocalBinder
+            _gpsActive.value = lb.isGpsActive()
             locationProvider = lb.getLocationProvider()
             viewModelScope.launch {
-                lb.getEngine().state.collect { _workoutState.value = it }
+                lb.getEngine().state.collect { state ->
+                    _workoutState.value = state
+                    if (state is WorkoutState.Completed && currentProgramId.isNotEmpty()) {
+                        loadPersonalBest()
+                    }
+                }
             }
             viewModelScope.launch {
                 lb.getLocationProvider().updates.collect { update ->
@@ -86,6 +111,9 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun startWorkout(programId: String, week: Int, day: Int) {
+        currentProgramId = programId
+        currentWeek = week
+        currentDay = day
         viewModelScope.launch { prefs.setLastProgramId(programId) }
         checkBatteryOptimization()
         val app = getApplication<Application>()
@@ -120,6 +148,18 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
     fun dismissBatteryPrompt() {
         _showBatteryPrompt.value = false
         viewModelScope.launch { prefs.setBatteryPromptDismissed() }
+    }
+
+    private fun loadPersonalBest() {
+        viewModelScope.launch {
+            val repo = (getApplication<Application>() as C2KApp).sessionRepository
+            // Fetch the best PREVIOUS run for this day (exclude the session just completed)
+            val current = _workoutState.value
+            val currentSessionId = if (current is WorkoutState.Completed) current.sessionId else -1L
+            val best = repo.getBestForDay(currentProgramId, currentWeek, currentDay)
+            // Only show if the best is a different session (not the one we just completed)
+            _personalBest.value = if (best != null && best.id != currentSessionId) best else null
+        }
     }
 
     private fun checkBatteryOptimization() {

@@ -16,9 +16,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,7 +33,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,6 +59,7 @@ fun HistoryScreen(
     vm: HistoryViewModel = viewModel()
 ) {
     val sessions by vm.sessions.collectAsStateWithLifecycle()
+    val stats by vm.stats.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     Scaffold(
@@ -108,10 +110,32 @@ fun HistoryScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item { Spacer(Modifier.height(4.dp)) }
+
+                // Aggregate stats card
+                item {
+                    StatsCard(stats)
+                }
+
+                item { Spacer(Modifier.height(4.dp)) }
+
                 items(sessions, key = { it.id }) { session ->
                     SwipeToDeleteSession(
                         session = session,
-                        onDelete = { vm.deleteSession(session.id) }
+                        onDelete = { vm.deleteSession(session.id) },
+                        onExportGpx = { hasRoute ->
+                            if (hasRoute) {
+                                vm.buildGpx(session) { gpx ->
+                                    val intent = Intent(Intent.ACTION_SEND).apply {
+                                        type = "application/gpx+xml"
+                                        putExtra(Intent.EXTRA_SUBJECT, "C2K route W${session.week}D${session.day}")
+                                        putExtra(Intent.EXTRA_TEXT, gpx)
+                                    }
+                                    context.startActivity(
+                                        Intent.createChooser(intent, context.getString(R.string.history_export_gpx_chooser))
+                                    )
+                                }
+                            }
+                        }
                     )
                 }
                 item { Spacer(Modifier.height(16.dp)) }
@@ -120,20 +144,61 @@ fun HistoryScreen(
     }
 }
 
+@Composable
+private fun StatsCard(stats: HistoryStats) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            StatItem(
+                value = stats.completedSessions.toString(),
+                label = stringResource(R.string.history_stats_workouts)
+            )
+            StatItem(
+                value = "%.1f".format(stats.totalKm),
+                label = stringResource(R.string.history_stats_km)
+            )
+            StatItem(
+                value = formatDuration(stats.totalTimeSeconds),
+                label = stringResource(R.string.history_stats_time)
+            )
+        }
+    }
+}
+
+@Composable
+private fun StatItem(value: String, label: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value, style = MaterialTheme.typography.titleLarge)
+        Text(
+            label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SwipeToDeleteSession(
     session: WorkoutSessionEntity,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onExportGpx: (hasRoute: Boolean) -> Unit
 ) {
     var showConfirm by remember { mutableStateOf(false) }
 
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
-            if (value == SwipeToDismissBoxValue.EndToStart) {
-                showConfirm = true
-            }
-            false  // spring back — deletion happens via dialog
+            if (value == SwipeToDismissBoxValue.EndToStart) showConfirm = true
+            false
         }
     )
 
@@ -173,30 +238,48 @@ private fun SwipeToDeleteSession(
             }
         }
     ) {
-        SessionCard(session)
+        SessionCard(
+            session = session,
+            onExportGpx = { onExportGpx(session.distanceMeters > 0f) }
+        )
     }
 }
 
 @Composable
-private fun SessionCard(session: WorkoutSessionEntity) {
+private fun SessionCard(
+    session: WorkoutSessionEntity,
+    onExportGpx: () -> Unit
+) {
     val displayName = Programs.all().find { it.programId == session.programId }?.displayName
         ?: session.programId
     val date = SimpleDateFormat("EEE d MMM yyyy  HH:mm", Locale.getDefault())
         .format(Date(session.startedAt))
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (session.completed) {
-                    Icon(
-                        Icons.Default.CheckCircle,
-                        contentDescription = null,
-                        tint = WarmCoolGreen
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                    if (session.completed) {
+                        Icon(Icons.Default.CheckCircle, contentDescription = null, tint = WarmCoolGreen)
+                    }
+                    Text(
+                        "  $displayName  •  Week ${session.week}, Day ${session.day}",
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
-                Text(
-                    "  $displayName  •  Week ${session.week}, Day ${session.day}",
-                    style = MaterialTheme.typography.titleLarge
-                )
+                // GPX export button — only shown when the session has GPS distance recorded
+                if (session.distanceMeters > 0f) {
+                    IconButton(onClick = onExportGpx) {
+                        Icon(
+                            Icons.Default.Route,
+                            contentDescription = stringResource(R.string.history_export_gpx),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             }
             Spacer(Modifier.height(4.dp))
             Text(

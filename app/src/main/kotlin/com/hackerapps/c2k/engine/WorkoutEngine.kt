@@ -50,7 +50,6 @@ class WorkoutEngine(
 
     fun pause() {
         if (isPaused) return
-        // Check state before setting isPaused to avoid freezing the engine on early calls
         val current = _state.value as? WorkoutState.Active ?: return
         isPaused = true
         pausedAt = clock()
@@ -69,7 +68,8 @@ class WorkoutEngine(
 
     fun stop() {
         tickJob?.cancel()
-        _state.value = WorkoutState.Idle
+        // Intentionally does NOT emit WorkoutState.Idle — callers handle their own cleanup
+        // to avoid a race between the service's state collector and handleStop().
     }
 
     private suspend fun runLoop() {
@@ -98,16 +98,29 @@ class WorkoutEngine(
                 continue
             }
 
-            if (countdownWarnings && ttsEnabled &&
-                (remaining == 10 || remaining == 5) &&
-                remaining !in warnedCountdowns
-            ) {
-                warnedCountdowns.add(remaining)
-                tts.announce(TtsAnnouncement.CountdownWarning(remaining))
+            if (countdownWarnings && ttsEnabled && remaining !in warnedCountdowns) {
+                when (remaining) {
+                    10 -> {
+                        warnedCountdowns.add(10)
+                        tts.announce(TtsAnnouncement.CountdownWarning(10))
+                    }
+                    5 -> {
+                        warnedCountdowns.add(5)
+                        tts.announce(TtsAnnouncement.CountdownWarning(5))
+                        // Look-ahead: announce what interval is coming next
+                        if (intervalIndex + 1 < intervals.size) {
+                            tts.announce(
+                                TtsAnnouncement.NextInterval(intervals[intervalIndex + 1]),
+                                queueAdd = true
+                            )
+                        }
+                    }
+                }
             }
 
             _state.value = WorkoutState.Active(
                 currentInterval = intervals[intervalIndex],
+                nextInterval = intervals.getOrNull(intervalIndex + 1),
                 intervalIndex = intervalIndex,
                 totalIntervals = intervals.size,
                 secondsRemainingInInterval = remaining,
@@ -122,7 +135,6 @@ class WorkoutEngine(
         tts.announce(TtsAnnouncement.IntervalStart(intervals[index]))
         if (index == 0) return
 
-        // Milestone: last run interval (queued after the interval announcement)
         val isLastRun = intervals[index].type == IntervalType.RUN &&
             intervals.drop(index + 1).none { it.type == IntervalType.RUN }
         if (isLastRun) {
@@ -130,7 +142,6 @@ class WorkoutEngine(
             return
         }
 
-        // Milestone: halfway through all intervals
         if (index == intervals.size / 2) {
             tts.announce(TtsAnnouncement.Halfway, queueAdd = true)
         }

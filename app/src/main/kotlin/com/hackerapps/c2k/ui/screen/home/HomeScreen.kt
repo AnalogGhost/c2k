@@ -27,6 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,7 +39,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.Programs
+import com.hackerapps.c2k.data.model.WorkoutPlan
 import com.hackerapps.c2k.service.WorkoutService
+import com.hackerapps.c2k.ui.screen.program.WorkoutPreviewSheet
 import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 import java.text.SimpleDateFormat
@@ -53,6 +58,25 @@ fun HomeScreen(
     vm: HomeViewModel = viewModel()
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
+
+    // Preview sheet state for the "Continue" shortcut
+    var showContinuePreview by remember { mutableStateOf(false) }
+
+    state.nextWorkout?.let { next ->
+        if (showContinuePreview) {
+            WorkoutPreviewSheet(
+                week = next.week,
+                day = next.day,
+                workoutDay = next.workoutDay,
+                isCompleted = false,
+                onDismiss = { showContinuePreview = false },
+                onStart = {
+                    showContinuePreview = false
+                    onContinueWorkout(next.programId, next.week, next.day)
+                }
+            )
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -88,7 +112,6 @@ fun HomeScreen(
                 }
             }
 
-            // Active workout banner
             if (state.workoutActive) {
                 item {
                     ActiveWorkoutBanner(
@@ -102,12 +125,12 @@ fun HomeScreen(
                 }
             }
 
-            // "Continue" shortcut when no active workout
+            // "Continue" shortcut — opens preview before starting
             state.nextWorkout?.let { next ->
                 item {
                     ContinueWorkoutCard(
                         next = next,
-                        onClick = { onContinueWorkout(next.programId, next.week, next.day) }
+                        onClick = { showContinuePreview = true }
                     )
                 }
             }
@@ -121,33 +144,7 @@ fun HomeScreen(
             }
 
             items(state.programs) { plan ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onSelectProgram(plan.programId) }
-                ) {
-                    Column(Modifier.padding(16.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(plan.displayName, style = MaterialTheme.typography.headlineMedium)
-                            Text(
-                                "${plan.totalWeeks} weeks",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                            )
-                        }
-                        if (plan.description.isNotBlank()) {
-                            Spacer(Modifier.height(4.dp))
-                            Text(
-                                plan.description,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                            )
-                        }
-                    }
-                }
+                ProgramCard(plan = plan, onClick = { onSelectProgram(plan.programId) })
             }
 
             if (state.recentSessions.isNotEmpty()) {
@@ -165,6 +162,45 @@ fun HomeScreen(
             }
 
             item { Spacer(Modifier.height(16.dp)) }
+        }
+    }
+}
+
+@Composable
+private fun ProgramCard(plan: WorkoutPlan, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(plan.displayName, style = MaterialTheme.typography.headlineMedium)
+                Text(
+                    stringResource(R.string.home_program_weeks, plan.totalWeeks),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+            if (plan.description.isNotBlank()) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    plan.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
+            }
+            if (plan.prerequisite != null) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    stringResource(R.string.home_program_prerequisite, plan.prerequisite),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
+            }
         }
     }
 }

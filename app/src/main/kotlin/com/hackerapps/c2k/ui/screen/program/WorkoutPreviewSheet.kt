@@ -27,6 +27,31 @@ import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WalkBlue
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 
+private data class IntervalGroup(
+    val type: IntervalType,
+    val durationSeconds: Int,
+    val count: Int
+)
+
+private fun List<Interval>.grouped(): List<IntervalGroup> {
+    if (isEmpty()) return emptyList()
+    val result = mutableListOf<IntervalGroup>()
+    var type = first().type
+    var duration = first().durationSeconds
+    var count = 1
+    for (i in 1 until size) {
+        val iv = this[i]
+        if (iv.type == type && iv.durationSeconds == duration) {
+            count++
+        } else {
+            result.add(IntervalGroup(type, duration, count))
+            type = iv.type; duration = iv.durationSeconds; count = 1
+        }
+    }
+    result.add(IntervalGroup(type, duration, count))
+    return result
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutPreviewSheet(
@@ -57,17 +82,15 @@ fun WorkoutPreviewSheet(
             HorizontalDivider()
             Spacer(Modifier.height(8.dp))
 
+            val groups = workoutDay.intervals.grouped()
             LazyColumn(modifier = Modifier.weight(1f, fill = false)) {
-                items(workoutDay.intervals) { interval ->
-                    IntervalPreviewRow(interval)
+                items(groups) { group ->
+                    IntervalGroupRow(group)
                 }
             }
 
             Spacer(Modifier.height(24.dp))
-            Button(
-                onClick = onStart,
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Button(onClick = onStart, modifier = Modifier.fillMaxWidth()) {
                 Text(
                     if (isCompleted) stringResource(R.string.program_preview_redo)
                     else stringResource(R.string.program_preview_start)
@@ -78,14 +101,14 @@ fun WorkoutPreviewSheet(
 }
 
 @Composable
-private fun IntervalPreviewRow(interval: Interval) {
-    val color = when (interval.type) {
+private fun IntervalGroupRow(group: IntervalGroup) {
+    val color = when (group.type) {
         IntervalType.RUN      -> RunOrange
         IntervalType.WALK     -> WalkBlue
         IntervalType.WARMUP,
         IntervalType.COOLDOWN -> WarmCoolGreen
     }
-    val label = when (interval.type) {
+    val label = when (group.type) {
         IntervalType.RUN      -> stringResource(R.string.workout_interval_run)
         IntervalType.WALK     -> stringResource(R.string.workout_interval_walk)
         IntervalType.WARMUP   -> stringResource(R.string.workout_interval_warmup)
@@ -97,8 +120,9 @@ private fun IntervalPreviewRow(interval: Interval) {
             .padding(vertical = 6.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(label, color = color, style = MaterialTheme.typography.bodyLarge)
-        Text(formatIntervalDuration(interval.durationSeconds), style = MaterialTheme.typography.bodyLarge)
+        val countSuffix = if (group.count > 1) " × ${group.count}" else ""
+        Text(label + countSuffix, color = color, style = MaterialTheme.typography.bodyLarge)
+        Text(formatIntervalDuration(group.durationSeconds), style = MaterialTheme.typography.bodyLarge)
     }
 }
 

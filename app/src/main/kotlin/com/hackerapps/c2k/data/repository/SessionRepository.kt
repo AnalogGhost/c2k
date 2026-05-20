@@ -12,9 +12,6 @@ class SessionRepository(private val db: AppDatabase) {
     fun observeAllSessions(): Flow<List<WorkoutSessionEntity>> =
         db.sessionDao().observeAll()
 
-    fun observeRecentSessions(): Flow<List<WorkoutSessionEntity>> =
-        db.sessionDao().observeRecent()
-
     suspend fun startSession(
         programId: String, week: Int, day: Int
     ): Long {
@@ -53,10 +50,19 @@ class SessionRepository(private val db: AppDatabase) {
     fun observeRoute(sessionId: Long): Flow<List<RoutePointEntity>> =
         db.routePointDao().observeRoute(sessionId)
 
+    suspend fun getRoutePoints(sessionId: Long): List<RoutePointEntity> =
+        db.routePointDao().getRoute(sessionId)
+
     fun observeCompletedDays(programId: String): Flow<Set<Pair<Int, Int>>> =
         db.sessionDao().observeCompletedDays(programId)
             .map { list -> list.map { it.week to it.day }.toSet() }
 
+    suspend fun getBestForDay(programId: String, week: Int, day: Int): WorkoutSessionEntity? =
+        db.sessionDao().getBestByDay(programId, week, day)
+
     suspend fun deleteSession(sessionId: Long) =
         db.sessionDao().deleteById(sessionId)
+
+    suspend fun resetProgress(programId: String) =
+        db.sessionDao().deleteByProgramId(programId)
 }

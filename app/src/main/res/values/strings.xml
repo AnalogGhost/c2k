@@ -16,6 +16,8 @@
     <string name="home_workout_active">Workout in progress — tap to return</string>
     <string name="home_continue_workout">Continue: %1$s · Week %2$d, Day %3$d</string>
     <string name="home_streak">%1$d-day streak 🔥</string>
+    <string name="home_program_weeks">%1$d weeks</string>
+    <string name="home_program_prerequisite">%1$s</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">Week %1$d</string>
@@ -28,6 +30,10 @@
     <string name="program_preview_start">Start</string>
     <string name="program_preview_redo">Redo</string>
     <string name="program_preview_duration">~%1$d min</string>
+    <string name="program_reset_title">Reset progress</string>
+    <string name="program_reset_message">This will permanently remove all completed sessions for this program. Your overall history is kept.</string>
+    <string name="program_reset_confirm">Reset</string>
+    <string name="program_reset_cancel">Cancel</string>
 
     <!-- Workout screen -->
     <string name="workout_stop_title">Stop workout?</string>
@@ -41,13 +47,22 @@
     <string name="workout_pause">Pause</string>
     <string name="workout_resume">Resume</string>
     <string name="workout_stop">Stop</string>
-    <string name="workout_elapsed">Elapsed</string>
+    <string name="workout_elapsed">Elapsed: %1$s</string>
+    <string name="workout_interval_progress">Interval %1$d of %2$d</string>
+    <string name="workout_next_interval">Next: %1$s %2$s</string>
     <string name="workout_distance_km">%1$.2f km</string>
     <string name="workout_pace">%1$s / km</string>
     <string name="workout_acquiring_gps">Acquiring GPS…</string>
     <string name="workout_gps_unavailable">GPS unavailable</string>
     <string name="workout_complete_title">Workout Complete!</string>
     <string name="workout_complete_message">Great job! Keep up the good work.</string>
+    <string name="workout_complete_time">Time: %1$s</string>
+    <string name="workout_done">Done</string>
+    <string name="workout_paused_label">PAUSED</string>
+    <string name="workout_reconnecting">Reconnecting…</string>
+    <string name="workout_starting">Starting…</string>
+    <string name="workout_new_best">New personal best!</string>
+    <string name="workout_previous_best">Previous best: %1$s</string>
 
     <!-- History screen -->
     <string name="history_title">History</string>
@@ -56,10 +71,15 @@
     <string name="history_duration">%1$s</string>
     <string name="history_export">Export CSV</string>
     <string name="history_export_chooser">Export workout history</string>
+    <string name="history_export_gpx">Export GPX route</string>
+    <string name="history_export_gpx_chooser">Share GPX route</string>
     <string name="history_delete_title">Delete workout?</string>
     <string name="history_delete_message">This will permanently remove this session from your history.</string>
     <string name="history_delete_confirm">Delete</string>
     <string name="history_delete_cancel">Cancel</string>
+    <string name="history_stats_workouts">workouts</string>
+    <string name="history_stats_km">km</string>
+    <string name="history_stats_time">time</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Workout</string>

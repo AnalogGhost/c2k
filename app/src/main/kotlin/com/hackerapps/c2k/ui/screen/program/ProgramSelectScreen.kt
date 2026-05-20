@@ -1,5 +1,6 @@
 package com.hackerapps.c2k.ui.screen.program
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,10 +15,16 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -27,9 +34,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -57,6 +66,37 @@ fun ProgramSelectScreen(
 
     val totalDays = plan.weeks.sumOf { it.size }
     var previewDay by remember { mutableStateOf<Pair<Int, Int>?>(null) }
+    var showResetDialog by remember { mutableStateOf(false) }
+    var showOverflow by remember { mutableStateOf(false) }
+
+    // Collapsed week state: completed weeks start collapsed, others start expanded.
+    // Initialised once per screen visit; user can override by tapping week headers.
+    val expandedWeeks = remember(plan.programId) { mutableStateMapOf<Int, Boolean>() }
+    plan.weeks.forEachIndexed { weekIdx, days ->
+        if (!expandedWeeks.containsKey(weekIdx)) {
+            val allDone = days.indices.all { dIdx -> (weekIdx + 1 to dIdx + 1) in state.completedDays }
+            expandedWeeks[weekIdx] = !allDone
+        }
+    }
+
+    if (showResetDialog) {
+        AlertDialog(
+            onDismissRequest = { showResetDialog = false },
+            title = { Text(stringResource(R.string.program_reset_title)) },
+            text = { Text(stringResource(R.string.program_reset_message)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    vm.resetProgress()
+                    showResetDialog = false
+                }) { Text(stringResource(R.string.program_reset_confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showResetDialog = false }) {
+                    Text(stringResource(R.string.program_reset_cancel))
+                }
+            }
+        )
+    }
 
     previewDay?.let { (previewWeek, previewDayNum) ->
         val workoutDay = plan.weeks[previewWeek - 1][previewDayNum - 1]
@@ -81,6 +121,25 @@ fun ProgramSelectScreen(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    if (state.completedDays.isNotEmpty()) {
+                        IconButton(onClick = { showOverflow = true }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = null)
+                        }
+                        DropdownMenu(
+                            expanded = showOverflow,
+                            onDismissRequest = { showOverflow = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.program_reset_title)) },
+                                onClick = {
+                                    showOverflow = false
+                                    showResetDialog = true
+                                }
+                            )
+                        }
                     }
                 }
             )
@@ -117,7 +176,6 @@ fun ProgramSelectScreen(
                     Spacer(Modifier.height(8.dp))
                 }
 
-                // "Continue" shortcut to first incomplete day
                 state.nextIncompleteDay?.let { (nextWeek, nextDay) ->
                     if (state.completedDays.isNotEmpty()) {
                         FilledTonalButton(
@@ -139,45 +197,71 @@ fun ProgramSelectScreen(
                 val week = weekIdx + 1
                 val weekDone = days.indices.all { dIdx -> (week to dIdx + 1) in state.completedDays }
                 val tip = CoachingTips.tip(programId, week)
-                Card(modifier = Modifier.fillMaxWidth()) {
+                val isExpanded = expandedWeeks[weekIdx] ?: true
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = if (weekDone)
+                        CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                    else
+                        CardDefaults.cardColors()
+                ) {
                     Column(Modifier.padding(12.dp)) {
+                        // Week header — tap to collapse/expand
                         Row(
+                            modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(
-                                stringResource(R.string.program_week_label, week),
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            if (weekDone) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text(
+                                    stringResource(R.string.program_week_label, week),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                                if (weekDone) {
+                                    Icon(
+                                        Icons.Default.CheckCircle,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp),
+                                        tint = WarmCoolGreen
+                                    )
+                                }
+                            }
+                            IconButton(onClick = { expandedWeeks[weekIdx] = !isExpanded }) {
                                 Icon(
-                                    Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(18.dp),
-                                    tint = WarmCoolGreen
+                                    if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                                    contentDescription = if (isExpanded) "Collapse" else "Expand"
                                 )
                             }
                         }
-                        if (tip != null) {
-                            Spacer(Modifier.height(4.dp))
-                            Text(
-                                tip,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
-                            )
-                        }
-                        Spacer(Modifier.height(8.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            days.forEachIndexed { dayIdx, workoutDay ->
-                                val day = dayIdx + 1
-                                val done = (week to day) in state.completedDays
-                                DayButton(
-                                    day = day,
-                                    completed = done,
-                                    workoutDay = workoutDay,
-                                    modifier = Modifier.weight(1f),
-                                    onClick = { previewDay = week to day }
-                                )
+
+                        AnimatedVisibility(visible = isExpanded) {
+                            Column {
+                                if (tip != null) {
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(
+                                        tip,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
+                                    )
+                                }
+                                Spacer(Modifier.height(8.dp))
+                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    days.forEachIndexed { dayIdx, workoutDay ->
+                                        val day = dayIdx + 1
+                                        val done = (week to day) in state.completedDays
+                                        DayButton(
+                                            day = day,
+                                            completed = done,
+                                            workoutDay = workoutDay,
+                                            modifier = Modifier.weight(1f),
+                                            onClick = { previewDay = week to day }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
