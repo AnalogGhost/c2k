@@ -15,6 +15,7 @@
     <string name="home_no_workouts">No workouts yet. Start a program to begin!</string>
     <string name="home_workout_active">Workout in progress — tap to return</string>
     <string name="home_continue_workout">Continue: %1$s · Week %2$d, Day %3$d</string>
+    <string name="home_streak">%1$d-day streak 🔥</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">Week %1$d</string>
@@ -22,6 +23,11 @@
     <string name="program_completed_badge">Done</string>
     <string name="program_start_workout">Start Workout</string>
     <string name="program_progress">%1$d of %2$d days completed</string>
+    <string name="program_next_workout">Continue: Week %1$d, Day %2$d →</string>
+    <string name="program_preview_title">Week %1$d, Day %2$d</string>
+    <string name="program_preview_start">Start</string>
+    <string name="program_preview_redo">Redo</string>
+    <string name="program_preview_duration">~%1$d min</string>
 
     <!-- Workout screen -->
     <string name="workout_stop_title">Stop workout?</string>
@@ -50,6 +56,10 @@
     <string name="history_duration">%1$s</string>
     <string name="history_export">Export CSV</string>
     <string name="history_export_chooser">Export workout history</string>
+    <string name="history_delete_title">Delete workout?</string>
+    <string name="history_delete_message">This will permanently remove this session from your history.</string>
+    <string name="history_delete_confirm">Delete</string>
+    <string name="history_delete_cancel">Cancel</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Workout</string>
@@ -72,6 +82,9 @@
     <string name="settings_countdown_warnings">Countdown warnings (10s, 5s)</string>
     <string name="settings_keep_screen_on">Keep screen on during workout</string>
     <string name="settings_vibration_enabled">Vibrate on interval change</string>
+    <string name="settings_tts_speed">Voice speed</string>
+    <string name="settings_tts_speed_slow">Slow</string>
+    <string name="settings_tts_speed_fast">Fast</string>
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Battery Optimization</string>

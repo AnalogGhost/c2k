@@ -29,7 +29,8 @@ data class HomeUiState(
     val recentSessions: List<WorkoutSessionEntity> = emptyList(),
     val workoutActive: Boolean = false,
     val activeWorkoutInfo: WorkoutService.WorkoutInfo? = null,
-    val nextWorkout: NextWorkout? = null
+    val nextWorkout: NextWorkout? = null,
+    val streak: Int = 0
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -40,9 +41,8 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     private val nextWorkoutFlow = prefs.lastProgramId
         .flatMapLatest { lastProgId ->
-            if (lastProgId == null) {
-                flowOf(null)
-            } else {
+            if (lastProgId == null) flowOf(null)
+            else {
                 val plan = Programs.all().find { it.programId == lastProgId }
                 if (plan == null) flowOf(null)
                 else repo.observeCompletedDays(lastProgId).map { completedDays ->
@@ -52,13 +52,14 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         }
 
     val uiState = combine(
-        repo.observeRecentSessions(),
+        repo.observeAllSessions(),
         WorkoutService.isRunning,
         WorkoutService.currentWorkout,
         nextWorkoutFlow
-    ) { sessions, active, workoutInfo, nextWorkout ->
+    ) { allSessions, active, workoutInfo, nextWorkout ->
         HomeUiState(
-            recentSessions = sessions,
+            recentSessions = allSessions.take(5),
+            streak = computeStreak(allSessions),
             workoutActive = active,
             activeWorkoutInfo = workoutInfo,
             nextWorkout = if (active) null else nextWorkout
@@ -71,13 +72,38 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     ): NextWorkout? {
         for ((weekIdx, days) in plan.weeks.withIndex()) {
             for (dayIdx in days.indices) {
-                val week = weekIdx + 1
-                val day = dayIdx + 1
+                val week = weekIdx + 1; val day = dayIdx + 1
                 if ((week to day) !in completedDays) {
                     return NextWorkout(plan.programId, plan.displayName, week, day)
                 }
             }
         }
         return null
+    }
+
+    private fun computeStreak(sessions: List<WorkoutSessionEntity>): Int {
+        val completedDays = sessions
+            .filter { it.completed }
+            .map { it.startedAt / MS_PER_DAY }
+            .toSortedSet()
+
+        if (completedDays.isEmpty()) return 0
+
+        val today = System.currentTimeMillis() / MS_PER_DAY
+        val yesterday = today - 1
+
+        if (completedDays.last() < yesterday) return 0
+
+        var streak = 1
+        var expected = completedDays.last() - 1
+        for (dayNum in completedDays.reversed().drop(1)) {
+            if (dayNum == expected) { streak++; expected-- }
+            else if (dayNum < expected) break
+        }
+        return streak
+    }
+
+    companion object {
+        private const val MS_PER_DAY = 24 * 60 * 60 * 1000L
     }
 }

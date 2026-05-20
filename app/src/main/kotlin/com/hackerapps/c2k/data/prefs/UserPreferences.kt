@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +23,7 @@ class UserPreferences(private val context: Context) {
         val LAST_PROGRAM_ID          = stringPreferencesKey("last_program_id")
         val BATTERY_PROMPT_DISMISSED = booleanPreferencesKey("battery_prompt_dismissed")
         val VIBRATION_ENABLED        = booleanPreferencesKey("vibration_enabled")
+        val TTS_SPEECH_RATE          = floatPreferencesKey("tts_speech_rate")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -63,6 +65,12 @@ class UserPreferences(private val context: Context) {
     suspend fun setBatteryPromptDismissed() =
         context.dataStore.edit { it[BATTERY_PROMPT_DISMISSED] = true }
 
+    val ttsSpeechRate: Flow<Float> = context.dataStore.data
+        .map { it[TTS_SPEECH_RATE] ?: 1.0f }
+
     suspend fun setVibrationEnabled(enabled: Boolean) =
         context.dataStore.edit { it[VIBRATION_ENABLED] = enabled }
+
+    suspend fun setTtsSpeechRate(rate: Float) =
+        context.dataStore.edit { it[TTS_SPEECH_RATE] = rate }
 }

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.engine.tts.TtsAnnouncement
 import com.hackerapps.c2k.engine.tts.TtsInterface
@@ -18,7 +19,6 @@ class WorkoutEngine(
     private val ttsEnabled: Boolean,
     private val countdownWarnings: Boolean,
     private val scope: CoroutineScope,
-    // Injectable clock — defaults to system monotonic clock; override in tests
     private val clock: () -> Long = { SystemClock.elapsedRealtime() }
 ) {
     private val _state = MutableStateFlow<WorkoutState>(WorkoutState.Idle)
@@ -35,8 +35,6 @@ class WorkoutEngine(
     private var intervalIndex = 0
     private val intervals = day.intervals
 
-    // Tracks which countdown seconds have already been announced for the current interval
-    // to prevent the same boundary firing multiple times across consecutive 200ms ticks.
     private val warnedCountdowns = mutableSetOf<Int>()
 
     fun start(sessionId: Long) {
@@ -52,9 +50,10 @@ class WorkoutEngine(
 
     fun pause() {
         if (isPaused) return
+        // Check state before setting isPaused to avoid freezing the engine on early calls
+        val current = _state.value as? WorkoutState.Active ?: return
         isPaused = true
         pausedAt = clock()
-        val current = _state.value as? WorkoutState.Active ?: return
         _state.value = WorkoutState.Paused(current)
     }
 
@@ -64,7 +63,6 @@ class WorkoutEngine(
         sessionStartMs += pauseDuration
         intervalStartMs += pauseDuration
         isPaused = false
-        // Immediately unfreeze the display without waiting for the next tick
         val snapshot = (_state.value as? WorkoutState.Paused)?.snapshot ?: return
         _state.value = snapshot
     }
@@ -122,5 +120,19 @@ class WorkoutEngine(
     private fun announceInterval(index: Int) {
         if (!ttsEnabled) return
         tts.announce(TtsAnnouncement.IntervalStart(intervals[index]))
+        if (index == 0) return
+
+        // Milestone: last run interval (queued after the interval announcement)
+        val isLastRun = intervals[index].type == IntervalType.RUN &&
+            intervals.drop(index + 1).none { it.type == IntervalType.RUN }
+        if (isLastRun) {
+            tts.announce(TtsAnnouncement.LastRunInterval, queueAdd = true)
+            return
+        }
+
+        // Milestone: halfway through all intervals
+        if (index == intervals.size / 2) {
+            tts.announce(TtsAnnouncement.Halfway, queueAdd = true)
+        }
     }
 }

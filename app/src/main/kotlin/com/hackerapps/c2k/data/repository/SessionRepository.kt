@@ -56,4 +56,7 @@ class SessionRepository(private val db: AppDatabase) {
     fun observeCompletedDays(programId: String): Flow<Set<Pair<Int, Int>>> =
         db.sessionDao().observeCompletedDays(programId)
             .map { list -> list.map { it.week to it.day }.toSet() }
+
+    suspend fun deleteSession(sessionId: Long) =
+        db.sessionDao().deleteById(sessionId)
 }

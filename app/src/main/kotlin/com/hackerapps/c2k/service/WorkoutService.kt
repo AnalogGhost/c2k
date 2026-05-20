@@ -95,7 +95,7 @@ class WorkoutService : Service() {
             ACTION_RESUME -> if (::engine.isInitialized) engine.resume()
             ACTION_STOP   -> handleStop()
         }
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     private fun handleStart(intent: Intent) {
@@ -119,13 +119,14 @@ class WorkoutService : Service() {
             val gpsEnabled        = prefs.gpsEnabled.first()
             val countdownWarnings = prefs.countdownWarnings.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
+            val speechRate        = prefs.ttsSpeechRate.first()
 
             val hasLocationPermission = ContextCompat.checkSelfPermission(
                 this@WorkoutService, android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
 
             withContext(Dispatchers.Main) {
-                ttsManager = TtsManager(this@WorkoutService)
+                ttsManager = TtsManager(this@WorkoutService, speechRate)
             }
 
             locationProvider = if (gpsEnabled && hasLocationPermission)

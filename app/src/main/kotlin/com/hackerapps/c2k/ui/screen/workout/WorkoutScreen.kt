@@ -51,6 +51,7 @@ import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.engine.WorkoutState
+import com.hackerapps.c2k.service.WorkoutService
 import com.hackerapps.c2k.ui.component.RequestLocationPermission
 import com.hackerapps.c2k.ui.screen.workout.components.IntervalRing
 import com.hackerapps.c2k.ui.theme.RunOrange
@@ -72,6 +73,7 @@ fun WorkoutScreen(
     val pace by vm.currentPaceMinPerKm.collectAsStateWithLifecycle()
     val keepScreenOn by vm.keepScreenOn.collectAsStateWithLifecycle()
     val showBatteryPrompt by vm.showBatteryPrompt.collectAsStateWithLifecycle()
+    val serviceRunning by WorkoutService.isRunning.collectAsStateWithLifecycle()
 
     var permissionResolved by remember { mutableStateOf(false) }
     var showStopDialog by remember { mutableStateOf(false) }
@@ -175,7 +177,7 @@ fun WorkoutScreen(
                     distanceMeters = distanceMeters,
                     onDone = onFinished
                 )
-                else -> Text("Starting…")
+                else -> Text(if (serviceRunning) "Reconnecting…" else "Starting…")
             }
         }
     }

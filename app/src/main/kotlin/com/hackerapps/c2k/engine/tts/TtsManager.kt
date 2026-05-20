@@ -3,10 +3,17 @@ package com.hackerapps.c2k.engine.tts
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import com.hackerapps.c2k.data.model.IntervalType
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 
-class TtsManager(context: Context) : TtsInterface, TextToSpeech.OnInitListener {
+class TtsManager(
+    context: Context,
+    private val speechRate: Float = 1.0f
+) : TtsInterface, TextToSpeech.OnInitListener {
+
+    companion object {
+        val isAvailableOnDevice = MutableStateFlow<Boolean?>(null)
+    }
 
     private val tts = TextToSpeech(context.applicationContext, this)
     private var ready = false
@@ -21,22 +28,26 @@ class TtsManager(context: Context) : TtsInterface, TextToSpeech.OnInitListener {
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 tts.setLanguage(Locale.ENGLISH)
             }
+            tts.setSpeechRate(speechRate)
             ready = true
             isAvailable = true
+            isAvailableOnDevice.value = true
             pendingAnnouncement?.let { announce(it) }
             pendingAnnouncement = null
         } else {
+            isAvailableOnDevice.value = false
             Log.w("TtsManager", "TextToSpeech initialization failed (status=$status)")
         }
     }
 
-    override fun announce(announcement: TtsAnnouncement) {
+    override fun announce(announcement: TtsAnnouncement, queueAdd: Boolean) {
         if (!ready) {
-            pendingAnnouncement = announcement
+            if (!queueAdd) pendingAnnouncement = announcement
             return
         }
         val text = buildText(announcement)
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "c2k_${System.nanoTime()}")
+        val mode = if (queueAdd) TextToSpeech.QUEUE_ADD else TextToSpeech.QUEUE_FLUSH
+        tts.speak(text, mode, null, "c2k_${System.nanoTime()}")
     }
 
     override fun shutdown() {
@@ -46,14 +57,10 @@ class TtsManager(context: Context) : TtsInterface, TextToSpeech.OnInitListener {
     }
 
     private fun buildText(announcement: TtsAnnouncement): String = when (announcement) {
-        is TtsAnnouncement.IntervalStart -> when (announcement.interval.type) {
-            IntervalType.WARMUP   -> "Begin warm-up walk"
-            IntervalType.COOLDOWN -> "Begin cool-down walk"
-            IntervalType.RUN, IntervalType.WALK -> announcement.interval.announcement
-        }
-        is TtsAnnouncement.CountdownWarning ->
-            "${announcement.secondsRemaining} seconds remaining"
-        TtsAnnouncement.WorkoutComplete ->
-            "Workout complete. Great job!"
+        is TtsAnnouncement.IntervalStart    -> announcement.interval.announcement
+        is TtsAnnouncement.CountdownWarning -> "${announcement.secondsRemaining} seconds remaining"
+        TtsAnnouncement.WorkoutComplete     -> "Workout complete. Great job!"
+        TtsAnnouncement.Halfway             -> "Halfway there, keep it up!"
+        TtsAnnouncement.LastRunInterval     -> "Last run, finish strong!"
     }
 }

@@ -26,7 +26,7 @@ class WorkoutEngineTest {
 
     private val fakeTts = object : TtsInterface {
         override val isAvailable = true
-        override fun announce(a: TtsAnnouncement) { announcements.add(a) }
+        override fun announce(a: TtsAnnouncement, queueAdd: Boolean) { announcements.add(a) }
         override fun shutdown() {}
     }
 

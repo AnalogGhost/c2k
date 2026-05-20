@@ -37,6 +37,7 @@ import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.service.WorkoutService
+import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -75,7 +76,17 @@ fun HomeScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item { Spacer(Modifier.height(8.dp)) }
+            item {
+                Spacer(Modifier.height(8.dp))
+                if (state.streak > 0) {
+                    Text(
+                        stringResource(R.string.home_streak, state.streak),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = RunOrange
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
+            }
 
             // Active workout banner
             if (state.workoutActive) {
