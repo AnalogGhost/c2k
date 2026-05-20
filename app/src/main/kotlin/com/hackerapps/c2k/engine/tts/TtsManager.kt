@@ -10,6 +10,7 @@ class TtsManager(context: Context) : TtsInterface, TextToSpeech.OnInitListener {
 
     private val tts = TextToSpeech(context.applicationContext, this)
     private var ready = false
+    private var pendingAnnouncement: TtsAnnouncement? = null
 
     override var isAvailable: Boolean = false
         private set
@@ -22,13 +23,18 @@ class TtsManager(context: Context) : TtsInterface, TextToSpeech.OnInitListener {
             }
             ready = true
             isAvailable = true
+            pendingAnnouncement?.let { announce(it) }
+            pendingAnnouncement = null
         } else {
             Log.w("TtsManager", "TextToSpeech initialization failed (status=$status)")
         }
     }
 
     override fun announce(announcement: TtsAnnouncement) {
-        if (!ready) return
+        if (!ready) {
+            pendingAnnouncement = announcement
+            return
+        }
         val text = buildText(announcement)
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "c2k_${System.nanoTime()}")
     }

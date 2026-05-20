@@ -17,5 +17,5 @@ sealed class WorkoutState {
 
     data class Paused(val snapshot: Active) : WorkoutState()
 
-    data class Completed(val sessionId: Long) : WorkoutState()
+    data class Completed(val sessionId: Long, val elapsedSessionSeconds: Int) : WorkoutState()
 }

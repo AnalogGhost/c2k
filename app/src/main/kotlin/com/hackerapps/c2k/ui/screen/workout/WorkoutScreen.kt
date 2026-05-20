@@ -1,7 +1,11 @@
 package com.hackerapps.c2k.ui.screen.workout
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.view.WindowManager
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +23,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -61,26 +66,44 @@ fun WorkoutScreen(
     val context = LocalContext.current
     val workoutState by vm.workoutState.collectAsStateWithLifecycle()
     val distanceMeters by vm.distanceMeters.collectAsStateWithLifecycle()
+    val pace by vm.currentPaceMinPerKm.collectAsStateWithLifecycle()
+    val keepScreenOn by vm.keepScreenOn.collectAsStateWithLifecycle()
+    val showBatteryPrompt by vm.showBatteryPrompt.collectAsStateWithLifecycle()
 
     var showStopDialog by remember { mutableStateOf(false) }
 
-    // Start workout and bind on first composition
     LaunchedEffect(Unit) {
-        vm.startWorkout(context, programId, week, day)
+        vm.startWorkout(programId, week, day)
     }
 
-    // Navigate away when completed
-    LaunchedEffect(workoutState) {
-        if (workoutState is WorkoutState.Completed) onFinished()
-    }
-
-    // Keep screen on during workout
-    DisposableEffect(Unit) {
+    // Keep screen on based on user preference
+    DisposableEffect(keepScreenOn) {
         val window = (context as? android.app.Activity)?.window
-        window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        onDispose {
-            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
+        if (keepScreenOn) window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        onDispose { window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+    }
+
+    if (showBatteryPrompt) {
+        AlertDialog(
+            onDismissRequest = { vm.dismissBatteryPrompt() },
+            title = { Text(stringResource(R.string.battery_opt_title)) },
+            text = { Text(stringResource(R.string.battery_opt_message)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    vm.dismissBatteryPrompt()
+                    context.startActivity(
+                        Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                            data = Uri.parse("package:${context.packageName}")
+                        }
+                    )
+                }) { Text(stringResource(R.string.battery_opt_open_settings)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { vm.dismissBatteryPrompt() }) {
+                    Text(stringResource(R.string.battery_opt_dismiss))
+                }
+            }
+        )
     }
 
     if (showStopDialog) {
@@ -90,7 +113,7 @@ fun WorkoutScreen(
             text = { Text("Your progress for this session will be saved as incomplete.") },
             confirmButton = {
                 TextButton(onClick = {
-                    vm.stop(context)
+                    vm.stop()
                     showStopDialog = false
                     onFinished()
                 }) { Text("Stop") }
@@ -102,9 +125,7 @@ fun WorkoutScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Week $week, Day $day") })
-        }
+        topBar = { TopAppBar(title = { Text("Week $week, Day $day") }) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -118,18 +139,20 @@ fun WorkoutScreen(
                 is WorkoutState.Active -> ActiveWorkoutContent(
                     state = s,
                     distanceMeters = distanceMeters,
-                    onPause = { vm.pause(context) },
+                    pace = pace,
+                    onPause = { vm.pause() },
                     onStop = { showStopDialog = true }
                 )
                 is WorkoutState.Paused -> PausedWorkoutContent(
                     state = s.snapshot,
-                    onResume = { vm.resume(context) },
+                    onResume = { vm.resume() },
                     onStop = { showStopDialog = true }
                 )
-                is WorkoutState.Completed -> {
-                    // Navigation triggered via LaunchedEffect above
-                    Text("Workout complete!")
-                }
+                is WorkoutState.Completed -> CompletedContent(
+                    state = s,
+                    distanceMeters = distanceMeters,
+                    onDone = onFinished
+                )
                 else -> Text("Starting…")
             }
         }
@@ -140,25 +163,23 @@ fun WorkoutScreen(
 private fun ActiveWorkoutContent(
     state: WorkoutState.Active,
     distanceMeters: Float,
+    pace: String?,
     onPause: () -> Unit,
     onStop: () -> Unit
 ) {
-    val ringColor = when (state.currentInterval.type) {
-        IntervalType.RUN      -> RunOrange
-        IntervalType.WALK     -> WalkBlue
-        IntervalType.WARMUP,
-        IntervalType.COOLDOWN -> WarmCoolGreen
-    }
-    val label = when (state.currentInterval.type) {
-        IntervalType.RUN      -> stringResource(R.string.workout_interval_run)
-        IntervalType.WALK     -> stringResource(R.string.workout_interval_walk)
-        IntervalType.WARMUP   -> stringResource(R.string.workout_interval_warmup)
-        IntervalType.COOLDOWN -> stringResource(R.string.workout_interval_cooldown)
-    }
-    val progress = 1f - state.secondsRemainingInInterval.toFloat() /
+    val ringColor = intervalColor(state.currentInterval.type)
+    val label = intervalLabel(state.currentInterval.type)
+    val intervalProgress = 1f - state.secondsRemainingInInterval.toFloat() /
             state.currentInterval.durationSeconds.toFloat()
 
-    IntervalRing(progress = progress.coerceIn(0f, 1f), ringColor = ringColor) {
+    // Overall workout progress
+    LinearProgressIndicator(
+        progress = { state.intervalIndex.toFloat() / state.totalIntervals },
+        modifier = Modifier.fillMaxWidth()
+    )
+    Spacer(Modifier.height(24.dp))
+
+    IntervalRing(progress = intervalProgress.coerceIn(0f, 1f), ringColor = ringColor) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
             Spacer(Modifier.height(4.dp))
@@ -172,7 +193,6 @@ private fun ActiveWorkoutContent(
 
     Spacer(Modifier.height(24.dp))
 
-    // Overall session progress
     Text(
         "Elapsed: ${formatTime(state.elapsedSessionSeconds)}",
         style = MaterialTheme.typography.bodyLarge,
@@ -186,10 +206,18 @@ private fun ActiveWorkoutContent(
 
     if (distanceMeters > 0f) {
         Spacer(Modifier.height(4.dp))
-        Text(
-            stringResource(R.string.workout_distance_km, distanceMeters / 1000f),
-            style = MaterialTheme.typography.bodyLarge
-        )
+        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text(
+                stringResource(R.string.workout_distance_km, distanceMeters / 1000f),
+                style = MaterialTheme.typography.bodyLarge
+            )
+            if (pace != null) {
+                Text(
+                    stringResource(R.string.workout_pace, pace),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
     }
 
     Spacer(Modifier.height(32.dp))
@@ -214,13 +242,42 @@ private fun PausedWorkoutContent(
     onResume: () -> Unit,
     onStop: () -> Unit
 ) {
-    Text("PAUSED", style = MaterialTheme.typography.headlineLarge)
+    val ringColor = intervalColor(state.currentInterval.type)
+    val label = intervalLabel(state.currentInterval.type)
+    val intervalProgress = 1f - state.secondsRemainingInInterval.toFloat() /
+            state.currentInterval.durationSeconds.toFloat()
+
+    LinearProgressIndicator(
+        progress = { state.intervalIndex.toFloat() / state.totalIntervals },
+        modifier = Modifier.fillMaxWidth()
+    )
+    Spacer(Modifier.height(24.dp))
+
+    // Ring frozen at current position, with PAUSED overlay
+    Box(contentAlignment = Alignment.Center) {
+        IntervalRing(progress = intervalProgress.coerceIn(0f, 1f), ringColor = ringColor) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    formatTime(state.secondsRemainingInInterval),
+                    fontSize = 42.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+
+    Spacer(Modifier.height(16.dp))
+    Text("PAUSED", style = MaterialTheme.typography.headlineMedium,
+        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f))
     Spacer(Modifier.height(8.dp))
     Text(
         "Elapsed: ${formatTime(state.elapsedSessionSeconds)}",
         style = MaterialTheme.typography.bodyLarge
     )
     Spacer(Modifier.height(32.dp))
+
     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         Button(onClick = onResume) {
             Icon(Icons.Default.PlayArrow, contentDescription = null)
@@ -233,6 +290,57 @@ private fun PausedWorkoutContent(
             Text(stringResource(R.string.workout_stop))
         }
     }
+}
+
+@Composable
+private fun CompletedContent(
+    state: WorkoutState.Completed,
+    distanceMeters: Float,
+    onDone: () -> Unit
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            stringResource(R.string.workout_complete_title),
+            style = MaterialTheme.typography.headlineLarge,
+            color = WarmCoolGreen
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            stringResource(R.string.workout_complete_message),
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Spacer(Modifier.height(24.dp))
+        Text(
+            "Time: ${formatTime(state.elapsedSessionSeconds)}",
+            style = MaterialTheme.typography.titleLarge
+        )
+        if (distanceMeters > 0f) {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                stringResource(R.string.workout_distance_km, distanceMeters / 1000f),
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+        Spacer(Modifier.height(32.dp))
+        Button(onClick = onDone) {
+            Text("Done")
+        }
+    }
+}
+
+private fun intervalColor(type: IntervalType) = when (type) {
+    IntervalType.RUN      -> RunOrange
+    IntervalType.WALK     -> WalkBlue
+    IntervalType.WARMUP,
+    IntervalType.COOLDOWN -> WarmCoolGreen
+}
+
+@Composable
+private fun intervalLabel(type: IntervalType) = when (type) {
+    IntervalType.RUN      -> stringResource(R.string.workout_interval_run)
+    IntervalType.WALK     -> stringResource(R.string.workout_interval_walk)
+    IntervalType.WARMUP   -> stringResource(R.string.workout_interval_warmup)
+    IntervalType.COOLDOWN -> stringResource(R.string.workout_interval_cooldown)
 }
 
 private fun formatTime(totalSeconds: Int): String {

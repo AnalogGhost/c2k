@@ -35,12 +35,17 @@ class WorkoutEngine(
     private var intervalIndex = 0
     private val intervals = day.intervals
 
+    // Tracks which countdown seconds have already been announced for the current interval
+    // to prevent the same boundary firing multiple times across consecutive 200ms ticks.
+    private val warnedCountdowns = mutableSetOf<Int>()
+
     fun start(sessionId: Long) {
         this.sessionId = sessionId
         intervalIndex = 0
         sessionStartMs = clock()
         intervalStartMs = sessionStartMs
         isPaused = false
+        warnedCountdowns.clear()
         announceInterval(intervalIndex)
         tickJob = scope.launch { runLoop() }
     }
@@ -59,6 +64,9 @@ class WorkoutEngine(
         sessionStartMs += pauseDuration
         intervalStartMs += pauseDuration
         isPaused = false
+        // Immediately unfreeze the display without waiting for the next tick
+        val snapshot = (_state.value as? WorkoutState.Paused)?.snapshot ?: return
+        _state.value = snapshot
     }
 
     fun stop() {
@@ -82,16 +90,21 @@ class WorkoutEngine(
                 intervalIndex++
                 if (intervalIndex >= intervals.size) {
                     if (ttsEnabled) tts.announce(TtsAnnouncement.WorkoutComplete)
-                    _state.value = WorkoutState.Completed(sessionId)
+                    _state.value = WorkoutState.Completed(sessionId, sessionElapsed)
                     tickJob?.cancel()
                     return
                 }
                 intervalStartMs = now
+                warnedCountdowns.clear()
                 announceInterval(intervalIndex)
                 continue
             }
 
-            if (countdownWarnings && ttsEnabled && (remaining == 10 || remaining == 5)) {
+            if (countdownWarnings && ttsEnabled &&
+                (remaining == 10 || remaining == 5) &&
+                remaining !in warnedCountdowns
+            ) {
+                warnedCountdowns.add(remaining)
                 tts.announce(TtsAnnouncement.CountdownWarning(remaining))
             }
 

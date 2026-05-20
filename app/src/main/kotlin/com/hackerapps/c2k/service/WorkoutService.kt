@@ -17,6 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.Programs
@@ -56,6 +57,8 @@ class WorkoutService : Service() {
     private lateinit var wakeLock: PowerManager.WakeLock
     private lateinit var prefs: UserPreferences
 
+    private var workoutRunning = false
+
     inner class LocalBinder : Binder() {
         fun getEngine(): WorkoutEngine = engine
         fun getLocationProvider(): LocationProvider = locationProvider
@@ -82,10 +85,13 @@ class WorkoutService : Service() {
     }
 
     private fun handleStart(intent: Intent) {
+        if (workoutRunning) return  // already running — caller just needs to bind
+
         val programId = intent.getStringExtra(EXTRA_PROGRAM_ID) ?: return
         val week      = intent.getIntExtra(EXTRA_WEEK, -1).takeIf { it >= 0 } ?: return
         val day       = intent.getIntExtra(EXTRA_DAY, -1).takeIf { it >= 0 } ?: return
 
+        workoutRunning = true
         acquireWakeLock()
         startForeground(NOTIFICATION_ID, buildNotification("Starting…"))
 
@@ -97,7 +103,10 @@ class WorkoutService : Service() {
             val gpsEnabled        = prefs.gpsEnabled.first()
             val countdownWarnings = prefs.countdownWarnings.first()
 
-            ttsManager = TtsManager(this@WorkoutService)
+            // TextToSpeech must be constructed on the main thread
+            withContext(Dispatchers.Main) {
+                ttsManager = TtsManager(this@WorkoutService)
+            }
 
             locationProvider = if (gpsEnabled) GpsLocationProvider(this@WorkoutService)
                                else NoOpLocationProvider()
@@ -132,13 +141,17 @@ class WorkoutService : Service() {
                         is WorkoutState.Completed -> {
                             app.sessionRepository.finishSession(
                                 sessionId = sessionId,
-                                durationSeconds = workoutDay.totalDurationSeconds,
+                                durationSeconds = state.elapsedSessionSeconds,
                                 distanceMeters = locationProvider.totalDistanceMeters,
                                 completed = true
                             )
+                            workoutRunning = false
                             stopSelf()
                         }
-                        is WorkoutState.Idle -> stopSelf()
+                        is WorkoutState.Idle -> {
+                            workoutRunning = false
+                            stopSelf()
+                        }
                     }
                 }
             }
@@ -175,6 +188,7 @@ class WorkoutService : Service() {
         }
         if (::locationProvider.isInitialized) locationProvider.stop()
         if (::ttsManager.isInitialized) ttsManager.shutdown()
+        workoutRunning = false
         stopSelf()
     }
 
@@ -243,7 +257,7 @@ class WorkoutService : Service() {
 
     private fun updateNotificationPaused() {
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.notify(NOTIFICATION_ID, buildNotification("Paused"))
+        nm.notify(NOTIFICATION_ID, buildNotification(getString(R.string.workout_paused_notification)))
     }
 
     private fun actionPending(action: String): PendingIntent =

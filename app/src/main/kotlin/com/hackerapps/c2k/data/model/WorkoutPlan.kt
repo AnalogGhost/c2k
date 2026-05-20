@@ -11,6 +11,7 @@ data class WorkoutDay(
 data class WorkoutPlan(
     val programId: String,
     val displayName: String,
+    val description: String,
     val weeks: List<List<WorkoutDay>>
 ) {
     val totalWeeks: Int get() = weeks.size

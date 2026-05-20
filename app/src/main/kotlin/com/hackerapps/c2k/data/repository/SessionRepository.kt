@@ -1,7 +1,9 @@
 package com.hackerapps.c2k.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import com.hackerapps.c2k.data.db.AppDatabase
+import com.hackerapps.c2k.data.db.dao.CompletedDay
 import com.hackerapps.c2k.data.db.entity.RoutePointEntity
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 
@@ -53,4 +55,8 @@ class SessionRepository(private val db: AppDatabase) {
 
     fun observeRoute(sessionId: Long): Flow<List<RoutePointEntity>> =
         db.routePointDao().observeRoute(sessionId)
+
+    fun observeCompletedDays(programId: String): Flow<Set<Pair<Int, Int>>> =
+        db.sessionDao().observeCompletedDays(programId)
+            .map { list -> list.map { it.week to it.day }.toSet() }
 }

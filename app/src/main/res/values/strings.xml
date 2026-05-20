@@ -49,6 +49,7 @@
     <string name="notification_action_resume">Resume</string>
     <string name="notification_action_stop">Stop</string>
     <string name="notification_title">C2K Workout</string>
+    <string name="workout_paused_notification">Paused</string>
 
     <!-- Permissions -->
     <string name="permission_location_rationale">C2K can track your distance and pace using GPS. This is optional — the workout timer works without it.</string>

@@ -9,13 +9,15 @@ import androidx.navigation.navArgument
 import com.hackerapps.c2k.ui.screen.history.HistoryScreen
 import com.hackerapps.c2k.ui.screen.home.HomeScreen
 import com.hackerapps.c2k.ui.screen.program.ProgramSelectScreen
+import com.hackerapps.c2k.ui.screen.settings.SettingsScreen
 import com.hackerapps.c2k.ui.screen.workout.WorkoutScreen
 
 object Routes {
-    const val HOME    = "home"
-    const val PROGRAM = "program/{programId}"
-    const val WORKOUT = "workout/{programId}/{week}/{day}"
-    const val HISTORY = "history"
+    const val HOME     = "home"
+    const val PROGRAM  = "program/{programId}"
+    const val WORKOUT  = "workout/{programId}/{week}/{day}"
+    const val HISTORY  = "history"
+    const val SETTINGS = "settings"
 
     fun program(programId: String) = "program/$programId"
     fun workout(programId: String, week: Int, day: Int) = "workout/$programId/$week/$day"
@@ -29,12 +31,9 @@ fun NavGraph() {
 
         composable(Routes.HOME) {
             HomeScreen(
-                onSelectProgram = { programId ->
-                    navController.navigate(Routes.program(programId))
-                },
-                onOpenHistory = {
-                    navController.navigate(Routes.HISTORY)
-                }
+                onSelectProgram = { navController.navigate(Routes.program(it)) },
+                onOpenHistory   = { navController.navigate(Routes.HISTORY) },
+                onOpenSettings  = { navController.navigate(Routes.SETTINGS) }
             )
         }
 
@@ -65,14 +64,16 @@ fun NavGraph() {
                 programId = args.getString("programId")!!,
                 week      = args.getInt("week"),
                 day       = args.getInt("day"),
-                onFinished = {
-                    navController.popBackStack(Routes.HOME, inclusive = false)
-                }
+                onFinished = { navController.popBackStack(Routes.HOME, inclusive = false) }
             )
         }
 
         composable(Routes.HISTORY) {
             HistoryScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Routes.SETTINGS) {
+            SettingsScreen(onBack = { navController.popBackStack() })
         }
     }
 }

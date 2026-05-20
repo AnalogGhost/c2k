@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
+import com.hackerapps.c2k.data.model.Programs
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -39,6 +41,7 @@ import java.util.Locale
 fun HomeScreen(
     onSelectProgram: (String) -> Unit,
     onOpenHistory: () -> Unit,
+    onOpenSettings: () -> Unit,
     vm: HomeViewModel = viewModel()
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
@@ -50,6 +53,9 @@ fun HomeScreen(
                 actions = {
                     IconButton(onClick = onOpenHistory) {
                         Icon(Icons.Default.History, contentDescription = stringResource(R.string.history_title))
+                    }
+                    IconButton(onClick = onOpenSettings) {
+                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings_title))
                     }
                 }
             )
@@ -78,12 +84,25 @@ fun HomeScreen(
                         .clickable { onSelectProgram(plan.programId) }
                 ) {
                     Column(Modifier.padding(16.dp)) {
-                        Text(plan.displayName, style = MaterialTheme.typography.headlineMedium)
-                        Text(
-                            "${plan.totalWeeks} weeks",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(plan.displayName, style = MaterialTheme.typography.headlineMedium)
+                            Text(
+                                "${plan.totalWeeks} weeks",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            )
+                        }
+                        if (plan.description.isNotBlank()) {
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                plan.description,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                            )
+                        }
                     }
                 }
             }
@@ -109,6 +128,8 @@ fun HomeScreen(
 
 @Composable
 private fun RecentSessionRow(session: WorkoutSessionEntity) {
+    val displayName = Programs.all()
+        .find { it.programId == session.programId }?.displayName ?: session.programId
     val date = SimpleDateFormat("EEE d MMM", Locale.getDefault())
         .format(Date(session.startedAt))
     Row(
@@ -117,7 +138,7 @@ private fun RecentSessionRow(session: WorkoutSessionEntity) {
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Week ${session.week}, Day ${session.day}  •  ${session.programId}")
+        Text("Week ${session.week}, Day ${session.day}  •  $displayName")
         Text(date, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f))
     }
 }

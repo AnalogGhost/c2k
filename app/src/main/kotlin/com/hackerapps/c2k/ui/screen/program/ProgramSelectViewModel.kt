@@ -4,17 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutPlan
 
 data class ProgramSelectUiState(
     val plan: WorkoutPlan? = null,
-    val completedDays: Set<Pair<Int, Int>> = emptySet()  // (week, day) pairs
+    val completedDays: Set<Pair<Int, Int>> = emptySet()
 )
 
 class ProgramSelectViewModel(
@@ -23,25 +23,15 @@ class ProgramSelectViewModel(
 ) : AndroidViewModel(app) {
 
     private val programId: String = savedStateHandle["programId"]!!
-    private val repo = (app as C2KApp).sessionRepository
+    private val plan = Programs.byId(programId)
 
-    private val _uiState = MutableStateFlow(ProgramSelectUiState())
-    val uiState: StateFlow<ProgramSelectUiState> = _uiState.asStateFlow()
-
-    init {
-        val plan = Programs.byId(programId)
-        _uiState.value = _uiState.value.copy(plan = plan)
-        viewModelScope.launch { loadCompletedDays(plan) }
-    }
-
-    private suspend fun loadCompletedDays(plan: WorkoutPlan) {
-        val completed = mutableSetOf<Pair<Int, Int>>()
-        plan.weeks.forEachIndexed { wi, week ->
-            week.forEachIndexed { di, _ ->
-                val w = wi + 1; val d = di + 1
-                if (repo.isCompleted(programId, w, d)) completed.add(w to d)
-            }
-        }
-        _uiState.value = _uiState.value.copy(completedDays = completed)
-    }
+    val uiState: StateFlow<ProgramSelectUiState> =
+        (app as C2KApp).sessionRepository
+            .observeCompletedDays(programId)
+            .map { completed -> ProgramSelectUiState(plan = plan, completedDays = completed) }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5_000),
+                ProgramSelectUiState(plan = plan)
+            )
 }
