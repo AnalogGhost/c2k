@@ -97,6 +97,58 @@ class ProgramsTest {
     }
 
     @Test
+    fun b210k_has_6_weeks() {
+        assertEquals(6, Programs.B210K.totalWeeks)
+    }
+
+    @Test
+    fun b210k_week6_is_60_min_run() {
+        val runs = Programs.B210K.weeks[5][0].intervals.filter { it.type == IntervalType.RUN }
+        assertEquals(1, runs.size)
+        assertEquals(3600, runs[0].durationSeconds)
+    }
+
+    @Test
+    fun ohr_has_13_weeks() {
+        assertEquals(13, Programs.OneHourRunner.totalWeeks)
+    }
+
+    @Test
+    fun ohr_week1_is_33_min_run() {
+        val runs = Programs.OneHourRunner.weeks[0][0].intervals.filter { it.type == IntervalType.RUN }
+        assertEquals(1, runs.size)
+        assertEquals(1980, runs[0].durationSeconds)
+    }
+
+    @Test
+    fun ohr_week13_is_60_min_run() {
+        val runs = Programs.OneHourRunner.weeks[12][0].intervals.filter { it.type == IntervalType.RUN }
+        assertEquals(1, runs.size)
+        assertEquals(3600, runs[0].durationSeconds)
+    }
+
+    @Test
+    fun five_k_improver_has_8_weeks() {
+        assertEquals(8, Programs.FiveKImprover.totalWeeks)
+    }
+
+    @Test
+    fun five_k_improver_week8_is_30_min_run() {
+        val runs = Programs.FiveKImprover.weeks[7][0].intervals.filter { it.type == IntervalType.RUN }
+        assertEquals(1, runs.size)
+        assertEquals(1800, runs[0].durationSeconds)
+    }
+
+    @Test
+    fun all_programs_each_week_has_3_days() {
+        Programs.all().forEach { plan ->
+            plan.weeks.forEachIndexed { i, week ->
+                assertEquals("${plan.programId} week ${i + 1} should have 3 days", 3, week.size)
+            }
+        }
+    }
+
+    @Test
     fun all_intervals_have_non_empty_announcements() {
         Programs.all().forEach { plan ->
             plan.weeks.forEach { week ->
