@@ -21,7 +21,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,6 +38,7 @@ import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.engine.tts.TtsManager
 import com.hackerapps.c2k.location.GpsLocationProvider
 import com.hackerapps.c2k.location.LocationProvider
+import com.hackerapps.c2k.location.LocationUpdate
 import com.hackerapps.c2k.location.NoOpLocationProvider
 import com.hackerapps.c2k.location.toEntity
 import com.hackerapps.c2k.ui.MainActivity
@@ -66,17 +70,24 @@ class WorkoutService : Service() {
 
     private lateinit var ttsManager: TtsManager
     private lateinit var engine: WorkoutEngine
-    private lateinit var locationProvider: LocationProvider
+    // Initialised to NoOp so binder calls before the setup coroutine finishes are safe.
+    private var locationProvider: LocationProvider = NoOpLocationProvider()
     private lateinit var wakeLock: PowerManager.WakeLock
     private lateinit var prefs: UserPreferences
+
+    // Exposed via binder — safe to collect immediately; populated once setup coroutine runs.
+    val workoutStateFlow = MutableStateFlow<WorkoutState>(WorkoutState.Idle)
+    private val _locationUpdates = MutableSharedFlow<LocationUpdate>(extraBufferCapacity = 64)
+    private val _gpsActive = MutableStateFlow(false)
 
     private var workoutRunning = false
     private var cleanedUp = false
 
     inner class LocalBinder : Binder() {
-        fun getEngine(): WorkoutEngine = engine
-        fun getLocationProvider(): LocationProvider = locationProvider
-        fun isGpsActive(): Boolean = ::locationProvider.isInitialized && locationProvider.isAvailable
+        fun getWorkoutState(): StateFlow<WorkoutState> = workoutStateFlow
+        fun getLocationUpdates(): SharedFlow<LocationUpdate> = _locationUpdates
+        fun getTotalDistanceMeters(): Float = locationProvider.totalDistanceMeters
+        fun getGpsActive(): StateFlow<Boolean> = _gpsActive
     }
 
     private val binder = LocalBinder()
@@ -110,7 +121,19 @@ class WorkoutService : Service() {
         isRunning.value = true
         currentWorkout.value = WorkoutInfo(programId, week, day)
         acquireWakeLock()
-        startForeground(NOTIFICATION_ID, buildNotification("Starting…"))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            val hasLocation = ContextCompat.checkSelfPermission(
+                this, android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+            startForeground(
+                NOTIFICATION_ID,
+                buildNotification("Starting…"),
+                if (hasLocation) android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
+                else 0  // FOREGROUND_SERVICE_TYPE_NONE — timer-only, no location claimed
+            )
+        } else {
+            startForeground(NOTIFICATION_ID, buildNotification("Starting…"))
+        }
 
         val workoutDay = Programs.byId(programId).weeks[week - 1][day - 1]
         val app = application as C2KApp
@@ -135,6 +158,8 @@ class WorkoutService : Service() {
             else
                 NoOpLocationProvider()
 
+            _gpsActive.value = locationProvider.isAvailable
+
             val sessionId = app.sessionRepository.startSession(programId, week, day)
 
             engine = WorkoutEngine(
@@ -150,6 +175,7 @@ class WorkoutService : Service() {
 
             launch {
                 locationProvider.updates.collect { update ->
+                    _locationUpdates.emit(update)
                     val s = engine.state.value
                     if (s is WorkoutState.Active) {
                         app.sessionRepository.addRoutePoint(update.toEntity(s.sessionId))
@@ -160,6 +186,7 @@ class WorkoutService : Service() {
             var lastIntervalIndex = -1
             launch {
                 engine.state.collect { state ->
+                    workoutStateFlow.value = state
                     when (state) {
                         is WorkoutState.Active -> {
                             if (state.intervalIndex != lastIntervalIndex && lastIntervalIndex >= 0) {
@@ -188,7 +215,7 @@ class WorkoutService : Service() {
     }
 
     private fun handleStop() {
-        val distance = if (::locationProvider.isInitialized) locationProvider.totalDistanceMeters else 0f
+        val distance = locationProvider.totalDistanceMeters
 
         if (!::engine.isInitialized) {
             cleanup()
@@ -233,7 +260,7 @@ class WorkoutService : Service() {
     private fun cleanup() {
         if (cleanedUp) return
         cleanedUp = true
-        if (::locationProvider.isInitialized) locationProvider.stop()
+        locationProvider.stop()
         if (::ttsManager.isInitialized) ttsManager.shutdown()
         if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
         isRunning.value = false

@@ -54,6 +54,7 @@ import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.service.WorkoutService
 import com.hackerapps.c2k.ui.component.RequestLocationPermission
+import com.hackerapps.c2k.ui.component.RequestNotificationPermission
 import com.hackerapps.c2k.ui.screen.workout.components.IntervalRing
 import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WalkBlue
@@ -79,6 +80,7 @@ fun WorkoutScreen(
     val hasGpsLock by vm.hasGpsLock.collectAsStateWithLifecycle()
     val personalBest by vm.personalBest.collectAsStateWithLifecycle()
 
+    var notificationPermissionDone by remember { mutableStateOf(false) }
     var permissionResolved by remember { mutableStateOf(false) }
     var showStopDialog by remember { mutableStateOf(false) }
 
@@ -86,7 +88,9 @@ fun WorkoutScreen(
         runCatching { Programs.byId(programId).displayName }.getOrDefault(programId)
     }
 
-    if (!permissionResolved) {
+    if (!notificationPermissionDone) {
+        RequestNotificationPermission { notificationPermissionDone = true }
+    } else if (!permissionResolved) {
         RequestLocationPermission { permissionResolved = true }
     }
 

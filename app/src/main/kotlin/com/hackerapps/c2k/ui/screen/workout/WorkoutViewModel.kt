@@ -21,9 +21,7 @@ import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.engine.WorkoutState
-import com.hackerapps.c2k.location.LocationProvider
 import com.hackerapps.c2k.location.LocationUpdate
-import com.hackerapps.c2k.location.NoOpLocationProvider
 import com.hackerapps.c2k.service.WorkoutService
 
 class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
@@ -73,16 +71,16 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
     private var currentWeek: Int = 0
     private var currentDay: Int = 0
 
-    private var locationProvider: LocationProvider = NoOpLocationProvider()
     private var isBound = false
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
             val lb = binder as WorkoutService.LocalBinder
-            _gpsActive.value = lb.isGpsActive()
-            locationProvider = lb.getLocationProvider()
             viewModelScope.launch {
-                lb.getEngine().state.collect { state ->
+                lb.getGpsActive().collect { active -> _gpsActive.value = active }
+            }
+            viewModelScope.launch {
+                lb.getWorkoutState().collect { state ->
                     _workoutState.value = state
                     if (state is WorkoutState.Completed && currentProgramId.isNotEmpty()) {
                         loadPersonalBest()
@@ -90,9 +88,9 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
                 }
             }
             viewModelScope.launch {
-                lb.getLocationProvider().updates.collect { update ->
+                lb.getLocationUpdates().collect { update ->
                     _locationUpdate.value = update
-                    _distanceMeters.value = lb.getLocationProvider().totalDistanceMeters
+                    _distanceMeters.value = lb.getTotalDistanceMeters()
                     _currentSpeedMps.value = update.speedMps
                 }
             }

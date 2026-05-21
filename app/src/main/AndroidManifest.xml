@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -12,6 +12,13 @@
 
     <!-- GPS is optional; app degrades gracefully without it -->
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+
+    <!-- Required on API 30+ for TextToSpeech to discover installed TTS engines -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
 
     <application
         android:name=".C2KApp"
@@ -37,7 +44,7 @@
 
         <service
             android:name=".service.WorkoutService"
-            android:foregroundServiceType="health"
+            android:foregroundServiceType="location"
             android:exported="false" />
 
     </application>
