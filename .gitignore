@@ -20,3 +20,6 @@ local.properties
 *.keystore
 *.jks
 release/
+
+# Local notes — not for the repo
+FDROID_PUBLISHING.md
