@@ -25,7 +25,7 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 ### Clone and build (debug)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/c2k.git
+git clone https://github.com/AnalogGhost/c2k.git
 cd c2k
 echo "sdk.dir=$HOME/Android/Sdk" > local.properties
 ./gradlew assembleDebug
