@@ -2,6 +2,7 @@ package com.hackerapps.c2k.ui.screen.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -98,11 +99,11 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
         ) {
-            item {
-                Spacer(Modifier.height(8.dp))
-                if (state.streak > 0) {
+            if (state.streak > 0) {
+                item {
                     Text(
                         stringResource(R.string.home_streak, state.streak),
                         style = MaterialTheme.typography.bodyMedium,
@@ -161,7 +162,6 @@ fun HomeScreen(
                 }
             }
 
-            item { Spacer(Modifier.height(16.dp)) }
         }
     }
 }
