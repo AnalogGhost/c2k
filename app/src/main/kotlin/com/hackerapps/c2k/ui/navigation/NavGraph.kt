@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.hackerapps.c2k.ui.screen.guide.GuideScreen
 import com.hackerapps.c2k.ui.screen.history.HistoryScreen
 import com.hackerapps.c2k.ui.screen.home.HomeScreen
 import com.hackerapps.c2k.ui.screen.program.ProgramSelectScreen
@@ -18,6 +19,7 @@ object Routes {
     const val WORKOUT  = "workout/{programId}/{week}/{day}"
     const val HISTORY  = "history"
     const val SETTINGS = "settings"
+    const val GUIDE    = "guide"
 
     fun program(programId: String) = "program/$programId"
     fun workout(programId: String, week: Int, day: Int) = "workout/$programId/$week/$day"
@@ -36,7 +38,8 @@ fun NavGraph() {
                     navController.navigate(Routes.workout(programId, week, day))
                 },
                 onOpenHistory     = { navController.navigate(Routes.HISTORY) },
-                onOpenSettings    = { navController.navigate(Routes.SETTINGS) }
+                onOpenSettings    = { navController.navigate(Routes.SETTINGS) },
+                onOpenGuide       = { navController.navigate(Routes.GUIDE) }
             )
         }
 
@@ -77,6 +80,10 @@ fun NavGraph() {
 
         composable(Routes.SETTINGS) {
             SettingsScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Routes.GUIDE) {
+            GuideScreen(onBack = { navController.popBackStack() })
         }
     }
 }

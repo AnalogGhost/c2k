@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
@@ -55,6 +56,7 @@ fun HomeScreen(
     onContinueWorkout: (programId: String, week: Int, day: Int) -> Unit,
     onOpenHistory: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenGuide: () -> Unit,
     vm: HomeViewModel = viewModel()
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
@@ -83,6 +85,9 @@ fun HomeScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.home_title)) },
                 actions = {
+                    IconButton(onClick = onOpenGuide) {
+                        Icon(Icons.Default.MenuBook, contentDescription = stringResource(R.string.guide_title))
+                    }
                     IconButton(onClick = onOpenHistory) {
                         Icon(Icons.Default.History, contentDescription = stringResource(R.string.history_title))
                     }

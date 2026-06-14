@@ -95,6 +95,9 @@
     <string name="permission_location_deny">Skip GPS</string>
     <string name="permission_location_allow">Allow GPS</string>
 
+    <!-- Guide -->
+    <string name="guide_title">Guide</string>
+
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_tts_enabled">Voice announcements</string>
