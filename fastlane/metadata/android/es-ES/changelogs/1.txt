@@ -1,0 +1,7 @@
+Initial release.
+
+• Couch to 5K (9 weeks) and Couch to 10K (14 weeks) programs
+• Audible voice prompts at interval transitions
+• Background timer with lock-screen notification
+• Optional GPS distance and pace tracking
+• Progress tracking across sessions

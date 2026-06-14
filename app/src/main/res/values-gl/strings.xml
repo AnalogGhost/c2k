@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">C2K</string>
+
+    <!-- Programs -->
+    <string name="program_c25k">Do sofá ao 5K</string>
+    <string name="program_c210k">Do sofá ao 10K</string>
+    <string name="program_c25k_desc">Programa de 9 semanas para correr 5K sen pausa</string>
+    <string name="program_c210k_desc">Programa de 14 semanas para correr 10K sen pausa</string>
+
+    <!-- Home screen -->
+    <string name="home_title">C2K</string>
+    <string name="home_choose_program">Elixe un programa</string>
+    <string name="home_recent_workouts">Adestramentos recentes</string>
+    <string name="home_no_workouts">Aínda non hai adestramentos. Inicia un programa primeiro!</string>
+    <string name="home_workout_active">Realizando un adestramento — toca para volver</string>
+    <string name="home_continue_workout">Continuar: %1$s · Semana %2$d, Día %3$d</string>
+    <string name="home_streak">Xeira de %1$d días 🔥</string>
+    <string name="home_program_weeks">%1$d semanas</string>
+    <string name="home_program_prerequisite">%1$s</string>
+
+    <!-- Program select screen -->
+    <string name="program_week_label">Semana %1$d</string>
+    <string name="program_day_label">Día %1$d</string>
+    <string name="program_completed_badge">Feito</string>
+    <string name="program_start_workout">Iniciar adestramento</string>
+    <string name="program_progress">%1$d de %2$d días completados</string>
+    <string name="program_next_workout">Continuar: Semana %1$d, Día %2$d →</string>
+    <string name="program_preview_title">Semana %1$d, Día %2$d</string>
+    <string name="program_preview_start">Comezar</string>
+    <string name="program_preview_redo">Volver facer</string>
+    <string name="program_preview_duration">~%1$d min</string>
+    <string name="program_reset_title">Restablecer progreso</string>
+    <string name="program_reset_message">Con isto vas eliminar todas as sesións completadas para o programa, pero o historial xeral vaise manter.</string>
+    <string name="program_reset_confirm">Restablecer</string>
+    <string name="program_reset_cancel">Cancelar</string>
+
+    <!-- Workout screen -->
+    <string name="workout_stop_title">Deter o adestramento?</string>
+    <string name="workout_stop_message">O progreso vaise gardar como incompleto.</string>
+    <string name="workout_stop_confirm">Deter</string>
+    <string name="workout_stop_cancel">Cancelar</string>
+    <string name="workout_interval_run">CORRER</string>
+    <string name="workout_interval_walk">CAMIÑAR</string>
+    <string name="workout_interval_warmup">QUECEMENTO</string>
+    <string name="workout_interval_cooldown">VOLTA Á CALMA</string>
+    <string name="workout_pause">Pausa</string>
+    <string name="workout_resume">Retormar</string>
+    <string name="workout_stop">Deter</string>
+    <string name="workout_elapsed">Tempo: %1$s</string>
+    <string name="workout_interval_progress">Intervalo %1$d de %2$d</string>
+    <string name="workout_next_interval">Seguinte: %1$s %2$s</string>
+    <string name="workout_distance_km">%1$.2f km</string>
+    <string name="workout_pace">%1$s / km</string>
+    <string name="workout_acquiring_gps">Localizando GPS…</string>
+    <string name="workout_gps_unavailable">GPS non dispoñible</string>
+    <string name="workout_complete_title">Completaches o adestramento!</string>
+    <string name="workout_complete_message">Bo traballo! Sigue así.</string>
+    <string name="workout_complete_time">Tempo: %1$s</string>
+    <string name="workout_done">Feito</string>
+    <string name="workout_paused_label">DETIDO</string>
+    <string name="workout_reconnecting">Reconectando…</string>
+    <string name="workout_starting">Comezando…</string>
+    <string name="workout_new_best">Nova marca persoal!</string>
+    <string name="workout_previous_best">Marca anterior: %1$s</string>
+
+    <!-- History screen -->
+    <string name="history_title">Historial</string>
+    <string name="history_empty">Aínda non completaches ningún adestramento.</string>
+    <string name="history_week_day">Semana %1$d, Día %2$d</string>
+    <string name="history_duration">%1$s</string>
+    <string name="history_export">Exportar CSV</string>
+    <string name="history_export_chooser">Exportar historial de adestramento</string>
+    <string name="history_export_gpx">Exportar ruta como GPX</string>
+    <string name="history_export_gpx_chooser">Compartir ruta GPX</string>
+    <string name="history_delete_title">Eliminar o adestramento?</string>
+    <string name="history_delete_message">Con isto vas eliminar de xeito definitivo esta sesión do teu historial.</string>
+    <string name="history_delete_confirm">Eliminar</string>
+    <string name="history_delete_cancel">Cancelar</string>
+    <string name="history_stats_workouts">adestramentos</string>
+    <string name="history_stats_km">km</string>
+    <string name="history_stats_time">tempo</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">Adestramento</string>
+    <string name="notification_channel_desc">Temporizador do adestramento activo</string>
+    <string name="notification_action_pause">Pausar</string>
+    <string name="notification_action_resume">Retomar</string>
+    <string name="notification_action_stop">Deter</string>
+    <string name="notification_title">Adestramento C2K</string>
+    <string name="workout_paused_notification">Detido</string>
+
+    <!-- Permissions -->
+    <string name="permission_location_rationale">C2K pode rexistrar a distancia e ritmo utilizando o GPS. Isto é optativo — o temporizador do adestramento funciona tamén sen el.</string>
+    <string name="permission_location_deny">Omitir GPS</string>
+    <string name="permission_location_allow">Utilizar GPS</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Axustes</string>
+    <string name="settings_tts_enabled">Anuncios por voz</string>
+    <string name="settings_gps_enabled">Gravar con GPS</string>
+    <string name="settings_countdown_warnings">Avisos de conta atrás (10s, 5s)</string>
+    <string name="settings_keep_screen_on">Manter pantalla acendida durante o adestramento</string>
+    <string name="settings_vibration_enabled">Vibrar cando cambia o tipo de intervalo</string>
+    <string name="settings_tts_speed">Velocidade da voz</string>
+    <string name="settings_tts_speed_slow">Lenta</string>
+    <string name="settings_tts_speed_fast">Rápida</string>
+
+    <!-- Battery optimization warning -->
+    <string name="battery_opt_title">Optimización da batería</string>
+    <string name="battery_opt_message">Para que os datos do adestramento sexan máis fiables permite que C2K funcione en segundo plano. Comproba os axustes da batería.</string>
+    <string name="battery_opt_open_settings">Abrir axustes</string>
+    <string name="battery_opt_dismiss">Desbotar</string>
+
+    <!-- TTS unavailable warning -->
+    <string name="tts_unavailable">O Texto-a-fala non está dispoñible neste dispostivo. Os anuncios por voz están desactivados.</string>
+</resources>
