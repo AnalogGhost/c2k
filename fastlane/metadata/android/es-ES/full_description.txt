@@ -1,0 +1,19 @@
+C2K es una app de entrenamiento para Android, libre y de código abierto, que te guía desde el nivel más básico hasta correr 5K o 10K — no necesita los servicios de Google, no te rastrea, y no tiene publicidad.
+
+Características:
+• Del sofá a 5K (C25K) — programa de 9 semanas, 3 sesiones por semana
+• Del sofá a 10K (C210K) — programa de 14 semanas
+• Indicaciones por voz — "Comienza a correr", "Camina durante 90 segundos", cuenta atrás
+• Temporizador en segundo plano — continúa funcionando con la pantalla apagada
+• Registro con GPS (opcional) — graba la distancia y ritmo; funciona igualmente sin GPS
+• Seguimiento de progreso — registra cuantos días y semanas has completado
+• Funciona sin datos — no necesita permiso de acceso a internet
+• No requiere Google Play Services — compatible con GrapheneOS y dispositivos "desgooglizados"
+
+Permisos:
+• FOREGROUND_SERVICE — mantiene el temporizador del entrenamiento con la pantalla apagada
+• WAKE_LOCK — evita que la CPU se detenga durante un entrenamiento
+• ACCESS_FINE_LOCATION — GPS opcional para grabar la distancia/ritmo del entrenamiento (puedes omitir esto)
+• POST_NOTIFICATIONS — notificaciones de entrenamiento con controles de pausa/detención
+
+C2K es software libre publicado con licencia GNU General Public License v3.
