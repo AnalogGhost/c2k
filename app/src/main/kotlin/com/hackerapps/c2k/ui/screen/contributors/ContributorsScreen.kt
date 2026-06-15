@@ -30,14 +30,16 @@ import com.hackerapps.c2k.R
 
 private data class Contributor(
     val name: String,
-    val handle: String,
+    val github: String? = null,
+    val fediverse: String? = null,
     val contributions: List<String>
 )
 
 private val contributors = listOf(
     Contributor(
         name = "xmgz",
-        handle = "@l10n@gts.xmgz.eu",
+        github = "xmgz",
+        fediverse = "@l10n@gts.xmgz.eu",
         contributions = listOf("Spanish (es) translation", "Galician (gl) translation")
     )
 )
@@ -79,20 +81,18 @@ fun ContributorsScreen(onBack: () -> Unit) {
 private fun ContributorCard(contributor: Contributor) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    contributor.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    contributor.handle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
+            Text(
+                contributor.name,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            contributor.github?.let {
+                Spacer(Modifier.height(2.dp))
+                HandleRow(label = "GitHub", value = it)
+            }
+            contributor.fediverse?.let {
+                Spacer(Modifier.height(2.dp))
+                HandleRow(label = "Fediverse", value = it)
             }
             Spacer(Modifier.height(8.dp))
             contributor.contributions.forEachIndexed { i, contribution ->
@@ -104,5 +104,21 @@ private fun ContributorCard(contributor: Contributor) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun HandleRow(label: String, value: String) {
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(
+            "$label:",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        )
+        Text(
+            value,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+        )
     }
 }
