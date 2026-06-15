@@ -96,7 +96,7 @@
     <string name="permission_location_allow">Utilizar GPS</string>
 
     <!-- Guide -->
-    <string name="guide_title">Manual</string>
+    <string name="guide_title">Glosario</string>
     
     <!-- Settings -->
     <string name="settings_title">Axustes</string>
