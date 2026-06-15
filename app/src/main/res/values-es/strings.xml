@@ -94,7 +94,10 @@
     <string name="permission_location_rationale">C2K puede registrar la distancia y ritmo utilizando el GPS. Esto es opcional — el temporizador también funcionará sin él.</string>
     <string name="permission_location_deny">Omitir GPS</string>
     <string name="permission_location_allow">Utilizar GPS</string>
-
+    
+    <!-- Guide -->
+    <string name="guide_title">Glosario</string>
+    
     <!-- Settings -->
     <string name="settings_title">Configuración</string>
     <string name="settings_tts_enabled">Indicaciones por voz</string>
