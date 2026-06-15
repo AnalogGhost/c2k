@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.hackerapps.c2k.ui.screen.contributors.ContributorsScreen
 import com.hackerapps.c2k.ui.screen.guide.GuideScreen
 import com.hackerapps.c2k.ui.screen.history.HistoryScreen
 import com.hackerapps.c2k.ui.screen.home.HomeScreen
@@ -19,7 +20,8 @@ object Routes {
     const val WORKOUT  = "workout/{programId}/{week}/{day}"
     const val HISTORY  = "history"
     const val SETTINGS = "settings"
-    const val GUIDE    = "guide"
+    const val GUIDE         = "guide"
+    const val CONTRIBUTORS  = "contributors"
 
     fun program(programId: String) = "program/$programId"
     fun workout(programId: String, week: Int, day: Int) = "workout/$programId/$week/$day"
@@ -33,13 +35,14 @@ fun NavGraph() {
 
         composable(Routes.HOME) {
             HomeScreen(
-                onSelectProgram   = { navController.navigate(Routes.program(it)) },
-                onContinueWorkout = { programId, week, day ->
+                onSelectProgram      = { navController.navigate(Routes.program(it)) },
+                onContinueWorkout    = { programId, week, day ->
                     navController.navigate(Routes.workout(programId, week, day))
                 },
-                onOpenHistory     = { navController.navigate(Routes.HISTORY) },
-                onOpenSettings    = { navController.navigate(Routes.SETTINGS) },
-                onOpenGuide       = { navController.navigate(Routes.GUIDE) }
+                onOpenHistory        = { navController.navigate(Routes.HISTORY) },
+                onOpenSettings       = { navController.navigate(Routes.SETTINGS) },
+                onOpenGuide          = { navController.navigate(Routes.GUIDE) },
+                onOpenContributors   = { navController.navigate(Routes.CONTRIBUTORS) }
             )
         }
 
@@ -84,6 +87,10 @@ fun NavGraph() {
 
         composable(Routes.GUIDE) {
             GuideScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Routes.CONTRIBUTORS) {
+            ContributorsScreen(onBack = { navController.popBackStack() })
         }
     }
 }

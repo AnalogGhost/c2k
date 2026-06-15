@@ -98,6 +98,9 @@
     <!-- Guide -->
     <string name="guide_title">Guide</string>
 
+    <!-- Contributors -->
+    <string name="contributors_title">Contributors</string>
+
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_tts_enabled">Voice announcements</string>
