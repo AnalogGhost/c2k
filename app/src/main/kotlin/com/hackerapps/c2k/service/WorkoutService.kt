@@ -127,12 +127,12 @@ class WorkoutService : Service() {
             ) == PackageManager.PERMISSION_GRANTED
             startForeground(
                 NOTIFICATION_ID,
-                buildNotification("Starting…"),
+                buildNotification(getString(R.string.workout_starting)),
                 if (hasLocation) android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
                 else 0  // FOREGROUND_SERVICE_TYPE_NONE — timer-only, no location claimed
             )
         } else {
-            startForeground(NOTIFICATION_ID, buildNotification("Starting…"))
+            startForeground(NOTIFICATION_ID, buildNotification(getString(R.string.workout_starting)))
         }
 
         val workoutDay = Programs.byId(programId).weeks[week - 1][day - 1]

@@ -47,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.Programs
+import com.hackerapps.c2k.ui.programNameRes
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -68,7 +69,7 @@ fun HistoryScreen(
                 title = { Text(stringResource(R.string.history_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.nav_back))
                     }
                 },
                 actions = {
@@ -250,8 +251,8 @@ private fun SessionCard(
     session: WorkoutSessionEntity,
     onExportGpx: () -> Unit
 ) {
-    val displayName = Programs.all().find { it.programId == session.programId }?.displayName
-        ?: session.programId
+    val nameRes = programNameRes(session.programId)
+    val displayName = nameRes?.let { stringResource(it) } ?: session.programId
     val date = SimpleDateFormat("EEE d MMM yyyy  HH:mm", Locale.getDefault())
         .format(Date(session.startedAt))
     Card(modifier = Modifier.fillMaxWidth()) {
@@ -266,7 +267,7 @@ private fun SessionCard(
                         Icon(Icons.Default.CheckCircle, contentDescription = null, tint = WarmCoolGreen)
                     }
                     Text(
-                        "  $displayName  •  Week ${session.week}, Day ${session.day}",
+                        "  $displayName  •  ${stringResource(R.string.history_week_day, session.week, session.day)}",
                         style = MaterialTheme.typography.titleMedium
                     )
                 }

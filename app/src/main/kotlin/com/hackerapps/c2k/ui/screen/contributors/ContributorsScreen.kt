@@ -1,5 +1,6 @@
 package com.hackerapps.c2k.ui.screen.contributors
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +33,7 @@ private data class Contributor(
     val name: String,
     val github: String? = null,
     val fediverse: String? = null,
-    val contributions: List<String>
+    @StringRes val contributionRes: List<Int>
 )
 
 private val contributors = listOf(
@@ -40,7 +41,7 @@ private val contributors = listOf(
         name = "xmgz",
         github = "xmgz",
         fediverse = "@l10n@gts.xmgz.eu",
-        contributions = listOf("Spanish (es) translation", "Galician (gl) translation")
+        contributionRes = listOf(R.string.contributor_translation_es, R.string.contributor_translation_gl)
     )
 )
 
@@ -53,7 +54,7 @@ fun ContributorsScreen(onBack: () -> Unit) {
                 title = { Text(stringResource(R.string.contributors_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.nav_back))
                     }
                 }
             )
@@ -88,17 +89,17 @@ private fun ContributorCard(contributor: Contributor) {
             )
             contributor.github?.let {
                 Spacer(Modifier.height(2.dp))
-                HandleRow(label = "GitHub", value = it)
+                HandleRow(label = stringResource(R.string.contributor_github_label), value = it)
             }
             contributor.fediverse?.let {
                 Spacer(Modifier.height(2.dp))
-                HandleRow(label = "Fediverse", value = it)
+                HandleRow(label = stringResource(R.string.contributor_fediverse_label), value = it)
             }
             Spacer(Modifier.height(8.dp))
-            contributor.contributions.forEachIndexed { i, contribution ->
+            contributor.contributionRes.forEachIndexed { i, resId ->
                 if (i > 0) HorizontalDivider(Modifier.padding(vertical = 4.dp))
                 Text(
-                    contribution,
+                    stringResource(resId),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(vertical = 2.dp)
                 )

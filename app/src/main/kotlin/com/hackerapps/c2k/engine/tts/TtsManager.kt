@@ -3,6 +3,8 @@ package com.hackerapps.c2k.engine.tts
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.util.Log
+import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.model.IntervalType
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 
@@ -15,7 +17,8 @@ class TtsManager(
         val isAvailableOnDevice = MutableStateFlow<Boolean?>(null)
     }
 
-    private val tts = TextToSpeech(context.applicationContext, this)
+    private val context: Context = context.applicationContext
+    private val tts = TextToSpeech(this.context, this)
     private var ready = false
     private var pendingAnnouncement: TtsAnnouncement? = null
 
@@ -57,19 +60,34 @@ class TtsManager(
     }
 
     private fun buildText(announcement: TtsAnnouncement): String = when (announcement) {
-        is TtsAnnouncement.IntervalStart    -> announcement.interval.announcement
-        is TtsAnnouncement.CountdownWarning -> "${announcement.secondsRemaining} seconds remaining"
-        is TtsAnnouncement.NextInterval     -> nextIntervalText(announcement.interval)
-        TtsAnnouncement.WorkoutComplete     -> "Workout complete. Great job!"
-        TtsAnnouncement.Halfway             -> "Halfway there, keep it up!"
-        TtsAnnouncement.LastRunInterval     -> "Last run, finish strong!"
+        is TtsAnnouncement.IntervalStart -> when (announcement.interval.type) {
+            IntervalType.WARMUP   -> context.getString(R.string.tts_interval_warmup)
+            IntervalType.COOLDOWN -> context.getString(R.string.tts_interval_cooldown)
+            IntervalType.RUN      -> context.getString(R.string.tts_interval_run, ttsDuration(announcement.interval.durationSeconds))
+            IntervalType.WALK     -> context.getString(R.string.tts_interval_walk, ttsDuration(announcement.interval.durationSeconds))
+        }
+        is TtsAnnouncement.CountdownWarning -> context.getString(R.string.tts_seconds_remaining, announcement.secondsRemaining)
+        is TtsAnnouncement.NextInterval -> when (announcement.interval.type) {
+            IntervalType.RUN      -> context.getString(R.string.tts_next_run)
+            IntervalType.WALK     -> context.getString(R.string.tts_next_walk)
+            IntervalType.WARMUP   -> context.getString(R.string.tts_next_warmup)
+            IntervalType.COOLDOWN -> context.getString(R.string.tts_next_cooldown)
+        }
+        TtsAnnouncement.WorkoutComplete -> context.getString(R.string.tts_workout_complete)
+        TtsAnnouncement.Halfway         -> context.getString(R.string.tts_halfway)
+        TtsAnnouncement.LastRunInterval -> context.getString(R.string.tts_last_run)
     }
 
-    private fun nextIntervalText(interval: com.hackerapps.c2k.data.model.Interval): String =
-        when (interval.type) {
-            com.hackerapps.c2k.data.model.IntervalType.RUN      -> "Get ready to run"
-            com.hackerapps.c2k.data.model.IntervalType.WALK     -> "Get ready to walk"
-            com.hackerapps.c2k.data.model.IntervalType.WARMUP   -> "Get ready to warm up"
-            com.hackerapps.c2k.data.model.IntervalType.COOLDOWN -> "Begin your cool-down soon"
+    private fun ttsDuration(seconds: Int): String {
+        val mins = seconds / 60
+        val secs = seconds % 60
+        val minStr = if (mins > 0) context.resources.getQuantityString(R.plurals.tts_duration_minutes, mins, mins) else null
+        val secStr = if (secs > 0) context.resources.getQuantityString(R.plurals.tts_duration_seconds, secs, secs) else null
+        return when {
+            minStr != null && secStr != null -> context.getString(R.string.tts_duration_min_sec, minStr, secStr)
+            minStr != null -> minStr
+            secStr != null -> secStr
+            else -> ""
         }
+    }
 }

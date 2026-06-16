@@ -40,9 +40,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
-import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutPlan
 import com.hackerapps.c2k.service.WorkoutService
+import com.hackerapps.c2k.ui.programDescRes
+import com.hackerapps.c2k.ui.programNameRes
+import com.hackerapps.c2k.ui.programPrereqRes
 import com.hackerapps.c2k.ui.screen.program.WorkoutPreviewSheet
 import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
@@ -178,6 +180,10 @@ fun HomeScreen(
 
 @Composable
 private fun ProgramCard(plan: WorkoutPlan, onClick: () -> Unit) {
+    val displayName = programNameRes(plan.programId)?.let { stringResource(it) } ?: plan.displayName
+    val description = programDescRes(plan.programId)?.let { stringResource(it) } ?: plan.description
+    val prereqRes = programPrereqRes(plan.programId)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -188,25 +194,25 @@ private fun ProgramCard(plan: WorkoutPlan, onClick: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(plan.displayName, style = MaterialTheme.typography.headlineMedium)
+                Text(displayName, style = MaterialTheme.typography.headlineMedium)
                 Text(
                     stringResource(R.string.home_program_weeks, plan.totalWeeks),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
-            if (plan.description.isNotBlank()) {
+            if (description.isNotBlank()) {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    plan.description,
+                    description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
             }
-            if (plan.prerequisite != null) {
+            if (prereqRes != null) {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    stringResource(R.string.home_program_prerequisite, plan.prerequisite),
+                    stringResource(prereqRes),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
@@ -269,8 +275,8 @@ private fun ContinueWorkoutCard(next: NextWorkout, onClick: () -> Unit) {
 
 @Composable
 private fun RecentSessionRow(session: WorkoutSessionEntity) {
-    val displayName = Programs.all()
-        .find { it.programId == session.programId }?.displayName ?: session.programId
+    val nameRes = programNameRes(session.programId)
+    val displayName = nameRes?.let { stringResource(it) } ?: session.programId
     val date = SimpleDateFormat("EEE d MMM", Locale.getDefault())
         .format(Date(session.startedAt))
     Row(
@@ -279,7 +285,7 @@ private fun RecentSessionRow(session: WorkoutSessionEntity) {
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Week ${session.week}, Day ${session.day}  •  $displayName")
+        Text("${stringResource(R.string.history_week_day, session.week, session.day)}  •  $displayName")
         Text(date, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f))
     }
 }
