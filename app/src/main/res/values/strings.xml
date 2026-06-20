@@ -183,6 +183,9 @@
     <string name="settings_tts_speed">Voice speed</string>
     <string name="settings_tts_speed_slow">Slow</string>
     <string name="settings_tts_speed_fast">Fast</string>
+    <string name="settings_tts_volume">Voice volume</string>
+    <string name="settings_tts_volume_quiet">Quiet</string>
+    <string name="settings_tts_volume_loud">Loud</string>
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Battery Optimization</string>

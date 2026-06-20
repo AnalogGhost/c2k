@@ -42,6 +42,7 @@ fun SettingsScreen(
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
+    val ttsVolume            by vm.ttsVolume.collectAsStateWithLifecycle()
     val ttsAvailableOnDevice by vm.ttsAvailableOnDevice.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -120,6 +121,46 @@ fun SettingsScreen(
                                 )
                                 Text(
                                     stringResource(R.string.settings_tts_speed_fast),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                )
+                            }
+                        }
+                    }
+                )
+                HorizontalDivider()
+                ListItem(
+                    headlineContent = {
+                        Column {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(stringResource(R.string.settings_tts_volume))
+                                Text(
+                                    "%.0f%%".format(ttsVolume * 100),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                )
+                            }
+                            Slider(
+                                value = ttsVolume,
+                                onValueChange = { vm.setTtsVolume(it) },
+                                valueRange = 0.2f..1.0f,
+                                steps = 3
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    stringResource(R.string.settings_tts_volume_quiet),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                )
+                                Text(
+                                    stringResource(R.string.settings_tts_volume_loud),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                                 )
