@@ -24,6 +24,7 @@ class UserPreferences(private val context: Context) {
         val BATTERY_PROMPT_DISMISSED = booleanPreferencesKey("battery_prompt_dismissed")
         val VIBRATION_ENABLED        = booleanPreferencesKey("vibration_enabled")
         val TTS_SPEECH_RATE          = floatPreferencesKey("tts_speech_rate")
+        val TTS_VOLUME               = floatPreferencesKey("tts_volume")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -73,4 +74,10 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setTtsSpeechRate(rate: Float) =
         context.dataStore.edit { it[TTS_SPEECH_RATE] = rate }
+
+    val ttsVolume: Flow<Float> = context.dataStore.data
+        .map { it[TTS_VOLUME] ?: 1.0f }
+
+    suspend fun setTtsVolume(volume: Float) =
+        context.dataStore.edit { it[TTS_VOLUME] = volume }
 }

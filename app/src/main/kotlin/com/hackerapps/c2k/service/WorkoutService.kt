@@ -144,13 +144,14 @@ class WorkoutService : Service() {
             val countdownWarnings = prefs.countdownWarnings.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
             val speechRate        = prefs.ttsSpeechRate.first()
+            val ttsVolume         = prefs.ttsVolume.first()
 
             val hasLocationPermission = ContextCompat.checkSelfPermission(
                 this@WorkoutService, android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
 
             withContext(Dispatchers.Main) {
-                ttsManager = TtsManager(this@WorkoutService, speechRate)
+                ttsManager = TtsManager(this@WorkoutService, speechRate, ttsVolume)
             }
 
             locationProvider = if (gpsEnabled && hasLocationPermission)

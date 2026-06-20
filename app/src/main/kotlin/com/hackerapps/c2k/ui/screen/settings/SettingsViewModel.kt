@@ -31,6 +31,9 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     val ttsSpeechRate = prefs.ttsSpeechRate
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 1.0f)
 
+    val ttsVolume = prefs.ttsVolume
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 1.0f)
+
     val ttsAvailableOnDevice = TtsManager.isAvailableOnDevice
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TtsManager.isAvailableOnDevice.value)
 
@@ -40,4 +43,5 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     fun setKeepScreenOn(v: Boolean)      { viewModelScope.launch { prefs.setKeepScreenOn(v) } }
     fun setVibrationEnabled(v: Boolean)  { viewModelScope.launch { prefs.setVibrationEnabled(v) } }
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
+    fun setTtsVolume(v: Float)           { viewModelScope.launch { prefs.setTtsVolume(v) } }
 }

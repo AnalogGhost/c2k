@@ -1,7 +1,12 @@
 package com.hackerapps.c2k.engine.tts
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.IntervalType
@@ -10,7 +15,8 @@ import java.util.Locale
 
 class TtsManager(
     context: Context,
-    private val speechRate: Float = 1.0f
+    private val speechRate: Float = 1.0f,
+    private val volume: Float = 1.0f
 ) : TtsInterface, TextToSpeech.OnInitListener {
 
     companion object {
@@ -22,6 +28,16 @@ class TtsManager(
     private var ready = false
     private var pendingAnnouncement: TtsAnnouncement? = null
 
+    private val audioManager = this.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+        .setAudioAttributes(
+            AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .build()
+        )
+        .build()
+
     override var isAvailable: Boolean = false
         private set
 
@@ -32,6 +48,16 @@ class TtsManager(
                 tts.setLanguage(Locale.ENGLISH)
             }
             tts.setSpeechRate(speechRate)
+            tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onStart(utteranceId: String?) {}
+                override fun onDone(utteranceId: String?) {
+                    if (!tts.isSpeaking) audioManager.abandonAudioFocusRequest(focusRequest)
+                }
+                @Deprecated("Deprecated in Java")
+                override fun onError(utteranceId: String?) {
+                    audioManager.abandonAudioFocusRequest(focusRequest)
+                }
+            })
             ready = true
             isAvailable = true
             isAvailableOnDevice.value = true
@@ -50,12 +76,17 @@ class TtsManager(
         }
         val text = buildText(announcement)
         val mode = if (queueAdd) TextToSpeech.QUEUE_ADD else TextToSpeech.QUEUE_FLUSH
-        tts.speak(text, mode, null, "c2k_${System.nanoTime()}")
+        val params = Bundle().apply {
+            putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
+        }
+        audioManager.requestAudioFocus(focusRequest)
+        tts.speak(text, mode, params, "c2k_${System.nanoTime()}")
     }
 
     override fun shutdown() {
         tts.stop()
         tts.shutdown()
+        audioManager.abandonAudioFocusRequest(focusRequest)
         ready = false
     }
 
