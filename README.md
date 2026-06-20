@@ -6,11 +6,11 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 
 ## Features
 
-- **C25K** — 9-week program to run 5K
-- **C210K** — 14-week program to run 10K
-- **Bridge to 10K** — 6-week bridge for C25K graduates
-- **One Hour Runner** — 13-week progression to 60 minutes continuous running
-- **5K Improver** — 8-week speed and stamina program for runners who can already complete 5K
+- C25K — 9-week program to run 5K
+- C210K — 14-week program to run 10K
+- Bridge to 10K — 6-week bridge for C25K graduates
+- One Hour Runner — 13-week progression to 60 minutes continuous running
+- 5K Improver — 8-week speed and stamina program for runners who can already complete 5K
 - Audible voice prompts (Android built-in TTS — no internet needed)
 - Voice volume and speed controls
 - Music ducking during voice announcements
