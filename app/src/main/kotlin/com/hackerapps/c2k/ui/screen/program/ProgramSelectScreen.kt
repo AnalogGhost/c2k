@@ -51,6 +51,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.CoachingTips
 import com.hackerapps.c2k.data.model.WorkoutDay
+import com.hackerapps.c2k.ui.programDescRes
+import com.hackerapps.c2k.ui.programNameRes
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,10 +119,10 @@ fun ProgramSelectScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(plan.displayName) },
+                title = { Text(programNameRes(plan.programId)?.let { stringResource(it) } ?: plan.displayName) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.nav_back))
                     }
                 },
                 actions = {
@@ -154,9 +156,10 @@ fun ProgramSelectScreen(
         ) {
             item {
                 Spacer(Modifier.height(4.dp))
-                if (plan.description.isNotBlank()) {
+                val planDesc = programDescRes(plan.programId)?.let { stringResource(it) } ?: plan.description
+                if (planDesc.isNotBlank()) {
                     Text(
-                        plan.description,
+                        planDesc,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
@@ -196,7 +199,7 @@ fun ProgramSelectScreen(
             itemsIndexed(plan.weeks) { weekIdx, days ->
                 val week = weekIdx + 1
                 val weekDone = days.indices.all { dIdx -> (week to dIdx + 1) in state.completedDays }
-                val tip = CoachingTips.tip(programId, week)
+                val tipRes = CoachingTips.tip(programId, week)
                 val isExpanded = expandedWeeks[weekIdx] ?: true
 
                 Card(
@@ -233,17 +236,17 @@ fun ProgramSelectScreen(
                             IconButton(onClick = { expandedWeeks[weekIdx] = !isExpanded }) {
                                 Icon(
                                     if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                                    contentDescription = if (isExpanded) "Collapse" else "Expand"
+                                    contentDescription = if (isExpanded) stringResource(R.string.cd_collapse) else stringResource(R.string.cd_expand)
                                 )
                             }
                         }
 
                         AnimatedVisibility(visible = isExpanded) {
                             Column {
-                                if (tip != null) {
+                                if (tipRes != null) {
                                     Spacer(Modifier.height(4.dp))
                                     Text(
-                                        tip,
+                                        stringResource(tipRes),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
                                     )
@@ -292,7 +295,7 @@ private fun DayButton(
                         modifier = Modifier.size(14.dp),
                         tint = WarmCoolGreen
                     )
-                    Text("  Day $day", color = WarmCoolGreen)
+                    Text("  ${stringResource(R.string.program_day_label, day)}", color = WarmCoolGreen)
                 }
             }
         }

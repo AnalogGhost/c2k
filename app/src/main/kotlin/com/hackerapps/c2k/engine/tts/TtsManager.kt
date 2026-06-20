@@ -1,23 +1,41 @@
 package com.hackerapps.c2k.engine.tts
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.util.Log
+import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.model.IntervalType
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Locale
 
 class TtsManager(
     context: Context,
-    private val speechRate: Float = 1.0f
+    private val speechRate: Float = 1.0f,
+    private val volume: Float = 1.0f
 ) : TtsInterface, TextToSpeech.OnInitListener {
 
     companion object {
         val isAvailableOnDevice = MutableStateFlow<Boolean?>(null)
     }
 
-    private val tts = TextToSpeech(context.applicationContext, this)
+    private val context: Context = context.applicationContext
+    private val tts = TextToSpeech(this.context, this)
     private var ready = false
     private var pendingAnnouncement: TtsAnnouncement? = null
+
+    private val audioManager = this.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private val ttsAudioAttributes = AudioAttributes.Builder()
+        .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
+        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+        .build()
+    private val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+        .setAudioAttributes(ttsAudioAttributes)
+        .build()
 
     override var isAvailable: Boolean = false
         private set
@@ -29,6 +47,17 @@ class TtsManager(
                 tts.setLanguage(Locale.ENGLISH)
             }
             tts.setSpeechRate(speechRate)
+            tts.setAudioAttributes(ttsAudioAttributes)
+            tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onStart(utteranceId: String?) {}
+                override fun onDone(utteranceId: String?) {
+                    if (!tts.isSpeaking) audioManager.abandonAudioFocusRequest(focusRequest)
+                }
+                @Deprecated("Deprecated in Java")
+                override fun onError(utteranceId: String?) {
+                    audioManager.abandonAudioFocusRequest(focusRequest)
+                }
+            })
             ready = true
             isAvailable = true
             isAvailableOnDevice.value = true
@@ -47,29 +76,49 @@ class TtsManager(
         }
         val text = buildText(announcement)
         val mode = if (queueAdd) TextToSpeech.QUEUE_ADD else TextToSpeech.QUEUE_FLUSH
-        tts.speak(text, mode, null, "c2k_${System.nanoTime()}")
+        val params = if (volume < 1.0f) Bundle().apply {
+            putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
+        } else null
+        audioManager.requestAudioFocus(focusRequest)
+        tts.speak(text, mode, params, "c2k_${System.nanoTime()}")
     }
 
     override fun shutdown() {
         tts.stop()
         tts.shutdown()
+        audioManager.abandonAudioFocusRequest(focusRequest)
         ready = false
     }
 
     private fun buildText(announcement: TtsAnnouncement): String = when (announcement) {
-        is TtsAnnouncement.IntervalStart    -> announcement.interval.announcement
-        is TtsAnnouncement.CountdownWarning -> "${announcement.secondsRemaining} seconds remaining"
-        is TtsAnnouncement.NextInterval     -> nextIntervalText(announcement.interval)
-        TtsAnnouncement.WorkoutComplete     -> "Workout complete. Great job!"
-        TtsAnnouncement.Halfway             -> "Halfway there, keep it up!"
-        TtsAnnouncement.LastRunInterval     -> "Last run, finish strong!"
+        is TtsAnnouncement.IntervalStart -> when (announcement.interval.type) {
+            IntervalType.WARMUP   -> context.getString(R.string.tts_interval_warmup)
+            IntervalType.COOLDOWN -> context.getString(R.string.tts_interval_cooldown)
+            IntervalType.RUN      -> context.getString(R.string.tts_interval_run, ttsDuration(announcement.interval.durationSeconds))
+            IntervalType.WALK     -> context.getString(R.string.tts_interval_walk, ttsDuration(announcement.interval.durationSeconds))
+        }
+        is TtsAnnouncement.CountdownWarning -> context.getString(R.string.tts_seconds_remaining, announcement.secondsRemaining)
+        is TtsAnnouncement.NextInterval -> when (announcement.interval.type) {
+            IntervalType.RUN      -> context.getString(R.string.tts_next_run)
+            IntervalType.WALK     -> context.getString(R.string.tts_next_walk)
+            IntervalType.WARMUP   -> context.getString(R.string.tts_next_warmup)
+            IntervalType.COOLDOWN -> context.getString(R.string.tts_next_cooldown)
+        }
+        TtsAnnouncement.WorkoutComplete -> context.getString(R.string.tts_workout_complete)
+        TtsAnnouncement.Halfway         -> context.getString(R.string.tts_halfway)
+        TtsAnnouncement.LastRunInterval -> context.getString(R.string.tts_last_run)
     }
 
-    private fun nextIntervalText(interval: com.hackerapps.c2k.data.model.Interval): String =
-        when (interval.type) {
-            com.hackerapps.c2k.data.model.IntervalType.RUN      -> "Get ready to run"
-            com.hackerapps.c2k.data.model.IntervalType.WALK     -> "Get ready to walk"
-            com.hackerapps.c2k.data.model.IntervalType.WARMUP   -> "Get ready to warm up"
-            com.hackerapps.c2k.data.model.IntervalType.COOLDOWN -> "Begin your cool-down soon"
+    private fun ttsDuration(seconds: Int): String {
+        val mins = seconds / 60
+        val secs = seconds % 60
+        val minStr = if (mins > 0) context.resources.getQuantityString(R.plurals.tts_duration_minutes, mins, mins) else null
+        val secStr = if (secs > 0) context.resources.getQuantityString(R.plurals.tts_duration_seconds, secs, secs) else null
+        return when {
+            minStr != null && secStr != null -> context.getString(R.string.tts_duration_min_sec, minStr, secStr)
+            minStr != null -> minStr
+            secStr != null -> secStr
+            else -> ""
         }
+    }
 }

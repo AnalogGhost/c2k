@@ -2,6 +2,7 @@ package com.hackerapps.c2k.ui.screen.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
@@ -39,9 +41,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
-import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutPlan
 import com.hackerapps.c2k.service.WorkoutService
+import com.hackerapps.c2k.ui.programDescRes
+import com.hackerapps.c2k.ui.programNameRes
+import com.hackerapps.c2k.ui.programPrereqRes
 import com.hackerapps.c2k.ui.screen.program.WorkoutPreviewSheet
 import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
@@ -57,6 +61,7 @@ fun HomeScreen(
     onOpenHistory: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenGuide: () -> Unit,
+    onOpenContributors: () -> Unit,
     vm: HomeViewModel = viewModel()
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
@@ -85,6 +90,9 @@ fun HomeScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.home_title)) },
                 actions = {
+                    IconButton(onClick = onOpenContributors) {
+                        Icon(Icons.Default.People, contentDescription = stringResource(R.string.contributors_title))
+                    }
                     IconButton(onClick = onOpenGuide) {
                         Icon(Icons.Default.MenuBook, contentDescription = stringResource(R.string.guide_title))
                     }
@@ -103,11 +111,11 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
         ) {
-            item {
-                Spacer(Modifier.height(8.dp))
-                if (state.streak > 0) {
+            if (state.streak > 0) {
+                item {
                     Text(
                         stringResource(R.string.home_streak, state.streak),
                         style = MaterialTheme.typography.bodyMedium,
@@ -166,13 +174,16 @@ fun HomeScreen(
                 }
             }
 
-            item { Spacer(Modifier.height(16.dp)) }
         }
     }
 }
 
 @Composable
 private fun ProgramCard(plan: WorkoutPlan, onClick: () -> Unit) {
+    val displayName = programNameRes(plan.programId)?.let { stringResource(it) } ?: plan.displayName
+    val description = programDescRes(plan.programId)?.let { stringResource(it) } ?: plan.description
+    val prereqRes = programPrereqRes(plan.programId)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -183,25 +194,25 @@ private fun ProgramCard(plan: WorkoutPlan, onClick: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(plan.displayName, style = MaterialTheme.typography.headlineMedium)
+                Text(displayName, style = MaterialTheme.typography.headlineMedium)
                 Text(
                     stringResource(R.string.home_program_weeks, plan.totalWeeks),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
-            if (plan.description.isNotBlank()) {
+            if (description.isNotBlank()) {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    plan.description,
+                    description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
             }
-            if (plan.prerequisite != null) {
+            if (prereqRes != null) {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    stringResource(R.string.home_program_prerequisite, plan.prerequisite),
+                    stringResource(prereqRes),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
@@ -264,8 +275,8 @@ private fun ContinueWorkoutCard(next: NextWorkout, onClick: () -> Unit) {
 
 @Composable
 private fun RecentSessionRow(session: WorkoutSessionEntity) {
-    val displayName = Programs.all()
-        .find { it.programId == session.programId }?.displayName ?: session.programId
+    val nameRes = programNameRes(session.programId)
+    val displayName = nameRes?.let { stringResource(it) } ?: session.programId
     val date = SimpleDateFormat("EEE d MMM", Locale.getDefault())
         .format(Date(session.startedAt))
     Row(
@@ -274,7 +285,7 @@ private fun RecentSessionRow(session: WorkoutSessionEntity) {
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Week ${session.week}, Day ${session.day}  •  $displayName")
+        Text("${stringResource(R.string.history_week_day, session.week, session.day)}  •  $displayName")
         Text(date, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f))
     }
 }

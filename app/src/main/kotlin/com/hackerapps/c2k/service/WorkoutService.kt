@@ -127,12 +127,12 @@ class WorkoutService : Service() {
             ) == PackageManager.PERMISSION_GRANTED
             startForeground(
                 NOTIFICATION_ID,
-                buildNotification("Starting…"),
+                buildNotification(getString(R.string.workout_starting)),
                 if (hasLocation) android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
                 else 0  // FOREGROUND_SERVICE_TYPE_NONE — timer-only, no location claimed
             )
         } else {
-            startForeground(NOTIFICATION_ID, buildNotification("Starting…"))
+            startForeground(NOTIFICATION_ID, buildNotification(getString(R.string.workout_starting)))
         }
 
         val workoutDay = Programs.byId(programId).weeks[week - 1][day - 1]
@@ -144,13 +144,14 @@ class WorkoutService : Service() {
             val countdownWarnings = prefs.countdownWarnings.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
             val speechRate        = prefs.ttsSpeechRate.first()
+            val ttsVolume         = prefs.ttsVolume.first()
 
             val hasLocationPermission = ContextCompat.checkSelfPermission(
                 this@WorkoutService, android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
 
             withContext(Dispatchers.Main) {
-                ttsManager = TtsManager(this@WorkoutService, speechRate)
+                ttsManager = TtsManager(this@WorkoutService, speechRate, ttsVolume)
             }
 
             locationProvider = if (gpsEnabled && hasLocationPermission)

@@ -50,11 +50,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.IntervalType
-import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.service.WorkoutService
 import com.hackerapps.c2k.ui.component.RequestLocationPermission
 import com.hackerapps.c2k.ui.component.RequestNotificationPermission
+import com.hackerapps.c2k.ui.programNameRes
 import com.hackerapps.c2k.ui.screen.workout.components.IntervalRing
 import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WalkBlue
@@ -84,9 +84,8 @@ fun WorkoutScreen(
     var permissionResolved by remember { mutableStateOf(false) }
     var showStopDialog by remember { mutableStateOf(false) }
 
-    val programName = remember(programId) {
-        runCatching { Programs.byId(programId).displayName }.getOrDefault(programId)
-    }
+    val nameResId = remember(programId) { programNameRes(programId) }
+    val programName = nameResId?.let { stringResource(it) } ?: programId
 
     if (!notificationPermissionDone) {
         RequestNotificationPermission { notificationPermissionDone = true }
@@ -154,7 +153,7 @@ fun WorkoutScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("$programName · Week $week, Day $day") })
+            TopAppBar(title = { Text("$programName · ${stringResource(R.string.history_week_day, week, day)}") })
         }
     ) { padding ->
         Column(
@@ -216,7 +215,7 @@ private fun ActiveWorkoutContent(
     IntervalRing(
         progress = intervalProgress.coerceIn(0f, 1f),
         ringColor = ringColor,
-        contentDescription = "$label: ${formatTime(state.secondsRemainingInInterval)} remaining"
+        contentDescription = stringResource(R.string.cd_interval_remaining, label, formatTime(state.secondsRemainingInInterval))
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
@@ -317,7 +316,7 @@ private fun PausedWorkoutContent(
     IntervalRing(
         progress = intervalProgress.coerceIn(0f, 1f),
         ringColor = ringColor,
-        contentDescription = "Paused: $label"
+        contentDescription = stringResource(R.string.cd_interval_paused, label)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
