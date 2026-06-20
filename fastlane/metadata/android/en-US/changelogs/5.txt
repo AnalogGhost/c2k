@@ -1,0 +1,5 @@
+• New: Guide screen with FAQ and glossary (warm-up, pacing, rest days, and more)
+• New: Spanish and Galician translations
+• New: Contributors screen
+• New: Voice volume control in Settings
+• Fix: Voice announcements now duck music playback instead of overlapping
