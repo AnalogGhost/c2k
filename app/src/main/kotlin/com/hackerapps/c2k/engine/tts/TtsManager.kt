@@ -29,13 +29,12 @@ class TtsManager(
     private var pendingAnnouncement: TtsAnnouncement? = null
 
     private val audioManager = this.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    private val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
-        .setAudioAttributes(
-            AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                .build()
-        )
+    private val ttsAudioAttributes = AudioAttributes.Builder()
+        .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
+        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+        .build()
+    private val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+        .setAudioAttributes(ttsAudioAttributes)
         .build()
 
     override var isAvailable: Boolean = false
@@ -48,6 +47,7 @@ class TtsManager(
                 tts.setLanguage(Locale.ENGLISH)
             }
             tts.setSpeechRate(speechRate)
+            tts.setAudioAttributes(ttsAudioAttributes)
             tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(utteranceId: String?) {}
                 override fun onDone(utteranceId: String?) {
@@ -76,9 +76,9 @@ class TtsManager(
         }
         val text = buildText(announcement)
         val mode = if (queueAdd) TextToSpeech.QUEUE_ADD else TextToSpeech.QUEUE_FLUSH
-        val params = Bundle().apply {
+        val params = if (volume < 1.0f) Bundle().apply {
             putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
-        }
+        } else null
         audioManager.requestAudioFocus(focusRequest)
         tts.speak(text, mode, params, "c2k_${System.nanoTime()}")
     }
