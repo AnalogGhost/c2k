@@ -1,0 +1,5 @@
+• Nuevo: Pantalla de guía con preguntas frecuentes y glosario (calentamiento, ritmo, días de descanso y más)
+• Nuevo: Traducciones al español y gallego
+• Nuevo: Pantalla de colaboradores
+• Nuevo: Control de volumen de voz en Ajustes
+• Corrección: Los anuncios de voz ya no se solapan con la música

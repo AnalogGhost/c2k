@@ -1,0 +1,5 @@
+• Novo: Pantalla de guía con preguntas frecuentes e glosario (quecemento, ritmo, días de descanso e máis)
+• Novo: Traducións ao español e ao galego
+• Novo: Pantalla de colaboradores
+• Novo: Control do volume de voz en Axustes
+• Corrección: Os anuncios de voz xa non se solapan coa música
