@@ -6,12 +6,19 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 
 ## Features
 
-- **C25K** — 9-week program to run 5K
-- **C210K** — 14-week program to run 10K
+- C25K — 9-week program to run 5K
+- C210K — 14-week program to run 10K
+- Bridge to 10K — 6-week bridge for C25K graduates
+- One Hour Runner — 13-week progression to 60 minutes continuous running
+- 5K Improver — 8-week speed and stamina program for runners who can already complete 5K
 - Audible voice prompts (Android built-in TTS — no internet needed)
+- Voice volume and speed controls
+- Music ducking during voice announcements
 - Background timer with lock-screen notification and pause/stop controls
 - Optional GPS tracking (distance & pace) — works without it too
 - Progress tracking across sessions
+- Guide screen with FAQ and glossary
+- Localised in English, Spanish, and Galician
 - Fully offline — no internet permission
 - Compatible with GrapheneOS and any de-Googled Android device (no Google Play Services)
 
@@ -19,7 +26,7 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 
 ### Requirements
 
-- JDK 17 or 21 (21 recommended — install via [SDKMAN](https://sdkman.io): `sdk install java 21.0.5-tem`)
+- JDK 21 (install via [SDKMAN](https://sdkman.io): `sdk install java 21.0.5-tem`)
 - Android SDK with platform API 36 and build-tools 36+ (install via Android Studio or `sdkmanager`)
 
 ### Clone and build (debug)
@@ -28,10 +35,10 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 git clone https://github.com/AnalogGhost/c2k.git
 cd c2k
 echo "sdk.dir=$HOME/Android/Sdk" > local.properties
-./gradlew assembleDebug
+./gradlew assembleFossDebug
 ```
 
-APK: `app/build/outputs/apk/debug/app-debug.apk`
+APK: `app/build/outputs/apk/foss/debug/app-foss-debug.apk`
 
 ### Run unit tests
 
@@ -42,20 +49,22 @@ APK: `app/build/outputs/apk/debug/app-debug.apk`
 ### Install on device via ADB
 
 ```bash
-adb install app/build/outputs/apk/debug/app-debug.apk
+adb install app/build/outputs/apk/foss/debug/app-foss-debug.apk
 ```
 
 ## Release builds
 
-### Unsigned (for F-Droid submission)
+### Reproducible build (for F-Droid submission)
+
+Use the Docker build script to produce an unsigned APK in the same environment F-Droid uses:
 
 ```bash
-./gradlew assembleRelease
+bash docker-build.sh
 ```
 
-APK: `app/build/outputs/apk/release/app-release-unsigned.apk`
+APK: `app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk`
 
-F-Droid builds from source and applies their own signature — no keystore needed for submission.
+F-Droid builds from source and applies their own signature. Build from the tagged commit before making any further commits.
 
 ### Signed (for personal sideloading)
 
@@ -79,20 +88,36 @@ keyAlias=c2k
 keyPassword=YOUR_KEY_PASS
 ```
 
-3. Build:
+3. Build and sign:
 
 ```bash
-./gradlew assembleRelease
+bash docker-build.sh
+
+$HOME/Android/Sdk/build-tools/<version>/apksigner sign \
+  --ks ~/c2k-release.jks \
+  --ks-key-alias c2k \
+  --ks-pass pass:YOUR_STORE_PASS \
+  --key-pass pass:YOUR_KEY_PASS \
+  --out app/build/outputs/apk/foss/release/app-foss-release-signed.apk \
+  app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk
 ```
 
-APK: `app/build/outputs/apk/release/app-release.apk`
+## F-Droid
 
-## F-Droid submission
+C2K is available on F-Droid. The app metadata file is `com.hackerapps.c2k.yml`.
 
-1. Fork the [fdroiddata](https://gitlab.com/fdroid/fdroiddata) repository
-2. Add `metadata/org.c2k.yml` describing the build
-3. Tag a release: `git tag v1.0.0 && git push --tags`
-4. Open a merge request to fdroiddata
+To release a new version:
+
+1. Bump `versionCode` and `versionName` in `app/build.gradle.kts`
+2. Add a changelog at `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`
+3. Commit, tag, and push — F-Droid picks up new tags automatically:
+
+```bash
+git tag v1.x.x
+git push origin main v1.x.x
+```
+
+See [FDROID_PUBLISHING.md](FDROID_PUBLISHING.md) for the full initial submission guide.
 
 ## Permissions explained
 
@@ -110,25 +135,32 @@ No `INTERNET` permission — the app is fully offline.
 ## Project structure
 
 ```
-app/src/main/kotlin/org/c2k/
+app/src/main/kotlin/com/hackerapps/c2k/
 ├── data/
-│   ├── model/        # C25K & C210K program definitions, interval types
+│   ├── model/        # Program definitions, interval types, coaching tips
 │   ├── db/           # Room database — sessions and GPS route points
 │   ├── repository/   # SessionRepository
 │   └── prefs/        # DataStore user preferences
 ├── engine/
 │   ├── WorkoutEngine.kt   # Coroutine tick loop, state machine
 │   ├── WorkoutState.kt    # Sealed class: Idle / Active / Paused / Completed
-│   └── tts/               # TextToSpeech wrapper and announcements
+│   └── tts/               # TextToSpeech wrapper, audio focus, announcements
 ├── service/
 │   └── WorkoutService.kt  # ForegroundService, wake lock, notification
 ├── location/              # GPS abstraction (graceful fallback if unavailable)
 └── ui/
-    ├── screen/home/       # Program selection, recent history
-    ├── screen/program/    # Week/day picker with completion badges
-    ├── screen/workout/    # Live timer, interval ring, distance/pace
-    └── screen/history/    # Past sessions list
+    ├── screen/home/         # Program selection, recent history, streak
+    ├── screen/program/      # Week/day picker with completion badges
+    ├── screen/workout/      # Live timer, interval ring, distance/pace
+    ├── screen/history/      # Past sessions list with CSV/GPX export
+    ├── screen/settings/     # Voice, GPS, vibration, display preferences
+    ├── screen/guide/        # FAQ and glossary
+    └── screen/contributors/ # Contributors credits
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute, including translation credits.
 
 ## License
 
