@@ -95,9 +95,84 @@
     <string name="permission_location_deny">Omitir GPS</string>
     <string name="permission_location_allow">Utilizar GPS</string>
 
+        <!-- Navigation content descriptions -->
+    <string name="nav_back">Volver</string>
+    <string name="cd_collapse">Pregar</string>
+    <string name="cd_expand">Despregar</string>
+
+    <!-- Workout screen title -->
+    <string name="cd_interval_remaining">%1$s: %2$s restantes</string>
+    <string name="cd_interval_paused">Detido: %1$s</string>
+
+    <!-- Additional programs -->
+    <string name="program_b210k">Cambiar ao 10K</string>
+    <string name="program_b210k_desc">transición de 6 semanas para persoas que completaron C25K pero que non van directas ao C210K.</string>
+    <string name="program_ohr">Correr Unha Hora</string>
+    <string name="program_ohr_desc">progresión de 13 semanas desde 30 a 60 minutos de carreira continua.</string>
+    <string name="program_5ki">Mellora o 5K</string>
+    <string name="program_5ki_desc">programa de 8 semanas para gañar velocidade e potencia en persoas que xa completaron 5K.</string>
+
+    <!-- Program prerequisites -->
+    <string name="program_prereq_after_c25k">Despois de completar C25K</string>
+    <string name="program_prereq_after_b210k_or_c25k">Despois de completar B210K ou C25K</string>
+    <string name="program_prereq_for_5k_runners">Para corredoras que xa completaron 5K</string>
+
     <!-- Guide -->
-    <string name="guide_title">Glosario</string>
+    <string name="guide_title">Dúbidas/PMF</string>
+    <string name="guide_section_before_start">Antes de comezar</string>
+    <string name="guide_section_during_workout">Durante o adestramento</string>
+    <string name="guide_section_between_workouts">Entre adestramentos</string>
+    <string name="guide_section_glossary">Glosario</string>
     
+    <string name="guide_q_conversational_pace">Que é o ritmo conversacional?</string>
+    <string name="guide_a_conversational_pace">Ritmo conversacional significa que corres suficientemente amodo como para manter unha charla fluída, con frases completas, sen pausas entre palabras. Se che falta o aire como para falar, vai máis amodo.\n\nA maioría das persoas principiantes corren demasiado rápido e fatíganse a si mesmas en só un minuto. Ir amodo non é signo de debilidade; é o modo correcto. Deberías sentir que estás facendo un traballo, pero de xeito cómodo.</string>
+    <string name="guide_q_gear_needed">Que equipamento necesito?</string>
+    <string name="guide_a_gear_needed">Unhas zapatillas para correr decentes é onde máis precisas invertir. Suavizan o impacto repetido sobre as túas articulacións e reducen o risco de lesións de xeito significativo. Se é posible, visita unha tenda especializada en calzado para correr e que te aconsellen, mirarán como camiñas e corres para axudarche a elexir o calzado máis .\n\nTodo o demáis — roupa especial, monitores de frecuencia cardíaca, reloxo GPS — é optativo. Podes comezar a correr simplemente coa roupa cómoda que xa posúes.</string>
+    <string name="guide_q_first_week">Como debería sentirme durante a primeira semana?</string>
+    <string name="guide_a_first_week">Faise difícil. Incluso os intervalos de 60 segundos correndo da primeira semana poden surprenderte se nunca corriches antes, isto é totalmente normal.\n\nO teu sistema cardiovascular adáptase máis rápido que os músculos e tecido conectivo, polo que a falta de aire soluciónase antes que as molestias musculares ou a fatiga nas pernas. É de agardar certa fatiga ao finalizar cada sesión — iso é que o adestramento funciona. Na semana 3 ou 4 a maioría das persoas notan unha mellora moi significativa.</string>
+    <string name="guide_q_safe_to_start">É seguro comezar se nunca corrín antes?</string>
+    <string name="guide_a_safe_to_start">Para a maioría das persoas, si — C25K creouse de xeito específico para persoas que comezan desde cero. Se tes diagnosticado un problema cardíaco, problemas nas articulacións, ou tes máis de 40 anos e nunca fixeches ningunha actividade, unha consulta básica co médico de familia é aconsellable aínda que non requerida.\n\nO programa comeza de xeito moi suave preciamente porque está orientado a persoas sen experiencia.</string>
+
+    <string name="guide_q_warmup">Que é o quecemento e por que non debería evitalo?</string>
+    <string name="guide_a_warmup">Unha camiñada de 5 minutos a ritmo vivo antes do inicio da sesión aumenta de xeito suave o ritmo cardíaco e o fluxo sanguíneo nos teus músculos. A musculatura fría é menos elástica e máis susceptible a sufrir dano.\n\nOmitir o quecemento fai que o primeiro intervalo correndo se faga moito máis difícil, e aumenta o risco de danarte. Cinco minutos é un pequeno investimento.</string>
+    <string name="guide_q_cooldown">Que é a volta á calma?</string>
+    <string name="guide_a_cooldown">Camiñar cinco minutos ao finalizar fai que o corazón volva á calma de xeito gradual mellor que parar de súpeto. Tamén axuda a que o corpo retire o ácido láctico dos músculos, reducindo a rixidez post-adestramento.\n\nSon só cinco minutos que marcan a diferencia respecto a como te sintes o día seguinte.</string>
+    <string name="guide_q_pain_discomfort">Dor e Incomodidade — como diferenciar?</string>
+    <string name="guide_a_pain_discomfort">A incomodidade é normal e de agardar: os pulmóns ardendo, pernas esgotadas, músculos que se queixan. Facer exercicio séntese así, sobre todo ao principio.\n\nA dor é diferente. É aguda, localizada nun punto concreto (xeonllo, canelas, o pé), ou emperora se continúas correndo. A dor é unha mensaxe do teu corpo que che di que algo non vai ben.\n\nA incomodidade diche que "isto é complicado." A dor di "detente." Se sentes dor durante unha sesión, para e volve para a casa. Se persiste despois dun par de días de descanso, consulta cun servizo de fisioterapia ou médico antes de volver a correr.</string>
+    <string name="guide_q_breathing">Como debería respirar?</string>
+    <string name="guide_a_breathing">Non hai un único estilo correcto — respira do xeito en que tomes máis aire. Moitas persoas corredoras collen de xeito natural un ritmo de 2:2 ao respirar: inhala durante 2 pasos, ixhala durante 2 pasos. Outras prefiren 3:2 ou simplemente respirar como che preste.\n\nRespirar ao mesmo tempo pola nariz e a boca é perfectamente natural e recomendable cando te esforzas. Se che falta o aire, estás correndo demasiado rápido — vai máis amodo ata que a respiración se normaliza.</string>
+    <string name="guide_q_cant_finish_interval">Que pasa se non finalizo un intervalo de carreira?</string>
+    <string name="guide_a_cant_finish_interval">Camiña. Non é demérito camiñar — os segmentos camiñando son parte do programa debido precisamente a esta razón.\n\nSe non podes completar os segmentos de carreira de xeito frecuente intenta correr incluso máis amodo. Moitas persoas sorpréndense do lento que é «correr lento». Unha carreira lenta que poidas manter é moito mellor que unha máis rápida que fai que te deteñas.</string>
+
+    <string name="guide_q_rest_days">Por que preciso días de descanso?</string>
+    <string name="guide_a_rest_days">O beneficio obténse durante o descanso, non durante o adestramento en si mesmo. Adestrando creas un pequeno estrés nos teus músculos e tecidos conectivos; nos días de descanso é cando o teu corpo repara ese dano e se fai máis forte.\n\nO prorama C25K inclúe 3 sesións por semana por esta razón. Correr a diario como persoa principiante aumenta significativamente o risco de lesión — fracturas de estrés, dor nas canelas, problemas nos tendóns poden deterte durante semanas.</string>
+    <string name="guide_q_repeat_day">Debo repetir unha sesión ou seguir adiante?</string>
+    <string name="guide_a_repeat_day">Continúa, incluso se unha sesión resultou difícil — sempre que a tiveses completado. C25K deseñouse dun xeito gradual para que case todo o mundo poida avanzar semana a semana.\n\nRepite un día só se non puideches completar os intervalos de ningún xeito  — por exemplo, se tiveches que parar varias veces a metade do intervalo (no só de xeito natural ao finalizar o intervalo). Sentir fatiga, lentitude ou falta de aire non é razón para repetir. Isto é habitual na segunda semana.</string>
+    <string name="guide_q_ready_next_session">Cando debo realizar a seguinte sesión?</string>
+    <string name="guide_a_ready_next_session">Cando as molestias da sesión anterior sexan practicamente imperceptibles — normalmente un ou dous días. Cabe agardar certa molestia muscular despois de 24-48 horas despois dun adestramento (en inglés din DOMS, establecemento en diferido da molestia muscular; maniotas) e mellora conforme o corpo se adapta nas primeiras semanas.\n\nSe aínda sentes molestia significativa ou rixidez, toma un día extra de descanso. Un día a maiores non ten gran importancia; correr coas pernas cansadas incrementa o risco de lesión.</string>
+    <string name="guide_q_stretch">Teño que estirar?</string>
+    <string name="guide_a_stretch">Un lixeiro estiramento despois de correr (non antes) pode axudar á recuperación e flexibilidade reducindo a rixidez. Céntrate nos xemelgos, biceps femoral, flexores da cadeira e cuádriceps — son os músculos que máis traballan.\n\nOs estiramentos antes de corren cando os músculos aínda están fríos son menos útiles e poden causar estrés. A camiñada de quecemento é máis efectiva que o estiramento estático.</string>
+
+    <string name="guide_q_aerobic_fitness">Condición aeróbica</string>
+    <string name="guide_a_aerobic_fitness">A capacidade do teu corazón e pulmóns para entregar osíxeno aos teus músculos durante o exercicio sostido. C25K crea de xeito específico condición aeróbica, que é o fundamento de calquera actividade aeróbica.</string>
+    <string name="guide_q_interval_term">Intervalo</string>
+    <string name="guide_a_interval_term">Un período de esforzo realizado a certa intensidade durante unha duración establecida. Cada sesión de C25K está estructurada como unha serie de intervalos correndo e camiñando — por exemplo, oito repeticións de «corre 60 segundos, camiña durante 90 segundos»</string>
+    <string name="guide_q_pace_term">Ritmo</string>
+    <string name="guide_a_pace_term">A velocidade á que corres, normalmente expresada como mintuos por quilómetro ou milla — por exemplo, 7:30 por km significa que che leva 7 minutos e 30 segundos completar un quilómetro.\n\nPara o programa C25K o ritmo non importa. O que importa é completar os intervalos. Ignora o ritmo totalmente ata que finalices o programa.</string>
+    <string name="guide_q_doms">DOMS (en inglés: Delayed Onset Muscle Soreness)</string>
+    <string name="guide_a_doms">A molestia muscular que aparece entre 24-48 horas despois de facer o adestramento, causada polo dano microscópico nas fibras musculares ao adaptarse ao novo esforzo. Normalmente non é problemátrica, e mellora rápidamente despois das primeiras semanas de adestramento.</string>
+    <string name="guide_q_shin_splints">Dor nas canelas</string>
+    <string name="guide_a_shin_splints">A dor na parte anterior do bordo interno da parte inferior das pernas, común en principiantes. Normalmente débese a facer moito demasiado axiña, ou correr con calzado moi gastado.\n\nSe tes esta molestia, descansa entre 3 e 5 días. Cando volvas a correr comproba o estado do calzado e corre máis amodo. Se persiste a dor deberías consultalo cun servizo de saúde especializado.</string>
+    <string name="guide_q_rpe">RPE (en inglés: Rate of Perceived Exertion)</string>
+    <string name="guide_a_rpe">Unha escala simple do 1 ao 10 para describir o esforzo percibido, onde 1 é permanecer inmóvil e 10 é un esprint a tope que non poderías manter máis duns segundos.\n\nA maioría do programa C25K debería sentirse como un 5–6: notando claramente o esforzo, pero de xeito sustentable. Ritmo conversacional.</string>
+
+        <!-- Contributors -->
+    <string name="contributors_title">Colaboracións</string>
+    <string name="contributor_github_label">GitHub</string>
+    <string name="contributor_fediverse_label">Fediverso</string>
+    <string name="contributor_translation_es">Tradución ao español (es)</string>
+    <string name="contributor_translation_gl">Tradución ao galego (gl)</string>
+
     <!-- Settings -->
     <string name="settings_title">Axustes</string>
     <string name="settings_tts_enabled">Anuncios por voz</string>
@@ -120,4 +195,67 @@
 
     <!-- TTS unavailable warning -->
     <string name="tts_unavailable">O Texto-a-fala non está dispoñible neste dispostivo. Os anuncios por voz están desactivados.</string>
-</resources>
+
+    <!-- TTS announcements -->
+    <string name="tts_interval_warmup">Comeza o quecemento andando</string>
+    <string name="tts_interval_run">Corre durante %1$s</string>
+    <string name="tts_interval_walk">Camiña durante %1$s</string>
+    <string name="tts_interval_cooldown">Comeza a camiñar para volver á calma</string>
+    <string name="tts_seconds_remaining">restan %1$d segundos</string>
+    <string name="tts_next_run">Prepárate para correr</string>
+    <string name="tts_next_walk">Prepárate para camiñar</string>
+    <string name="tts_next_warmup">Prepárate para o quecemento</string>
+    <string name="tts_next_cooldown">Vai comezar a volta á calma</string>
+    <string name="tts_workout_complete">Adestramento completado. Bo traballo!</string>
+    <string name="tts_halfway">Imos pola metade, sigue así!</string>
+    <string name="tts_last_run">Última carreira, acabando forte!</string>
+    <string name="tts_duration_min_sec">%1$s e %2$s</string>
+    <plurals name="tts_duration_minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
+    <plurals name="tts_duration_seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
+
+    <!-- Coaching tips - C25K -->
+    <string name="coaching_c25k_w1">Corre a un ritmo que che permita falar. As pausas camiñando son parte do adestramento.</string>
+    <string name="coaching_c25k_w2">Completaches a primeira semana — o teu corpo xa se vai adaptando. Mantén o ritmo fácil.</string>
+    <string name="coaching_c25k_w3">Esta semana intervalos máis longos. Céntrate na respiración: inhala cada 2 pasos; exhala cada 2.</string>
+    <string name="coaching_c25k_w4">Catro lonxitudes diferentes hoxe. Isto contribúe á fortaleza mental tanto como á física.</string>
+    <string name="coaching_c25k_w5">O día 3 desta semana é un fito no camiño: 20 minutos de carreira contínua. Conseguíchelo.</string>
+    <string name="coaching_c25k_w6">Superaches a metade do camiño. As carreiras longas crean a túa base aeróbica.</string>
+    <string name="coaching_c25k_w7">25 minutos seguidos. Non todo o mundo chega tan lonxe — xa es unha persoa corredora.</string>
+    <string name="coaching_c25k_w8">28 minutos. Xa case conseguiches o obxectivo. Non te apresures, gárdao para a próxima semana.</string>
+    <string name="coaching_c25k_w9">Semana de graduación. 30 minutos, celébrao!</string>
+
+    <!-- Coaching tips - C210K extension weeks -->
+    <string name="coaching_c210k_w10">Volver aos intervalos para reconstruír a base para unha distancia maior. Tómao con calma.</string>
+    <string name="coaching_c210k_w11">Esforzos combinados máis longos. Mantén o ritmo conversacional todo o tempo.</string>
+    <string name="coaching_c210k_w12">40 minutos de carreira cun breve interludio. Reláxate e non compitas.</string>
+    <string name="coaching_c210k_w13">50 minutos. Se podes facer isto, tes o 10K ao teu alcance.</string>
+    <string name="coaching_c210k_w14">60 minutos — carreira de graduación do 10K. A por el!</string>
+
+    <!-- Coaching tips - Bridge to 10K -->
+    <string name="coaching_b210k_w1">Retomando o hábito após o C25K. Tómao con calma, non é o momento de forzar.</string>
+    <string name="coaching_b210k_w2">Dous bloques máis longos con recuperación curta. Intenta levar un ritmo constante nos dous segmentos.</string>
+    <string name="coaching_b210k_w3">Aumentando o volume total. Céntrate nun esforzo consistente nos dous intervalos.</string>
+    <string name="coaching_b210k_w4">Cas 45 minutos de carreira. Estás creando o fundamento para un 10K.</string>
+    <string name="coaching_b210k_w5">50 minutos esta semana. Falta unha semana para a carreira de graduación dos 60 minutos.</string>
+    <string name="coaching_b210k_w6">60 minutos — a liña de meta do B210K. Ben feito!</string>
+
+    <!-- Coaching tips - One Hour Runner -->
+    <string name="coaching_ohr_w1">33 minutos de carreira cómoda, correndo fácil. Non te preocupes polo ritmo, simplemente completaa.</string>
+    <string name="coaching_ohr_w4">40 minutos. Cada semana estás aumentando a resistencia.</string>
+    <string name="coaching_ohr_w7">Case 50 minutos. Xa superaches por moito a zona de comfort da persoa corredora media.</string>
+    <string name="coaching_ohr_w10">55 minutos. O obxectivo dunha hora está a unha semana vista.</string>
+    <string name="coaching_ohr_w13">60 minutos — xa está. Correches unha hora!</string>
+
+    <!-- Coaching tips - 5K Improver -->
+    <string name="coaching_5ki_w1">Esforzos curtos e duros, collendo velocidade nas pernas. Esfórzate un pouquiño máis do que sería o teu ritmo habitual para 5K.</string>
+    <string name="coaching_5ki_w2">Os intervalos de 5 minutos son ideais para crear potencia aeróbica.</string>
+    <string name="coaching_5ki_w4">Adestramento combinados: intervalos longos cunha carreira ao final. A forza necesaria para a carreira.</string>
+    <string name="coaching_5ki_w6">Dous segmentos de 15 minutos — traballo aeróbico sólido que se traduce directamente nun 5K máis rápido.</string>
+    <string name="coaching_5ki_w8">Carreira de graduación: 30 minutos a ritmo de 5K. Mira que lonxe chegaches — congratúlate!.</string>
+</resources>-->

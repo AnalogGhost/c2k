@@ -159,11 +159,11 @@
     <string name="guide_a_interval_term">Un período de esfuerzo realizado a una intensidad concreta durante una duración esablecida. Cada sesión C25K se estrucutura como una serie de intervalos que alternan correr y caminar — por ejemplo, ocho repeticiiones de "corre 60 segundos, camina durante 90 segundos."</string>
     <string name="guide_q_pace_term">Ritmo</string>
     <string name="guide_a_pace_term">La velocidad a la que corres, normalmente expresada en minutos por kilómetro o milla — ejemplo, 7:30 por km significa que te ha llevado 7 minutos y 30 segundos correr un kilómetro.\n\nPara casi todo C25K el ritmo no importa. Completar los intervalos si. Ignora el ritmo totalmente hasta el final del programa.</string>
-    <string name="guide_q_doms">DOMS (en inglés: aparición diferida de molestia muscular)</string>
-    <string name="guide_a_doms">Molestia muscular que aparece entre 24 y 48 horas después de hacer ejercicio, causada por daño microscópico en las fibras musculares que se adaptan al nuevo estrés. Es normal, no dañino, y mejora significativamente después de las primeras semanas del entrenamiento.</string>
-    <string name="guide_q_shin_splints">Shin splints</string>
+    <string name="guide_q_doms">DOMS (en inglés: Delayed Onset Muscle Soreness)</string>
+    <string name="guide_a_doms">Molestia muscular que aparece entre 24 y 48 horas después de hacer ejercicio, causada por daño microscópico en las fibras musculares que se adaptan al nuevo estrés. Es normal, no dañino, y mejora significativamente después de las primeras semanas del entrenamiento. Coloquialmente: agujetas.</string>
+    <string name="guide_q_shin_splints">Dolor en las tibias</string>
     <string name="guide_a_shin_splints">Dolor a lo largo de la parte frontal del borde interno de la parte inferior de la pierna, común en principiantes. Normalmente se debe a hacer demasiado y demasiado pronto o por correr con zapatillas muy gastadas.\n\nSi desarrollas esta molestia, descansa durante 3-5 días. A la vuelta, comprueba tus zapatillas y asegúrate de no correr demasiado rápido. El dolor persistente debe ser valorado por un fisioterapeuta.</string>
-    <string name="guide_q_rpe">RPE (en inglés: nivel de esfuerzo percibido)</string>
+    <string name="guide_q_rpe">RPE (en inglés: Rate of Perceived Exertion)</string>
     <string name="guide_a_rpe">Valorar en una escala del 1 al 10 el esfuerzo percibido durante el ejercicio, siendo 1 permanecer parado y 10 un esprint a velocidad máxima que no podrías aguantar más de unos segundos.\n\nLa mayoría del programa C25K debería sentirse como un 5–6: claramente hacer un trabajo, pero sostenible. Ritmo conversacional.</string>
 
     <!-- Contributors -->
