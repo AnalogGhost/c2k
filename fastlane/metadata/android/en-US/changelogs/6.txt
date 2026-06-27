@@ -1,0 +1,2 @@
+• New: Monochrome icon for themed icons support on Android 13+
+• Fix: Splash screen now respects dark mode

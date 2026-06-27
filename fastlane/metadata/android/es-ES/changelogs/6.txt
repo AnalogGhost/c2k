@@ -1,0 +1,2 @@
+• Nuevo: Icono monocromático para compatibilidad con iconos temáticos en Android 13+
+• Corrección: La pantalla de inicio ahora respeta el modo oscuro
