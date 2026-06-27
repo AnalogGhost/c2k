@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M42,26 A8,8 0 1,0 58,26 A8,8 0 1,0 42,26 Z"/>
+
+    <!-- Torso: neck to hip, forward lean -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:pathData="M52,34 L60,57"/>
+
+    <!-- Back arm sweeps behind -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7"
+        android:strokeLineCap="round"
+        android:pathData="M50,43 L33,31"/>
+
+    <!-- Forward arm pumps ahead -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7"
+        android:strokeLineCap="round"
+        android:pathData="M53,42 L70,55"/>
+
+    <!-- Forward leg: hip, knee, foot striking forward -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M60,57 L72,73 L82,83"/>
+
+    <!-- Back leg: heel kick up behind -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M58,57 L46,71 L32,64"/>
+
+</vector>
