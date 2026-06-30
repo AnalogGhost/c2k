@@ -180,6 +180,7 @@
     <string name="settings_tts_enabled">Anuncios por voz</string>
     <string name="settings_gps_enabled">Gravar con GPS</string>
     <string name="settings_countdown_warnings">Avisos de conta atrás (10s, 5s)</string>
+    <string name="settings_mid_interval_cues">Motivación a metade da carreira</string>
     <string name="settings_keep_screen_on">Manter pantalla acendida durante o adestramento</string>
     <string name="settings_vibration_enabled">Vibrar cando cambia o tipo de intervalo</string>
     <string name="settings_tts_speed">Velocidade da voz</string>
@@ -208,6 +209,13 @@
     <string name="tts_next_walk">Prepárate para camiñar</string>
     <string name="tts_next_warmup">Prepárate para o quecemento</string>
     <string name="tts_next_cooldown">Vai comezar a volta á calma</string>
+    <string-array name="tts_encouragement_phrases">
+        <item>¡Estás indo de marabilla, continúa así!</item>
+        <item>¡A metade do camiño, mantente forte!</item>
+        <item>¡Segue, podes con isto!</item>
+        <item>¡Bo esforzo, xa case!</item>
+        <item>¡Estás facéndoo brillantemente, segue empuxando!</item>
+    </string-array>
     <string name="tts_workout_complete">Adestramento completado. Bo traballo!</string>
     <string name="tts_halfway">Imos pola metade, sigue así!</string>
     <string name="tts_last_run">Última carreira, acabando forte!</string>

@@ -142,6 +142,7 @@ class WorkoutService : Service() {
             val ttsEnabled        = prefs.ttsEnabled.first()
             val gpsEnabled        = prefs.gpsEnabled.first()
             val countdownWarnings = prefs.countdownWarnings.first()
+            val midIntervalCues   = prefs.midIntervalCues.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
             val speechRate        = prefs.ttsSpeechRate.first()
             val ttsVolume         = prefs.ttsVolume.first()
@@ -168,6 +169,7 @@ class WorkoutService : Service() {
                 tts = ttsManager,
                 ttsEnabled = ttsEnabled,
                 countdownWarnings = countdownWarnings,
+                midIntervalCues = midIntervalCues,
                 scope = serviceScope
             )
 

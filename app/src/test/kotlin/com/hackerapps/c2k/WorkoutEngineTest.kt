@@ -30,12 +30,16 @@ class WorkoutEngineTest {
         override fun shutdown() {}
     }
 
-    private fun makeEngine(vararg intervals: Interval): WorkoutEngine =
+    private fun makeEngine(
+        vararg intervals: Interval,
+        midIntervalCues: Boolean = false
+    ): WorkoutEngine =
         WorkoutEngine(
             day = WorkoutDay(week = 1, day = 1, intervals = intervals.toList()),
             tts = fakeTts,
             ttsEnabled = true,
             countdownWarnings = false,
+            midIntervalCues = midIntervalCues,
             scope = testScope,
             // Virtual clock: testScope.currentTime advances with advanceTimeBy()
             clock = { testScope.testScheduler.currentTime }
@@ -137,6 +141,43 @@ class WorkoutEngineTest {
         advanceTimeBy(1_500)
         assertTrue("Expected WorkoutComplete announcement",
             announcements.any { it is TtsAnnouncement.WorkoutComplete })
+    }
+
+    @Test
+    fun mid_interval_cue_fires_at_halfway_for_long_run() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 60), midIntervalCues = true)
+        engine.start(1L)
+        advanceTimeBy(29_500)  // 29.5s — just before midpoint
+        val beforeMid = announcements.count { it is TtsAnnouncement.IntervalMidpoint }
+        assertEquals("No midpoint cue yet at 29s", 0, beforeMid)
+        advanceTimeBy(1_000)  // 30.5s — past midpoint
+        val afterMid = announcements.count { it is TtsAnnouncement.IntervalMidpoint }
+        assertEquals("Midpoint cue should have fired once", 1, afterMid)
+        engine.stop()
+    }
+
+    @Test
+    fun mid_interval_cue_does_not_fire_for_short_run() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 30), midIntervalCues = true)
+        engine.start(1L)
+        advanceTimeBy(31_000)  // past the end
+        assertTrue("Short interval should have completed", engine.state.value is WorkoutState.Completed)
+        val midpoints = announcements.count { it is TtsAnnouncement.IntervalMidpoint }
+        assertEquals("No midpoint cue for <60s interval", 0, midpoints)
+    }
+
+    @Test
+    fun mid_interval_cue_fires_once_per_interval() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 60),
+            Interval(IntervalType.WALK, 30),
+            Interval(IntervalType.RUN, 60),
+            midIntervalCues = true
+        )
+        engine.start(1L)
+        advanceTimeBy(150_500)  // past both run intervals
+        val midpoints = announcements.count { it is TtsAnnouncement.IntervalMidpoint }
+        assertEquals("One midpoint cue per qualifying run interval", 2, midpoints)
     }
 
     @Test
