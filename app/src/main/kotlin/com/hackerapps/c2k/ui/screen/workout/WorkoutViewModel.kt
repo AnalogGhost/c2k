@@ -60,6 +60,9 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
     val keepScreenOn: StateFlow<Boolean> = prefs.keepScreenOn
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
 
+    val treadmillMode: StateFlow<Boolean> = prefs.treadmillMode
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
     private val _showBatteryPrompt = MutableStateFlow(false)
     val showBatteryPrompt: StateFlow<Boolean> = _showBatteryPrompt.asStateFlow()
 
@@ -120,6 +123,7 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
             putExtra(WorkoutService.EXTRA_PROGRAM_ID, programId)
             putExtra(WorkoutService.EXTRA_WEEK, week)
             putExtra(WorkoutService.EXTRA_DAY, day)
+            putExtra(WorkoutService.EXTRA_TREADMILL_MODE, treadmillMode.value)
         }
         app.startForegroundService(intent)
         bind()

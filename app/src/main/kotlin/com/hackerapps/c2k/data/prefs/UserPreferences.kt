@@ -26,6 +26,7 @@ class UserPreferences(private val context: Context) {
         val TTS_SPEECH_RATE          = floatPreferencesKey("tts_speech_rate")
         val TTS_VOLUME               = floatPreferencesKey("tts_volume")
         val MID_INTERVAL_CUES        = booleanPreferencesKey("mid_interval_cues")
+        val TREADMILL_MODE           = booleanPreferencesKey("treadmill_mode")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -87,4 +88,10 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setMidIntervalCues(enabled: Boolean) =
         context.dataStore.edit { it[MID_INTERVAL_CUES] = enabled }
+
+    val treadmillMode: Flow<Boolean> = context.dataStore.data
+        .map { it[TREADMILL_MODE] ?: false }
+
+    suspend fun setTreadmillMode(enabled: Boolean) =
+        context.dataStore.edit { it[TREADMILL_MODE] = enabled }
 }

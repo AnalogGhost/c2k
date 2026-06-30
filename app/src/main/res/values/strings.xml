@@ -52,6 +52,10 @@
     <string name="workout_next_interval">Next: %1$s %2$s</string>
     <string name="workout_distance_km">%1$.2f km</string>
     <string name="workout_pace">%1$s / km</string>
+    <string name="workout_treadmill_effort_run">Comfortable running pace</string>
+    <string name="workout_treadmill_effort_walk">Brisk walking pace</string>
+    <string name="workout_treadmill_effort_warmup">Easy walking pace</string>
+    <string name="workout_treadmill_effort_cooldown">Easy walking pace</string>
     <string name="workout_acquiring_gps">Acquiring GPS…</string>
     <string name="workout_gps_unavailable">GPS unavailable</string>
     <string name="workout_complete_title">Workout Complete!</string>
@@ -178,6 +182,7 @@
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_tts_enabled">Voice announcements</string>
+    <string name="settings_treadmill_mode">Treadmill mode (disables GPS)</string>
     <string name="settings_gps_enabled">GPS tracking</string>
     <string name="settings_countdown_warnings">Countdown warnings (10s, 5s)</string>
     <string name="settings_mid_interval_cues">Mid-run encouragement</string>

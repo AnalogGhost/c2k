@@ -52,6 +52,10 @@
     <string name="workout_next_interval">Seguinte: %1$s %2$s</string>
     <string name="workout_distance_km">%1$.2f km</string>
     <string name="workout_pace">%1$s / km</string>
+    <string name="workout_treadmill_effort_run">Ritmo de carreira cómodo</string>
+    <string name="workout_treadmill_effort_walk">Ritmo de camiñada rápida</string>
+    <string name="workout_treadmill_effort_warmup">Ritmo de camiñada suave</string>
+    <string name="workout_treadmill_effort_cooldown">Ritmo de camiñada suave</string>
     <string name="workout_acquiring_gps">Localizando GPS…</string>
     <string name="workout_gps_unavailable">GPS non dispoñible</string>
     <string name="workout_complete_title">Completaches o adestramento!</string>
@@ -178,6 +182,7 @@
     <!-- Settings -->
     <string name="settings_title">Axustes</string>
     <string name="settings_tts_enabled">Anuncios por voz</string>
+    <string name="settings_treadmill_mode">Modo cinta de correr (desactiva GPS)</string>
     <string name="settings_gps_enabled">Gravar con GPS</string>
     <string name="settings_countdown_warnings">Avisos de conta atrás (10s, 5s)</string>
     <string name="settings_mid_interval_cues">Motivación a metade da carreira</string>

@@ -53,9 +53,10 @@ class WorkoutService : Service() {
         const val ACTION_RESUME = "com.hackerapps.c2k.action.RESUME"
         const val ACTION_STOP   = "com.hackerapps.c2k.action.STOP"
 
-        const val EXTRA_PROGRAM_ID = "program_id"
-        const val EXTRA_WEEK       = "week"
-        const val EXTRA_DAY        = "day"
+        const val EXTRA_PROGRAM_ID    = "program_id"
+        const val EXTRA_WEEK          = "week"
+        const val EXTRA_DAY           = "day"
+        const val EXTRA_TREADMILL_MODE = "treadmill_mode"
 
         private const val NOTIFICATION_ID  = 1
         private const val CHANNEL_ID       = "workout_channel"
@@ -125,10 +126,13 @@ class WorkoutService : Service() {
             val hasLocation = ContextCompat.checkSelfPermission(
                 this, android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
+            // Read treadmill mode synchronously from the intent extra set by the service starter;
+            // prefs aren't available yet (setup coroutine hasn't run), so WorkoutViewModel embeds it.
+            val treadmill = intent.getBooleanExtra(EXTRA_TREADMILL_MODE, false)
             startForeground(
                 NOTIFICATION_ID,
                 buildNotification(getString(R.string.workout_starting)),
-                if (hasLocation) android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
+                if (hasLocation && !treadmill) android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
                 else 0  // FOREGROUND_SERVICE_TYPE_NONE — timer-only, no location claimed
             )
         } else {
@@ -141,6 +145,7 @@ class WorkoutService : Service() {
         serviceScope.launch {
             val ttsEnabled        = prefs.ttsEnabled.first()
             val gpsEnabled        = prefs.gpsEnabled.first()
+            val treadmillMode     = prefs.treadmillMode.first()
             val countdownWarnings = prefs.countdownWarnings.first()
             val midIntervalCues   = prefs.midIntervalCues.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
@@ -155,7 +160,7 @@ class WorkoutService : Service() {
                 ttsManager = TtsManager(this@WorkoutService, speechRate, ttsVolume)
             }
 
-            locationProvider = if (gpsEnabled && hasLocationPermission)
+            locationProvider = if (!treadmillMode && gpsEnabled && hasLocationPermission)
                 GpsLocationProvider(this@WorkoutService)
             else
                 NoOpLocationProvider()

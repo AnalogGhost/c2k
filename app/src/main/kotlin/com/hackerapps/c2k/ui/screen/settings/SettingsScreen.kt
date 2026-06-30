@@ -40,6 +40,7 @@ fun SettingsScreen(
     val gpsEnabled           by vm.gpsEnabled.collectAsStateWithLifecycle()
     val countdownWarnings    by vm.countdownWarnings.collectAsStateWithLifecycle()
     val midIntervalCues      by vm.midIntervalCues.collectAsStateWithLifecycle()
+    val treadmillMode        by vm.treadmillMode.collectAsStateWithLifecycle()
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
@@ -186,8 +187,15 @@ fun SettingsScreen(
             )
             HorizontalDivider()
             SettingsToggle(
+                label = stringResource(R.string.settings_treadmill_mode),
+                checked = treadmillMode,
+                onCheckedChange = vm::setTreadmillMode
+            )
+            HorizontalDivider()
+            SettingsToggle(
                 label = stringResource(R.string.settings_gps_enabled),
                 checked = gpsEnabled,
+                enabled = !treadmillMode,
                 onCheckedChange = vm::setGpsEnabled
             )
             HorizontalDivider()

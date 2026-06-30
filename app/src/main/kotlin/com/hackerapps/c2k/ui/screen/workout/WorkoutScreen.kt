@@ -74,6 +74,7 @@ fun WorkoutScreen(
     val distanceMeters by vm.distanceMeters.collectAsStateWithLifecycle()
     val pace by vm.currentPaceMinPerKm.collectAsStateWithLifecycle()
     val keepScreenOn by vm.keepScreenOn.collectAsStateWithLifecycle()
+    val treadmillMode by vm.treadmillMode.collectAsStateWithLifecycle()
     val showBatteryPrompt by vm.showBatteryPrompt.collectAsStateWithLifecycle()
     val serviceRunning by WorkoutService.isRunning.collectAsStateWithLifecycle()
     val gpsActive by vm.gpsActive.collectAsStateWithLifecycle()
@@ -81,7 +82,8 @@ fun WorkoutScreen(
     val personalBest by vm.personalBest.collectAsStateWithLifecycle()
 
     var notificationPermissionDone by remember { mutableStateOf(false) }
-    var permissionResolved by remember { mutableStateOf(false) }
+    // In treadmill mode skip the location permission request entirely
+    var permissionResolved by remember(treadmillMode) { mutableStateOf(treadmillMode) }
     var showStopDialog by remember { mutableStateOf(false) }
 
     val nameResId = remember(programId) { programNameRes(programId) }
@@ -171,6 +173,7 @@ fun WorkoutScreen(
                     pace = pace,
                     gpsActive = gpsActive,
                     hasGpsLock = hasGpsLock,
+                    treadmillMode = treadmillMode,
                     onPause = { vm.pause() },
                     onStop = { showStopDialog = true }
                 )
@@ -198,6 +201,7 @@ private fun ActiveWorkoutContent(
     pace: String?,
     gpsActive: Boolean,
     hasGpsLock: Boolean,
+    treadmillMode: Boolean,
     onPause: () -> Unit,
     onStop: () -> Unit
 ) {
@@ -255,6 +259,14 @@ private fun ActiveWorkoutContent(
     )
 
     when {
+        treadmillMode -> {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                treadmillEffortCue(state.currentInterval.type),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+            )
+        }
         distanceMeters > 0f -> {
             Spacer(Modifier.height(4.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -424,6 +436,14 @@ private fun intervalLabel(type: IntervalType) = when (type) {
     IntervalType.WALK     -> stringResource(R.string.workout_interval_walk)
     IntervalType.WARMUP   -> stringResource(R.string.workout_interval_warmup)
     IntervalType.COOLDOWN -> stringResource(R.string.workout_interval_cooldown)
+}
+
+@Composable
+private fun treadmillEffortCue(type: IntervalType) = when (type) {
+    IntervalType.RUN      -> stringResource(R.string.workout_treadmill_effort_run)
+    IntervalType.WALK     -> stringResource(R.string.workout_treadmill_effort_walk)
+    IntervalType.WARMUP   -> stringResource(R.string.workout_treadmill_effort_warmup)
+    IntervalType.COOLDOWN -> stringResource(R.string.workout_treadmill_effort_cooldown)
 }
 
 private fun formatTime(totalSeconds: Int): String {

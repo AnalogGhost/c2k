@@ -48,4 +48,9 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
     fun setTtsVolume(v: Float)           { viewModelScope.launch { prefs.setTtsVolume(v) } }
     fun setMidIntervalCues(v: Boolean)   { viewModelScope.launch { prefs.setMidIntervalCues(v) } }
+
+    val treadmillMode = prefs.treadmillMode
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    fun setTreadmillMode(v: Boolean)     { viewModelScope.launch { prefs.setTreadmillMode(v) } }
 }
