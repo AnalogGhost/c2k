@@ -25,6 +25,7 @@ class UserPreferences(private val context: Context) {
         val VIBRATION_ENABLED        = booleanPreferencesKey("vibration_enabled")
         val TTS_SPEECH_RATE          = floatPreferencesKey("tts_speech_rate")
         val TTS_VOLUME               = floatPreferencesKey("tts_volume")
+        val MID_INTERVAL_CUES        = booleanPreferencesKey("mid_interval_cues")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -80,4 +81,10 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setTtsVolume(volume: Float) =
         context.dataStore.edit { it[TTS_VOLUME] = volume }
+
+    val midIntervalCues: Flow<Boolean> = context.dataStore.data
+        .map { it[MID_INTERVAL_CUES] ?: true }
+
+    suspend fun setMidIntervalCues(enabled: Boolean) =
+        context.dataStore.edit { it[MID_INTERVAL_CUES] = enabled }
 }

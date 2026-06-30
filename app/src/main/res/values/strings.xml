@@ -180,6 +180,7 @@
     <string name="settings_tts_enabled">Voice announcements</string>
     <string name="settings_gps_enabled">GPS tracking</string>
     <string name="settings_countdown_warnings">Countdown warnings (10s, 5s)</string>
+    <string name="settings_mid_interval_cues">Mid-run encouragement</string>
     <string name="settings_keep_screen_on">Keep screen on during workout</string>
     <string name="settings_vibration_enabled">Vibrate on interval change</string>
     <string name="settings_tts_speed">Voice speed</string>
@@ -208,6 +209,13 @@
     <string name="tts_next_walk">Get ready to walk</string>
     <string name="tts_next_warmup">Get ready to warm up</string>
     <string name="tts_next_cooldown">Begin your cool-down soon</string>
+    <string-array name="tts_encouragement_phrases">
+        <item>You\'re doing great, keep it up!</item>
+        <item>Halfway through, stay strong!</item>
+        <item>Keep going, you\'ve got this!</item>
+        <item>Great effort, nearly there!</item>
+        <item>You\'re doing brilliantly, keep pushing!</item>
+    </string-array>
     <string name="tts_workout_complete">Workout complete. Great job!</string>
     <string name="tts_halfway">Halfway there, keep it up!</string>
     <string name="tts_last_run">Last run, finish strong!</string>

@@ -18,6 +18,7 @@ class WorkoutEngine(
     private val tts: TtsInterface,
     private val ttsEnabled: Boolean,
     private val countdownWarnings: Boolean,
+    private val midIntervalCues: Boolean,
     private val scope: CoroutineScope,
     private val clock: () -> Long = { SystemClock.elapsedRealtime() }
 ) {
@@ -36,6 +37,7 @@ class WorkoutEngine(
     private val intervals = day.intervals
 
     private val warnedCountdowns = mutableSetOf<Int>()
+    private var midpointAnnounced = false
 
     fun start(sessionId: Long) {
         this.sessionId = sessionId
@@ -44,6 +46,7 @@ class WorkoutEngine(
         intervalStartMs = sessionStartMs
         isPaused = false
         warnedCountdowns.clear()
+        midpointAnnounced = false
         announceInterval(intervalIndex)
         tickJob = scope.launch { runLoop() }
     }
@@ -94,6 +97,7 @@ class WorkoutEngine(
                 }
                 intervalStartMs = now
                 warnedCountdowns.clear()
+                midpointAnnounced = false
                 announceInterval(intervalIndex)
                 continue
             }
@@ -116,6 +120,16 @@ class WorkoutEngine(
                         }
                     }
                 }
+            }
+
+            if (midIntervalCues && ttsEnabled &&
+                currentInterval.type == IntervalType.RUN &&
+                currentInterval.durationSeconds >= 60 &&
+                intervalElapsed >= currentInterval.durationSeconds / 2 &&
+                !midpointAnnounced
+            ) {
+                midpointAnnounced = true
+                tts.announce(TtsAnnouncement.IntervalMidpoint(intervalIndex), queueAdd = true)
             }
 
             _state.value = WorkoutState.Active(

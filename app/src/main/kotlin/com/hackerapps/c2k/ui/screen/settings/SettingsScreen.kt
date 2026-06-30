@@ -39,6 +39,7 @@ fun SettingsScreen(
     val ttsEnabled           by vm.ttsEnabled.collectAsStateWithLifecycle()
     val gpsEnabled           by vm.gpsEnabled.collectAsStateWithLifecycle()
     val countdownWarnings    by vm.countdownWarnings.collectAsStateWithLifecycle()
+    val midIntervalCues      by vm.midIntervalCues.collectAsStateWithLifecycle()
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
@@ -84,6 +85,13 @@ fun SettingsScreen(
                 checked = countdownWarnings,
                 enabled = ttsEnabled,
                 onCheckedChange = vm::setCountdownWarnings
+            )
+            HorizontalDivider()
+            SettingsToggle(
+                label = stringResource(R.string.settings_mid_interval_cues),
+                checked = midIntervalCues,
+                enabled = ttsEnabled,
+                onCheckedChange = vm::setMidIntervalCues
             )
             HorizontalDivider()
 

@@ -104,6 +104,10 @@ class TtsManager(
             IntervalType.WARMUP   -> context.getString(R.string.tts_next_warmup)
             IntervalType.COOLDOWN -> context.getString(R.string.tts_next_cooldown)
         }
+        is TtsAnnouncement.IntervalMidpoint -> {
+            val phrases = context.resources.getStringArray(R.array.tts_encouragement_phrases)
+            phrases[announcement.phraseIndex % phrases.size]
+        }
         TtsAnnouncement.WorkoutComplete -> context.getString(R.string.tts_workout_complete)
         TtsAnnouncement.Halfway         -> context.getString(R.string.tts_halfway)
         TtsAnnouncement.LastRunInterval -> context.getString(R.string.tts_last_run)

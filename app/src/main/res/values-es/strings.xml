@@ -180,6 +180,7 @@
     <string name="settings_tts_enabled">Indicaciones por voz</string>
     <string name="settings_gps_enabled">Seguimiento con GPS</string>
     <string name="settings_countdown_warnings">Avisos de cuenta atrás (10s, 5s)</string>
+    <string name="settings_mid_interval_cues">Motivación a mitad de carrera</string>
     <string name="settings_keep_screen_on">Pantalla encendida durante el entrenamiento</string>
     <string name="settings_vibration_enabled">Vibrar al cambiar de intervalo</string>
     <string name="settings_tts_speed">Velocidad de la voz</string>
@@ -208,6 +209,13 @@
     <string name="tts_next_walk">Prepárate para camiñar</string>
     <string name="tts_next_warmup">Prepárate para el calentamiento</string>
     <string name="tts_next_cooldown">Pronto comienza el enfriamiento</string>
+    <string-array name="tts_encouragement_phrases">
+        <item>¡Lo estás haciendo genial, sigue así!</item>
+        <item>¡A mitad de camino, mantente fuerte!</item>
+        <item>¡Sigue, tú puedes!</item>
+        <item>¡Buen esfuerzo, ya casi!</item>
+        <item>¡Lo estás haciendo de maravilla, sigue empujando!</item>
+    </string-array>
     <string name="tts_workout_complete">Entrenamiento completado. Buen trabajo!</string>
     <string name="tts_halfway">Vas por la mitad, sigue así!</string>
     <string name="tts_last_run">Última carrera, finalizando fuerte!</string>
