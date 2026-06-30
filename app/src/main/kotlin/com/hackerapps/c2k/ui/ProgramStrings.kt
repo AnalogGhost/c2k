@@ -6,6 +6,7 @@ import com.hackerapps.c2k.data.model.Programs
 
 @StringRes
 fun programNameRes(programId: String): Int? = when (programId) {
+    Programs.ID_PRE_C25K -> R.string.program_pre_c25k
     Programs.ID_C25K  -> R.string.program_c25k
     Programs.ID_C210K -> R.string.program_c210k
     Programs.ID_B210K -> R.string.program_b210k
@@ -16,6 +17,7 @@ fun programNameRes(programId: String): Int? = when (programId) {
 
 @StringRes
 fun programDescRes(programId: String): Int? = when (programId) {
+    Programs.ID_PRE_C25K -> R.string.program_pre_c25k_desc
     Programs.ID_C25K  -> R.string.program_c25k_desc
     Programs.ID_C210K -> R.string.program_c210k_desc
     Programs.ID_B210K -> R.string.program_b210k_desc

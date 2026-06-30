@@ -2,12 +2,14 @@ package com.hackerapps.c2k.data.model
 
 object Programs {
 
+    const val ID_PRE_C25K = "PRE_C25K"
     const val ID_C25K   = "C25K"
     const val ID_C210K  = "C210K"
     const val ID_B210K  = "B210K"
     const val ID_OHR    = "OHR"
     const val ID_5KI    = "5KI"
 
+    val PreC25K:       WorkoutPlan by lazy { buildPreC25K() }
     val C25K:          WorkoutPlan by lazy { buildC25K() }
     val C210K:         WorkoutPlan by lazy { buildC210K() }
     val B210K:         WorkoutPlan by lazy { buildB210K() }
@@ -15,6 +17,7 @@ object Programs {
     val FiveKImprover: WorkoutPlan by lazy { buildFiveKImprover() }
 
     fun byId(id: String): WorkoutPlan = when (id) {
+        ID_PRE_C25K -> PreC25K
         ID_C25K  -> C25K
         ID_C210K -> C210K
         ID_B210K -> B210K
@@ -23,7 +26,7 @@ object Programs {
         else     -> error("Unknown program: $id")
     }
 
-    fun all(): List<WorkoutPlan> = listOf(C25K, C210K, B210K, OneHourRunner, FiveKImprover)
+    fun all(): List<WorkoutPlan> = listOf(PreC25K, C25K, C210K, B210K, OneHourRunner, FiveKImprover)
 
     // ── helpers ──────────────────────────────────────────────────────────────
 
@@ -47,6 +50,26 @@ object Programs {
 
     private fun continuousRun(week: Int, runSec: Int): List<WorkoutDay> =
         uniformWeek(week, buildList { add(warmup()); add(run(runSec)); add(cooldown()) })
+
+    // ── Pre-C25K ──────────────────────────────────────────────────────────────
+    // Gentler lead-in for absolute beginners who find C25K Week 1 too hard.
+    // Graduates to C25K Week 1 by the final week.
+
+    private fun buildPreC25K(): WorkoutPlan {
+        val weeks = listOf(
+            // W1 — 8 × (run 30s, walk 90s)
+            uniformWeek(1, repeatRunWalk(8, 30, 90)),
+
+            // W2 — 8 × (run 45s, walk 90s)
+            uniformWeek(2, repeatRunWalk(8, 45, 90)),
+
+            // W3 — 8 × (run 60s, walk 90s): matches C25K Week 1
+            uniformWeek(3, repeatRunWalk(8, 60, 90))
+        )
+        return WorkoutPlan(ID_PRE_C25K, "Pre-C25K",
+            "3-week starter for beginners who find Week 1 of C25K too hard. Graduates into C25K.", weeks,
+            prerequisite = null)
+    }
 
     // ── C25K ─────────────────────────────────────────────────────────────────
 

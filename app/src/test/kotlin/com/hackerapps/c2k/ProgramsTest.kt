@@ -9,6 +9,25 @@ import org.junit.Test
 class ProgramsTest {
 
     @Test
+    fun pre_c25k_has_3_weeks() {
+        assertEquals(3, Programs.PreC25K.totalWeeks)
+    }
+
+    @Test
+    fun pre_c25k_week1_run_duration_is_30s() {
+        val runIntervals = Programs.PreC25K.weeks[0][0].intervals
+            .filter { it.type == IntervalType.RUN }
+        runIntervals.forEach { assertEquals(30, it.durationSeconds) }
+    }
+
+    @Test
+    fun pre_c25k_week3_run_duration_is_60s() {
+        val runIntervals = Programs.PreC25K.weeks[2][0].intervals
+            .filter { it.type == IntervalType.RUN }
+        runIntervals.forEach { assertEquals(60, it.durationSeconds) }
+    }
+
+    @Test
     fun c25k_has_9_weeks() {
         assertEquals(9, Programs.C25K.totalWeeks)
     }

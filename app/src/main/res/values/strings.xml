@@ -105,6 +105,8 @@
     <string name="cd_interval_paused">Paused: %1$s</string>
 
     <!-- Additional programs -->
+    <string name="program_pre_c25k">Pre-C25K</string>
+    <string name="program_pre_c25k_desc">3-week starter for beginners who find C25K Week 1 too hard. Graduates into C25K.</string>
     <string name="program_b210k">Bridge to 10K</string>
     <string name="program_b210k_desc">6-week bridge for C25K graduates not ready to jump straight to C210K.</string>
     <string name="program_ohr">One Hour Runner</string>

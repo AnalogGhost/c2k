@@ -105,6 +105,8 @@
     <string name="cd_interval_paused">En pausa: %1$s</string>
     
         <!-- Additional programs -->
+    <string name="program_pre_c25k">Pre-C25K</string>
+    <string name="program_pre_c25k_desc">3 semanas de iniciación para principiantes que encuentran la semana 1 de C25K demasiado difícil. Finaliza en C25K.</string>
     <string name="program_b210k">Cambiar a 10K</string>
     <string name="program_b210k_desc">transición de 6 semanas para quienes han realizado C25K pero que no se sienten preparados para ir directamente a C210K.</string>
     <string name="program_ohr">Corre Una Hora</string>
