@@ -1,0 +1,1 @@
+• Corrección: os avisos de voz agora reducen o volume da música en segundo plano en lugar de pausala
