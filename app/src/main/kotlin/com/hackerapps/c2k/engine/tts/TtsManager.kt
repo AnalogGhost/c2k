@@ -21,6 +21,7 @@ class TtsManager(
 
     companion object {
         val isAvailableOnDevice = MutableStateFlow<Boolean?>(null)
+        private const val TAG = "TtsManager"
     }
 
     private val context: Context = context.applicationContext
@@ -33,9 +34,21 @@ class TtsManager(
         .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
         .build()
-    private val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+
+    // MAY_DUCK so the system ducks the other player rather than pausing it. GAIN_TRANSIENT sends
+    // AUDIOFOCUS_LOSS_TRANSIENT to other apps, which causes music players to pause; a paused media
+    // service then drops its foreground state and gets killed by the OS.
+    private val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
         .setAudioAttributes(ttsAudioAttributes)
         .build()
+
+    // Focus is held for an entire announcement group (a QUEUE_FLUSH utterance plus any QUEUE_ADD
+    // follow-ups) and released once all utterances in the group have finished or been discarded.
+    // On QUEUE_FLUSH the previous group's pending ids are cleared immediately: a flushed utterance
+    // may never deliver a terminal callback, and waiting for one would leak focus.
+    private val focusLock = Any()
+    private val pending = HashSet<String>()
+    private var holdsFocus = false
 
     override var isAvailable: Boolean = false
         private set
@@ -50,13 +63,12 @@ class TtsManager(
             tts.setAudioAttributes(ttsAudioAttributes)
             tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(utteranceId: String?) {}
-                override fun onDone(utteranceId: String?) {
-                    if (!tts.isSpeaking) audioManager.abandonAudioFocusRequest(focusRequest)
-                }
+                override fun onDone(utteranceId: String?) = finishUtterance(utteranceId)
+                // onStop fires when an utterance is cancelled by tts.stop() or a later QUEUE_FLUSH
+                override fun onStop(utteranceId: String?, interrupted: Boolean) = finishUtterance(utteranceId)
                 @Deprecated("Deprecated in Java")
-                override fun onError(utteranceId: String?) {
-                    audioManager.abandonAudioFocusRequest(focusRequest)
-                }
+                override fun onError(utteranceId: String?) = finishUtterance(utteranceId)
+                override fun onError(utteranceId: String?, errorCode: Int) = finishUtterance(utteranceId)
             })
             ready = true
             isAvailable = true
@@ -65,7 +77,7 @@ class TtsManager(
             pendingAnnouncement = null
         } else {
             isAvailableOnDevice.value = false
-            Log.w("TtsManager", "TextToSpeech initialization failed (status=$status)")
+            Log.w(TAG, "TextToSpeech initialization failed (status=$status)")
         }
     }
 
@@ -79,14 +91,50 @@ class TtsManager(
         val params = if (volume < 1.0f) Bundle().apply {
             putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
         } else null
-        audioManager.requestAudioFocus(focusRequest)
-        tts.speak(text, mode, params, "c2k_${System.nanoTime()}")
+        val utteranceId = "c2k_${System.nanoTime()}"
+
+        synchronized(focusLock) {
+            if (!queueAdd) pending.clear()
+            pending.add(utteranceId)
+            if (!holdsFocus) {
+                val res = audioManager.requestAudioFocus(focusRequest)
+                holdsFocus = res != AudioManager.AUDIOFOCUS_REQUEST_FAILED
+                if (!holdsFocus) Log.w(TAG, "Audio focus not granted (res=$res); speaking without duck")
+            }
+        }
+
+        // speak() is called outside the lock; the id is already registered so an early
+        // onDone/onStop callback from the TTS binder thread still balances correctly.
+        val speakResult = tts.speak(text, mode, params, utteranceId)
+        if (speakResult == TextToSpeech.ERROR) {
+            finishUtterance(utteranceId)
+        }
+    }
+
+    private fun finishUtterance(utteranceId: String?) {
+        synchronized(focusLock) {
+            if (utteranceId != null) pending.remove(utteranceId)
+            if (pending.isEmpty() && holdsFocus) {
+                audioManager.abandonAudioFocusRequest(focusRequest)
+                holdsFocus = false
+            }
+        }
+    }
+
+    private fun forceAbandon() {
+        synchronized(focusLock) {
+            pending.clear()
+            if (holdsFocus) {
+                audioManager.abandonAudioFocusRequest(focusRequest)
+                holdsFocus = false
+            }
+        }
     }
 
     override fun shutdown() {
         tts.stop()
         tts.shutdown()
-        audioManager.abandonAudioFocusRequest(focusRequest)
+        forceAbandon()
         ready = false
     }
 
