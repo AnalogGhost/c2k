@@ -42,6 +42,11 @@ private val contributors = listOf(
         github = "xmgz",
         fediverse = "@l10n@gts.xmgz.eu",
         contributionRes = listOf(R.string.contributor_translation_es, R.string.contributor_translation_gl)
+    ),
+    Contributor(
+        name = "Andrew Farabee",
+        github = "andrewfarabee",
+        contributionRes = listOf(R.string.contributor_fix_tts_ducking)
     )
 )
 
