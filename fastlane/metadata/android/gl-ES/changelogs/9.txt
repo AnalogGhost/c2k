@@ -1,0 +1,1 @@
+• Corrección: actualizáronse as ferramentas de compilación para producir compilacións reproducibles (sen cambios na funcionalidade da app)

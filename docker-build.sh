@@ -10,7 +10,7 @@ docker run --rm \
   -e JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 \
   -w /workspace \
   registry.gitlab.com/fdroid/fdroidserver:buildserver-trixie \
-  bash -c "apt-get install -y -q openjdk-21-jdk-headless 2>/dev/null && ./gradlew --no-daemon -Dorg.gradle.java.home=/usr/lib/jvm/java-21-openjdk-amd64 :app:assembleFossRelease"
+  bash -c "apt-get install -y -q openjdk-21-jdk-headless 2>/dev/null && ./gradlew --no-daemon -Dorg.gradle.java.home=/usr/lib/jvm/java-21-openjdk-amd64 --no-build-cache clean :app:assembleFossRelease"
 
 # Always restore local.properties
 cp /tmp/local.properties.bak /home/ghost/Projects/c2k/local.properties
