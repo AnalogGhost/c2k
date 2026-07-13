@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">C2K</string>
+
+    <!-- Programs -->
+    <string name="program_c25k">Vom Sofa zum 5K</string>
+    <string name="program_c210k">Vom Sofa zum 10K</string>
+    <string name="program_c25k_desc">9-wöchiges Programm, um 5 km ohne Pause zu laufen</string>
+    <string name="program_c210k_desc">14-wöchiges Programm, um 10 km ohne Pause zu laufen</string>
+
+    <!-- Home screen -->
+    <string name="home_title">C2K</string>
+    <string name="home_choose_program">Programm wählen</string>
+    <string name="home_recent_workouts">Letzte Trainingseinheiten</string>
+    <string name="home_no_workouts">Noch keine Trainingseinheiten. Starte ein Programm, um loszulegen!</string>
+    <string name="home_workout_active">Training läuft – tippen, um zurückzukehren</string>
+    <string name="home_continue_workout">Fortsetzen: %1$s · Woche %2$d, Tag %3$d</string>
+    <string name="home_streak">%1$d Tage in Folge 🔥</string>
+    <string name="home_program_weeks">%1$d Wochen</string>
+    <string name="home_program_prerequisite">%1$s</string>
+
+    <!-- Program select screen -->
+    <string name="program_week_label">Woche %1$d</string>
+    <string name="program_day_label">Tag %1$d</string>
+    <string name="program_completed_badge">Erledigt</string>
+    <string name="program_start_workout">Training starten</string>
+    <string name="program_progress">%1$d von %2$d Tagen abgeschlossen</string>
+    <string name="program_next_workout">Fortsetzen: Woche %1$d, Tag %2$d →</string>
+    <string name="program_preview_title">Woche %1$d, Tag %2$d</string>
+    <string name="program_preview_start">Start</string>
+    <string name="program_preview_redo">Wiederholen</string>
+    <string name="program_preview_duration">~%1$d Min.</string>
+    <string name="program_reset_title">Fortschritt zurücksetzen</string>
+    <string name="program_reset_message">Dadurch werden alle abgeschlossenen Sitzungen für dieses Programm dauerhaft gelöscht. Dein gesamter Verlauf bleibt erhalten.</string>
+    <string name="program_reset_confirm">Zurücksetzen</string>
+    <string name="program_reset_cancel">Abbrechen</string>
+
+    <!-- Workout screen -->
+    <string name="workout_stop_title">Training beenden?</string>
+    <string name="workout_stop_message">Dein Fortschritt wird als unvollständig gespeichert.</string>
+    <string name="workout_stop_confirm">Beenden</string>
+    <string name="workout_stop_cancel">Abbrechen</string>
+    <string name="workout_interval_run">LAUFEN</string>
+    <string name="workout_interval_walk">GEHEN</string>
+    <string name="workout_interval_warmup">AUFWÄRMEN</string>
+    <string name="workout_interval_cooldown">ABKÜHLEN</string>
+    <string name="workout_pause">Pause</string>
+    <string name="workout_resume">Fortsetzen</string>
+    <string name="workout_stop">Beenden</string>
+    <string name="workout_elapsed">Verstrichen: %1$s</string>
+    <string name="workout_interval_progress">Intervall %1$d von %2$d</string>
+    <string name="workout_next_interval">Nächstes: %1$s %2$s</string>
+    <string name="workout_distance_km">%1$.2f km</string>
+    <string name="workout_pace">%1$s / km</string>
+    <string name="workout_treadmill_effort_run">Angenehmes Lauftempo</string>
+    <string name="workout_treadmill_effort_walk">Zügiges Gehtempo</string>
+    <string name="workout_treadmill_effort_warmup">Lockeres Gehtempo</string>
+    <string name="workout_treadmill_effort_cooldown">Lockeres Gehtempo</string>
+    <string name="workout_acquiring_gps">GPS wird gesucht…</string>
+    <string name="workout_gps_unavailable">GPS nicht verfügbar</string>
+    <string name="workout_complete_title">Training abgeschlossen!</string>
+    <string name="workout_complete_message">Gut gemacht! Weiter so.</string>
+    <string name="workout_complete_time">Zeit: %1$s</string>
+    <string name="workout_done">Fertig</string>
+    <string name="workout_paused_label">PAUSIERT</string>
+    <string name="workout_reconnecting">Verbindung wird wiederhergestellt…</string>
+    <string name="workout_starting">Wird gestartet…</string>
+    <string name="workout_new_best">Neue persönliche Bestleistung!</string>
+    <string name="workout_previous_best">Bisherige Bestleistung: %1$s</string>
+
+    <!-- History screen -->
+    <string name="history_title">Verlauf</string>
+    <string name="history_empty">Noch keine abgeschlossenen Trainingseinheiten.</string>
+    <string name="history_week_day">Woche %1$d, Tag %2$d</string>
+    <string name="history_duration">%1$s</string>
+    <string name="history_export">CSV exportieren</string>
+    <string name="history_export_chooser">Trainingsverlauf exportieren</string>
+    <string name="history_export_gpx">GPX-Route exportieren</string>
+    <string name="history_export_gpx_chooser">GPX-Route teilen</string>
+    <string name="history_delete_title">Training löschen?</string>
+    <string name="history_delete_message">Diese Sitzung wird dauerhaft aus deinem Verlauf entfernt.</string>
+    <string name="history_delete_confirm">Löschen</string>
+    <string name="history_delete_cancel">Abbrechen</string>
+    <string name="history_stats_workouts">Trainingseinheiten</string>
+    <string name="history_stats_km">km</string>
+    <string name="history_stats_time">Zeit</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">Training</string>
+    <string name="notification_channel_desc">Aktiver Trainings-Timer</string>
+    <string name="notification_action_pause">Pause</string>
+    <string name="notification_action_resume">Fortsetzen</string>
+    <string name="notification_action_stop">Beenden</string>
+    <string name="notification_title">C2K-Training</string>
+    <string name="workout_paused_notification">Pausiert</string>
+
+    <!-- Permissions -->
+    <string name="permission_location_rationale">C2K kann deine Distanz und dein Tempo per GPS erfassen. Das ist optional – der Trainings-Timer funktioniert auch ohne.</string>
+    <string name="permission_location_deny">GPS überspringen</string>
+    <string name="permission_location_allow">GPS erlauben</string>
+
+    <!-- Navigation content descriptions -->
+    <string name="nav_back">Zurück</string>
+    <string name="cd_collapse">Einklappen</string>
+    <string name="cd_expand">Ausklappen</string>
+
+    <!-- Workout screen title -->
+    <string name="cd_interval_remaining">%1$s: %2$s verbleibend</string>
+    <string name="cd_interval_paused">Pausiert: %1$s</string>
+
+    <!-- Additional programs -->
+    <string name="program_pre_c25k">Pre-C25K</string>
+    <string name="program_pre_c25k_desc">3-wöchiger Einstieg für Anfänger, denen Woche 1 von C25K zu schwer ist. Führt anschließend zu C25K.</string>
+    <string name="program_b210k">Brücke zu 10K</string>
+    <string name="program_b210k_desc">6-wöchige Brücke für C25K-Absolventen, die noch nicht bereit sind, direkt zu C210K zu wechseln.</string>
+    <string name="program_ohr">Ein-Stunden-Läufer</string>
+    <string name="program_ohr_desc">13-wöchige Steigerung von 30 auf 60 Minuten durchgehendes Laufen.</string>
+    <string name="program_5ki">5K Verbesserer</string>
+    <string name="program_5ki_desc">8-wöchiges Tempo- und Ausdauerprogramm für Läufer, die bereits 5 km durchlaufen können.</string>
+
+    <!-- Program prerequisites -->
+    <string name="program_prereq_after_c25k">Nach Abschluss von C25K</string>
+    <string name="program_prereq_after_b210k_or_c25k">Nach Abschluss von B210K oder C25K</string>
+    <string name="program_prereq_for_5k_runners">Für Läufer, die bereits 5 km schaffen</string>
+
+    <!-- Guide -->
+    <string name="guide_title">Leitfaden</string>
+    <string name="guide_section_before_start">Bevor du startest</string>
+    <string name="guide_section_during_workout">Während eines Trainings</string>
+    <string name="guide_section_between_workouts">Zwischen den Trainingseinheiten</string>
+    <string name="guide_section_glossary">Glossar</string>
+
+    <string name="guide_q_conversational_pace">Was ist Unterhaltungstempo?</string>
+    <string name="guide_a_conversational_pace">Unterhaltungstempo bedeutet, so langsam zu laufen, dass du dich dabei noch ganz normal unterhalten könntest – vollständige Sätze, nicht nur Keuchen zwischen den Worten. Wenn dir die Luft zum Sprechen fehlt, lauf langsamer.\n\nDie meisten Anfänger laufen zu schnell und erschöpfen sich bereits in der ersten Minute. Langsamer zu laufen ist kein Zeichen von Schwäche, sondern die richtige Technik. Es sollte sich anstrengend, aber angenehm anfühlen.</string>
+    <string name="guide_q_gear_needed">Welche Ausrüstung brauche ich wirklich?</string>
+    <string name="guide_a_gear_needed">Ein ordentliches Paar Laufschuhe ist die eine Sache, in die es sich zu investieren lohnt. Sie dämpfen die wiederholte Belastung deiner Gelenke und senken das Verletzungsrisiko deutlich. Wenn möglich, geh in ein Fachgeschäft und lass dich beraten – dort schaut man sich kurz an, wie du läufst oder gehst, und empfiehlt den passenden Schuhtyp.\n\nAlles andere – spezielle Kleidung, Pulsmesser, GPS-Uhren – ist optional. Bequeme Kleidung, die du schon besitzt, reicht zum Start völlig aus.</string>
+    <string name="guide_q_first_week">Wie sollte sich die erste Woche anfühlen?</string>
+    <string name="guide_a_first_week">Anstrengend. Selbst die 60-Sekunden-Laufintervalle in Woche 1 werden überraschend fordernd sein, wenn du vorher noch nicht gelaufen bist – das ist völlig normal.\n\nDein Herz-Kreislauf-System passt sich schneller an als deine Muskeln und Bindegewebe, daher lässt die Kurzatmigkeit meist nach, bevor die Beinmüdigkeit nachlässt. Erwarte, dich nach jeder Einheit müde zu fühlen – das zeigt, dass das Training wirkt. Ab Woche 3 oder 4 bemerken die meisten eine deutliche Verbesserung.</string>
+    <string name="guide_q_safe_to_start">Ist es sicher zu starten, wenn ich seit Jahren keinen Sport gemacht habe?</string>
+    <string name="guide_a_safe_to_start">Für die meisten Menschen ja – C25K wurde speziell für Einsteiger bei null entwickelt. Wenn du eine Herzerkrankung, Gelenkprobleme hast oder seit Langem inaktiv und über 40 bist, ist eine kurze Rücksprache mit deinem Arzt sinnvoll, aber nicht immer notwendig.\n\nDas Programm beginnt sehr behutsam, gerade weil es sich an komplette Anfänger richtet.</string>
+
+    <string name="guide_q_warmup">Was ist ein Aufwärmen, und warum sollte ich es nicht auslassen?</string>
+    <string name="guide_a_warmup">Der 5-minütige zügige Spaziergang zu Beginn jeder Einheit erhöht schrittweise deinen Herzschlag und die Durchblutung deiner Muskeln. Kalte Muskeln sind weniger elastisch und anfälliger für Zerrungen.\n\nWer das Aufwärmen auslässt, für den fühlt sich das erste Laufintervall viel schwerer an als nötig, und das Verletzungsrisiko steigt. Fünf Minuten sind eine kleine Investition.</string>
+    <string name="guide_q_cooldown">Was ist ein Cool-down?</string>
+    <string name="guide_a_cooldown">Der 5-minütige Spaziergang am Ende senkt deinen Herzschlag allmählich, statt abrupt zu stoppen. Er hilft deinem Körper außerdem, Milchsäure aus den Muskeln abzubauen, was den Muskelkater nach dem Training verringert.\n\nEs dauert nur 5 Minuten und macht einen echten Unterschied dafür, wie du dich am nächsten Tag fühlst.</string>
+    <string name="guide_q_pain_discomfort">Schmerz vs. Unbehagen – wie erkenne ich den Unterschied?</string>
+    <string name="guide_a_pain_discomfort">Unbehagen ist normal und zu erwarten: brennende Lunge, müde Beine, Muskeln, die sich beschweren. So fühlt sich Training an, besonders am Anfang.\n\nSchmerz ist etwas anderes. Er ist stechend, auf einen bestimmten Punkt begrenzt (ein Knie, ein Schienbein, ein Fuß), oder er verstärkt sich beim Weiterlaufen. Schmerz ist das Signal deines Körpers, dass etwas nicht stimmt.\n\nUnbehagen sagt „Das ist hart.“ Schmerz sagt „Stopp.“ Wenn du während einer Einheit echten Schmerz spürst, stoppe und geh nach Hause. Hält er nach einem Ruhetag noch an, suche einen Physiotherapeuten oder Arzt auf, bevor du wieder läufst.</string>
+    <string name="guide_q_breathing">Wie sollte ich atmen?</string>
+    <string name="guide_a_breathing">Es gibt keine einzig richtige Technik – atme so, wie du am meisten Luft bekommst. Viele Läufer finden natürlich zu einem 2:2-Rhythmus: 2 Schritte einatmen, 2 Schritte ausatmen. Andere bevorzugen 3:2 oder atmen einfach nach Bedarf.\n\nDurch Nase und Mund gleichzeitig zu atmen ist völlig in Ordnung und bei Anstrengung sogar ratsam. Wenn du nach Luft schnappst, läufst du zu schnell – reduziere das Tempo, bis sich deine Atmung wieder gut anfühlt.</string>
+    <string name="guide_q_cant_finish_interval">Was, wenn ich ein Laufintervall nicht schaffe?</string>
+    <string name="guide_a_cant_finish_interval">Geh. Gehen ist kein Versagen – die Gehpausen sind genau aus diesem Grund fest im Programm eingeplant.\n\nWenn du die Laufintervalle regelmäßig nicht schaffst, versuch, dein Lauftempo noch weiter zu drosseln. Viele sind überrascht, wie langsam „langsam“ am Anfang sein muss. Ein sehr langsamer Trab, den du durchhalten kannst, ist weit besser als ein schnelles Tempo, das dich zum Anhalten zwingt.</string>
+
+    <string name="guide_q_rest_days">Warum brauche ich Ruhetage?</string>
+    <string name="guide_a_rest_days">Fitnessfortschritte entstehen während der Erholung, nicht während des Laufens selbst. Training setzt kleine Reize in deinen Muskeln und im Bindegewebe; an den Ruhetagen repariert dein Körper diese Reize und wird dabei etwas stärker.\n\nAus diesem Grund umfasst der C25K-Plan 3 Einheiten pro Woche. Tägliches Laufen als Anfänger erhöht das Risiko von Überlastungsschäden deutlich – Ermüdungsbrüche, Schienbeinkantensyndrom und Sehnenprobleme, die dich wochenlang ausbremsen können.</string>
+    <string name="guide_q_repeat_day">Sollte ich einen Tag wiederholen oder weitermachen?</string>
+    <string name="guide_a_repeat_day">Mach weiter, auch wenn sich eine Einheit hart angefühlt hat – solange du sie abgeschlossen hast. C25K ist so behutsam aufgebaut, dass fast jeder jede Woche vorankommt.\n\nWiederhole einen Tag nur, wenn du die Laufintervalle überhaupt nicht schaffen konntest – zum Beispiel, wenn du mehrmals mitten im Intervall anhalten musstest (nicht nur am natürlichen Ende eines Intervalls). Müdigkeit, Langsamkeit oder Atemnot sind kein Grund zur Wiederholung. So fühlt sich Woche 2 nun mal an.</string>
+    <string name="guide_q_ready_next_session">Wann bin ich bereit für meine nächste Einheit?</string>
+    <string name="guide_a_ready_next_session">Wenn der Muskelkater der vorherigen Einheit weitgehend abgeklungen ist – meist nach 1 bis 2 Tagen. Muskelkater 24–48 Stunden nach einem Lauf ist normal (das nennt man DOMS, verzögert einsetzender Muskelkater) und wird in den ersten Wochen zunehmend milder, während sich dein Körper anpasst.\n\nWenn du noch deutlich wund oder steif bist, leg einen zusätzlichen Ruhetag ein. Ein zusätzlicher Tag macht selten einen Unterschied; Laufen mit sehr müden Beinen erhöht das Verletzungsrisiko.</string>
+    <string name="guide_q_stretch">Muss ich dehnen?</string>
+    <string name="guide_a_stretch">Leichtes Dehnen nach dem Laufen (nicht davor) kann die Beweglichkeit verbessern und Steifheit reduzieren. Konzentriere dich auf Waden, Oberschenkelrückseite, Hüftbeuger und Quadrizeps – die Muskeln, die den Großteil der Arbeit leisten.\n\nDehnen vor dem Laufen, wenn die Muskeln noch kalt sind, bringt wenig und kann sogar zu Zerrungen führen. Der Aufwärm-Spaziergang ist die wirksamere Vorbereitung als statisches Dehnen.</string>
+
+    <string name="guide_q_aerobic_fitness">Aerobe Fitness</string>
+    <string name="guide_a_aerobic_fitness">Die Fähigkeit von Herz und Lunge, deine Muskeln während anhaltender Belastung mit Sauerstoff zu versorgen. C25K baut gezielt aerobe Fitness auf – die Grundlage jeder Ausdaueraktivität.</string>
+    <string name="guide_q_interval_term">Intervall</string>
+    <string name="guide_a_interval_term">Ein Zeitabschnitt mit einer bestimmten Intensität über eine festgelegte Dauer. Jede C25K-Einheit besteht aus einer Reihe von Lauf- und Gehintervallen – zum Beispiel acht Wiederholungen von „60 Sekunden laufen, 90 Sekunden gehen“.</string>
+    <string name="guide_q_pace_term">Tempo</string>
+    <string name="guide_a_pace_term">Wie schnell du läufst, meist angegeben in Minuten pro Kilometer oder Meile – zum Beispiel bedeutet 7:30 pro km, dass du 7 Minuten und 30 Sekunden für einen Kilometer brauchst.\n\nFür den größten Teil von C25K spielt das Tempo keine Rolle. Die Intervalle zu schaffen zählt. Ignoriere das Tempo komplett, bis du das Programm abgeschlossen hast.</string>
+    <string name="guide_q_doms">DOMS (verzögert einsetzender Muskelkater)</string>
+    <string name="guide_a_doms">Muskelkater, der 24–48 Stunden nach dem Training auftritt, verursacht durch mikroskopisch kleine Schäden an Muskelfasern, während sie sich an die neue Belastung anpassen. Normal, nicht schädlich, und wird in den ersten Trainingswochen deutlich schwächer.</string>
+    <string name="guide_q_shin_splints">Schienbeinkantensyndrom</string>
+    <string name="guide_a_shin_splints">Schmerzen entlang der Vorder- oder Innenkante des Unterschenkels, häufig bei neuen Läufern. Meist verursacht durch zu viel zu früh oder durch abgelaufene Schuhe.\n\nWenn du ein Schienbeinkantensyndrom entwickelst, ruh dich 3–5 Tage aus. Überprüfe danach deine Schuhe und achte darauf, dass dein Lauftempo nicht zu hoch ist. Anhaltende Schienbeinschmerzen sollten von einem Physiotherapeuten untersucht werden.</string>
+    <string name="guide_q_rpe">RPE (subjektiv empfundene Anstrengung)</string>
+    <string name="guide_a_rpe">Eine einfache Skala von 1 bis 10 dafür, wie anstrengend sich eine Belastung anfühlt, wobei 1 Stillsitzen und 10 ein Sprint mit voller Kraft ist, den du nur wenige Sekunden durchhalten könntest.\n\nDer Großteil deines C25K-Laufens sollte sich wie eine 5–6 anfühlen: spürbar anstrengend, aber tragbar. Unterhaltungstempo.</string>
+
+    <!-- Contributors -->
+    <string name="contributors_title">Mitwirkende</string>
+    <string name="contributor_github_label">GitHub</string>
+    <string name="contributor_fediverse_label">Fediverse</string>
+    <string name="contributor_translation_es">Spanische (es) Übersetzung</string>
+    <string name="contributor_translation_gl">Galicische (gl) Übersetzung</string>
+    <string name="contributor_fix_tts_ducking">Fix: Sprachansagen dämpfen jetzt die Hintergrundmusik, statt sie zu pausieren</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_tts_enabled">Sprachansagen</string>
+    <string name="settings_treadmill_mode">Laufband-Modus (deaktiviert GPS)</string>
+    <string name="settings_gps_enabled">GPS-Tracking</string>
+    <string name="settings_countdown_warnings">Countdown-Warnungen (10s, 5s)</string>
+    <string name="settings_mid_interval_cues">Motivation während des Laufens</string>
+    <string name="settings_keep_screen_on">Bildschirm während des Trainings an lassen</string>
+    <string name="settings_vibration_enabled">Vibrieren bei Intervallwechsel</string>
+    <string name="settings_tts_speed">Sprechgeschwindigkeit</string>
+    <string name="settings_tts_speed_slow">Langsam</string>
+    <string name="settings_tts_speed_fast">Schnell</string>
+    <string name="settings_tts_volume">Sprachlautstärke</string>
+    <string name="settings_tts_volume_quiet">Leise</string>
+    <string name="settings_tts_volume_loud">Laut</string>
+
+    <!-- Battery optimization warning -->
+    <string name="battery_opt_title">Akku-Optimierung</string>
+    <string name="battery_opt_message">Damit Trainings zuverlässig laufen, erlaube C2K, im Hintergrund aktiv zu bleiben. Tippen, um die Akku-Einstellungen zu öffnen.</string>
+    <string name="battery_opt_open_settings">Einstellungen öffnen</string>
+    <string name="battery_opt_dismiss">Verwerfen</string>
+
+    <!-- TTS unavailable warning -->
+    <string name="tts_unavailable">Text-zu-Sprache ist auf diesem Gerät nicht verfügbar. Sprachansagen sind deaktiviert.</string>
+
+    <!-- TTS announcements -->
+    <string name="tts_interval_warmup">Aufwärm-Spaziergang beginnen</string>
+    <string name="tts_interval_run">Beginne, %1$s zu laufen</string>
+    <string name="tts_interval_walk">Gehe %1$s</string>
+    <string name="tts_interval_cooldown">Cool-down-Spaziergang beginnen</string>
+    <string name="tts_seconds_remaining">%1$d Sekunden verbleibend</string>
+    <string name="tts_next_run">Mach dich bereit zu laufen</string>
+    <string name="tts_next_walk">Mach dich bereit zu gehen</string>
+    <string name="tts_next_warmup">Mach dich bereit zum Aufwärmen</string>
+    <string name="tts_next_cooldown">Cool-down beginnt bald</string>
+    <string-array name="tts_encouragement_phrases">
+        <item>Du machst das großartig, weiter so!</item>
+        <item>Schon zur Hälfte geschafft, bleib stark!</item>
+        <item>Weiter so, du schaffst das!</item>
+        <item>Starke Leistung, du bist fast da!</item>
+        <item>Du machst das hervorragend, gib weiter Gas!</item>
+    </string-array>
+    <string name="tts_workout_complete">Training abgeschlossen. Gut gemacht!</string>
+    <string name="tts_halfway">Du bist auf halbem Weg, weiter so!</string>
+    <string name="tts_last_run">Letzter Laufabschnitt, gib alles!</string>
+    <string name="tts_duration_min_sec">%1$s und %2$s</string>
+    <plurals name="tts_duration_minutes">
+        <item quantity="one">%d Minute</item>
+        <item quantity="other">%d Minuten</item>
+    </plurals>
+    <plurals name="tts_duration_seconds">
+        <item quantity="one">%d Sekunde</item>
+        <item quantity="other">%d Sekunden</item>
+    </plurals>
+
+    <!-- Coaching tips - C25K -->
+    <string name="coaching_c25k_w1">Lauf in einem Tempo, in dem du dich noch unterhalten kannst. Die Gehpausen sind Teil des Trainings.</string>
+    <string name="coaching_c25k_w2">Du hast Woche 1 geschafft – dein Körper passt sich bereits an. Halte das Tempo locker.</string>
+    <string name="coaching_c25k_w3">Diese Woche gibt es längere Intervalle. Achte auf gleichmäßiges Atmen: 2 Schritte ein, 2 Schritte aus.</string>
+    <string name="coaching_c25k_w4">Heute vier verschiedene Laufabschnitte. Das stärkt genauso die mentale Stärke wie die Fitness.</string>
+    <string name="coaching_c25k_w5">Tag 3 dieser Woche ist der berühmte Meilenstein: 20 Minuten durchgehendes Laufen. Du hast es dir verdient.</string>
+    <string name="coaching_c25k_w6">Du bist über der Halbzeitmarke. Die langen Läufe bauen deine aerobe Basis auf.</string>
+    <string name="coaching_c25k_w7">25 Minuten durchgehend. Nicht jeder kommt so weit – du bist jetzt ein Läufer.</string>
+    <string name="coaching_c25k_w8">28 Minuten. Das Ziel ist fast erreicht. Werde nicht schneller – heb dir das für nächste Woche auf.</string>
+    <string name="coaching_c25k_w9">Das ist die Abschlusswoche. 30 Minuten, dann wird gefeiert!</string>
+
+    <!-- Coaching tips - C210K extension weeks -->
+    <string name="coaching_c210k_w10">Zurück zu Intervallen, um deine Basis für die längere Distanz aufzubauen. Bleib locker.</string>
+    <string name="coaching_c210k_w11">Längere kombinierte Läufe. Halte das Tempo durchgehend im Unterhaltungsbereich.</string>
+    <string name="coaching_c210k_w12">40 Minuten Laufen mit einer kurzen Pause. Entspann dich und laufe kein Rennen.</string>
+    <string name="coaching_c210k_w13">50 Minuten. Wenn du das schaffst, ist ein 10K-Finish in Reichweite.</string>
+    <string name="coaching_c210k_w14">60 Minuten — dein 10K-Abschlusslauf. Hol es dir!</string>
+
+    <!-- Coaching tips - Bridge to 10K -->
+    <string name="coaching_b210k_w1">Die Gewohnheit nach C25K neu aufbauen. Lauf locker, noch musst du dich nicht anstrengen.</string>
+    <string name="coaching_b210k_w2">Zwei längere Blöcke mit einer kurzen Pause. Ziel: gleichmäßiges Tempo über beide Läufe.</string>
+    <string name="coaching_b210k_w3">Der Gesamtumfang steigt. Achte auf gleichmäßige Anstrengung in beiden Intervallen.</string>
+    <string name="coaching_b210k_w4">Fast 45 Minuten Laufen. Du baust echte 10K-Fitness auf.</string>
+    <string name="coaching_b210k_w5">50 Minuten diese Woche. Der volle 60-Minuten-Abschlusslauf ist nur noch eine Woche entfernt.</string>
+    <string name="coaching_b210k_w6">60 Minuten — die B210K-Ziellinie. Gut gemacht!</string>
+
+    <!-- Coaching tips - One Hour Runner -->
+    <string name="coaching_ohr_w1">33 Minuten entspanntes, leichtes Laufen. Kümmere dich nicht ums Tempo, lauf einfach durch.</string>
+    <string name="coaching_ohr_w4">40 Minuten. Jede Woche baust du echte Ausdauer auf.</string>
+    <string name="coaching_ohr_w7">Fast 50 Minuten. Du bist weit über der Komfortzone der meisten Läufer.</string>
+    <string name="coaching_ohr_w10">55 Minuten. Das Ein-Stunden-Ziel ist nur noch eine gute Woche entfernt.</string>
+    <string name="coaching_ohr_w13">60 Minuten — das ist es. Du bist ein Ein-Stunden-Läufer!</string>
+
+    <!-- Coaching tips - 5K Improver -->
+    <string name="coaching_5ki_w1">Kurze, harte Belastungen bauen Beinschnelligkeit auf. Lauf etwas schneller als dein übliches 5K-Tempo.</string>
+    <string name="coaching_5ki_w2">5-Minuten-Intervalle sind ideal, um aerobe Leistungsfähigkeit aufzubauen.</string>
+    <string name="coaching_5ki_w4">Kombi-Training: längere Intervalle mit einem Schlusslauf. Das baut Renn-Ausdauer auf.</string>
+    <string name="coaching_5ki_w6">Zwei 15-Minuten-Läufe — solide aerobe Arbeit, die sich direkt in ein schnelleres 5K übersetzt.</string>
+    <string name="coaching_5ki_w8">Abschlusslauf: 30 Minuten im 5K-Tempo. Schau, wie weit du kommst — es sollte sich gut anfühlen.</string>
+</resources>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">C2K</string>
+
+    <!-- Programs -->
+    <string name="program_c25k">Du canapé au 5 km</string>
+    <string name="program_c210k">Du canapé au 10 km</string>
+    <string name="program_c25k_desc">Programme de 9 semaines pour courir 5 km sans s\'arrêter</string>
+    <string name="program_c210k_desc">Programme de 14 semaines pour courir 10 km sans s\'arrêter</string>
+
+    <!-- Home screen -->
+    <string name="home_title">C2K</string>
+    <string name="home_choose_program">Choisir un programme</string>
+    <string name="home_recent_workouts">Séances récentes</string>
+    <string name="home_no_workouts">Aucune séance pour l\'instant. Lancez un programme pour commencer !</string>
+    <string name="home_workout_active">Séance en cours — touchez pour y retourner</string>
+    <string name="home_continue_workout">Continuer : %1$s · Semaine %2$d, Jour %3$d</string>
+    <string name="home_streak">%1$d jours d\'affilée 🔥</string>
+    <string name="home_program_weeks">%1$d semaines</string>
+    <string name="home_program_prerequisite">%1$s</string>
+
+    <!-- Program select screen -->
+    <string name="program_week_label">Semaine %1$d</string>
+    <string name="program_day_label">Jour %1$d</string>
+    <string name="program_completed_badge">Terminé</string>
+    <string name="program_start_workout">Démarrer la séance</string>
+    <string name="program_progress">%1$d jours sur %2$d complétés</string>
+    <string name="program_next_workout">Continuer : Semaine %1$d, Jour %2$d →</string>
+    <string name="program_preview_title">Semaine %1$d, Jour %2$d</string>
+    <string name="program_preview_start">Commencer</string>
+    <string name="program_preview_redo">Refaire</string>
+    <string name="program_preview_duration">~%1$d min</string>
+    <string name="program_reset_title">Réinitialiser la progression</string>
+    <string name="program_reset_message">Cette action supprimera définitivement toutes les séances terminées de ce programme. Votre historique global est conservé.</string>
+    <string name="program_reset_confirm">Réinitialiser</string>
+    <string name="program_reset_cancel">Annuler</string>
+
+    <!-- Workout screen -->
+    <string name="workout_stop_title">Arrêter la séance ?</string>
+    <string name="workout_stop_message">Votre progression sera enregistrée comme incomplète.</string>
+    <string name="workout_stop_confirm">Arrêter</string>
+    <string name="workout_stop_cancel">Annuler</string>
+    <string name="workout_interval_run">COURSE</string>
+    <string name="workout_interval_walk">MARCHE</string>
+    <string name="workout_interval_warmup">ÉCHAUFFEMENT</string>
+    <string name="workout_interval_cooldown">RETOUR AU CALME</string>
+    <string name="workout_pause">Pause</string>
+    <string name="workout_resume">Reprendre</string>
+    <string name="workout_stop">Arrêter</string>
+    <string name="workout_elapsed">Écoulé : %1$s</string>
+    <string name="workout_interval_progress">Intervalle %1$d sur %2$d</string>
+    <string name="workout_next_interval">Suivant : %1$s %2$s</string>
+    <string name="workout_distance_km">%1$.2f km</string>
+    <string name="workout_pace">%1$s / km</string>
+    <string name="workout_treadmill_effort_run">Allure de course confortable</string>
+    <string name="workout_treadmill_effort_walk">Marche rapide</string>
+    <string name="workout_treadmill_effort_warmup">Marche tranquille</string>
+    <string name="workout_treadmill_effort_cooldown">Marche tranquille</string>
+    <string name="workout_acquiring_gps">Recherche du GPS…</string>
+    <string name="workout_gps_unavailable">GPS indisponible</string>
+    <string name="workout_complete_title">Séance terminée !</string>
+    <string name="workout_complete_message">Bravo ! Continuez comme ça.</string>
+    <string name="workout_complete_time">Temps : %1$s</string>
+    <string name="workout_done">Terminé</string>
+    <string name="workout_paused_label">EN PAUSE</string>
+    <string name="workout_reconnecting">Reconnexion…</string>
+    <string name="workout_starting">Démarrage…</string>
+    <string name="workout_new_best">Nouveau record personnel !</string>
+    <string name="workout_previous_best">Record précédent : %1$s</string>
+
+    <!-- History screen -->
+    <string name="history_title">Historique</string>
+    <string name="history_empty">Aucune séance terminée pour l\'instant.</string>
+    <string name="history_week_day">Semaine %1$d, Jour %2$d</string>
+    <string name="history_duration">%1$s</string>
+    <string name="history_export">Exporter en CSV</string>
+    <string name="history_export_chooser">Exporter l\'historique des séances</string>
+    <string name="history_export_gpx">Exporter le tracé GPX</string>
+    <string name="history_export_gpx_chooser">Partager le tracé GPX</string>
+    <string name="history_delete_title">Supprimer la séance ?</string>
+    <string name="history_delete_message">Cette séance sera définitivement supprimée de votre historique.</string>
+    <string name="history_delete_confirm">Supprimer</string>
+    <string name="history_delete_cancel">Annuler</string>
+    <string name="history_stats_workouts">séances</string>
+    <string name="history_stats_km">km</string>
+    <string name="history_stats_time">temps</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">Entraînement</string>
+    <string name="notification_channel_desc">Minuteur de la séance en cours</string>
+    <string name="notification_action_pause">Pause</string>
+    <string name="notification_action_resume">Reprendre</string>
+    <string name="notification_action_stop">Arrêter</string>
+    <string name="notification_title">Séance C2K</string>
+    <string name="workout_paused_notification">En pause</string>
+
+    <!-- Permissions -->
+    <string name="permission_location_rationale">C2K peut suivre votre distance et votre allure via le GPS. C\'est optionnel — le minuteur fonctionne aussi sans.</string>
+    <string name="permission_location_deny">Ignorer le GPS</string>
+    <string name="permission_location_allow">Autoriser le GPS</string>
+
+    <!-- Navigation content descriptions -->
+    <string name="nav_back">Retour</string>
+    <string name="cd_collapse">Réduire</string>
+    <string name="cd_expand">Développer</string>
+
+    <!-- Workout screen title -->
+    <string name="cd_interval_remaining">%1$s : %2$s restantes</string>
+    <string name="cd_interval_paused">En pause : %1$s</string>
+
+    <!-- Additional programs -->
+    <string name="program_pre_c25k">Pré-C25K</string>
+    <string name="program_pre_c25k_desc">Programme d\'initiation de 3 semaines pour les débutants qui trouvent la semaine 1 de C25K trop difficile. Débouche sur C25K.</string>
+    <string name="program_b210k">Pont vers 10K</string>
+    <string name="program_b210k_desc">Transition de 6 semaines pour les diplômés de C25K qui ne sont pas encore prêts à passer directement au C210K.</string>
+    <string name="program_ohr">Coureur d\'une heure</string>
+    <string name="program_ohr_desc">Progression de 13 semaines de 30 à 60 minutes de course continue.</string>
+    <string name="program_5ki">Amélioration 5K</string>
+    <string name="program_5ki_desc">Programme de vitesse et d\'endurance de 8 semaines pour les coureurs capables de finir un 5 km.</string>
+
+    <!-- Program prerequisites -->
+    <string name="program_prereq_after_c25k">Après avoir terminé C25K</string>
+    <string name="program_prereq_after_b210k_or_c25k">Après avoir terminé B210K ou C25K</string>
+    <string name="program_prereq_for_5k_runners">Pour les coureurs capables de finir un 5 km</string>
+
+    <!-- Guide -->
+    <string name="guide_title">Guide</string>
+    <string name="guide_section_before_start">Avant de commencer</string>
+    <string name="guide_section_during_workout">Pendant une séance</string>
+    <string name="guide_section_between_workouts">Entre les séances</string>
+    <string name="guide_section_glossary">Glossaire</string>
+
+    <string name="guide_q_conversational_pace">Qu\'est-ce que l\'allure conversationnelle ?</string>
+    <string name="guide_a_conversational_pace">L\'allure conversationnelle signifie courir assez lentement pour pouvoir tenir une conversation complète — des phrases entières, pas juste des halètements entre les mots. Si vous êtes trop essoufflé pour parler, ralentissez.\n\nLa plupart des débutants courent trop vite et s\'épuisent dès la première minute. Ralentir n\'est pas un signe de faiblesse, c\'est la bonne technique. Vous devriez sentir que vous travaillez, mais confortablement.</string>
+    <string name="guide_q_gear_needed">De quel équipement ai-je vraiment besoin ?</string>
+    <string name="guide_a_gear_needed">Une bonne paire de chaussures de course est la seule chose qui vaille la peine d\'investir. Elles amortissent l\'impact répété sur vos articulations et réduisent considérablement le risque de blessure. Si possible, rendez-vous dans un magasin spécialisé pour un essayage — on vous observera brièvement marcher ou courir et on vous recommandera le type qui vous convient.\n\nTout le reste — vêtements spéciaux, cardiofréquencemètre, montre GPS — est optionnel. Des vêtements confortables que vous possédez déjà suffisent pour commencer.</string>
+    <string name="guide_q_first_week">Comment devrait se sentir la première semaine ?</string>
+    <string name="guide_a_first_week">Difficile. Même les intervalles de course de 60 secondes de la semaine 1 seront surprenants si vous n\'avez jamais couru, et c\'est tout à fait normal.\n\nVotre système cardiovasculaire s\'adapte plus vite que vos muscles et tissus conjonctifs, donc l\'essoufflement a tendance à s\'atténuer avant la fatigue des jambes. Attendez-vous à vous sentir fatigué après chaque séance — c\'est le signe que l\'entraînement fonctionne. Dès la semaine 3 ou 4, la plupart des gens remarquent une nette amélioration.</string>
+    <string name="guide_q_safe_to_start">Est-ce sûr de commencer si je n\'ai pas fait de sport depuis des années ?</string>
+    <string name="guide_a_safe_to_start">Pour la plupart des gens, oui — C25K est spécifiquement conçu pour les personnes qui partent de zéro. Si vous avez un problème cardiaque, des problèmes articulaires, ou si vous n\'avez pas été actif depuis longtemps et avez plus de 40 ans, une brève consultation médicale au préalable est sage, sans être toujours nécessaire.\n\nLe programme commence très en douceur, précisément parce qu\'il s\'adresse à des débutants complets.</string>
+
+    <string name="guide_q_warmup">Qu\'est-ce qu\'un échauffement, et pourquoi ne devrais-je pas le sauter ?</string>
+    <string name="guide_a_warmup">La marche rapide de 5 minutes au début de chaque séance augmente progressivement votre rythme cardiaque et la circulation sanguine vers vos muscles. Des muscles froids sont moins élastiques et plus sujets aux blessures.\n\nSauter l\'échauffement rend le premier intervalle de course bien plus difficile qu\'il ne devrait l\'être, et augmente le risque de se blesser. Cinq minutes, c\'est un petit investissement.</string>
+    <string name="guide_q_cooldown">Qu\'est-ce qu\'un retour au calme ?</string>
+    <string name="guide_a_cooldown">La marche de 5 minutes à la fin fait redescendre progressivement votre rythme cardiaque plutôt que de s\'arrêter brutalement. Elle aide aussi votre corps à commencer à éliminer l\'acide lactique de vos muscles, ce qui réduit les courbatures après l\'effort.\n\nCela ne prend que 5 minutes et fait une vraie différence sur la façon dont vous vous sentirez le lendemain.</string>
+    <string name="guide_q_pain_discomfort">Douleur ou gêne — comment faire la différence ?</string>
+    <string name="guide_a_pain_discomfort">La gêne est normale et attendue : poumons qui brûlent, jambes fatiguées, muscles qui se plaignent. C\'est ce que ressent l\'effort physique, surtout au début.\n\nLa douleur est différente. Elle est aiguë, localisée en un point précis (un genou, un tibia, un pied), ou elle s\'aggrave à mesure que vous continuez de courir. La douleur est le signal de votre corps que quelque chose ne va pas.\n\nLa gêne dit « c\'est dur ». La douleur dit « arrête ». Si vous ressentez une douleur réelle pendant une séance, arrêtez-vous et rentrez à pied. Si elle persiste après un jour de repos, consultez un kinésithérapeute ou un médecin avant de recourir.</string>
+    <string name="guide_q_breathing">Comment devrais-je respirer ?</string>
+    <string name="guide_a_breathing">Il n\'existe pas de technique unique — respirez de la façon qui vous permet de prendre le plus d\'air. Beaucoup de coureurs adoptent naturellement un rythme 2:2 : inspirer sur 2 pas, expirer sur 2 pas. D\'autres préfèrent 3:2, ou respirent simplement selon leurs besoins.\n\nRespirer à la fois par le nez et par la bouche est parfaitement normal, voire conseillé à l\'effort. Si vous êtes à bout de souffle, c\'est que vous courez trop vite — ralentissez jusqu\'à ce que votre respiration redevienne gérable.</string>
+    <string name="guide_q_cant_finish_interval">Que faire si je n\'arrive pas à finir un intervalle de course ?</string>
+    <string name="guide_a_cant_finish_interval">Marchez. Il n\'y a aucun échec à marcher — les pauses marche sont intégrées au programme précisément pour cette raison.\n\nSi vous n\'arrivez régulièrement pas à terminer les intervalles de course, essayez de ralentir encore votre allure de course. Beaucoup sont surpris de voir à quel point « lent » doit l\'être au début. Un trot très lent que vous pouvez tenir vaut bien mieux qu\'une course rapide qui vous force à vous arrêter.</string>
+
+    <string name="guide_q_rest_days">Pourquoi ai-je besoin de jours de repos ?</string>
+    <string name="guide_a_rest_days">Les progrès en forme physique se produisent pendant le repos, pas pendant la course elle-même. L\'entraînement crée de petites contraintes dans vos muscles et tissus conjonctifs ; les jours de repos sont le moment où votre corps répare ces contraintes et en ressort un peu plus fort.\n\nC\'est pour cette raison que le programme C25K compte 3 séances par semaine. Courir tous les jours en tant que débutant augmente considérablement le risque de blessures de surmenage — fractures de fatigue, périostites tibiales et problèmes de tendons, qui peuvent vous immobiliser pendant des semaines.</string>
+    <string name="guide_q_repeat_day">Dois-je refaire un jour ou continuer ?</string>
+    <string name="guide_a_repeat_day">Continuez, même si une séance vous a semblé difficile — du moment que vous l\'avez terminée. C25K est conçu avec une progression suffisamment progressive pour que presque tout le monde puisse avancer chaque semaine.\n\nNe refaites un jour que si vous n\'avez pas du tout réussi à terminer les intervalles de course — par exemple, si vous avez dû vous arrêter à plusieurs reprises en plein milieu d\'un intervalle (pas seulement à la fin naturelle d\'un intervalle). Se sentir fatigué, lent ou essoufflé n\'est pas une raison de refaire. C\'est simplement ce que l\'on ressent en semaine 2.</string>
+    <string name="guide_q_ready_next_session">Quand suis-je prêt pour ma prochaine séance ?</string>
+    <string name="guide_a_ready_next_session">Quand les courbatures de la séance précédente se sont en grande partie dissipées — généralement 1 à 2 jours. Des courbatures 24 à 48 heures après une course sont normales (on appelle cela les DOMS, courbatures d\'apparition différée) et deviennent moins intenses à mesure que votre corps s\'adapte au fil des premières semaines.\n\nSi vous êtes encore nettement courbaturé ou raide, prenez un jour de repos supplémentaire. Un jour de plus ne change presque rien ; courir avec des jambes très fatiguées augmente le risque de blessure.</string>
+    <string name="guide_q_stretch">Dois-je m\'étirer ?</string>
+    <string name="guide_a_stretch">Des étirements légers après la course (pas avant) peuvent améliorer la souplesse et réduire les raideurs. Concentrez-vous sur les mollets, les ischio-jambiers, les fléchisseurs de hanche et les quadriceps — les muscles qui travaillent le plus.\n\nS\'étirer avant de courir, quand les muscles sont encore froids, est peu utile et peut même provoquer une blessure. La marche d\'échauffement est une préparation plus efficace que les étirements statiques.</string>
+
+    <string name="guide_q_aerobic_fitness">Endurance aérobie</string>
+    <string name="guide_a_aerobic_fitness">La capacité de votre cœur et de vos poumons à apporter de l\'oxygène à vos muscles pendant un effort prolongé. C25K développe spécifiquement l\'endurance aérobie — le fondement de toute activité d\'endurance.</string>
+    <string name="guide_q_interval_term">Intervalle</string>
+    <string name="guide_a_interval_term">Une période d\'effort à une intensité donnée pendant une durée fixe. Chaque séance C25K est structurée comme une série d\'intervalles de course et de marche — par exemple, huit répétitions de « courir 60 secondes, marcher 90 secondes ».</string>
+    <string name="guide_q_pace_term">Allure</string>
+    <string name="guide_a_pace_term">La vitesse à laquelle vous courez, généralement exprimée en minutes par kilomètre ou par mile — par exemple, 7:30 par km signifie qu\'il vous faut 7 minutes et 30 secondes pour courir un kilomètre.\n\nPour la majeure partie de C25K, l\'allure n\'a pas d\'importance. Terminer les intervalles, oui. Ignorez complètement l\'allure jusqu\'à ce que vous ayez fini le programme.</string>
+    <string name="guide_q_doms">DOMS (courbatures d\'apparition différée)</string>
+    <string name="guide_a_doms">Courbatures qui apparaissent 24 à 48 heures après l\'exercice, causées par des dommages microscopiques aux fibres musculaires qui s\'adaptent à une nouvelle contrainte. Normal, sans danger, et devient nettement moins intense après les premières semaines d\'entraînement.</string>
+    <string name="guide_q_shin_splints">Périostite tibiale</string>
+    <string name="guide_a_shin_splints">Douleur le long du bord avant ou intérieur du bas de la jambe, fréquente chez les nouveaux coureurs. Généralement causée par une progression trop rapide ou des chaussures usées.\n\nSi vous développez une périostite, reposez-vous 3 à 5 jours. À votre retour, vérifiez vos chaussures et assurez-vous que votre allure de course n\'est pas trop rapide. Une douleur tibiale persistante doit être évaluée par un kinésithérapeute.</string>
+    <string name="guide_q_rpe">RPE (perception de l\'effort)</string>
+    <string name="guide_a_rpe">Une échelle simple de 1 à 10 pour évaluer la difficulté ressentie d\'un effort, où 1 correspond à être assis immobile et 10 à un sprint maximal que vous ne pourriez tenir que quelques secondes.\n\nLa majeure partie de votre course C25K devrait se situer autour de 5–6 : un effort clair, mais tenable. L\'allure conversationnelle.</string>
+
+    <!-- Contributors -->
+    <string name="contributors_title">Contributeurs</string>
+    <string name="contributor_github_label">GitHub</string>
+    <string name="contributor_fediverse_label">Fediverse</string>
+    <string name="contributor_translation_es">Traduction en espagnol (es)</string>
+    <string name="contributor_translation_gl">Traduction en galicien (gl)</string>
+    <string name="contributor_fix_tts_ducking">Correction : les annonces vocales atténuent désormais la musique de fond au lieu de la mettre en pause</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_tts_enabled">Annonces vocales</string>
+    <string name="settings_treadmill_mode">Mode tapis de course (désactive le GPS)</string>
+    <string name="settings_gps_enabled">Suivi GPS</string>
+    <string name="settings_countdown_warnings">Avertissements du compte à rebours (10 s, 5 s)</string>
+    <string name="settings_mid_interval_cues">Encouragements en milieu de course</string>
+    <string name="settings_keep_screen_on">Garder l\'écran allumé pendant la séance</string>
+    <string name="settings_vibration_enabled">Vibrer au changement d\'intervalle</string>
+    <string name="settings_tts_speed">Vitesse de la voix</string>
+    <string name="settings_tts_speed_slow">Lente</string>
+    <string name="settings_tts_speed_fast">Rapide</string>
+    <string name="settings_tts_volume">Volume de la voix</string>
+    <string name="settings_tts_volume_quiet">Faible</string>
+    <string name="settings_tts_volume_loud">Fort</string>
+
+    <!-- Battery optimization warning -->
+    <string name="battery_opt_title">Optimisation de la batterie</string>
+    <string name="battery_opt_message">Pour des séances fiables, autorisez C2K à fonctionner en arrière-plan. Touchez pour ouvrir les paramètres de batterie.</string>
+    <string name="battery_opt_open_settings">Ouvrir les paramètres</string>
+    <string name="battery_opt_dismiss">Ignorer</string>
+
+    <!-- TTS unavailable warning -->
+    <string name="tts_unavailable">La synthèse vocale n\'est pas disponible sur cet appareil. Les annonces vocales sont désactivées.</string>
+
+    <!-- TTS announcements -->
+    <string name="tts_interval_warmup">Débutez la marche d\'échauffement</string>
+    <string name="tts_interval_run">Courez pendant %1$s</string>
+    <string name="tts_interval_walk">Marchez pendant %1$s</string>
+    <string name="tts_interval_cooldown">Débutez la marche de retour au calme</string>
+    <string name="tts_seconds_remaining">%1$d secondes restantes</string>
+    <string name="tts_next_run">Préparez-vous à courir</string>
+    <string name="tts_next_walk">Préparez-vous à marcher</string>
+    <string name="tts_next_warmup">Préparez-vous à vous échauffer</string>
+    <string name="tts_next_cooldown">Le retour au calme commence bientôt</string>
+    <string-array name="tts_encouragement_phrases">
+        <item>Vous vous en sortez très bien, continuez !</item>
+        <item>À mi-chemin, restez fort !</item>
+        <item>Continuez, vous y êtes presque !</item>
+        <item>Bel effort, vous y êtes presque !</item>
+        <item>Vous êtes brillant, continuez à pousser !</item>
+    </string-array>
+    <string name="tts_workout_complete">Séance terminée. Bravo !</string>
+    <string name="tts_halfway">Vous êtes à mi-chemin, continuez !</string>
+    <string name="tts_last_run">Dernière course, finissez fort !</string>
+    <string name="tts_duration_min_sec">%1$s et %2$s</string>
+    <plurals name="tts_duration_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="tts_duration_seconds">
+        <item quantity="one">%d seconde</item>
+        <item quantity="other">%d secondes</item>
+    </plurals>
+
+    <!-- Coaching tips - C25K -->
+    <string name="coaching_c25k_w1">Courez à une allure qui vous permet encore de parler. Les pauses marche font partie de l\'entraînement.</string>
+    <string name="coaching_c25k_w2">Vous avez passé la semaine 1 — votre corps s\'adapte déjà. Gardez une allure facile.</string>
+    <string name="coaching_c25k_w3">Des intervalles plus longs cette semaine. Concentrez-vous sur une respiration régulière : inspirez sur 2 pas, expirez sur 2 pas.</string>
+    <string name="coaching_c25k_w4">Quatre longueurs de course différentes aujourd\'hui. Cela renforce autant la résistance mentale que la forme physique.</string>
+    <string name="coaching_c25k_w5">Le jour 3 de cette semaine est le fameux jalon : 20 minutes de course continue. Vous l\'avez mérité.</string>
+    <string name="coaching_c25k_w6">Vous avez passé la moitié du parcours. Les longues courses construisent votre base aérobie.</string>
+    <string name="coaching_c25k_w7">25 minutes en continu. Tout le monde ne va pas aussi loin — vous êtes maintenant un coureur.</string>
+    <string name="coaching_c25k_w8">28 minutes. L\'objectif est presque atteint. N\'accélérez pas — gardez-en pour la semaine prochaine.</string>
+    <string name="coaching_c25k_w9">C\'est la semaine de la remise des diplômes. 30 minutes, puis célébrez !</string>
+
+    <!-- Coaching tips - C210K extension weeks -->
+    <string name="coaching_c210k_w10">Retour aux intervalles pour reconstruire votre base en vue de la distance plus longue. Restez tranquille.</string>
+    <string name="coaching_c210k_w11">Des efforts combinés plus longs. Gardez une allure conversationnelle tout du long.</string>
+    <string name="coaching_c210k_w12">40 minutes de course avec une courte pause. Détendez-vous et ne faites pas la course.</string>
+    <string name="coaching_c210k_w13">50 minutes. Si vous y arrivez, une arrivée en 10 km est à portée de main.</string>
+    <string name="coaching_c210k_w14">60 minutes — votre course de remise des diplômes du 10 km. Allez-y !</string>
+
+    <!-- Coaching tips - Bridge to 10K -->
+    <string name="coaching_b210k_w1">On rétablit l\'habitude après le C25K. Courez tranquillement, pas besoin de forcer encore.</string>
+    <string name="coaching_b210k_w2">Deux blocs plus longs avec une courte pause. Visez une allure régulière sur les deux courses.</string>
+    <string name="coaching_b210k_w3">Le volume total augmente. Concentrez-vous sur un effort constant sur les deux intervalles.</string>
+    <string name="coaching_b210k_w4">Presque 45 minutes de course. Vous développez une vraie forme pour le 10 km.</string>
+    <string name="coaching_b210k_w5">50 minutes cette semaine. La course de remise des diplômes de 60 minutes complètes n\'est plus qu\'à une semaine.</string>
+    <string name="coaching_b210k_w6">60 minutes — la ligne d\'arrivée du B210K. Bien joué !</string>
+
+    <!-- Coaching tips - One Hour Runner -->
+    <string name="coaching_ohr_w1">33 minutes de course facile et confortable. Ne vous souciez pas de l\'allure, terminez simplement.</string>
+    <string name="coaching_ohr_w4">40 minutes. Chaque semaine, vous développez une véritable endurance.</string>
+    <string name="coaching_ohr_w7">Presque 50 minutes. Vous avez largement dépassé la zone de confort du coureur moyen.</string>
+    <string name="coaching_ohr_w10">55 minutes. L\'objectif d\'une heure n\'est plus qu\'à une bonne semaine.</string>
+    <string name="coaching_ohr_w13">60 minutes — ça y est. Vous êtes un coureur d\'une heure !</string>
+
+    <!-- Coaching tips - 5K Improver -->
+    <string name="coaching_5ki_w1">Des efforts courts et intenses développent la vitesse des jambes. Poussez un peu plus fort que votre allure habituelle sur 5 km.</string>
+    <string name="coaching_5ki_w2">Les intervalles de 5 minutes sont idéaux pour développer la puissance aérobie.</string>
+    <string name="coaching_5ki_w4">Séance combinée : des intervalles plus longs avec une course finale. Cela renforce l\'endurance de course.</string>
+    <string name="coaching_5ki_w6">Deux courses de 15 minutes — un solide travail aérobie qui se traduira directement par un 5 km plus rapide.</string>
+    <string name="coaching_5ki_w8">Course de remise des diplômes : 30 minutes à l\'effort d\'un 5 km. Voyez jusqu\'où vous allez — ça devrait bien se passer.</string>
+</resources>
