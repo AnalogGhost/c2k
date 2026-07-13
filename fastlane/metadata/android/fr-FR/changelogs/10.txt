@@ -1,0 +1,2 @@
+• Correction : les annonces vocales utilisent désormais la langue de l'app plutôt que la langue système de l'appareil
+• Ajout des traductions en allemand, français et portugais brésilien
