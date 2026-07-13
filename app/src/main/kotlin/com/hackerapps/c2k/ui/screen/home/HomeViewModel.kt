@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.Programs
+import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.data.model.WorkoutPlan
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.service.WorkoutService
@@ -22,7 +23,7 @@ data class NextWorkout(
     val displayName: String,
     val week: Int,
     val day: Int,
-    val workoutDay: com.hackerapps.c2k.data.model.WorkoutDay
+    val workoutDay: WorkoutDay
 )
 
 data class HomeUiState(
@@ -60,52 +61,52 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     ) { allSessions, active, workoutInfo, nextWorkout ->
         HomeUiState(
             recentSessions = allSessions.take(5),
-            streak = computeStreak(allSessions),
+            streak = computeStreak(allSessions, System.currentTimeMillis()),
             workoutActive = active,
             activeWorkoutInfo = workoutInfo,
             nextWorkout = if (active) null else nextWorkout
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState())
 
-    private fun computeNextWorkout(
-        plan: WorkoutPlan,
-        completedDays: Set<Pair<Int, Int>>
-    ): NextWorkout? {
-        for ((weekIdx, days) in plan.weeks.withIndex()) {
-            for (dayIdx in days.indices) {
-                val week = weekIdx + 1; val day = dayIdx + 1
-                if ((week to day) !in completedDays) {
-                    return NextWorkout(plan.programId, plan.displayName, week, day,
-                        plan.weeks[weekIdx][dayIdx])
-                }
-            }
-        }
-        return null
-    }
-
-    private fun computeStreak(sessions: List<WorkoutSessionEntity>): Int {
-        val completedDays = sessions
-            .filter { it.completed }
-            .map { it.startedAt / MS_PER_DAY }
-            .toSortedSet()
-
-        if (completedDays.isEmpty()) return 0
-
-        val today = System.currentTimeMillis() / MS_PER_DAY
-        val yesterday = today - 1
-
-        if (completedDays.last() < yesterday) return 0
-
-        var streak = 1
-        var expected = completedDays.last() - 1
-        for (dayNum in completedDays.toList().reversed().drop(1)) {
-            if (dayNum == expected) { streak++; expected-- }
-            else if (dayNum < expected) break
-        }
-        return streak
-    }
-
     companion object {
         private const val MS_PER_DAY = 24 * 60 * 60 * 1000L
+
+        internal fun computeNextWorkout(
+            plan: WorkoutPlan,
+            completedDays: Set<Pair<Int, Int>>
+        ): NextWorkout? {
+            for ((weekIdx, days) in plan.weeks.withIndex()) {
+                for (dayIdx in days.indices) {
+                    val week = weekIdx + 1; val day = dayIdx + 1
+                    if ((week to day) !in completedDays) {
+                        return NextWorkout(plan.programId, plan.displayName, week, day,
+                            plan.weeks[weekIdx][dayIdx])
+                    }
+                }
+            }
+            return null
+        }
+
+        internal fun computeStreak(sessions: List<WorkoutSessionEntity>, nowMillis: Long): Int {
+            val completedDays = sessions
+                .filter { it.completed }
+                .map { it.startedAt / MS_PER_DAY }
+                .toSortedSet()
+
+            if (completedDays.isEmpty()) return 0
+
+            val today = nowMillis / MS_PER_DAY
+            val yesterday = today - 1
+
+            if (completedDays.last() < yesterday) return 0
+
+            var streak = 1
+            var expected = completedDays.last() - 1
+            for (dayNum in completedDays.toList().reversed().drop(1)) {
+                if (dayNum == expected) { streak++; expected-- }
+                else if (dayNum < expected) break
+            }
+            return streak
+        }
     }
 }

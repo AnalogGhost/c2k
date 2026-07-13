@@ -29,14 +29,8 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
     val sessions: StateFlow<List<WorkoutSessionEntity>> = repo.observeAllSessions()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    val stats: StateFlow<HistoryStats> = sessions.map { list ->
-        HistoryStats(
-            totalSessions     = list.size,
-            completedSessions = list.count { it.completed },
-            totalKm           = list.sumOf { it.distanceMeters.toDouble() }.toFloat() / 1000f,
-            totalTimeSeconds  = list.sumOf { it.durationSeconds }
-        )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HistoryStats(0, 0, 0f, 0))
+    val stats: StateFlow<HistoryStats> = sessions.map { list -> computeStats(list) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HistoryStats(0, 0, 0f, 0))
 
     fun deleteSession(sessionId: Long) {
         viewModelScope.launch { repo.deleteSession(sessionId) }
@@ -49,22 +43,31 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    private fun generateGpx(session: WorkoutSessionEntity, points: List<RoutePointEntity>): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-        val name = "C2K W${session.week}D${session.day} ${dateFormat.format(Date(session.startedAt))}"
-        val sb = StringBuilder()
-        sb.appendLine("""<?xml version="1.0" encoding="UTF-8"?>""")
-        sb.appendLine("""<gpx version="1.1" creator="C2K" xmlns="http://www.topografix.com/GPX/1/1">""")
-        sb.appendLine("""  <trk><name>$name</name><trkseg>""")
-        for (pt in points) {
-            val time = dateFormat.format(Date(pt.recordedAt))
-            val ele = if (pt.altitudeMeters != null) "\n      <ele>${pt.altitudeMeters}</ele>" else ""
-            sb.appendLine("""    <trkpt lat="${pt.latitude}" lon="${pt.longitude}">$ele
+    companion object {
+        internal fun computeStats(sessions: List<WorkoutSessionEntity>): HistoryStats = HistoryStats(
+            totalSessions     = sessions.size,
+            completedSessions = sessions.count { it.completed },
+            totalKm           = sessions.sumOf { it.distanceMeters.toDouble() }.toFloat() / 1000f,
+            totalTimeSeconds  = sessions.sumOf { it.durationSeconds }
+        )
+
+        internal fun generateGpx(session: WorkoutSessionEntity, points: List<RoutePointEntity>): String {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+            val name = "C2K W${session.week}D${session.day} ${dateFormat.format(Date(session.startedAt))}"
+            val sb = StringBuilder()
+            sb.appendLine("""<?xml version="1.0" encoding="UTF-8"?>""")
+            sb.appendLine("""<gpx version="1.1" creator="C2K" xmlns="http://www.topografix.com/GPX/1/1">""")
+            sb.appendLine("""  <trk><name>$name</name><trkseg>""")
+            for (pt in points) {
+                val time = dateFormat.format(Date(pt.recordedAt))
+                val ele = if (pt.altitudeMeters != null) "\n      <ele>${pt.altitudeMeters}</ele>" else ""
+                sb.appendLine("""    <trkpt lat="${pt.latitude}" lon="${pt.longitude}">$ele
       <time>$time</time>
     </trkpt>""")
+            }
+            sb.appendLine("""  </trkseg></trk>""")
+            sb.appendLine("""</gpx>""")
+            return sb.toString()
         }
-        sb.appendLine("""  </trkseg></trk>""")
-        sb.appendLine("""</gpx>""")
-        return sb.toString()
     }
 }
