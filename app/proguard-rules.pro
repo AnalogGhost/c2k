@@ -10,4 +10,4 @@
 -keepclassmembernames class kotlinx.** { volatile <fields>; }
 
 # Keep data classes used by Room
--keepclassmembers class org.ctok.data.db.entity.** { *; }
+-keepclassmembers class com.hackerapps.c2k.data.db.entity.** { *; }
