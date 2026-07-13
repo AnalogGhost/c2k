@@ -1,0 +1,2 @@
+• Corrección: los avisos de voz ahora usan el idioma de la app en lugar del idioma del sistema del dispositivo
+• Se añadieron traducciones al alemán, francés y portugués de Brasil

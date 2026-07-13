@@ -1,0 +1,2 @@
+• Fix: voice announcements now use the app's language instead of the device's system language
+• Added German, French, and Brazilian Portuguese translations
