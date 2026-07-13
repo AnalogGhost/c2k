@@ -16,9 +16,11 @@ docker run --rm \
   -v "$PROJECT_DIR:/workspace:z" \
   -v "$GRADLE_CACHE_DIR:/root/.gradle:z" \
   -e JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 \
+  -e HOST_UID="$(id -u)" \
+  -e HOST_GID="$(id -g)" \
   -w /workspace \
   registry.gitlab.com/fdroid/fdroidserver:buildserver-trixie \
-  bash -c "apt-get install -y -q openjdk-21-jdk-headless 2>/dev/null && ./gradlew --no-daemon -Dorg.gradle.java.home=/usr/lib/jvm/java-21-openjdk-amd64 --no-build-cache clean :app:assembleFossRelease"
+  bash -c "apt-get install -y -q openjdk-21-jdk-headless 2>/dev/null && ./gradlew --no-daemon -Dorg.gradle.java.home=/usr/lib/jvm/java-21-openjdk-amd64 --no-build-cache clean :app:assembleFossRelease; status=\$?; chown -R \$HOST_UID:\$HOST_GID /workspace /root/.gradle; exit \$status"
 
 # Restore (or remove) local.properties
 if [ "$HAD_LOCAL_PROPERTIES" -eq 1 ]; then
