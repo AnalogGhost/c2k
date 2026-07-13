@@ -3,6 +3,7 @@
 Free, open-source running trainer for Android. No Google services. No tracking. No ads.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![CI](https://github.com/AnalogGhost/c2k/actions/workflows/ci.yml/badge.svg)](https://github.com/AnalogGhost/c2k/actions/workflows/ci.yml)
 
 ## Features
 
@@ -19,7 +20,7 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 - Optional GPS tracking (distance & pace) — works without it too
 - Progress tracking across sessions
 - Guide screen with FAQ and glossary
-- Localised in English, Spanish, and Galician
+- Localised in English, Spanish, Galician, German, French, and Brazilian Portuguese
 - Fully offline — no internet permission
 - Compatible with GrapheneOS and any de-Googled Android device (no Google Play Services)
 
@@ -66,6 +67,8 @@ bash docker-build.sh
 APK: `app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk`
 
 F-Droid builds from source and applies their own signature. Build from the tagged commit before making any further commits.
+
+CI runs this script twice on every push and fails if the two builds don't produce byte-identical output — see [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ### Signed (for personal sideloading)
 
