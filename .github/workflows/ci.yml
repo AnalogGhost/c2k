@@ -43,15 +43,15 @@ jobs:
         run: bash docker-build.sh
 
       - name: Save first build artifact
-        run: sudo cp app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk /tmp/build1.apk
+        run: cp app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk /tmp/build1.apk
 
       - name: Second build
         run: bash docker-build.sh
 
       - name: Compare build hashes
         run: |
-          h1=$(sudo sha256sum /tmp/build1.apk | cut -d' ' -f1)
-          h2=$(sudo sha256sum app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk | cut -d' ' -f1)
+          h1=$(sha256sum /tmp/build1.apk | cut -d' ' -f1)
+          h2=$(sha256sum app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk | cut -d' ' -f1)
           echo "Build 1: $h1"
           echo "Build 2: $h2"
           if [ "$h1" != "$h2" ]; then
