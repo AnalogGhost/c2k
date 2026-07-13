@@ -1,0 +1,2 @@
+• Fix: Sprachansagen verwenden jetzt die Sprache der App statt der Systemsprache des Geräts
+• Deutsche, französische und brasilianisch-portugiesische Übersetzungen hinzugefügt
