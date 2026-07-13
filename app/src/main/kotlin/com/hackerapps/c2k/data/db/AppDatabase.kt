@@ -12,7 +12,7 @@ import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 @Database(
     entities = [WorkoutSessionEntity::class, RoutePointEntity::class],
     version = 1,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
 
