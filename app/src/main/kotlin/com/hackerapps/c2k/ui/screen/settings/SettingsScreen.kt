@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -67,6 +68,7 @@ fun SettingsScreen(
             SettingsToggle(
                 label = stringResource(R.string.settings_tts_enabled),
                 checked = ttsEnabled,
+                testTag = "toggle_tts_enabled",
                 onCheckedChange = vm::setTtsEnabled
             )
 
@@ -85,6 +87,7 @@ fun SettingsScreen(
                 label = stringResource(R.string.settings_countdown_warnings),
                 checked = countdownWarnings,
                 enabled = ttsEnabled,
+                testTag = "toggle_countdown_warnings",
                 onCheckedChange = vm::setCountdownWarnings
             )
             HorizontalDivider()
@@ -92,6 +95,7 @@ fun SettingsScreen(
                 label = stringResource(R.string.settings_mid_interval_cues),
                 checked = midIntervalCues,
                 enabled = ttsEnabled,
+                testTag = "toggle_mid_interval_cues",
                 onCheckedChange = vm::setMidIntervalCues
             )
             HorizontalDivider()
@@ -183,12 +187,14 @@ fun SettingsScreen(
             SettingsToggle(
                 label = stringResource(R.string.settings_vibration_enabled),
                 checked = vibrationEnabled,
+                testTag = "toggle_vibration_enabled",
                 onCheckedChange = vm::setVibrationEnabled
             )
             HorizontalDivider()
             SettingsToggle(
                 label = stringResource(R.string.settings_treadmill_mode),
                 checked = treadmillMode,
+                testTag = "toggle_treadmill_mode",
                 onCheckedChange = vm::setTreadmillMode
             )
             HorizontalDivider()
@@ -196,12 +202,14 @@ fun SettingsScreen(
                 label = stringResource(R.string.settings_gps_enabled),
                 checked = gpsEnabled,
                 enabled = !treadmillMode,
+                testTag = "toggle_gps_enabled",
                 onCheckedChange = vm::setGpsEnabled
             )
             HorizontalDivider()
             SettingsToggle(
                 label = stringResource(R.string.settings_keep_screen_on),
                 checked = keepScreenOn,
+                testTag = "toggle_keep_screen_on",
                 onCheckedChange = vm::setKeepScreenOn
             )
         }
@@ -213,12 +221,18 @@ private fun SettingsToggle(
     label: String,
     checked: Boolean,
     enabled: Boolean = true,
+    testTag: String? = null,
     onCheckedChange: (Boolean) -> Unit
 ) {
     ListItem(
         headlineContent = { Text(label) },
         trailingContent = {
-            Switch(checked = checked, enabled = enabled, onCheckedChange = onCheckedChange)
+            Switch(
+                checked = checked,
+                enabled = enabled,
+                onCheckedChange = onCheckedChange,
+                modifier = if (testTag != null) Modifier.testTag(testTag) else Modifier
+            )
         }
     )
 }
