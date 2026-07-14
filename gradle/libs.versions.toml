@@ -34,7 +34,8 @@ kotlinx-coroutines-test          = { group = "org.jetbrains.kotlinx",     name =
 datastore-preferences            = { group = "androidx.datastore",         name = "datastore-preferences",          version.ref = "datastore" }
 
 junit                            = { group = "junit",                      name = "junit",                          version = "4.13.2" }
-androidx-test-ext-junit          = { group = "androidx.test.ext",          name = "junit",                          version = "1.2.1" }
+androidx-test-ext-junit          = { group = "androidx.test.ext",          name = "junit",                          version = "1.3.0" }
+androidx-test-runner             = { group = "androidx.test",              name = "runner",                         version = "1.7.0" }
 
 [plugins]
 android-application = { id = "com.android.application",              version.ref = "agp" }
