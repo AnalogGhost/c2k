@@ -2,6 +2,7 @@ package com.hackerapps.c2k.ui.screen.contributors
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -24,7 +25,9 @@ class ContributorsScreenTest {
     fun contributors_are_listed_by_name() {
         composeRule.setContent { ContributorsScreen(onBack = {}) }
 
-        composeRule.onNodeWithText("xmgz").assertExists()
+        // "xmgz" is both the contributor's name and their GitHub handle, so it legitimately
+        // renders as two separate nodes — assert at least one rather than assuming uniqueness.
+        assertTrue(composeRule.onAllNodesWithText("xmgz").fetchSemanticsNodes().isNotEmpty())
         composeRule.onNodeWithText("Andrew Farabee").assertExists()
     }
 

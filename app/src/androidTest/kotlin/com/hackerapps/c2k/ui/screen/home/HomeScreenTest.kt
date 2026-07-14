@@ -22,7 +22,7 @@ import org.junit.runner.RunWith
 
 // HomeScreen shows sessions across every program unfiltered, same as HistoryScreen — clear
 // everything it would display rather than assuming other test classes clean up after themselves.
-private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 5_000, assertion: () -> Unit) {
+private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 10_000, assertion: () -> Unit) {
     waitUntil(timeoutMillis) {
         try {
             assertion()

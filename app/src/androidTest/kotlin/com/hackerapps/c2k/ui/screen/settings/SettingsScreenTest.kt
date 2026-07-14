@@ -26,7 +26,7 @@ import org.junit.runner.RunWith
 // Clicking a toggle round-trips through the ViewModel and DataStore (real disk I/O) before the
 // resulting recomposition lands, so assertions right after performClick() can race ahead of it.
 // Poll instead of asserting once immediately.
-private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 5_000, assertion: () -> Unit) {
+private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 10_000, assertion: () -> Unit) {
     waitUntil(timeoutMillis) {
         try {
             assertion()

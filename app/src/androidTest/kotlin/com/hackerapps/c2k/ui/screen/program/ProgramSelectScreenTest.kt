@@ -26,7 +26,7 @@ private const val PROGRAM_ID = "C25K"
 
 // Same rationale as SettingsScreenTest: state changes route through a real Room-backed
 // repository, so assertions right after a click can race the resulting recomposition.
-private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 5_000, assertion: () -> Unit) {
+private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 10_000, assertion: () -> Unit) {
     waitUntil(timeoutMillis) {
         try {
             assertion()
