@@ -6,6 +6,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -21,6 +22,20 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+
+// Clicking a toggle round-trips through the ViewModel and DataStore (real disk I/O) before the
+// resulting recomposition lands, so assertions right after performClick() can race ahead of it.
+// Poll instead of asserting once immediately.
+private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 5_000, assertion: () -> Unit) {
+    waitUntil(timeoutMillis) {
+        try {
+            assertion()
+            true
+        } catch (e: AssertionError) {
+            false
+        }
+    }
+}
 
 @RunWith(AndroidJUnit4::class)
 class SettingsScreenTest {
@@ -62,7 +77,7 @@ class SettingsScreenTest {
     @Test
     fun all_toggle_labels_are_displayed() {
         setContent()
-        composeRule.onNodeWithText(string(R.string.settings_tts_enabled)).assertIsOn()
+        composeRule.onNodeWithText(string(R.string.settings_tts_enabled)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_gps_enabled)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_countdown_warnings)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_vibration_enabled)).assertExists()
@@ -74,8 +89,12 @@ class SettingsScreenTest {
     fun clicking_a_toggle_switches_its_state() {
         setContent()
         composeRule.onNodeWithTag("toggle_gps_enabled").assertIsOn()
+
         composeRule.onNodeWithTag("toggle_gps_enabled").performClick()
-        composeRule.onNodeWithTag("toggle_gps_enabled").assertIsOff()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("toggle_gps_enabled").assertIsOff()
+        }
     }
 
     @Test
@@ -86,7 +105,9 @@ class SettingsScreenTest {
 
         composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
 
-        composeRule.onNodeWithText(string(R.string.settings_tts_speed)).assertDoesNotExist()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.settings_tts_speed)).assertDoesNotExist()
+        }
         composeRule.onNodeWithText(string(R.string.settings_tts_volume)).assertDoesNotExist()
     }
 
@@ -98,8 +119,12 @@ class SettingsScreenTest {
 
         composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
 
-        composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsNotEnabled()
-        composeRule.onNodeWithTag("toggle_mid_interval_cues").assertIsNotEnabled()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsNotEnabled()
+        }
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("toggle_mid_interval_cues").assertIsNotEnabled()
+        }
     }
 
     @Test
@@ -109,7 +134,9 @@ class SettingsScreenTest {
 
         composeRule.onNodeWithTag("toggle_treadmill_mode").performClick()
 
-        composeRule.onNodeWithTag("toggle_gps_enabled").assertIsNotEnabled()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("toggle_gps_enabled").assertIsNotEnabled()
+        }
     }
 
     @Test
