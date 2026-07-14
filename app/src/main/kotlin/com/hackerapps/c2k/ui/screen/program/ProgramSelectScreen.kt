@@ -44,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -127,7 +128,10 @@ fun ProgramSelectScreen(
                 },
                 actions = {
                     if (state.completedDays.isNotEmpty()) {
-                        IconButton(onClick = { showOverflow = true }) {
+                        IconButton(
+                            onClick = { showOverflow = true },
+                            modifier = Modifier.testTag("program_overflow_button")
+                        ) {
                             Icon(Icons.Default.MoreVert, contentDescription = null)
                         }
                         DropdownMenu(
