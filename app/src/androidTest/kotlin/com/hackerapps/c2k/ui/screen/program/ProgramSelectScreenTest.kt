@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -80,8 +81,14 @@ class ProgramSelectScreenTest {
     @Test
     fun week_and_day_labels_are_displayed() {
         setContent()
+        // Week 1 is unique, but "Day 1" isn't — it's the first day of every week, and C25K's
+        // 9 weeks start expanded (nothing's completed yet), so it legitimately renders once
+        // per visible week. Assert at least one exists rather than assuming uniqueness.
         composeRule.onNodeWithText(string(R.string.program_week_label, 1)).assertExists()
-        composeRule.onNodeWithText(string(R.string.program_day_label, 1)).assertExists()
+        assertTrue(
+            composeRule.onAllNodesWithText(string(R.string.program_day_label, 1))
+                .fetchSemanticsNodes().isNotEmpty()
+        )
     }
 
     @Test
