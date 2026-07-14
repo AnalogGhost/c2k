@@ -1,0 +1,1 @@
+• Fix: Änderung an den Build-Tools für reproduzierbare Builds (keine Änderungen an der App-Funktionalität)
