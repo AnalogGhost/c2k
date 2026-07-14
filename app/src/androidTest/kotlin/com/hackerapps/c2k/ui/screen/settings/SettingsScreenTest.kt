@@ -31,18 +31,23 @@ class SettingsScreenTest {
     // Resets every setting to the same defaults SettingsViewModel falls back to, so tests are
     // isolated regardless of execution order (DataStore persists across tests within a run).
     @Before
-    fun resetPreferences() = runBlocking {
-        val app = ApplicationProvider.getApplicationContext<Application>()
-        val prefs = UserPreferences(app)
-        prefs.setTtsEnabled(true)
-        prefs.setGpsEnabled(true)
-        prefs.setCountdownWarnings(true)
-        prefs.setKeepScreenOn(true)
-        prefs.setVibrationEnabled(false)
-        prefs.setTtsSpeechRate(1.0f)
-        prefs.setTtsVolume(1.0f)
-        prefs.setMidIntervalCues(true)
-        prefs.setTreadmillMode(false)
+    fun resetPreferences() {
+        // Block body, not `= runBlocking { ... }`: DataStore.edit() returns Preferences (not
+        // Unit), so an expression-bodied function here infers a non-void return type, which
+        // JUnit rejects for @Before with "should be void".
+        runBlocking {
+            val app = ApplicationProvider.getApplicationContext<Application>()
+            val prefs = UserPreferences(app)
+            prefs.setTtsEnabled(true)
+            prefs.setGpsEnabled(true)
+            prefs.setCountdownWarnings(true)
+            prefs.setKeepScreenOn(true)
+            prefs.setVibrationEnabled(false)
+            prefs.setTtsSpeechRate(1.0f)
+            prefs.setTtsVolume(1.0f)
+            prefs.setMidIntervalCues(true)
+            prefs.setTreadmillMode(false)
+        }
     }
 
     private fun setContent(onBack: () -> Unit = {}) {
