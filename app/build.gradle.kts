@@ -21,8 +21,8 @@ android {
         applicationId = "com.hackerapps.c2k"
         minSdk = 26
         targetSdk = 36
-        versionCode = 10
-        versionName = "1.2.3"
+        versionCode = 11
+        versionName = "1.2.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
@@ -88,9 +88,14 @@ android {
 
 }
 
-androidComponents {
-    onVariants(selector().withBuildType("release")) {
-        it.experimentalProperties.put("android.experimental.art.profile.emit", false)
+// ART baseline profile generation (assets/dexopt/baseline.prof(m)) is not reproducible:
+// AGP's ArtProfile.kt iterates a HashMap<DexFile, DexFileData> without sorting when
+// serializing some profile formats, so byte order can differ build-to-build even with
+// otherwise identical output. Disabling it entirely is the documented workaround —
+// see https://gist.github.com/obfusk/61046e09cee352ae6dd109911534b12e
+tasks.configureEach {
+    if (name.contains("ArtProfile")) {
+        enabled = false
     }
 }
 
