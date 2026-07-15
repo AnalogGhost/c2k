@@ -35,6 +35,22 @@ Defaults to a dry run (validate_only) against the internal track — pass track:
 
 and validate_only:false to actually publish.
 
+### android release
+
+```sh
+[bundle exec] fastlane android release
+```
+
+Tag, reproducibly build, sign, and publish a GitHub release for F-Droid.
+
+Run this only after the version bump + changelog commit is already made and pushed-
+
+worthy — see project release checklist. Pauses for confirmation before anything public
+
+(push, GitHub release) happens; the docker build and signing run first so you can see
+
+the real SHA-256 before deciding.
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

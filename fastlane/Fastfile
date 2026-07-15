@@ -21,4 +21,64 @@ platform :android do
       validate_only: options[:validate_only].nil? ? true : options[:validate_only]
     )
   end
+
+  desc "Tag, reproducibly build, sign, and publish a GitHub release for F-Droid."
+  desc "Run this only after the version bump + changelog commit is already made and pushed-"
+  desc "worthy — see project release checklist. Pauses for confirmation before anything public"
+  desc "(push, GitHub release) happens; the docker build and signing run first so you can see"
+  desc "the real SHA-256 before deciding."
+  lane :release do
+    project_dir = File.expand_path("..", __dir__)
+
+    ensure_git_status_clean
+
+    gradle_kts = File.read(File.join(project_dir, "app/build.gradle.kts"))
+    version_name = gradle_kts[/versionName\s*=\s*"([^"]+)"/, 1]
+    version_code = gradle_kts[/versionCode\s*=\s*(\d+)/, 1]
+    UI.user_error!("Couldn't find versionName/versionCode in app/build.gradle.kts") unless version_name && version_code
+    tag = "v#{version_name}"
+
+    UI.header("Releasing #{tag} (versionCode #{version_code})")
+
+    add_git_tag(tag: tag)
+
+    UI.message("Running reproducible docker build (this takes a few minutes)...")
+    sh("bash '#{project_dir}/docker-build.sh'")
+
+    UI.message("Signing...")
+    local_props = File.read(File.join(project_dir, "local.properties"))
+    store_pass = local_props[/storePassword=(.+)/, 1]
+    key_pass = local_props[/keyPassword=(.+)/, 1]
+    UI.user_error!("Missing storePassword/keyPassword in local.properties") unless store_pass && key_pass
+
+    unsigned_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk")
+    signed_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-foss-release-signed.apk")
+    release_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-release.apk")
+
+    sh(
+      "#{ENV['HOME']}/Android/Sdk/build-tools/37.0.0/apksigner sign " \
+      "--ks #{ENV['HOME']}/c2k-release.jks --ks-key-alias c2k " \
+      "--ks-pass pass:#{store_pass} --key-pass pass:#{key_pass} " \
+      "--out '#{signed_apk}' '#{unsigned_apk}'",
+      log: false
+    )
+    sh("cp '#{signed_apk}' '#{release_apk}'")
+
+    sha256 = sh("sha256sum '#{release_apk}' | cut -d' ' -f1").strip
+
+    UI.important("Built and signed #{tag}. SHA-256: #{sha256}")
+    UI.important("Local tag created but NOT pushed yet — nothing public has happened.")
+    UI.user_error!("Aborted — tag left local, nothing pushed.") unless UI.confirm("Push #{tag} to origin and create the GitHub release now?")
+
+    push_to_git_remote(tags: true)
+
+    changelog_path = File.join(project_dir, "fastlane/metadata/android/en-US/changelogs/#{version_code}.txt")
+    notes = File.exist?(changelog_path) ? File.read(changelog_path) : ""
+    body = "## What's new\n\n#{notes}\n## SHA-256\n\n`#{sha256}`\n"
+
+    require "shellwords"
+    sh("gh release create #{tag.shellescape} #{release_apk.shellescape} --title #{tag.shellescape} --notes #{body.shellescape}")
+
+    UI.success("Released #{tag}: https://github.com/AnalogGhost/c2k/releases/tag/#{tag}")
+  end
 end
