@@ -1,4 +1,6 @@
-app_package_name("com.hackerapps.c2k")
+# .debug applicationIdSuffix from the debug build type — not the release app_package_name.
+app_package_name("com.hackerapps.c2k.debug")
+tests_package_name("com.hackerapps.c2k.debug.test")
 use_tests_in_classes(["com.hackerapps.c2k.screenshots.ScreenshotTest"])
 
 locales(["en-US", "es-ES", "gl-ES", "de-DE", "fr-FR", "pt-BR"])
@@ -8,3 +10,4 @@ tests_apk_path("app/build/outputs/apk/androidTest/foss/debug/app-foss-debug-andr
 
 output_directory("./fastlane/metadata/android")
 clear_previous_screenshots(true)
+use_timestamp_suffix(false)
