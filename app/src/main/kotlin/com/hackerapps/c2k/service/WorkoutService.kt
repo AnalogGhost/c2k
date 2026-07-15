@@ -201,7 +201,7 @@ class WorkoutService : Service() {
                     when (state) {
                         is WorkoutState.Active -> {
                             if (state.intervalIndex != lastIntervalIndex && lastIntervalIndex >= 0) {
-                                if (vibrationEnabled) vibrate()
+                                if (vibrationEnabled) vibrateForInterval(state.currentInterval.type)
                             }
                             lastIntervalIndex = state.intervalIndex
                             updateNotification(state)
@@ -295,8 +295,15 @@ class WorkoutService : Service() {
 
     // ── Vibration ─────────────────────────────────────────────────────────────
 
-    private fun vibrate() {
-        val effect = VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
+    // RUN gets a double-pulse "go" cue; WALK/WARMUP/COOLDOWN share a single gentler pulse
+    // since they're all lower-intensity segments — distinguishing those three from each
+    // other wasn't worth the extra patterns to learn.
+    private fun vibrateForInterval(type: IntervalType) {
+        val effect = when (type) {
+            IntervalType.RUN -> VibrationEffect.createWaveform(longArrayOf(0, 150, 100, 150), -1)
+            IntervalType.WALK, IntervalType.WARMUP, IntervalType.COOLDOWN ->
+                VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
+        }
         doVibrate(effect)
     }
 
