@@ -2,11 +2,14 @@ package com.hackerapps.c2k.ui.screen.home
 
 import android.app.Application
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.C2KApp
@@ -108,9 +111,14 @@ class HomeScreenTest {
         }
         setContent()
 
+        // "Recent workouts" renders after all 6 program cards in the LazyColumn — off-screen
+        // without scrolling (same class of issue as "Day 1" and "Glossary" elsewhere this
+        // session, just surfacing as a timeout instead of an immediate failure). Scroll first.
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithText(string(R.string.home_recent_workouts)).assertExists()
+            composeRule.onNodeWithTag("home_screen_list")
+                .performScrollToNode(hasText(string(R.string.home_recent_workouts)))
         }
+        composeRule.onNodeWithText(string(R.string.home_recent_workouts)).assertExists()
     }
 
     @Test
