@@ -27,6 +27,33 @@ fun RequestLocationPermission(onResult: (Boolean) -> Unit) {
     }
 }
 
+// Requests ACTIVITY_RECOGNITION on API 34+, where it's required to start WorkoutService as a
+// "health" foreground service type — resolves immediately on older versions, which don't
+// enforce a foreground service type at all. Proceeds regardless of grant/deny, same as
+// notifications; unlike location there's no treadmill-mode fallback to skip needing it, since
+// the manifest declares a single service type that always applies.
+@Composable
+fun RequestActivityRecognitionPermission(onResult: () -> Unit) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        LaunchedEffect(Unit) { onResult() }
+        return
+    }
+
+    val context = LocalContext.current
+    val alreadyGranted = ContextCompat.checkSelfPermission(
+        context, Manifest.permission.ACTIVITY_RECOGNITION
+    ) == PackageManager.PERMISSION_GRANTED
+
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { onResult() }
+
+    LaunchedEffect(Unit) {
+        if (alreadyGranted) onResult()
+        else launcher.launch(Manifest.permission.ACTIVITY_RECOGNITION)
+    }
+}
+
 // Requests POST_NOTIFICATIONS on API 33+; resolves immediately on older versions.
 @Composable
 fun RequestNotificationPermission(onResult: () -> Unit) {

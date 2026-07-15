@@ -129,6 +129,7 @@ See [FDROID_PUBLISHING.md](FDROID_PUBLISHING.md) for the full initial submission
 |---|---|
 | `FOREGROUND_SERVICE` | Keeps the timer running with screen off |
 | `FOREGROUND_SERVICE_HEALTH` | Required service type on Android 14+ |
+| `ACTIVITY_RECOGNITION` | Required runtime permission for the health service type on Android 14+ — requested for every workout, not just GPS ones |
 | `WAKE_LOCK` | Prevents CPU sleep mid-workout |
 | `POST_NOTIFICATIONS` | Shows workout notification with pause/stop controls |
 | `ACCESS_FINE_LOCATION` | Optional GPS for distance & pace — you can skip this |

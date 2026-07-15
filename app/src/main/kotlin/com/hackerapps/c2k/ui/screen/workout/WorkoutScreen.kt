@@ -53,6 +53,7 @@ import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.service.WorkoutService
+import com.hackerapps.c2k.ui.component.RequestActivityRecognitionPermission
 import com.hackerapps.c2k.ui.component.RequestLocationPermission
 import com.hackerapps.c2k.ui.component.RequestNotificationPermission
 import com.hackerapps.c2k.ui.programNameRes
@@ -83,6 +84,9 @@ fun WorkoutScreen(
     val personalBest by vm.personalBest.collectAsStateWithLifecycle()
 
     var notificationPermissionDone by remember { mutableStateOf(false) }
+    // Needed every workout, GPS or not — WorkoutService always starts as a "health" foreground
+    // service type (see WorkoutService.handleStart), which Android 14+ requires this for.
+    var activityRecognitionPermissionDone by remember { mutableStateOf(false) }
     // In treadmill mode skip the location permission request entirely
     var permissionResolved by remember(treadmillMode) { mutableStateOf(treadmillMode) }
     var showStopDialog by remember { mutableStateOf(false) }
@@ -92,12 +96,14 @@ fun WorkoutScreen(
 
     if (!notificationPermissionDone) {
         RequestNotificationPermission { notificationPermissionDone = true }
+    } else if (!activityRecognitionPermissionDone) {
+        RequestActivityRecognitionPermission { activityRecognitionPermissionDone = true }
     } else if (!permissionResolved) {
         RequestLocationPermission { permissionResolved = true }
     }
 
-    LaunchedEffect(permissionResolved) {
-        if (permissionResolved) vm.startWorkout(programId, week, day)
+    LaunchedEffect(activityRecognitionPermissionDone, permissionResolved) {
+        if (activityRecognitionPermissionDone && permissionResolved) vm.startWorkout(programId, week, day)
     }
 
     BackHandler {
