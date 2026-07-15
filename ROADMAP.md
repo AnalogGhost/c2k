@@ -11,7 +11,7 @@ Prioritised by impact vs. effort. Out-of-scope items are listed at the bottom wi
 - **Customisable countdown warning intervals** — let users set their own warning thresholds instead of the fixed 10s and 5s.
 - ~~**Treadmill mode** — disables GPS and switches pace display to effort cues. A simple flag in settings.~~ *(done: fa8d08c)*
 - ~~**Haptic pattern variety** — different vibration patterns for run vs. walk vs. workout complete, rather than a single pulse on any change.~~ *(done: 9ccdd9c)*
-- **Strength and rest day suggestions** — static content recommending cross-training on rest days. Fits naturally alongside the existing Guide screen.
+- ~~**Strength and rest day suggestions** — static content recommending cross-training on rest days. Fits naturally alongside the existing Guide screen.~~ *(done: 2d8d1a1)*
 - **Calories burned estimate** — local calculation based on user weight, distance, and pace. No external dependencies.
 
 ---
