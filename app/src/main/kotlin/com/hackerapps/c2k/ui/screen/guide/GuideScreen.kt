@@ -168,6 +168,7 @@ private fun guideSections(): List<GuideSection> = listOf(
         title = stringResource(R.string.guide_section_between_workouts),
         entries = listOf(
             GuideEntry(stringResource(R.string.guide_q_rest_days),           stringResource(R.string.guide_a_rest_days)),
+            GuideEntry(stringResource(R.string.guide_q_rest_day_activities), stringResource(R.string.guide_a_rest_day_activities)),
             GuideEntry(stringResource(R.string.guide_q_repeat_day),          stringResource(R.string.guide_a_repeat_day)),
             GuideEntry(stringResource(R.string.guide_q_ready_next_session),  stringResource(R.string.guide_a_ready_next_session)),
             GuideEntry(stringResource(R.string.guide_q_stretch),             stringResource(R.string.guide_a_stretch)),
