@@ -1,0 +1,6 @@
+package_name("com.hackerapps.c2k")
+
+# Path to the Play Console service-account JSON key. Never hardcoded here —
+# lives outside the repo (see fastlane/.env.default, gitignored) since this
+# file is committed.
+json_key_file(ENV["SUPPLY_JSON_KEY_FILE"])

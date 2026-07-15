@@ -29,3 +29,7 @@ com.hackerapps.c2k.yml
 fastlane/report.xml
 fastlane/metadata/android/screenshots.html
 vendor/bundle/
+
+# Local machine paths to secrets — never commit
+fastlane/.env.default
+fastlane/.env
