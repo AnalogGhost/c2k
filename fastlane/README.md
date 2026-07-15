@@ -23,6 +23,18 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Build the debug APK + test APK and capture store-listing screenshots in every locale
 
+### android playstore
+
+```sh
+[bundle exec] fastlane android playstore
+```
+
+Build the Play release AAB and upload it plus store listing metadata to Google Play
+
+Defaults to a dry run (validate_only) against the internal track — pass track:production
+
+and validate_only:false to actually publish.
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
