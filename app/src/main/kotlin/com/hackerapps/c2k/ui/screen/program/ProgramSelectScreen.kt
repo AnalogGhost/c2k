@@ -264,7 +264,7 @@ fun ProgramSelectScreen(
                                             day = day,
                                             completed = done,
                                             workoutDay = workoutDay,
-                                            modifier = Modifier.weight(1f),
+                                            modifier = Modifier.weight(1f).testTag("day_${week}_$day"),
                                             onClick = { previewDay = week to day }
                                         )
                                     }

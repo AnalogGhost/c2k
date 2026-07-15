@@ -41,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -139,11 +140,14 @@ fun WorkoutScreen(
             title = { Text(stringResource(R.string.workout_stop_title)) },
             text = { Text(stringResource(R.string.workout_stop_message)) },
             confirmButton = {
-                TextButton(onClick = {
-                    vm.stop()
-                    showStopDialog = false
-                    onFinished()
-                }) { Text(stringResource(R.string.workout_stop_confirm)) }
+                TextButton(
+                    onClick = {
+                        vm.stop()
+                        showStopDialog = false
+                        onFinished()
+                    },
+                    modifier = Modifier.testTag("workout_stop_confirm_button")
+                ) { Text(stringResource(R.string.workout_stop_confirm)) }
             },
             dismissButton = {
                 TextButton(onClick = { showStopDialog = false }) {
@@ -300,7 +304,7 @@ private fun ActiveWorkoutContent(
             Spacer(Modifier.width(4.dp))
             Text(stringResource(R.string.workout_pause))
         }
-        OutlinedButton(onClick = onStop) {
+        OutlinedButton(onClick = onStop, modifier = Modifier.testTag("workout_stop_button")) {
             Icon(Icons.Default.Stop, contentDescription = null)
             Spacer(Modifier.width(4.dp))
             Text(stringResource(R.string.workout_stop))
@@ -358,7 +362,7 @@ private fun PausedWorkoutContent(
             Spacer(Modifier.width(4.dp))
             Text(stringResource(R.string.workout_resume))
         }
-        OutlinedButton(onClick = onStop) {
+        OutlinedButton(onClick = onStop, modifier = Modifier.testTag("workout_stop_button")) {
             Icon(Icons.Default.Stop, contentDescription = null)
             Spacer(Modifier.width(4.dp))
             Text(stringResource(R.string.workout_stop))

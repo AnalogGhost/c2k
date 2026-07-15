@@ -38,6 +38,8 @@ datastore-preferences            = { group = "androidx.datastore",         name 
 junit                            = { group = "junit",                      name = "junit",                          version = "4.13.2" }
 androidx-test-ext-junit          = { group = "androidx.test.ext",          name = "junit",                          version = "1.3.0" }
 androidx-test-runner             = { group = "androidx.test",              name = "runner",                         version = "1.7.0" }
+androidx-test-rules              = { group = "androidx.test",              name = "rules",                          version = "1.7.0" }
+screengrab                       = { group = "tools.fastlane",             name = "screengrab",                     version = "2.1.1" }
 
 [plugins]
 android-application = { id = "com.android.application",              version.ref = "agp" }

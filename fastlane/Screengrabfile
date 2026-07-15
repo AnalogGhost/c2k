@@ -1,0 +1,10 @@
+app_package_name("com.hackerapps.c2k")
+use_tests_in_classes(["com.hackerapps.c2k.screenshots.ScreenshotTest"])
+
+locales(["en-US", "es-ES", "gl-ES", "de-DE", "fr-FR", "pt-BR"])
+
+app_apk_path("app/build/outputs/apk/foss/debug/app-foss-debug.apk")
+tests_apk_path("app/build/outputs/apk/androidTest/foss/debug/app-foss-debug-androidTest.apk")
+
+output_directory("./fastlane/metadata/android")
+clear_previous_screenshots(true)

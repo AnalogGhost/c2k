@@ -24,3 +24,8 @@ release/
 # Local notes — not for the repo
 FDROID_PUBLISHING.md
 com.hackerapps.c2k.yml
+
+# fastlane run artifacts — not the config files themselves
+fastlane/report.xml
+fastlane/screenshots.html
+vendor/bundle/

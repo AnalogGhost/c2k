@@ -1,0 +1,9 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build the debug APK + test APK and capture store-listing screenshots in every locale"
+  lane :screenshots do
+    gradle(task: "assembleFossDebug assembleFossDebugAndroidTest")
+    capture_android_screenshots
+  end
+end
