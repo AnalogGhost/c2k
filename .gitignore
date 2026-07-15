@@ -27,5 +27,5 @@ com.hackerapps.c2k.yml
 
 # fastlane run artifacts — not the config files themselves
 fastlane/report.xml
-fastlane/screenshots.html
+fastlane/metadata/android/screenshots.html
 vendor/bundle/

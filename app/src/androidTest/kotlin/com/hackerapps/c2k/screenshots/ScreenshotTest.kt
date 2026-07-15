@@ -35,7 +35,13 @@ private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 15_000, ass
         try {
             assertion()
             true
-        } catch (e: AssertionError) {
+        } catch (e: Throwable) {
+            // Broader than AssertionError on purpose: this is the only test in the suite using
+            // createAndroidComposeRule<MainActivity>() with a real auto-launched Activity (every
+            // other screen test calls composeRule.setContent {} explicitly, which blocks until
+            // composition happens) — so the very first check here can race MainActivity's own
+            // startup and see IllegalStateException("No compose hierarchies found") rather than
+            // a plain assertion failure. Retry either the same as "not ready yet".
             false
         }
     }
@@ -57,12 +63,18 @@ class ScreenshotTest {
         val localeTestRule = LocaleTestRule()
     }
 
-    // Notifications so RequestNotificationPermission resolves without a system dialog; location
-    // isn't needed since the demo workout runs in treadmill mode (skips RequestLocationPermission
-    // entirely — see WorkoutScreen's `permissionResolved` initial value).
+    // All three pre-granted so every RequestXPermission composable short-circuits to an
+    // immediate no-dialog grant. Location is included even though the demo workout runs in
+    // treadmill mode (which is supposed to skip RequestLocationPermission entirely) because
+    // WorkoutScreen's `permissionResolved` initial value is keyed off a DataStore-backed
+    // StateFlow set in @Before — that write can still be propagating when WorkoutScreen first
+    // composes, especially since automated clicks happen far faster than a human would, so it
+    // can transiently read treadmillMode=false and fire a real system dialog otherwise.
     @get:Rule(order = 0)
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-        Manifest.permission.POST_NOTIFICATIONS
+        Manifest.permission.POST_NOTIFICATIONS,
+        Manifest.permission.ACTIVITY_RECOGNITION,
+        Manifest.permission.ACCESS_FINE_LOCATION
     )
 
     @get:Rule(order = 1)
@@ -79,7 +91,12 @@ class ScreenshotTest {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
         runBlocking {
             repo().observeAllSessions().first().forEach { repo().deleteSession(it.id) }
-            UserPreferences(app()).setTreadmillMode(true)
+            val prefs = UserPreferences(app())
+            prefs.setTreadmillMode(true)
+            // Otherwise WorkoutViewModel.checkBatteryOptimization() shows a real AlertDialog on
+            // top of the workout screen the first time a workout starts, right where 04_workout
+            // gets captured.
+            prefs.setBatteryPromptDismissed()
             seedHistory()
         }
     }
