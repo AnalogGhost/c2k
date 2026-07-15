@@ -40,6 +40,7 @@ androidx-test-ext-junit          = { group = "androidx.test.ext",          name 
 androidx-test-runner             = { group = "androidx.test",              name = "runner",                         version = "1.7.0" }
 androidx-test-rules              = { group = "androidx.test",              name = "rules",                          version = "1.7.0" }
 androidx-test-espresso-core      = { group = "androidx.test.espresso",     name = "espresso-core",                  version = "3.7.0" }
+androidx-test-uiautomator        = { group = "androidx.test.uiautomator",  name = "uiautomator",                    version = "2.3.0" }
 screengrab                       = { group = "tools.fastlane",             name = "screengrab",                     version = "2.1.1" }
 
 [plugins]
