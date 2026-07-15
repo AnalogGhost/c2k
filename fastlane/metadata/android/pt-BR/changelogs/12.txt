@@ -1,0 +1,2 @@
+• Correção: falha ao iniciar um treino em esteira (sem GPS) no Android 16
+• Correção: texto secundário de baixo contraste (datas, rótulos, descrições) em alguns temas

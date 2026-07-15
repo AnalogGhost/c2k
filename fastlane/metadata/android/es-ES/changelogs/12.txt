@@ -1,0 +1,2 @@
+• Corrección: fallo al iniciar un entrenamiento en cinta (sin GPS) en Android 16
+• Corrección: texto secundario de bajo contraste (fechas, etiquetas, descripciones) en algunos temas

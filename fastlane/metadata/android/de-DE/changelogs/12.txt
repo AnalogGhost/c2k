@@ -1,0 +1,2 @@
+• Fix: Absturz beim Starten eines Laufband-Trainings (ohne GPS) unter Android 16
+• Fix: Sekundärtext mit geringem Kontrast (Datum, Bezeichnungen, Beschreibungen) in einigen Designs

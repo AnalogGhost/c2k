@@ -1,0 +1,2 @@
+• Correction : plantage au démarrage d'une séance sur tapis de course (sans GPS) sous Android 16
+• Correction : texte secondaire à faible contraste (dates, libellés, descriptions) dans certains thèmes

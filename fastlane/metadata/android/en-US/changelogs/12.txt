@@ -1,0 +1,2 @@
+• Fix: crash when starting a treadmill (GPS-off) workout on Android 16
+• Fix: low-contrast secondary text (dates, labels, descriptions) in some themes
