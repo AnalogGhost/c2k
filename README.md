@@ -54,6 +54,8 @@ APK: `app/build/outputs/apk/foss/debug/app-foss-debug.apk`
 adb install app/build/outputs/apk/foss/debug/app-foss-debug.apk
 ```
 
+Or, to boot an emulator and install the debug build in one step: `bash run-emulator.sh` (uses the `Pixel_10` AVD — adjust the script if yours is named differently).
+
 ## Release builds
 
 ### Reproducible build (for F-Droid submission)
@@ -113,15 +115,15 @@ C2K is available on F-Droid. The app metadata file is `com.hackerapps.c2k.yml`.
 To release a new version:
 
 1. Bump `versionCode` and `versionName` in `app/build.gradle.kts`
-2. Add a changelog at `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`
-3. Commit, tag, and push — F-Droid picks up new tags automatically:
+2. Add a changelog at `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` (and the other locale folders)
+3. Commit that version bump
+4. Run `bundle exec fastlane release` — tags, runs the reproducible Docker build, signs, then pauses showing the real SHA-256 before pushing the tag and creating the GitHub release. F-Droid picks up new tags automatically once pushed.
 
-```bash
-git tag v1.x.x
-git push origin main v1.x.x
-```
+See [`fastlane/Fastfile`](fastlane/Fastfile) for what the lane does step by step, and [FDROID_PUBLISHING.md](FDROID_PUBLISHING.md) for the full initial submission guide.
 
-See [FDROID_PUBLISHING.md](FDROID_PUBLISHING.md) for the full initial submission guide.
+## Play Store
+
+C2K also ships on Google Play, built from the same source under the `play` product flavor (`com.hackerapps.c2k`, same as `foss` — only the signing config differs). `bundle exec fastlane playstore` builds the release AAB and uploads it plus store listing metadata; it defaults to a dry run (`validate_only:true`) against the `internal` track, so pass `track:production validate_only:false` to actually publish.
 
 ## Permissions explained
 
@@ -129,11 +131,14 @@ See [FDROID_PUBLISHING.md](FDROID_PUBLISHING.md) for the full initial submission
 |---|---|
 | `FOREGROUND_SERVICE` | Keeps the timer running with screen off |
 | `FOREGROUND_SERVICE_HEALTH` | Required service type on Android 14+ |
+| `FOREGROUND_SERVICE_LOCATION` | Required service type on Android 14+ when a workout is GPS-tracked |
 | `ACTIVITY_RECOGNITION` | Required runtime permission for the health service type on Android 14+ — requested for every workout, not just GPS ones |
 | `WAKE_LOCK` | Prevents CPU sleep mid-workout |
 | `POST_NOTIFICATIONS` | Shows workout notification with pause/stop controls |
 | `ACCESS_FINE_LOCATION` | Optional GPS for distance & pace — you can skip this |
 | `ACCESS_COARSE_LOCATION` | Coarse fallback for location permission dialog |
+| `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | Prompts to exempt the app from battery optimization so a workout isn't killed mid-run |
+| `VIBRATE` | Optional haptic cue on interval change |
 
 No `INTERNET` permission — the app is fully offline.
 
