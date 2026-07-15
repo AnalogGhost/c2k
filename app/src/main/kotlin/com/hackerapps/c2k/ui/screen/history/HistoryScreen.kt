@@ -286,7 +286,7 @@ private fun SessionCard(
             Text(
                 date,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
             if (session.distanceMeters > 0f) {
                 Text(

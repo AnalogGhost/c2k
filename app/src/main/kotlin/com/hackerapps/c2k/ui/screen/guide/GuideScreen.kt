@@ -129,7 +129,7 @@ private fun GuideEntryRow(entry: GuideEntry, expanded: Boolean, onToggle: () -> 
             Icon(
                 imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                 contentDescription = if (expanded) stringResource(R.string.cd_collapse) else stringResource(R.string.cd_expand),
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
         }
         AnimatedVisibility(visible = expanded) {

@@ -76,7 +76,7 @@ fun WorkoutPreviewSheet(
             Text(
                 stringResource(R.string.program_preview_duration, workoutDay.totalDurationSeconds / 60),
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
             Spacer(Modifier.height(16.dp))
             HorizontalDivider()

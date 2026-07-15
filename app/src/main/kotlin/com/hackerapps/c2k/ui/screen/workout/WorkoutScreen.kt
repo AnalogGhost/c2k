@@ -255,7 +255,7 @@ private fun ActiveWorkoutContent(
     Text(
         stringResource(R.string.workout_interval_progress, state.intervalIndex + 1, state.totalIntervals),
         style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
     )
 
     when {
@@ -264,7 +264,7 @@ private fun ActiveWorkoutContent(
             Text(
                 treadmillEffortCue(state.currentInterval.type),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
         }
         distanceMeters > 0f -> {
@@ -287,7 +287,7 @@ private fun ActiveWorkoutContent(
             Text(
                 stringResource(R.string.workout_acquiring_gps),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
         }
     }
@@ -344,7 +344,7 @@ private fun PausedWorkoutContent(
     Spacer(Modifier.height(16.dp))
     Text(stringResource(R.string.workout_paused_label),
         style = MaterialTheme.typography.headlineMedium,
-        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f))
+        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
     Spacer(Modifier.height(8.dp))
     Text(
         stringResource(R.string.workout_elapsed, formatTime(state.elapsedSessionSeconds)),
@@ -412,7 +412,7 @@ private fun CompletedContent(
             Text(
                 stringResource(R.string.workout_previous_best, prevTime),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
         }
 

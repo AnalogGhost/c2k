@@ -178,7 +178,7 @@ fun ProgramSelectScreen(
                     Text(
                         stringResource(R.string.program_progress, state.completedDays.size, totalDays),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
                     Spacer(Modifier.height(8.dp))
                 }
@@ -252,7 +252,7 @@ fun ProgramSelectScreen(
                                     Text(
                                         stringResource(tipRes),
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                     )
                                 }
                                 Spacer(Modifier.height(8.dp))

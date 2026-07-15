@@ -200,7 +200,7 @@ private fun ProgramCard(plan: WorkoutPlan, onClick: () -> Unit) {
                 Text(
                     stringResource(R.string.home_program_weeks, plan.totalWeeks),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
             }
             if (description.isNotBlank()) {
@@ -216,7 +216,7 @@ private fun ProgramCard(plan: WorkoutPlan, onClick: () -> Unit) {
                 Text(
                     stringResource(prereqRes),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
             }
         }
@@ -288,6 +288,6 @@ private fun RecentSessionRow(session: WorkoutSessionEntity) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text("${stringResource(R.string.history_week_day, session.week, session.day)}  •  $displayName")
-        Text(date, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f))
+        Text(date, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
     }
 }
