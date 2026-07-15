@@ -33,3 +33,6 @@ vendor/bundle/
 # Local machine paths to secrets — never commit
 fastlane/.env.default
 fastlane/.env
+
+# Generated Play Console demo video — large binary, not a repo asset
+foreground-service-demo.mp4

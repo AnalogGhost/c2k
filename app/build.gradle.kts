@@ -128,6 +128,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.uiautomator)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.compose.ui.test.junit4)
     androidTestImplementation(libs.screengrab)
