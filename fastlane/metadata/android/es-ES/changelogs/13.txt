@@ -1,0 +1,3 @@
+• Las tabletas y plegables ahora pueden rotar libremente, con un nuevo diseño horizontal para la pantalla de entrenamiento (los móviles se mantienen en vertical)
+• Menor tamaño de descarga gracias a la reducción de recursos
+• Gestión actualizada de la pantalla de borde a borde para Android 15+

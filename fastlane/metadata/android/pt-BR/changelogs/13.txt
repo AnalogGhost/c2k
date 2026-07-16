@@ -1,0 +1,3 @@
+• Tablets e dobráveis agora podem girar livremente, com um novo layout de paisagem para a tela de treino (celulares permanecem em retrato)
+• Tamanho de download menor graças à redução de recursos
+• Exibição de ponta a ponta atualizada para Android 15+
