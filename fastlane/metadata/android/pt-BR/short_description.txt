@@ -1,1 +1,1 @@
-Treinador de corrida C25K/C210K gratuito e de código aberto. Sem Google, sem rastreamento.
+Treinador de corrida C25K/C210K de código aberto. Sem Google, sem rastreamento.
