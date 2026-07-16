@@ -1,6 +1,7 @@
 package com.hackerapps.c2k.ui.screen.workout
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.provider.Settings
 import android.view.WindowManager
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
@@ -40,10 +43,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -168,10 +173,12 @@ fun WorkoutScreen(
             TopAppBar(title = { Text("$programName · ${stringResource(R.string.history_week_day, week, day)}") })
         }
     ) { padding ->
+        val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .verticalScroll(rememberScrollState())
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -184,11 +191,13 @@ fun WorkoutScreen(
                     gpsActive = gpsActive,
                     hasGpsLock = hasGpsLock,
                     treadmillMode = treadmillMode,
+                    isLandscape = isLandscape,
                     onPause = { vm.pause() },
                     onStop = { showStopDialog = true }
                 )
                 is WorkoutState.Paused -> PausedWorkoutContent(
                     state = s.snapshot,
+                    isLandscape = isLandscape,
                     onResume = { vm.resume() },
                     onStop = { showStopDialog = true }
                 )
@@ -212,6 +221,7 @@ private fun ActiveWorkoutContent(
     gpsActive: Boolean,
     hasGpsLock: Boolean,
     treadmillMode: Boolean,
+    isLandscape: Boolean,
     onPause: () -> Unit,
     onStop: () -> Unit
 ) {
@@ -226,101 +236,127 @@ private fun ActiveWorkoutContent(
     )
     Spacer(Modifier.height(24.dp))
 
-    IntervalRing(
-        progress = intervalProgress.coerceIn(0f, 1f),
-        ringColor = ringColor,
-        contentDescription = stringResource(R.string.cd_interval_remaining, label, formatTime(state.secondsRemainingInInterval))
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
-            Spacer(Modifier.height(4.dp))
-            Text(
-                formatTime(state.secondsRemainingInInterval),
-                fontSize = 42.sp,
-                fontWeight = FontWeight.Bold
-            )
+    val ring: @Composable (Dp) -> Unit = { ringSize ->
+        IntervalRing(
+            progress = intervalProgress.coerceIn(0f, 1f),
+            ringColor = ringColor,
+            contentDescription = stringResource(R.string.cd_interval_remaining, label, formatTime(state.secondsRemainingInInterval)),
+            size = ringSize
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    formatTime(state.secondsRemainingInInterval),
+                    fontSize = 42.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 
-    Spacer(Modifier.height(12.dp))
+    val details: @Composable () -> Unit = {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            // Next interval hint
+            state.nextInterval?.let { next ->
+                val nextLabel = intervalLabel(next.type)
+                val nextColor = intervalColor(next.type)
+                Text(
+                    stringResource(R.string.workout_next_interval, nextLabel, formatTime(next.durationSeconds)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = nextColor.copy(alpha = 0.75f)
+                )
+            }
 
-    // Next interval hint
-    state.nextInterval?.let { next ->
-        val nextLabel = intervalLabel(next.type)
-        val nextColor = intervalColor(next.type)
-        Text(
-            stringResource(R.string.workout_next_interval, nextLabel, formatTime(next.durationSeconds)),
-            style = MaterialTheme.typography.bodyMedium,
-            color = nextColor.copy(alpha = 0.75f)
-        )
-    }
+            Spacer(Modifier.height(12.dp))
 
-    Spacer(Modifier.height(12.dp))
-
-    Text(
-        stringResource(R.string.workout_elapsed, formatTime(state.elapsedSessionSeconds)),
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-    )
-    Text(
-        stringResource(R.string.workout_interval_progress, state.intervalIndex + 1, state.totalIntervals),
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-    )
-
-    when {
-        treadmillMode -> {
-            Spacer(Modifier.height(4.dp))
             Text(
-                treadmillEffortCue(state.currentInterval.type),
-                style = MaterialTheme.typography.bodyMedium,
+                stringResource(R.string.workout_elapsed, formatTime(state.elapsedSessionSeconds)),
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
-        }
-        distanceMeters > 0f -> {
-            Spacer(Modifier.height(4.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(
-                    stringResource(R.string.workout_distance_km, distanceMeters / 1000f),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                if (pace != null) {
+            Text(
+                stringResource(R.string.workout_interval_progress, state.intervalIndex + 1, state.totalIntervals),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+            )
+
+            when {
+                treadmillMode -> {
+                    Spacer(Modifier.height(4.dp))
                     Text(
-                        stringResource(R.string.workout_pace, pace),
-                        style = MaterialTheme.typography.bodyLarge
+                        treadmillEffortCue(state.currentInterval.type),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                    )
+                }
+                distanceMeters > 0f -> {
+                    Spacer(Modifier.height(4.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Text(
+                            stringResource(R.string.workout_distance_km, distanceMeters / 1000f),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        if (pace != null) {
+                            Text(
+                                stringResource(R.string.workout_pace, pace),
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+                }
+                gpsActive && !hasGpsLock -> {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        stringResource(R.string.workout_acquiring_gps),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
                     )
                 }
             }
         }
-        gpsActive && !hasGpsLock -> {
-            Spacer(Modifier.height(4.dp))
-            Text(
-                stringResource(R.string.workout_acquiring_gps),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-            )
+    }
+
+    val controls: @Composable () -> Unit = {
+        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            FilledTonalButton(onClick = onPause) {
+                Icon(Icons.Default.Pause, contentDescription = null)
+                Spacer(Modifier.width(4.dp))
+                Text(stringResource(R.string.workout_pause))
+            }
+            OutlinedButton(onClick = onStop, modifier = Modifier.testTag("workout_stop_button")) {
+                Icon(Icons.Default.Stop, contentDescription = null)
+                Spacer(Modifier.width(4.dp))
+                Text(stringResource(R.string.workout_stop))
+            }
         }
     }
 
-    Spacer(Modifier.height(32.dp))
-
-    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        FilledTonalButton(onClick = onPause) {
-            Icon(Icons.Default.Pause, contentDescription = null)
-            Spacer(Modifier.width(4.dp))
-            Text(stringResource(R.string.workout_pause))
+    if (isLandscape) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(48.dp)
+        ) {
+            ring(180.dp)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                details()
+                Spacer(Modifier.height(24.dp))
+                controls()
+            }
         }
-        OutlinedButton(onClick = onStop, modifier = Modifier.testTag("workout_stop_button")) {
-            Icon(Icons.Default.Stop, contentDescription = null)
-            Spacer(Modifier.width(4.dp))
-            Text(stringResource(R.string.workout_stop))
-        }
+    } else {
+        ring(220.dp)
+        Spacer(Modifier.height(12.dp))
+        details()
+        Spacer(Modifier.height(32.dp))
+        controls()
     }
 }
 
 @Composable
 private fun PausedWorkoutContent(
     state: WorkoutState.Active,
+    isLandscape: Boolean,
     onResume: () -> Unit,
     onStop: () -> Unit
 ) {
@@ -335,44 +371,71 @@ private fun PausedWorkoutContent(
     )
     Spacer(Modifier.height(24.dp))
 
-    IntervalRing(
-        progress = intervalProgress.coerceIn(0f, 1f),
-        ringColor = ringColor,
-        contentDescription = stringResource(R.string.cd_interval_paused, label)
-    ) {
+    val ring: @Composable (Dp) -> Unit = { ringSize ->
+        IntervalRing(
+            progress = intervalProgress.coerceIn(0f, 1f),
+            ringColor = ringColor,
+            contentDescription = stringResource(R.string.cd_interval_paused, label),
+            size = ringSize
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    formatTime(state.secondsRemainingInInterval),
+                    fontSize = 42.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+
+    val details: @Composable () -> Unit = {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
-            Spacer(Modifier.height(4.dp))
+            Text(stringResource(R.string.workout_paused_label),
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
+            Spacer(Modifier.height(8.dp))
             Text(
-                formatTime(state.secondsRemainingInInterval),
-                fontSize = 42.sp,
-                fontWeight = FontWeight.Bold
+                stringResource(R.string.workout_elapsed, formatTime(state.elapsedSessionSeconds)),
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }
 
-    Spacer(Modifier.height(16.dp))
-    Text(stringResource(R.string.workout_paused_label),
-        style = MaterialTheme.typography.headlineMedium,
-        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
-    Spacer(Modifier.height(8.dp))
-    Text(
-        stringResource(R.string.workout_elapsed, formatTime(state.elapsedSessionSeconds)),
-        style = MaterialTheme.typography.bodyLarge
-    )
-    Spacer(Modifier.height(32.dp))
+    val controls: @Composable () -> Unit = {
+        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Button(onClick = onResume) {
+                Icon(Icons.Default.PlayArrow, contentDescription = null)
+                Spacer(Modifier.width(4.dp))
+                Text(stringResource(R.string.workout_resume))
+            }
+            OutlinedButton(onClick = onStop, modifier = Modifier.testTag("workout_stop_button")) {
+                Icon(Icons.Default.Stop, contentDescription = null)
+                Spacer(Modifier.width(4.dp))
+                Text(stringResource(R.string.workout_stop))
+            }
+        }
+    }
 
-    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        Button(onClick = onResume) {
-            Icon(Icons.Default.PlayArrow, contentDescription = null)
-            Spacer(Modifier.width(4.dp))
-            Text(stringResource(R.string.workout_resume))
+    if (isLandscape) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(48.dp)
+        ) {
+            ring(180.dp)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                details()
+                Spacer(Modifier.height(24.dp))
+                controls()
+            }
         }
-        OutlinedButton(onClick = onStop, modifier = Modifier.testTag("workout_stop_button")) {
-            Icon(Icons.Default.Stop, contentDescription = null)
-            Spacer(Modifier.width(4.dp))
-            Text(stringResource(R.string.workout_stop))
-        }
+    } else {
+        ring(220.dp)
+        Spacer(Modifier.height(16.dp))
+        details()
+        Spacer(Modifier.height(32.dp))
+        controls()
     }
 }
 
