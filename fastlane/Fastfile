@@ -27,6 +27,22 @@ platform :android do
     )
   end
 
+  desc "Upload only the store-listing text (titles/descriptions) to Google Play — no build,"
+  desc "no AAB, no images, no changelogs. For listing-copy fixes between releases."
+  desc "Defaults to a dry run; pass validate_only:false to publish."
+  lane :metadata do |options|
+    upload_to_play_store(
+      track: options[:track] || "production",
+      metadata_path: "./fastlane/metadata/android",
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: true,
+      validate_only: options[:validate_only].nil? ? true : options[:validate_only]
+    )
+  end
+
   desc "Tag, reproducibly build, sign, and publish a GitHub release for F-Droid."
   desc "Run this only after the version bump + changelog commit is already made and pushed-"
   desc "worthy — see project release checklist. Pauses for confirmation before anything public"
