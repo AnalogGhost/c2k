@@ -1,0 +1,3 @@
+• As tabletas e pregables agora poden rotar libremente, cun novo deseño horizontal para a pantalla de adestramento (os móbiles mantéñense en vertical)
+• Menor tamaño de descarga grazas á redución de recursos
+• Xestión actualizada da pantalla de bordo a bordo para Android 15+

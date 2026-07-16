@@ -1,0 +1,3 @@
+• Tablets und Foldables können jetzt frei rotieren, mit neuem Querformat-Layout für den Trainingsbildschirm (Smartphones bleiben im Hochformat)
+• Kleinere Downloadgröße dank Ressourcenverkleinerung
+• Aktualisierte randlose Darstellung für Android 15+

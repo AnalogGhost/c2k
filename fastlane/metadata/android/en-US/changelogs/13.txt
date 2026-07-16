@@ -1,0 +1,3 @@
+• Tablets and foldables can now rotate freely, with a new landscape layout for the workout screen (phones stay portrait)
+• Smaller download size thanks to resource shrinking
+• Updated edge-to-edge display handling for Android 15+
