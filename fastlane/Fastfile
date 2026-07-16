@@ -55,11 +55,13 @@ platform :android do
     signed_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-foss-release-signed.apk")
     release_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-release.apk")
 
+    require "shellwords"
+    # Passwords can contain shell metacharacters — escape everything interpolated.
     sh(
       "#{ENV['HOME']}/Android/Sdk/build-tools/37.0.0/apksigner sign " \
       "--ks #{ENV['HOME']}/c2k-release.jks --ks-key-alias c2k " \
-      "--ks-pass pass:#{store_pass} --key-pass pass:#{key_pass} " \
-      "--out '#{signed_apk}' '#{unsigned_apk}'",
+      "--ks-pass pass:#{store_pass.shellescape} --key-pass pass:#{key_pass.shellescape} " \
+      "--out #{signed_apk.shellescape} #{unsigned_apk.shellescape}",
       log: false
     )
     sh("cp '#{signed_apk}' '#{release_apk}'")
@@ -76,7 +78,6 @@ platform :android do
     notes = File.exist?(changelog_path) ? File.read(changelog_path) : ""
     body = "## What's new\n\n#{notes}\n## SHA-256\n\n`#{sha256}`\n"
 
-    require "shellwords"
     sh("gh release create #{tag.shellescape} #{release_apk.shellescape} --title #{tag.shellescape} --notes #{body.shellescape}")
 
     UI.success("Released #{tag}: https://github.com/AnalogGhost/c2k/releases/tag/#{tag}")
