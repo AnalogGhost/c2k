@@ -1,4 +1,4 @@
-C2K is a free, open-source running trainer for Android that guides you from the couch to running 5K or 10K — with no Google services, no tracking, and no ads.
+C2K is a free, open-source running trainer for Android that guides you from the couch to running 5K or 10K — with no ads and no tracking.
 
 Features:
 • Couch to 5K (C25K) — 9-week program, 3 runs per week
@@ -8,7 +8,7 @@ Features:
 • GPS tracking (optional) — records distance and pace; works without GPS too
 • Progress tracking — remembers which weeks and days you've completed
 • Works offline — no internet permission required
-• No Google Play Services required — compatible with GrapheneOS and de-Googled devices
+• No proprietary services required — compatible with GrapheneOS and privacy-focused devices
 
 Permissions:
 • FOREGROUND_SERVICE — keeps the workout timer running with screen off

@@ -1,4 +1,4 @@
-O C2K é um treinador de corrida gratuito e de código aberto para Android que te guia do sofá até correr 5 km ou 10 km — sem serviços do Google, sem rastreamento e sem anúncios.
+O C2K é um treinador de corrida gratuito e de código aberto para Android que te guia do sofá até correr 5 km ou 10 km — sem anúncios e sem rastreamento.
 
 Recursos:
 • Do sofá aos 5K (C25K) — programa de 9 semanas, 3 corridas por semana
@@ -8,7 +8,7 @@ Recursos:
 • Rastreamento por GPS (opcional) — registra distância e ritmo; também funciona sem GPS
 • Acompanhamento de progresso — lembra quais semanas e dias você já completou
 • Funciona offline — não requer permissão de internet
-• Não requer Google Play Services — compatível com GrapheneOS e dispositivos sem Google
+• Não requer serviços proprietários — compatível com GrapheneOS e dispositivos focados em privacidade
 
 Permissões:
 • FOREGROUND_SERVICE — mantém o cronômetro do treino ativo com a tela desligada
