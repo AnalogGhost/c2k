@@ -18,6 +18,11 @@ platform :android do
       aab: Dir["app/build/outputs/bundle/playRelease/*.aab"].first,
       metadata_path: "./fastlane/metadata/android",
       skip_upload_apk: true,
+      # Images/screenshots rarely change between releases, and uploading them for
+      # every locale multiplies flaky Play API calls (500s, dropped connections).
+      # Pass skip_images:false / skip_screenshots:false when they actually changed.
+      skip_upload_images: options[:skip_images].nil? ? true : options[:skip_images],
+      skip_upload_screenshots: options[:skip_screenshots].nil? ? true : options[:skip_screenshots],
       validate_only: options[:validate_only].nil? ? true : options[:validate_only]
     )
   end
