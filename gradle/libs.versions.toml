@@ -8,7 +8,7 @@ lifecycle = "2.8.7"
 navigation = "2.8.9"
 coroutines = "1.9.0"
 datastore = "1.1.1"
-activityCompose = "1.9.3"
+activityCompose = "1.10.1"
 
 [libraries]
 compose-bom                      = { group = "androidx.compose",          name = "compose-bom",                    version.ref = "composeBom" }
