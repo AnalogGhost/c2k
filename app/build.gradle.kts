@@ -59,6 +59,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -91,10 +92,12 @@ android {
 // ART baseline profile generation (assets/dexopt/baseline.prof(m)) is not reproducible:
 // AGP's ArtProfile.kt iterates a HashMap<DexFile, DexFileData> without sorting when
 // serializing some profile formats, so byte order can differ build-to-build even with
-// otherwise identical output. Disabling it entirely is the documented workaround —
+// otherwise identical output. Disabling it is the documented workaround —
 // see https://gist.github.com/obfusk/61046e09cee352ae6dd109911534b12e
+// Only F-Droid (foss flavor) needs reproducibility, so Play builds keep the
+// profile for better startup performance.
 tasks.configureEach {
-    if (name.contains("ArtProfile")) {
+    if (name.contains("ArtProfile") && !name.contains("Play")) {
         enabled = false
     }
 }
