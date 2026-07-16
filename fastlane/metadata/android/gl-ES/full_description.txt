@@ -1,4 +1,4 @@
-Prepárate con C2K, unha aplicación para Android libre e de código aberto que te acompaña desde o nivel máis básico ata completar 5K ou 10K — non precisa os servizos de Google, non te rastrexa, e non ten publicidade.
+Prepárate con C2K, unha aplicación para Android libre e de código aberto que te acompaña desde o nivel máis básico ata completar 5K ou 10K — non te rastrexa e non ten publicidade.
 
 Características:
 • Do sofá ao 5K (C25K) — programa de 9 semanas, 3 adestramentos por semana
@@ -8,7 +8,7 @@ Características:
 • Rexistro con GPS (optativo) — grava a distancia e ritmo; funciona igualmente sen GPS
 • Seguimento do progreso — lembra os días e semanas que xa completaches
 • Funciona sen conexión á rede — non precisa acceso a internet
-• Non precisa os Google Play Services — compatible con GrapheneOS e dispositivos «desgooglizados»
+• Non precisa servizos propietarios — compatible con GrapheneOS e dispositivos centrados na privacidade
 
 Permisos:
 • FOREGROUND_SERVICE — mantén o temporizador cando a pantalla está apagada
