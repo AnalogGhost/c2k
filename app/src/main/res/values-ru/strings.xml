@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">C2K</string>
+
+    <!-- Programs -->
+    <string name="program_c25k">Бег на 5 км</string>
+    <string name="program_c210k">Бег на 10 км</string>
+    <string name="program_c25k_desc">Программа на 9 недель для бега на 5 км без передышки</string>
+    <string name="program_c210k_desc">Программа на 14 недель для бега на 10 км без передышки</string>
+
+    <!-- Home screen -->
+    <string name="home_title">C2K</string>
+    <string name="home_choose_program">Выберите программу</string>
+    <string name="home_recent_workouts">Недавние тренировки</string>
+    <string name="home_no_workouts">Пока нет тренировок. Выберите программу, чтобы начать!</string>
+    <string name="home_workout_active">Идёт тренировки — нажмите для возврата</string>
+    <string name="home_continue_workout">Продолжить: %1$s · Неделя %2$d, День %3$d</string>
+    <string name="home_streak">Серия в %1$d дн.! 🔥</string>
+    <string name="home_program_weeks">%1$d нед.</string>
+    <string name="home_program_prerequisite">%1$s</string>
+
+    <!-- Program select screen -->
+    <string name="program_week_label">Неделя %1$d</string>
+    <string name="program_day_label">День %1$d</string>
+    <string name="program_completed_badge">Готово</string>
+    <string name="program_start_workout">Начать Тренировку</string>
+    <string name="program_progress">%1$d из %2$d дн. завершено</string>
+    <string name="program_next_workout">Продолжить: Неделя %1$d, День %2$d →</string>
+    <string name="program_preview_title">Неделя %1$d, День %2$d</string>
+    <string name="program_preview_start">Начать</string>
+    <string name="program_preview_redo">Заново</string>
+    <string name="program_preview_duration">~%1$d минут</string>
+    <string name="program_reset_title">Сбросить прогресс</string>
+    <string name="program_reset_message">Полностью удалит весь прогресс завершённых сессий для этой программы. Ваша общая история будет сохранена.</string>
+    <string name="program_reset_confirm">Сбросить</string>
+    <string name="program_reset_cancel">Отмена</string>
+
+    <!-- Workout screen -->
+    <string name="workout_stop_title">Остановить тренировку?</string>
+    <string name="workout_stop_message">Ваш прогресс будет сохранён как незавершённый.</string>
+    <string name="workout_stop_confirm">Стоп</string>
+    <string name="workout_stop_cancel">Отмена</string>
+    <string name="workout_interval_run">БЕГ</string>
+    <string name="workout_interval_walk">ХОДЬБА</string>
+    <string name="workout_interval_warmup">РАЗМИНКА</string>
+    <string name="workout_interval_cooldown">ЗАМИНКА</string>
+    <string name="workout_pause">Пауза</string>
+    <string name="workout_resume">Продолжить</string>
+    <string name="workout_stop">Стоп</string>
+    <string name="workout_elapsed">Прошло: %1$s</string>
+    <string name="workout_interval_progress">Интервал %1$d из %2$d</string>
+    <string name="workout_next_interval">Далее: %1$s %2$s</string>
+    <string name="workout_distance_km">%1$.2f км</string>
+    <string name="workout_pace">%1$s / км</string>
+    <string name="workout_treadmill_effort_run">Комфортный темп бега</string>
+    <string name="workout_treadmill_effort_walk">Быстрый темп ходьбы</string>
+    <string name="workout_treadmill_effort_warmup">Лёгкий темп ходьбы</string>
+    <string name="workout_treadmill_effort_cooldown">Лёгкий темп ходьбы</string>
+    <string name="workout_acquiring_gps">Подключение к GPS…</string>
+    <string name="workout_gps_unavailable">GPS недоступен</string>
+    <string name="workout_complete_title">Тренировка завершена!</string>
+    <string name="workout_complete_message">Отличая работа! Так держать.</string>
+    <string name="workout_complete_time">Время: %1$s</string>
+    <string name="workout_done">Готово</string>
+    <string name="workout_paused_label">НА ПАУЗЕ</string>
+    <string name="workout_reconnecting">Переподключение…</string>
+    <string name="workout_starting">Начинаем…</string>
+    <string name="workout_new_best">Новый личный рекорд!</string>
+    <string name="workout_previous_best">Прошлый рекорд: %1$s</string>
+
+    <!-- History screen -->
+    <string name="history_title">История</string>
+    <string name="history_empty">Пока нет завершённых тренировок.</string>
+    <string name="history_week_day">Неделя %1$d, День %2$d</string>
+    <string name="history_duration">%1$s</string>
+    <string name="history_export">Экспорт CSV</string>
+    <string name="history_export_chooser">Экспорт истории тренировок</string>
+    <string name="history_export_gpx">Экспорт GPX-маршрута</string>
+    <string name="history_export_gpx_chooser">Поделиться GPX-маршрутом</string>
+    <string name="history_delete_title">Удалить тренировку?</string>
+    <string name="history_delete_message">Безвозвратно удалит эту сессию из вашей истории.</string>
+    <string name="history_delete_confirm">Удалить</string>
+    <string name="history_delete_cancel">Отмена</string>
+    <string name="history_stats_workouts">тренировки</string>
+    <string name="history_stats_km">км</string>
+    <string name="history_stats_time">время</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">Тренировка</string>
+    <string name="notification_channel_desc">Таймер активной стренировки</string>
+    <string name="notification_action_pause">Пауза</string>
+    <string name="notification_action_resume">Продолжить</string>
+    <string name="notification_action_stop">Стоп</string>
+    <string name="notification_title">Тренировка C2K</string>
+    <string name="workout_paused_notification">На паузе</string>
+
+    <!-- Permissions -->
+    <string name="permission_location_rationale">C2K может отслеживать вашу дистанцию и темп с помощью GPS. Это опционально — таймер тренировки работает без этого.</string>
+    <string name="permission_location_deny">Пропустить GPS</string>
+    <string name="permission_location_allow">Разрешить GPS</string>
+
+    <!-- Navigation content descriptions -->
+    <string name="nav_back">Назад</string>
+    <string name="cd_collapse">Свернуть</string>
+    <string name="cd_expand">Развернуть</string>
+
+    <!-- Workout screen title -->
+    <string name="cd_interval_remaining">%1$s: %2$s осталось</string>
+    <string name="cd_interval_paused">На паузе: %1$s</string>
+
+    <!-- Additional programs -->
+    <string name="program_pre_c25k">Пре-бег на 5 км</string>
+    <string name="program_pre_c25k_desc">План на 3 недели для новичков, для кого Неделя 1 слишком сложная. Переходит в Бег на 5 км.</string>
+    <string name="program_b210k">Переход к 10 км</string>
+    <string name="program_b210k_desc">Переходный план на 6 недель для тех, кто завершил Бег на 5 км, но ещё не готов переходить сразу к бегу на 10 км.</string>
+    <string name="program_ohr">Бег Целый Час</string>
+    <string name="program_ohr_desc">Прогрессивный план на 13 недель с переходом от 30 к 60 минутам непрерывного бега.</string>
+    <string name="program_5ki">Улучшенный бег на 5 км</string>
+    <string name="program_5ki_desc">План на 8 недель по повышению скорости и выносливости для тех, кто уже может завершить план Бега на 5 км.</string>
+
+    <!-- Program prerequisites -->
+    <string name="program_prereq_after_c25k">После завершения Бега на 5 км</string>
+    <string name="program_prereq_after_b210k_or_c25k">После завершения Бега на 10 км или Бега на 5 км</string>
+    <string name="program_prereq_for_5k_runners">Для тех, кто уже может завершить план Бега на 5 км</string>
+
+    <!-- Guide -->
+    <string name="guide_title">Подсказки</string>
+    <string name="guide_section_before_start">Прежде чем начать</string>
+    <string name="guide_section_during_workout">Во время тренировки</string>
+    <string name="guide_section_between_workouts">Между тренировками</string>
+    <string name="guide_section_glossary">Словарь</string>
+
+    <string name="guide_q_conversational_pace">What is conversational pace?</string>
+    <string name="guide_a_conversational_pace">Conversational pace means running slowly enough that you could hold a full conversation — complete sentences, not gasps between words. If you\'re too breathless to speak, slow down.\n\nMost beginners run too fast and exhaust themselves in the first minute. Slowing down is not a sign of weakness; it\'s the correct technique. You should feel like you\'re working, but comfortably so.</string>
+    <string name="guide_q_gear_needed">What gear do I actually need?</string>
+    <string name="guide_a_gear_needed">A decent pair of running shoes is the one thing worth spending money on. They cushion the repeated impact on your joints and reduce injury risk significantly. If possible, visit a specialist running shop and get fitted — they\'ll watch you walk or run briefly and recommend the right type.\n\nEverything else — special clothes, heart rate monitors, GPS watches — is optional. Comfortable clothes you already own are fine to start.</string>
+    <string name="guide_q_first_week">What should the first week feel like?</string>
+    <string name="guide_a_first_week">Hard. Even the 60-second run intervals in Week 1 will be surprising if you haven\'t run before, and that\'s completely normal.\n\nYour cardiovascular system adapts faster than your muscles and connective tissue, so the breathlessness tends to ease before the leg fatigue does. Expect to feel tired after each session — that\'s the training doing its job. By Week 3 or 4 most people notice a significant improvement.</string>
+    <string name="guide_q_safe_to_start">Is it safe to start if I haven\'t exercised in years?</string>
+    <string name="guide_a_safe_to_start">For most people, yes — C25K is specifically designed for people starting from zero. If you have a heart condition, joint problems, or haven\'t been active for a long time and are over 40, a brief check with your doctor first is sensible but not always necessary.\n\nThe programme starts very gently precisely because it\'s aimed at complete beginners.</string>
+
+    <string name="guide_q_warmup">What is a warm-up, and why shouldn\'t I skip it?</string>
+    <string name="guide_a_warmup">The 5-minute brisk walk at the start of every session gradually raises your heart rate and increases blood flow to your muscles. Cold muscles are less elastic and more prone to strain.\n\nSkipping the warm-up makes the first run interval feel much harder than it should, and increases the risk of pulling something. Five minutes is a small investment.</string>
+    <string name="guide_q_cooldown">What is a cool-down?</string>
+    <string name="guide_a_cooldown">The 5-minute walk at the end brings your heart rate down gradually rather than stopping abruptly. It also helps your body begin clearing lactic acid from your muscles, which reduces post-workout stiffness.\n\nIt takes only 5 minutes and makes a real difference to how you feel the following day.</string>
+    <string name="guide_q_pain_discomfort">Pain vs. discomfort — how do I tell the difference?</string>
+    <string name="guide_a_pain_discomfort">Discomfort is normal and expected: burning lungs, tired legs, muscles that feel like they\'re complaining. This is what exercise feels like, especially early on.\n\nPain is different. It\'s sharp, localised to a specific point (a knee, a shin, a foot), or it gets worse as you continue running. Pain is your body signalling that something is wrong.\n\nDiscomfort says "this is hard." Pain says "stop." If you feel genuine pain during a session, stop and walk home. If it persists after a day of rest, see a physio or doctor before running again.</string>
+    <string name="guide_q_breathing">How should I breathe?</string>
+    <string name="guide_a_breathing">There is no single correct technique — breathe however lets you take in the most air. Many runners settle naturally into a 2:2 rhythm: inhale for 2 steps, exhale for 2 steps. Others prefer 3:2 or just breathe as needed.\n\nBreathing through both your nose and mouth is perfectly fine and actually advisable when working hard. If you\'re gasping, you\'re running too fast — slow down until your breathing feels manageable.</string>
+    <string name="guide_q_cant_finish_interval">What if I can\'t finish a run interval?</string>
+    <string name="guide_a_cant_finish_interval">Walk. There is no failure in walking — the walk breaks are built into the programme for exactly this reason.\n\nIf you regularly can\'t complete the run intervals, try slowing your running pace even further. Many people are surprised how slow "slow" needs to be at first. A very slow jog that you can sustain is far better than a fast run that forces you to stop.</string>
+
+    <string name="guide_q_rest_days">Why do I need rest days?</string>
+    <string name="guide_a_rest_days">Fitness gains happen during rest, not during the run itself. Training creates small stresses in your muscles and connective tissue; the rest days are when your body repairs those stresses and comes back slightly stronger.\n\nThe C25K schedule has 3 sessions per week for this reason. Running every day as a beginner significantly increases the risk of overuse injuries — stress fractures, shin splints, and tendon problems that can sideline you for weeks.</string>
+    <string name="guide_q_rest_day_activities">What should I do on rest days?</string>
+    <string name="guide_a_rest_day_activities">Rest doesn\'t have to mean doing nothing. Light activity — walking, stretching, or bodyweight strength work — keeps blood flowing to sore muscles without adding running-specific stress, and can speed up recovery compared to total inactivity.\n\nBodyweight strength exercises like squats, lunges, planks, and calf raises are especially useful alongside C25K: they build the hip, core, and ankle stability that running alone doesn\'t train, and stronger stabilizing muscles are one of the best defenses against common beginner-runner injuries like shin splints and runner\'s knee. Two or three short sessions a week — 15–20 minutes — is plenty; this program\'s running schedule is already your main training stimulus.</string>
+    <string name="guide_q_repeat_day">Should I repeat a day or move on?</string>
+    <string name="guide_a_repeat_day">Move on, even if a session felt hard — as long as you completed it. C25K is designed with gradual enough progression that almost everyone can move forward each week.\n\nRepeat a day only if you couldn\'t complete the run intervals at all — for example, if you had to stop mid-interval several times (not just at the natural end of an interval). Feeling tired, slow, or out of breath is not a reason to repeat. That\'s just what Week 2 feels like.</string>
+    <string name="guide_q_ready_next_session">When am I ready to start my next session?</string>
+    <string name="guide_a_ready_next_session">When the soreness from the previous session has mostly cleared — usually 1 to 2 days. Some muscle soreness 24–48 hours after a run is normal (this is called DOMS, delayed onset muscle soreness) and gets less severe as your body adapts over the first few weeks.\n\nIf you\'re still significantly sore or stiff, take an extra rest day. One extra day rarely matters; running on very tired legs increases injury risk.</string>
+    <string name="guide_q_stretch">Do I need to stretch?</string>
+    <string name="guide_a_stretch">Light stretching after a run (not before) can help with flexibility and reduce stiffness. Focus on calves, hamstrings, hip flexors, and quads — the muscles doing most of the work.\n\nStretching before a run while your muscles are cold is less useful and can even cause strain. The warm-up walk is more effective preparation than static stretching.</string>
+
+    <string name="guide_q_aerobic_fitness">Aerobic fitness</string>
+    <string name="guide_a_aerobic_fitness">The capacity of your heart and lungs to deliver oxygen to your muscles during sustained exercise. C25K specifically builds aerobic fitness — the foundation of all endurance activity.</string>
+    <string name="guide_q_interval_term">Interval</string>
+    <string name="guide_a_interval_term">A period of effort at a specific intensity for a set duration. Each C25K session is structured as a series of run and walk intervals — for example, eight repetitions of "run 60 seconds, walk 90 seconds."</string>
+    <string name="guide_q_pace_term">Pace</string>
+    <string name="guide_a_pace_term">How fast you\'re running, usually expressed as minutes per kilometre or mile — for example, 7:30 per km means it takes 7 minutes and 30 seconds to run one kilometre.\n\nFor most of C25K, pace doesn\'t matter. Completing the intervals does. Ignore pace entirely until you\'ve finished the programme.</string>
+    <string name="guide_q_doms">DOMS (Delayed Onset Muscle Soreness)</string>
+    <string name="guide_a_doms">Muscle soreness that appears 24–48 hours after exercise, caused by microscopic damage to muscle fibres as they adapt to new stress. Normal, not harmful, and gets significantly less severe after the first few weeks of training.</string>
+    <string name="guide_q_shin_splints">Shin splints</string>
+    <string name="guide_a_shin_splints">Pain along the front or inner edge of the lower leg, common in new runners. Usually caused by doing too much too soon, or running in worn-out shoes.\n\nIf you develop shin splints, rest for 3–5 days. When you return, check your shoes and make sure your running pace isn\'t too fast. Persistent shin pain should be assessed by a physio.</string>
+    <string name="guide_q_rpe">RPE (Rate of Perceived Exertion)</string>
+    <string name="guide_a_rpe">A simple 1–10 scale for how hard an effort feels, where 1 is sitting still and 10 is an all-out sprint you couldn\'t sustain for more than a few seconds.\n\nMost of your C25K running should feel like a 5–6: clearly working, but sustainable. Conversational pace.</string>
+
+    <!-- Contributors -->
+    <string name="contributors_title">Авторы</string>
+    <string name="contributor_github_label">GitHub</string>
+    <string name="contributor_fediverse_label">Fediverse</string>
+    <string name="contributor_translation_es">Перевод на испанский (es)</string>
+    <string name="contributor_translation_gl">Перевод на галисийский (gl)</string>
+    <string name="contributor_fix_tts_ducking">Исправление: голосовые уведомления теперь приглушают фоновое воспроизведения музыки вместо установки её на паузу</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_tts_enabled">Голосовые уведомления</string>
+    <string name="settings_treadmill_mode">Режим беговой дорожки (отключает GPS)</string>
+    <string name="settings_gps_enabled">GPS-отслеживание</string>
+    <string name="settings_countdown_warnings">Предупреждающий обратный отсчёт (10 с, 5 с)</string>
+    <string name="settings_mid_interval_cues">Подбадривания посреди пробежки</string>
+    <string name="settings_keep_screen_on">Оставлять экран включенным во время тренировки</string>
+    <string name="settings_vibration_enabled">Вибрировать при сменен интервала</string>
+    <string name="settings_tts_speed">Скорость речи Voice speed</string>
+    <string name="settings_tts_speed_slow">Медленно</string>
+    <string name="settings_tts_speed_fast">Быстро</string>
+    <string name="settings_tts_volume">Громкость речи</string>
+    <string name="settings_tts_volume_quiet">Тихо</string>
+    <string name="settings_tts_volume_loud">Громко</string>
+
+    <!-- Battery optimization warning -->
+    <string name="battery_opt_title">Оптимизация энергопотребления</string>
+    <string name="battery_opt_message">Для обеспечения стабильной работы во время тренировок, разрешите C2K работать в фоновом режиме. Нажмите для перехода к настройкам энергопотребления.</string>
+    <string name="battery_opt_open_settings">Открыть Настройки</string>
+    <string name="battery_opt_dismiss">Отклонить</string>
+
+    <!-- TTS unavailable warning -->
+    <string name="tts_unavailable">Синтез речи недоступен на данном устройстве. Голосовые уведомления отключены.</string>
+
+    <!-- TTS announcements -->
+    <string name="tts_interval_warmup">Начните разминочную ходьбу</string>
+    <string name="tts_interval_run">Начните бег на %1$s</string>
+    <string name="tts_interval_walk">Ходьба %1$s</string>
+    <string name="tts_interval_cooldown">Начните заминочкую ходьбу</string>
+    <string name="tts_seconds_remaining">Осталось %1$d секунд</string>
+    <string name="tts_next_run">Приготовьтесь к бегу</string>
+    <string name="tts_next_walk">Приготовьтесь к ходьбе</string>
+    <string name="tts_next_warmup">Приготовьтесь к разминке</string>
+    <string name="tts_next_cooldown">Приготовьтесь к скорой заминке</string>
+    <string-array name="tts_encouragement_phrases">
+        <item>У вас отлично получается, продолжайте!</item>
+        <item>Уже на полпути, не сдавайтесь!</item>
+        <item>Продолжайте, вы справитесь!</item>
+        <item>Вы молодец, уже почти у цели!</item>
+        <item>Великолепный прогресс, не останавливайтесь!</item>
+    </string-array>
+    <string name="tts_workout_complete">Тренировка завершена. Отличная работа!</string>
+    <string name="tts_halfway">Уже на полпути, не сдавайтесь!</string>
+    <string name="tts_last_run">Последняя пробежка, финишируйте на высокой ноте!</string>
+    <string name="tts_duration_min_sec">%1$s и %2$s</string>
+    <plurals name="tts_duration_minutes">
+        <item quantity="one">%d минута</item>
+        <item quantity="other">%d минут</item>
+    </plurals>
+    <plurals name="tts_duration_seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="other">%d секунд</item>
+    </plurals>
+
+    <!-- Coaching tips - C25K -->
+    <string name="coaching_c25k_w1">Run at a pace where you can still talk. The walk breaks are part of the training.</string>
+    <string name="coaching_c25k_w2">You made it through week 1 — your body is already adapting. Keep the pace easy.</string>
+    <string name="coaching_c25k_w3">Longer intervals this week. Focus on steady breathing: in for 2 steps, out for 2.</string>
+    <string name="coaching_c25k_w4">Four different run lengths today. This builds mental toughness as much as fitness.</string>
+    <string name="coaching_c25k_w5">Day 3 this week is the famous milestone: 20 minutes of continuous running. You\'ve earned it.</string>
+    <string name="coaching_c25k_w6">You\'re over the halfway mark. The long runs are building your aerobic base.</string>
+    <string name="coaching_c25k_w7">25 minutes continuous. Not everyone gets this far — you\'re a runner now.</string>
+    <string name="coaching_c25k_w8">28 minutes. The goal is almost in reach. Don\'t speed up — save it for next week.</string>
+    <string name="coaching_c25k_w9">This is graduation week. 30 minutes, then celebrate!</string>
+
+    <!-- Coaching tips - C210K extension weeks -->
+    <string name="coaching_c210k_w10">Back to intervals to rebuild your base for the longer distance. Stay easy.</string>
+    <string name="coaching_c210k_w11">Longer combined efforts. Keep the pace conversational throughout.</string>
+    <string name="coaching_c210k_w12">40 minutes of running with a short break. Relax and don\'t race.</string>
+    <string name="coaching_c210k_w13">50 minutes. If you can do this, a 10K finish is within reach.</string>
+    <string name="coaching_c210k_w14">60 minutes — your 10K graduation run. Go get it!</string>
+
+    <!-- Coaching tips - Bridge to 10K -->
+    <string name="coaching_b210k_w1">Re-establishing the habit after C25K. Run easy, no need to push yet.</string>
+    <string name="coaching_b210k_w2">Two longer blocks with a short rest. Aim for an even pace across both runs.</string>
+    <string name="coaching_b210k_w3">Increasing total volume. Focus on consistent effort across both intervals.</string>
+    <string name="coaching_b210k_w4">Nearly 45 minutes of running. You\'re building real 10K fitness.</string>
+    <string name="coaching_b210k_w5">50 minutes this week. The full 60-minute graduation run is one week away.</string>
+    <string name="coaching_b210k_w6">60 minutes — the B210K finish line. Well done!</string>
+
+    <!-- Coaching tips - One Hour Runner -->
+    <string name="coaching_ohr_w1">33 minutes of comfortable, easy running. Don\'t worry about pace, just finish.</string>
+    <string name="coaching_ohr_w4">40 minutes. Each week you\'re building genuine endurance.</string>
+    <string name="coaching_ohr_w7">Nearly 50 minutes. You\'re well past the average runner\'s comfort zone.</string>
+    <string name="coaching_ohr_w10">55 minutes. The one-hour goal is one good week away.</string>
+    <string name="coaching_ohr_w13">60 minutes — this is it. You are an hour runner!</string>
+
+    <!-- Coaching tips - 5K Improver -->
+    <string name="coaching_5ki_w1">Short, hard efforts build leg speed. Push a little harder than your usual 5K pace.</string>
+    <string name="coaching_5ki_w2">5-minute intervals are the sweet spot for building aerobic power.</string>
+    <string name="coaching_5ki_w4">Combination workout: longer intervals with a finishing run. This builds race stamina.</string>
+    <string name="coaching_5ki_w6">Two 15-minute runs — solid aerobic work that will translate directly to a faster 5K.</string>
+    <string name="coaching_5ki_w8">Graduation run: 30 minutes at 5K effort. See how far you get — it should feel good.</string>
+</resources>
