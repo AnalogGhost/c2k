@@ -3,8 +3,8 @@
     <string name="app_name">C2K</string>
 
     <!-- Programs -->
-    <string name="program_c25k">Бег на 5 км</string>
-    <string name="program_c210k">Бег на 10 км</string>
+    <string name="program_c25k">Бег на 5 км (C25K)</string>
+    <string name="program_c210k">Бег на 10 км (C210K)</string>
     <string name="program_c25k_desc">Программа на 9 недель для бега на 5 км без передышки</string>
     <string name="program_c210k_desc">Программа на 14 недель для бега на 10 км без передышки</string>
 
