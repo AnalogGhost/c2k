@@ -130,22 +130,22 @@
     <string name="guide_section_between_workouts">Между тренировками</string>
     <string name="guide_section_glossary">Словарь</string>
 
-    <string name="guide_q_conversational_pace">What is conversational pace?</string>
-    <string name="guide_a_conversational_pace">Conversational pace means running slowly enough that you could hold a full conversation — complete sentences, not gasps between words. If you\'re too breathless to speak, slow down.\n\nMost beginners run too fast and exhaust themselves in the first minute. Slowing down is not a sign of weakness; it\'s the correct technique. You should feel like you\'re working, but comfortably so.</string>
-    <string name="guide_q_gear_needed">What gear do I actually need?</string>
-    <string name="guide_a_gear_needed">A decent pair of running shoes is the one thing worth spending money on. They cushion the repeated impact on your joints and reduce injury risk significantly. If possible, visit a specialist running shop and get fitted — they\'ll watch you walk or run briefly and recommend the right type.\n\nEverything else — special clothes, heart rate monitors, GPS watches — is optional. Comfortable clothes you already own are fine to start.</string>
-    <string name="guide_q_first_week">What should the first week feel like?</string>
-    <string name="guide_a_first_week">Hard. Even the 60-second run intervals in Week 1 will be surprising if you haven\'t run before, and that\'s completely normal.\n\nYour cardiovascular system adapts faster than your muscles and connective tissue, so the breathlessness tends to ease before the leg fatigue does. Expect to feel tired after each session — that\'s the training doing its job. By Week 3 or 4 most people notice a significant improvement.</string>
-    <string name="guide_q_safe_to_start">Is it safe to start if I haven\'t exercised in years?</string>
-    <string name="guide_a_safe_to_start">For most people, yes — C25K is specifically designed for people starting from zero. If you have a heart condition, joint problems, or haven\'t been active for a long time and are over 40, a brief check with your doctor first is sensible but not always necessary.\n\nThe programme starts very gently precisely because it\'s aimed at complete beginners.</string>
+    <string name="guide_q_conversational_pace">Что такое разговорный темп?</string>
+    <string name="guide_a_conversational_pace">Разговорный темп означает медленный бег в темпе, достаточном, чтобы поддержать полноценную беседу — полноценные предложения, а не вздохи между отдельных слов. Если вам не хватает дыхания, замедлитесь.\n\nБольшинство новичков бегут слишком быстро и выдыхаются в первые минуты. Замедление это не признак слабости — это правильная техника. Вы должны чувствовать, что работаете, но в комфортном режиме.</string>
+    <string name="guide_q_gear_needed">Что мне реально нужно для бега?</string>
+    <string name="guide_a_gear_needed">Хорошая пара кроссовок для бега — единственная вещь, на которую стоит потратить деньги. Они смягчают повторяющиеся удары к ваших суставах и значительно снижают риск получения травмы.  Если возможно, посетите специалиста по бегу в магазине и проконсультируйтесь — они посмотрят, как вы ходите или бегаете и подскажут нужный тип обуви.\n\nВсё остальное — специальная одежда, устройства для отслеживания ЧСС, часы с GPS — опциональное. Любая комфортная одежда, которая у вас уже есть, более чем подходит для начала.</string>
+    <string name="guide_q_first_week">Как должна ощущаться первая неделя?</string>
+    <string name="guide_a_first_week">Тяжело. Даже интервалы бега в 60 секунд первую неделю будут удивлять, если вы не бегали до этого, и это абсолютно нормально. \n\nВаша кардиоваскулярная система адаптируется быстрее, чем ваши мускулы и соединительные ткани, поэтому одышка обычно проходит раньше, чем усталость в ногах. Ожидайте усталость после каждой сессии — это тренировка делает свою работу. К третьей или четвёртой неделе большинство людей замечают значительное улучшение.</string>
+    <string name="guide_q_safe_to_start">Безопасно ли начинать, если я не занимался несколько лет?</string>
+    <string name="guide_a_safe_to_start">Для большинства людей, да — бег на 5 км специально создан для людей, начинающих с нуля. Если у вас есть проблемы с сердце, суставами, вы не занимались физически долгое время или вам больше 40 лет, то быстрый осмотр у вашего лечащего врача может быть полезен, но не всегда обязателен.\n\nПрограмма начинается очень мягко именно по той причине, что рассчитана на полных новичков.</string>
 
-    <string name="guide_q_warmup">What is a warm-up, and why shouldn\'t I skip it?</string>
-    <string name="guide_a_warmup">The 5-minute brisk walk at the start of every session gradually raises your heart rate and increases blood flow to your muscles. Cold muscles are less elastic and more prone to strain.\n\nSkipping the warm-up makes the first run interval feel much harder than it should, and increases the risk of pulling something. Five minutes is a small investment.</string>
-    <string name="guide_q_cooldown">What is a cool-down?</string>
-    <string name="guide_a_cooldown">The 5-minute walk at the end brings your heart rate down gradually rather than stopping abruptly. It also helps your body begin clearing lactic acid from your muscles, which reduces post-workout stiffness.\n\nIt takes only 5 minutes and makes a real difference to how you feel the following day.</string>
-    <string name="guide_q_pain_discomfort">Pain vs. discomfort — how do I tell the difference?</string>
-    <string name="guide_a_pain_discomfort">Discomfort is normal and expected: burning lungs, tired legs, muscles that feel like they\'re complaining. This is what exercise feels like, especially early on.\n\nPain is different. It\'s sharp, localised to a specific point (a knee, a shin, a foot), or it gets worse as you continue running. Pain is your body signalling that something is wrong.\n\nDiscomfort says "this is hard." Pain says "stop." If you feel genuine pain during a session, stop and walk home. If it persists after a day of rest, see a physio or doctor before running again.</string>
-    <string name="guide_q_breathing">How should I breathe?</string>
+    <string name="guide_q_warmup">Что такое разминка и почему не стоит её пропускать?</string>
+    <string name="guide_a_warmup">Лёгкая ходьба в течение 5 минут перед началось каждой сессии постепенно повышает частоту вашего сердцебиения и увеличивает приток крови к вашим мускулам. «Холодные» мускулы менее эластичные и более склонны к напряжению.\n\nЕсли вы пропустите разминку, то первый интервал бега будет ощущаться гораздо сложнее, чем должен, что также увеличивает риск растянуть что-либо. Пять минут — это небольшое вложение.</string>
+    <string name="guide_q_cooldown">Что такое заминка?</string>
+    <string name="guide_a_cooldown">Пятиминутная ходьба в конце постепенно возвращает частоту вашего сердцебиения в норму вместо внезапной остановки. Это также помогает вашему телу начать выводить молочную кислоту из ваших мышц, что уменьшается жёсткость мышц после тренировки.\n\nЭто занимает всего 5 минут и вносит значительный вклад к то, как вы будете себя чувствовать на следующий день.</string>
+    <string name="guide_q_pain_discomfort">Боль против дискомфорта — как понять разницу?</string>
+    <string name="guide_a_pain_discomfort">Дискомфорт это нормально и ожидаемо: «горящие» лёгкие, уставшие ноги, мускулы, которые по ощущениям будто возмущаются. Это именно то, как ощущаются упражнения, особенно поначалу.\n\nБоль же это другое. Она острая, локализованная в конкретной точке (колено, голень, нога), или же ухудшается по мере продолжения бега. Боль — это сигнал вашего организма, что что-то идёт не так.\n\nДискомфорт означает «это тяжело». Боль означает «стоп». Если вы ощущаете настоящую боль во время сессии, остановитесь и пойдите домой. Если она сохраняется после целого дня отдыха, обратитесь к физиотерапевту или врачу перед тем, как начать бегать снова.</string>
+    <string name="guide_q_breathing">Как мне следует дышать?</string>
     <string name="guide_a_breathing">There is no single correct technique — breathe however lets you take in the most air. Many runners settle naturally into a 2:2 rhythm: inhale for 2 steps, exhale for 2 steps. Others prefer 3:2 or just breathe as needed.\n\nBreathing through both your nose and mouth is perfectly fine and actually advisable when working hard. If you\'re gasping, you\'re running too fast — slow down until your breathing feels manageable.</string>
     <string name="guide_q_cant_finish_interval">What if I can\'t finish a run interval?</string>
     <string name="guide_a_cant_finish_interval">Walk. There is no failure in walking — the walk breaks are built into the programme for exactly this reason.\n\nIf you regularly can\'t complete the run intervals, try slowing your running pace even further. Many people are surprised how slow "slow" needs to be at first. A very slow jog that you can sustain is far better than a fast run that forces you to stop.</string>
@@ -238,42 +238,42 @@
     </plurals>
 
     <!-- Coaching tips - C25K -->
-    <string name="coaching_c25k_w1">Run at a pace where you can still talk. The walk breaks are part of the training.</string>
-    <string name="coaching_c25k_w2">You made it through week 1 — your body is already adapting. Keep the pace easy.</string>
-    <string name="coaching_c25k_w3">Longer intervals this week. Focus on steady breathing: in for 2 steps, out for 2.</string>
-    <string name="coaching_c25k_w4">Four different run lengths today. This builds mental toughness as much as fitness.</string>
-    <string name="coaching_c25k_w5">Day 3 this week is the famous milestone: 20 minutes of continuous running. You\'ve earned it.</string>
-    <string name="coaching_c25k_w6">You\'re over the halfway mark. The long runs are building your aerobic base.</string>
-    <string name="coaching_c25k_w7">25 minutes continuous. Not everyone gets this far — you\'re a runner now.</string>
-    <string name="coaching_c25k_w8">28 minutes. The goal is almost in reach. Don\'t speed up — save it for next week.</string>
-    <string name="coaching_c25k_w9">This is graduation week. 30 minutes, then celebrate!</string>
+    <string name="coaching_c25k_w1">Бегите в таком темпе, когда вы бы могли спокойно разговаривать. Перерывы с ходьбой являются частью тренировки.</string>
+    <string name="coaching_c25k_w2">Вы справились с первой неделей — ваше тело уже адаптируется. Сохраняйте спокойный темп.</string>
+    <string name="coaching_c25k_w3">Более продолжительные интервалы на этой неделе. Сфокусируйте на размеренном дыхании: вдох на 2 шага, выход на 2 шага.</string>
+    <string name="coaching_c25k_w4">Четыре разных дистанции сегодня. Это укрепляет силу воли вместе с вашим телом.</string>
+    <string name="coaching_c25k_w5">День 3 на этой неделе знаменательный: 20 минут непрерывного бега. Вы это заслужили.</string>
+    <string name="coaching_c25k_w6">Вы более чем на полпути. Продолжительные забеги увеличиваются вашу аэробную силу.</string>
+    <string name="coaching_c25k_w7">25 минут непрерывности. Не каждый может достичь такого — теперь вы бегун.</string>
+    <string name="coaching_c25k_w8">28 минут. Цель почти достигнута. Не ускоряйтесь — сохраните силы на следующую неделю.</string>
+    <string name="coaching_c25k_w9">Выпускная неделя. 30 минут, а потом праздновать!</string>
 
     <!-- Coaching tips - C210K extension weeks -->
-    <string name="coaching_c210k_w10">Back to intervals to rebuild your base for the longer distance. Stay easy.</string>
-    <string name="coaching_c210k_w11">Longer combined efforts. Keep the pace conversational throughout.</string>
-    <string name="coaching_c210k_w12">40 minutes of running with a short break. Relax and don\'t race.</string>
-    <string name="coaching_c210k_w13">50 minutes. If you can do this, a 10K finish is within reach.</string>
-    <string name="coaching_c210k_w14">60 minutes — your 10K graduation run. Go get it!</string>
+    <string name="coaching_c210k_w10">Возврат к интервалам для адаптации вашего организма к длительным забегам. Не геройствуйте.</string>
+    <string name="coaching_c210k_w11">Более продолжительные комбинированные усилия. Сохраняйте разговорный темп на всё протяжении.</string>
+    <string name="coaching_c210k_w12">40 минут бега с коротким перерывом. Расслабьтесь и не устраивайте гонку.</string>
+    <string name="coaching_c210k_w13">50 минут. Если вы сможете это сделать, то до 10 км уже рукой подать.</string>
+    <string name="coaching_c210k_w14">60 минут — ваш выпускной бег на 10 км. Покажите всем!</string>
 
     <!-- Coaching tips - Bridge to 10K -->
-    <string name="coaching_b210k_w1">Re-establishing the habit after C25K. Run easy, no need to push yet.</string>
-    <string name="coaching_b210k_w2">Two longer blocks with a short rest. Aim for an even pace across both runs.</string>
-    <string name="coaching_b210k_w3">Increasing total volume. Focus on consistent effort across both intervals.</string>
-    <string name="coaching_b210k_w4">Nearly 45 minutes of running. You\'re building real 10K fitness.</string>
-    <string name="coaching_b210k_w5">50 minutes this week. The full 60-minute graduation run is one week away.</string>
-    <string name="coaching_b210k_w6">60 minutes — the B210K finish line. Well done!</string>
+    <string name="coaching_b210k_w1">Переустанавливаем привычки после бега на 5 км. Бегите налегке, не надо лезть из кожи вон.</string>
+    <string name="coaching_b210k_w2">Два продолжительных блока с коротким перерывом. Старайтесь поддерживать стабильный темп в обоих блоках.</string>
+    <string name="coaching_b210k_w3">Увеличение общего объёма. Сфокусируйтесь на постоянном усилии между обоими интервалами.</string>
+    <string name="coaching_b210k_w4">Почти 45 минут бега. Это настоящий фитнес на 10 км.</string>
+    <string name="coaching_b210k_w5">50 минут на этой неделе. Полный выпускной забег на 60 минут всего в одной неделе от вас.</string>
+    <string name="coaching_b210k_w6">60 минут — финишная прямая. Отлично сработано!</string>
 
     <!-- Coaching tips - One Hour Runner -->
-    <string name="coaching_ohr_w1">33 minutes of comfortable, easy running. Don\'t worry about pace, just finish.</string>
-    <string name="coaching_ohr_w4">40 minutes. Each week you\'re building genuine endurance.</string>
-    <string name="coaching_ohr_w7">Nearly 50 minutes. You\'re well past the average runner\'s comfort zone.</string>
-    <string name="coaching_ohr_w10">55 minutes. The one-hour goal is one good week away.</string>
-    <string name="coaching_ohr_w13">60 minutes — this is it. You are an hour runner!</string>
+    <string name="coaching_ohr_w1">33 минут простого комфортного бега. Не переживайте насчёт темпа, просто финишируйте.</string>
+    <string name="coaching_ohr_w4">40 минут. Каждую неделю вы улучшаете естественную выносливость.</string>
+    <string name="coaching_ohr_w7">Почти 50 минут. Вы уже далеко за пределами зоны комфорта обычного бегуна.</string>
+    <string name="coaching_ohr_w10">55 минут. Бег целый час всего в одной неделе от вас.</string>
+    <string name="coaching_ohr_w13">60 минут — вот и оно. Мы можете бежать целый час!</string>
 
     <!-- Coaching tips - 5K Improver -->
-    <string name="coaching_5ki_w1">Short, hard efforts build leg speed. Push a little harder than your usual 5K pace.</string>
-    <string name="coaching_5ki_w2">5-minute intervals are the sweet spot for building aerobic power.</string>
-    <string name="coaching_5ki_w4">Combination workout: longer intervals with a finishing run. This builds race stamina.</string>
-    <string name="coaching_5ki_w6">Two 15-minute runs — solid aerobic work that will translate directly to a faster 5K.</string>
-    <string name="coaching_5ki_w8">Graduation run: 30 minutes at 5K effort. See how far you get — it should feel good.</string>
+    <string name="coaching_5ki_w1">Короткие и сильные толчки увеличивают скорость ног. Прикладывайте чуть больше усилий, чем во время обычного бега на 5 км.</string>
+    <string name="coaching_5ki_w2">Пятиминутные интервалы лучше всего подходят для повышения аэробной силы</string>
+    <string name="coaching_5ki_w4">Комбинированная тренировка: более продолжительные интервалы с бегом на финише. Это улучшает выносливость при соревновательность беге.</string>
+    <string name="coaching_5ki_w6">2 пятнадцатиминутных бега — достойная аэробная нагрузка, которая напрямую приведёт к более быстрому бегу на 5 км.</string>
+    <string name="coaching_5ki_w8"> Выпускной забег: 30 минут при усилиях как во время бега на 5 км. Узнайте, насколько далеко вы пробежите — должно ощущаться здорово.</string>
 </resources>
