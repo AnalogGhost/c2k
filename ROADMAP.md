@@ -8,7 +8,7 @@ Prioritised by impact vs. effort. Out-of-scope items are listed at the bottom wi
 
 - ~~**Pre-C25K starter plan** — a gentler lead-in with 30-second run intervals for absolute beginners who find Week 1 too hard. Pure program data, no new infrastructure.~~ *(done: e675a69)*
 - ~~**Spoken motivational cues mid-interval** — encouragement mid-run ("you're doing great", halfway cues per interval), not just at transitions. TTS is already wired up.~~ *(done: a55cd8b)*
-- **Customisable countdown warning intervals** — let users set their own warning thresholds instead of the fixed 10s and 5s.
+- ~~**Customisable countdown warning intervals** — let users set their own warning thresholds instead of the fixed 10s and 5s.~~ *(done: 2c06053)*
 - ~~**Treadmill mode** — disables GPS and switches pace display to effort cues. A simple flag in settings.~~ *(done: fa8d08c)*
 - ~~**Haptic pattern variety** — different vibration patterns for run vs. walk vs. workout complete, rather than a single pulse on any change.~~ *(done: 9ccdd9c)*
 - ~~**Strength and rest day suggestions** — static content recommending cross-training on rest days. Fits naturally alongside the existing Guide screen.~~ *(done: 2d8d1a1)*
