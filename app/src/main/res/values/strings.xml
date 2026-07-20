@@ -188,7 +188,9 @@
     <string name="settings_tts_enabled">Voice announcements</string>
     <string name="settings_treadmill_mode">Treadmill mode (disables GPS)</string>
     <string name="settings_gps_enabled">GPS tracking</string>
-    <string name="settings_countdown_warnings">Countdown warnings (10s, 5s)</string>
+    <string name="settings_countdown_warnings">Countdown warnings</string>
+    <string name="settings_countdown_warning_1">First warning</string>
+    <string name="settings_countdown_warning_2">Second warning</string>
     <string name="settings_mid_interval_cues">Mid-run encouragement</string>
     <string name="settings_keep_screen_on">Keep screen on during workout</string>
     <string name="settings_vibration_enabled">Vibrate on interval change</string>

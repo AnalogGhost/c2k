@@ -32,13 +32,18 @@ class WorkoutEngineTest {
 
     private fun makeEngine(
         vararg intervals: Interval,
-        midIntervalCues: Boolean = false
+        midIntervalCues: Boolean = false,
+        countdownWarnings: Boolean = false,
+        countdownWarningSeconds1: Int = 10,
+        countdownWarningSeconds2: Int = 5
     ): WorkoutEngine =
         WorkoutEngine(
             day = WorkoutDay(week = 1, day = 1, intervals = intervals.toList()),
             tts = fakeTts,
             ttsEnabled = true,
-            countdownWarnings = false,
+            countdownWarnings = countdownWarnings,
+            countdownWarningSeconds1 = countdownWarningSeconds1,
+            countdownWarningSeconds2 = countdownWarningSeconds2,
             midIntervalCues = midIntervalCues,
             scope = testScope,
             // Virtual clock: testScope.currentTime advances with advanceTimeBy()
@@ -178,6 +183,104 @@ class WorkoutEngineTest {
         advanceTimeBy(150_500)  // past both run intervals
         val midpoints = announcements.count { it is TtsAnnouncement.IntervalMidpoint }
         assertEquals("One midpoint cue per qualifying run interval", 2, midpoints)
+    }
+
+    @Test
+    fun countdown_warnings_fire_at_default_thresholds() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            Interval(IntervalType.WALK, 30),
+            countdownWarnings = true
+        )
+        engine.start(1L)
+        advanceTimeBy(5_300)  // 5s elapsed of a 15s interval -> 10s remaining
+        assertEquals(1, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 10
+        })
+        advanceTimeBy(5_000)  // 10.3s elapsed -> 5s remaining
+        assertEquals(1, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 5
+        })
+        assertTrue("Final (smallest) threshold should announce the next interval",
+            announcements.any { it is TtsAnnouncement.NextInterval })
+        engine.stop()
+    }
+
+    @Test
+    fun countdown_warnings_fire_at_custom_thresholds() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 20),
+            countdownWarnings = true,
+            countdownWarningSeconds1 = 15,
+            countdownWarningSeconds2 = 8
+        )
+        engine.start(1L)
+        advanceTimeBy(5_300)  // 5s elapsed -> 15s remaining
+        assertEquals(1, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 15
+        })
+        advanceTimeBy(5_000)  // 10.3s elapsed -> 10s remaining, not a configured threshold
+        assertEquals(0, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 10
+        })
+        advanceTimeBy(2_000)  // 12.3s elapsed -> 8s remaining, the final configured threshold
+        assertEquals(1, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 8
+        })
+        assertTrue("No next interval exists, so no look-ahead should be announced",
+            announcements.none { it is TtsAnnouncement.NextInterval })
+        engine.stop()
+    }
+
+    @Test
+    fun countdown_warnings_do_not_fire_when_disabled() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 15), countdownWarnings = false)
+        engine.start(1L)
+        advanceTimeBy(10_300)  // crosses both default 10s and 5s thresholds
+        assertEquals(0, announcements.count { it is TtsAnnouncement.CountdownWarning })
+        engine.stop()
+    }
+
+    @Test
+    fun countdown_warning_fires_only_once_per_interval() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 15), countdownWarnings = true)
+        engine.start(1L)
+        advanceTimeBy(5_900)  // several 200ms ticks land on the same "10s remaining" second
+        assertEquals(1, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 10
+        })
+        engine.stop()
+    }
+
+    @Test
+    fun equal_thresholds_collapse_to_single_warning_with_lookahead() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            Interval(IntervalType.WALK, 30),
+            countdownWarnings = true,
+            countdownWarningSeconds1 = 10,
+            countdownWarningSeconds2 = 10
+        )
+        engine.start(1L)
+        advanceTimeBy(5_300)  // 10s remaining
+        assertEquals(1, announcements.count { it is TtsAnnouncement.CountdownWarning })
+        assertTrue(announcements.any { it is TtsAnnouncement.NextInterval })
+        engine.stop()
+    }
+
+    @Test
+    fun threshold_larger_than_interval_never_fires() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            countdownWarnings = true,
+            countdownWarningSeconds1 = 30,
+            countdownWarningSeconds2 = 25
+        )
+        engine.start(1L)
+        advanceTimeBy(15_500)  // whole interval elapses
+        assertTrue("Should complete normally without crashing",
+            engine.state.value is WorkoutState.Completed)
+        assertEquals(0, announcements.count { it is TtsAnnouncement.CountdownWarning })
     }
 
     @Test

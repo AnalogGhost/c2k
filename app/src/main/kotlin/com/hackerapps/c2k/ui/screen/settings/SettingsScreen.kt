@@ -40,6 +40,8 @@ fun SettingsScreen(
     val ttsEnabled           by vm.ttsEnabled.collectAsStateWithLifecycle()
     val gpsEnabled           by vm.gpsEnabled.collectAsStateWithLifecycle()
     val countdownWarnings    by vm.countdownWarnings.collectAsStateWithLifecycle()
+    val countdownWarning1    by vm.countdownWarning1.collectAsStateWithLifecycle()
+    val countdownWarning2    by vm.countdownWarning2.collectAsStateWithLifecycle()
     val midIntervalCues      by vm.midIntervalCues.collectAsStateWithLifecycle()
     val treadmillMode        by vm.treadmillMode.collectAsStateWithLifecycle()
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
@@ -90,6 +92,22 @@ fun SettingsScreen(
                 testTag = "toggle_countdown_warnings",
                 onCheckedChange = vm::setCountdownWarnings
             )
+            if (ttsEnabled && countdownWarnings) {
+                SecondsSlider(
+                    label = stringResource(R.string.settings_countdown_warning_1),
+                    seconds = countdownWarning1,
+                    range = 3f..30f,
+                    testTag = "slider_countdown_warning_1",
+                    onValueChange = vm::setCountdownWarning1
+                )
+                SecondsSlider(
+                    label = stringResource(R.string.settings_countdown_warning_2),
+                    seconds = countdownWarning2,
+                    range = 3f..30f,
+                    testTag = "slider_countdown_warning_2",
+                    onValueChange = vm::setCountdownWarning2
+                )
+            }
             HorizontalDivider()
             SettingsToggle(
                 label = stringResource(R.string.settings_mid_interval_cues),
@@ -214,6 +232,41 @@ fun SettingsScreen(
             )
         }
     }
+}
+
+@Composable
+private fun SecondsSlider(
+    label: String,
+    seconds: Int,
+    range: ClosedFloatingPointRange<Float>,
+    testTag: String,
+    onValueChange: (Int) -> Unit
+) {
+    ListItem(
+        headlineContent = {
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(label)
+                    Text(
+                        "%d s".format(seconds),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
+                }
+                Slider(
+                    value = seconds.toFloat(),
+                    onValueChange = { onValueChange(it.roundToInt()) },
+                    valueRange = range,
+                    steps = (range.endInclusive - range.start).toInt() - 1,
+                    modifier = Modifier.testTag(testTag)
+                )
+            }
+        }
+    )
 }
 
 @Composable

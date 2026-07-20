@@ -6,12 +6,14 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.R
@@ -56,6 +58,8 @@ class SettingsScreenTest {
             prefs.setTtsEnabled(true)
             prefs.setGpsEnabled(true)
             prefs.setCountdownWarnings(true)
+            prefs.setCountdownWarning1(10)
+            prefs.setCountdownWarning2(5)
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
             prefs.setTtsSpeechRate(1.0f)
@@ -109,6 +113,54 @@ class SettingsScreenTest {
             composeRule.onNodeWithText(string(R.string.settings_tts_speed)).assertDoesNotExist()
         }
         composeRule.onNodeWithText(string(R.string.settings_tts_volume)).assertDoesNotExist()
+    }
+
+    @Test
+    fun countdown_warning_sliders_shown_with_default_values() {
+        setContent()
+        composeRule.onNodeWithText(string(R.string.settings_countdown_warning_1)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_countdown_warning_2)).assertExists()
+        composeRule.onNodeWithText("10 s").assertExists()
+        composeRule.onNodeWithText("5 s").assertExists()
+    }
+
+    @Test
+    fun disabling_countdown_warnings_hides_the_sliders() {
+        setContent()
+        composeRule.onNodeWithTag("slider_countdown_warning_1").assertExists()
+
+        composeRule.onNodeWithTag("toggle_countdown_warnings").performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("slider_countdown_warning_1").assertDoesNotExist()
+        }
+        composeRule.onNodeWithTag("slider_countdown_warning_2").assertDoesNotExist()
+    }
+
+    @Test
+    fun disabling_tts_also_hides_countdown_warning_sliders() {
+        setContent()
+        composeRule.onNodeWithTag("slider_countdown_warning_1").assertExists()
+
+        composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("slider_countdown_warning_1").assertDoesNotExist()
+        }
+        composeRule.onNodeWithTag("slider_countdown_warning_2").assertDoesNotExist()
+    }
+
+    @Test
+    fun dragging_a_countdown_warning_slider_updates_its_displayed_value() {
+        setContent()
+        composeRule.onNodeWithText("10 s").assertExists()
+
+        composeRule.onNodeWithTag("slider_countdown_warning_1")
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(20f) }
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText("20 s").assertExists()
+        }
     }
 
     @Test
