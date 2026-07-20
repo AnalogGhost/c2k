@@ -35,6 +35,18 @@ Defaults to a dry run (validate_only) against the internal track — pass track:
 
 and validate_only:false to actually publish.
 
+### android metadata
+
+```sh
+[bundle exec] fastlane android metadata
+```
+
+Upload only the store-listing text (titles/descriptions) to Google Play — no build,
+
+no AAB, no images, no changelogs. For listing-copy fixes between releases.
+
+Defaults to a dry run; pass validate_only:false to publish.
+
 ### android release
 
 ```sh
