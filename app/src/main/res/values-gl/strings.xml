@@ -180,6 +180,7 @@
     <string name="contributor_fediverse_label">Fediverso</string>
     <string name="contributor_translation_es">Tradución ao español (es)</string>
     <string name="contributor_translation_gl">Tradución ao galego (gl)</string>
+    <string name="contributor_translation_ru">Tradución ao ruso (ru)</string>
 
     <!-- Settings -->
     <string name="settings_title">Axustes</string>

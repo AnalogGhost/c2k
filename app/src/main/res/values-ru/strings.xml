@@ -180,6 +180,7 @@
     <string name="contributor_fediverse_label">Fediverse</string>
     <string name="contributor_translation_es">Перевод на испанский (es)</string>
     <string name="contributor_translation_gl">Перевод на галисийский (gl)</string>
+    <string name="contributor_translation_ru">Перевод на русский (ru)</string>
     <string name="contributor_fix_tts_ducking">Исправление: голосовые уведомления теперь приглушают фоновое воспроизведения музыки вместо установки её на паузу</string>
 
     <!-- Settings -->
@@ -230,10 +231,14 @@
     <string name="tts_duration_min_sec">%1$s и %2$s</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
         <item quantity="other">%d минут</item>
     </plurals>
     <plurals name="tts_duration_seconds">
         <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунды</item>
+        <item quantity="many">%d секунд</item>
         <item quantity="other">%d секунд</item>
     </plurals>
 
@@ -275,5 +280,5 @@
     <string name="coaching_5ki_w2">Пятиминутные интервалы лучше всего подходят для повышения аэробной силы.</string>
     <string name="coaching_5ki_w4">Комбинированная тренировка: более продолжительные интервалы с бегом на финише. Это улучшает выносливость при соревновательном беге.</string>
     <string name="coaching_5ki_w6">2 пятнадцатиминутных пробежки — достойная аэробная нагрузка, которая напрямую приведёт к более быстрому бегу на 5 км.</string>
-    <string name="coaching_5ki_w8"> Выпускной забег: 30 минут при усилиях как при беге на 5 км. Узнайте, насколько далеко вы пробежите — должно ощущаться здорово.</string>
+    <string name="coaching_5ki_w8">Выпускной забег: 30 минут при усилиях как при беге на 5 км. Узнайте, насколько далеко вы пробежите — должно ощущаться здорово.</string>
 </resources>

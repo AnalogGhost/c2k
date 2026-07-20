@@ -180,6 +180,7 @@
     <string name="contributor_fediverse_label">Fediverse</string>
     <string name="contributor_translation_es">Spanish (es) translation</string>
     <string name="contributor_translation_gl">Galician (gl) translation</string>
+    <string name="contributor_translation_ru">Russian (ru) translation</string>
     <string name="contributor_fix_tts_ducking">Fix: TTS announcements now duck background music instead of pausing it</string>
 
     <!-- Settings -->
