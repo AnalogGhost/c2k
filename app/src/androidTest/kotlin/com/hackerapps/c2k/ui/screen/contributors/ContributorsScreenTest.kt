@@ -29,6 +29,7 @@ class ContributorsScreenTest {
         // renders as two separate nodes — assert at least one rather than assuming uniqueness.
         assertTrue(composeRule.onAllNodesWithText("xmgz").fetchSemanticsNodes().isNotEmpty())
         composeRule.onNodeWithText("Andrew Farabee").assertExists()
+        composeRule.onNodeWithText("Ilyushenok Ilya").assertExists()
     }
 
     @Test
@@ -37,6 +38,7 @@ class ContributorsScreenTest {
 
         composeRule.onNodeWithText(string(R.string.contributor_translation_es)).assertExists()
         composeRule.onNodeWithText(string(R.string.contributor_fix_tts_ducking)).assertExists()
+        composeRule.onNodeWithText(string(R.string.contributor_translation_ru)).assertExists()
     }
 
     @Test
