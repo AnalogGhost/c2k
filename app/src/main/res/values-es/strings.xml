@@ -180,6 +180,7 @@
     <string name="contributor_fediverse_label">Fediverso</string>
     <string name="contributor_translation_es">Traducción al Castellano (es)</string>
     <string name="contributor_translation_gl">Traducción al Gallego (gl)</string>
+    <string name="contributor_translation_ru">Traducción al Ruso (ru)</string>
 
     <!-- Settings -->
     <string name="settings_title">Configuración</string>

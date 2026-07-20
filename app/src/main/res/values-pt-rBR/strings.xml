@@ -180,6 +180,7 @@
     <string name="contributor_fediverse_label">Fediverso</string>
     <string name="contributor_translation_es">Tradução para o espanhol (es)</string>
     <string name="contributor_translation_gl">Tradução para o galego (gl)</string>
+    <string name="contributor_translation_ru">Tradução para o russo (ru)</string>
     <string name="contributor_fix_tts_ducking">Correção: os avisos de voz agora reduzem o volume da música de fundo em vez de pausá-la</string>
 
     <!-- Settings -->

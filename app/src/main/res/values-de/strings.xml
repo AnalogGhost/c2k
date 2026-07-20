@@ -180,6 +180,7 @@
     <string name="contributor_fediverse_label">Fediverse</string>
     <string name="contributor_translation_es">Spanische (es) Übersetzung</string>
     <string name="contributor_translation_gl">Galicische (gl) Übersetzung</string>
+    <string name="contributor_translation_ru">Russische (ru) Übersetzung</string>
     <string name="contributor_fix_tts_ducking">Fix: Sprachansagen dämpfen jetzt die Hintergrundmusik, statt sie zu pausieren</string>
 
     <!-- Settings -->

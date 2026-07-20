@@ -180,6 +180,7 @@
     <string name="contributor_fediverse_label">Fediverse</string>
     <string name="contributor_translation_es">Traduction en espagnol (es)</string>
     <string name="contributor_translation_gl">Traduction en galicien (gl)</string>
+    <string name="contributor_translation_ru">Traduction en russe (ru)</string>
     <string name="contributor_fix_tts_ducking">Correction : les annonces vocales atténuent désormais la musique de fond au lieu de la mettre en pause</string>
 
     <!-- Settings -->
