@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +28,8 @@ class UserPreferences(private val context: Context) {
         val TTS_VOLUME               = floatPreferencesKey("tts_volume")
         val MID_INTERVAL_CUES        = booleanPreferencesKey("mid_interval_cues")
         val TREADMILL_MODE           = booleanPreferencesKey("treadmill_mode")
+        val COUNTDOWN_WARNING_1      = intPreferencesKey("countdown_warning_1")
+        val COUNTDOWN_WARNING_2      = intPreferencesKey("countdown_warning_2")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -37,6 +40,12 @@ class UserPreferences(private val context: Context) {
 
     val countdownWarnings: Flow<Boolean> = context.dataStore.data
         .map { it[COUNTDOWN_WARNINGS] ?: true }
+
+    val countdownWarning1: Flow<Int> = context.dataStore.data
+        .map { it[COUNTDOWN_WARNING_1] ?: 10 }
+
+    val countdownWarning2: Flow<Int> = context.dataStore.data
+        .map { it[COUNTDOWN_WARNING_2] ?: 5 }
 
     val keepScreenOn: Flow<Boolean> = context.dataStore.data
         .map { it[KEEP_SCREEN_ON] ?: true }
@@ -58,6 +67,12 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setCountdownWarnings(enabled: Boolean) =
         context.dataStore.edit { it[COUNTDOWN_WARNINGS] = enabled }
+
+    suspend fun setCountdownWarning1(seconds: Int) =
+        context.dataStore.edit { it[COUNTDOWN_WARNING_1] = seconds }
+
+    suspend fun setCountdownWarning2(seconds: Int) =
+        context.dataStore.edit { it[COUNTDOWN_WARNING_2] = seconds }
 
     suspend fun setKeepScreenOn(enabled: Boolean) =
         context.dataStore.edit { it[KEEP_SCREEN_ON] = enabled }

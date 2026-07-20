@@ -22,6 +22,12 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     val countdownWarnings = prefs.countdownWarnings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
 
+    val countdownWarning1 = prefs.countdownWarning1
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 10)
+
+    val countdownWarning2 = prefs.countdownWarning2
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 5)
+
     val keepScreenOn = prefs.keepScreenOn
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
 
@@ -43,6 +49,8 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     fun setTtsEnabled(v: Boolean)        { viewModelScope.launch { prefs.setTtsEnabled(v) } }
     fun setGpsEnabled(v: Boolean)        { viewModelScope.launch { prefs.setGpsEnabled(v) } }
     fun setCountdownWarnings(v: Boolean) { viewModelScope.launch { prefs.setCountdownWarnings(v) } }
+    fun setCountdownWarning1(v: Int)     { viewModelScope.launch { prefs.setCountdownWarning1(v) } }
+    fun setCountdownWarning2(v: Int)     { viewModelScope.launch { prefs.setCountdownWarning2(v) } }
     fun setKeepScreenOn(v: Boolean)      { viewModelScope.launch { prefs.setKeepScreenOn(v) } }
     fun setVibrationEnabled(v: Boolean)  { viewModelScope.launch { prefs.setVibrationEnabled(v) } }
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
