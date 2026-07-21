@@ -1,0 +1,1 @@
+• Os tempos de aviso de conta atrás agora son personalizables (antes fixos en 10s e 5s)

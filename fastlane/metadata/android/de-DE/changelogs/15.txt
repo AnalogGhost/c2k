@@ -1,0 +1,1 @@
+• Die Countdown-Warnzeiten sind jetzt anpassbar (vorher fest auf 10s und 5s)

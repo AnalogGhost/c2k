@@ -1,0 +1,1 @@
+• Les délais d'avertissement du compte à rebours sont désormais personnalisables (auparavant fixés à 10 s et 5 s)
