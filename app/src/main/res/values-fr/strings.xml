@@ -36,6 +36,7 @@
     <string name="program_reset_cancel">Annuler</string>
 
     <!-- Workout screen -->
+    <string name="workout_title">%1$s · %2$s</string>
     <string name="workout_stop_title">Arrêter la séance ?</string>
     <string name="workout_stop_message">Votre progression sera enregistrée comme incomplète.</string>
     <string name="workout_stop_confirm">Arrêter</string>

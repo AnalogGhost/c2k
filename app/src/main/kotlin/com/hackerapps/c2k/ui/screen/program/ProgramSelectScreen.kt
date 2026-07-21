@@ -308,7 +308,7 @@ private fun DayButton(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(stringResource(R.string.program_day_label, day))
                 Text(
-                    "~${durationMin}m",
+                    stringResource(R.string.program_preview_duration, durationMin),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
                 )

@@ -36,6 +36,7 @@
     <string name="program_reset_cancel">Отмена</string>
 
     <!-- Workout screen -->
+    <string name="workout_title">%1$s · %2$s</string>
     <string name="workout_stop_title">Остановить тренировку?</string>
     <string name="workout_stop_message">Ваш прогресс будет сохранён как незавершённый.</string>
     <string name="workout_stop_confirm">Стоп</string>
