@@ -60,7 +60,8 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         nextWorkoutFlow
     ) { allSessions, active, workoutInfo, nextWorkout ->
         HomeUiState(
-            recentSessions = allSessions.take(5),
+            // Recent list shows real runs only; streak still counts manually-marked days.
+            recentSessions = allSessions.filter { !it.manual }.take(5),
             streak = computeStreak(allSessions, System.currentTimeMillis()),
             workoutActive = active,
             activeWorkoutInfo = workoutInfo,

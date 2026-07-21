@@ -113,6 +113,15 @@ fun ProgramSelectScreen(
             onStart = {
                 previewDay = null
                 onStartWorkout(previewWeek, previewDayNum)
+            },
+            isManual = (previewWeek to previewDayNum) in state.manualDays,
+            onMarkDone = {
+                vm.markDayDone(previewWeek, previewDayNum)
+                previewDay = null
+            },
+            onUnmark = {
+                vm.unmarkDay(previewWeek, previewDayNum)
+                previewDay = null
             }
         )
     }

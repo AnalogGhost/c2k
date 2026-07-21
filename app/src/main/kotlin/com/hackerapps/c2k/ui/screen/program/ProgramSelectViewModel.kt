@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.data.model.Programs
@@ -15,7 +15,9 @@ import com.hackerapps.c2k.data.model.WorkoutPlan
 
 data class ProgramSelectUiState(
     val plan: WorkoutPlan? = null,
-    val completedDays: Set<Pair<Int, Int>> = emptySet()
+    val completedDays: Set<Pair<Int, Int>> = emptySet(),
+    // Subset of completedDays whose completion came only from a manual mark (offer "un-mark").
+    val manualDays: Set<Pair<Int, Int>> = emptySet()
 ) {
     val nextIncompleteDay: Pair<Int, Int>? get() {
         val p = plan ?: return null
@@ -39,13 +41,24 @@ class ProgramSelectViewModel(
     private val repo = (app as C2KApp).sessionRepository
 
     val uiState: StateFlow<ProgramSelectUiState> =
-        repo.observeCompletedDays(programId)
-            .map { completed -> ProgramSelectUiState(plan = plan, completedDays = completed) }
-            .stateIn(
-                viewModelScope,
-                SharingStarted.WhileSubscribed(5_000),
-                ProgramSelectUiState(plan = plan)
-            )
+        combine(
+            repo.observeCompletedDays(programId),
+            repo.observeManualDays(programId)
+        ) { completed, manual ->
+            ProgramSelectUiState(plan = plan, completedDays = completed, manualDays = manual)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            ProgramSelectUiState(plan = plan)
+        )
+
+    fun markDayDone(week: Int, day: Int) {
+        viewModelScope.launch { repo.markDayDone(programId, week, day) }
+    }
+
+    fun unmarkDay(week: Int, day: Int) {
+        viewModelScope.launch { repo.unmarkDay(programId, week, day) }
+    }
 
     fun resetProgress() {
         viewModelScope.launch { repo.resetProgress(programId) }

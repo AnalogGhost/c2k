@@ -57,6 +57,33 @@ class SessionRepository(private val db: AppDatabase) {
         db.sessionDao().observeCompletedDays(programId)
             .map { list -> list.map { it.week to it.day }.toSet() }
 
+    fun observeManualDays(programId: String): Flow<Set<Pair<Int, Int>>> =
+        db.sessionDao().observeManualDays(programId)
+            .map { list -> list.map { it.week to it.day }.toSet() }
+
+    // Marks a day complete without an actual run (counts toward progress/streak; zero duration
+    // and distance so it stays out of personal-best and distance/time stats).
+    suspend fun markDayDone(programId: String, week: Int, day: Int) {
+        val now = System.currentTimeMillis()
+        db.sessionDao().insert(
+            WorkoutSessionEntity(
+                programId = programId,
+                week = week,
+                day = day,
+                startedAt = now,
+                completedAt = now,
+                durationSeconds = 0,
+                distanceMeters = 0f,
+                completed = true,
+                manual = true
+            )
+        )
+    }
+
+    // Removes only manual marks for a day; a real completed run for that day is left intact.
+    suspend fun unmarkDay(programId: String, week: Int, day: Int) =
+        db.sessionDao().deleteManualByDay(programId, week, day)
+
     suspend fun getBestForDay(programId: String, week: Int, day: Int): WorkoutSessionEntity? =
         db.sessionDao().getBestByDay(programId, week, day)
 

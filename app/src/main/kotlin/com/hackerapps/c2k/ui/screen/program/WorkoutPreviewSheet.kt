@@ -15,6 +15,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -60,7 +61,12 @@ fun WorkoutPreviewSheet(
     workoutDay: WorkoutDay,
     isCompleted: Boolean,
     onDismiss: () -> Unit,
-    onStart: () -> Unit
+    onStart: () -> Unit,
+    // Optional manual mark-as-done controls. When null (e.g. the Home "continue" shortcut) no
+    // mark button is shown. isManual = the day's completion came from a manual mark (offer un-mark).
+    isManual: Boolean = false,
+    onMarkDone: (() -> Unit)? = null,
+    onUnmark: (() -> Unit)? = null
 ) {
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(
@@ -95,6 +101,15 @@ fun WorkoutPreviewSheet(
                     if (isCompleted) stringResource(R.string.program_preview_redo)
                     else stringResource(R.string.program_preview_start)
                 )
+            }
+            if (!isCompleted && onMarkDone != null) {
+                TextButton(onClick = onMarkDone, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.program_mark_done))
+                }
+            } else if (isCompleted && isManual && onUnmark != null) {
+                TextButton(onClick = onUnmark, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.program_mark_not_done))
+                }
             }
         }
     }

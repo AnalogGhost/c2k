@@ -30,6 +30,8 @@
     <string name="program_preview_start">Start</string>
     <string name="program_preview_redo">Redo</string>
     <string name="program_preview_duration">~%1$d min</string>
+    <string name="program_mark_done">Mark as done</string>
+    <string name="program_mark_not_done">Mark as not done</string>
     <string name="program_reset_title">Reset progress</string>
     <string name="program_reset_message">This will permanently remove all completed sessions for this program. Your overall history is kept.</string>
     <string name="program_reset_confirm">Reset</string>

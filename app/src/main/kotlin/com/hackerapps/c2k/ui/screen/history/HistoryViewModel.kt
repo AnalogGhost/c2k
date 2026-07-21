@@ -26,7 +26,10 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
 
     private val repo = (app as C2KApp).sessionRepository
 
+    // History lists actual runs only; manually-marked days (which have no duration/distance)
+    // are filtered out so they don't appear as 0:00 entries or skew the km/time stats.
     val sessions: StateFlow<List<WorkoutSessionEntity>> = repo.observeAllSessions()
+        .map { list -> list.filter { !it.manual } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val stats: StateFlow<HistoryStats> = sessions.map { list -> computeStats(list) }
