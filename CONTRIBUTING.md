@@ -7,7 +7,7 @@ Thanks for taking the time to contribute! C2K is a small, focused FOSS app — c
 - **Translations** — add or improve string resources under `app/src/main/res/values-*/strings.xml` and matching Fastlane metadata under `fastlane/metadata/android/<locale>/`
 - **Bug reports** — open an issue with steps to reproduce, Android version, and device/ROM
 - **Bug fixes** — open a PR; link the issue it closes
-- **New programs** — additional training plans go in `app/src/main/kotlin/org/c2k/data/model/`
+- **New programs** — additional training plans go in `app/src/main/kotlin/com/hackerapps/c2k/data/model/`
 
 ## Building locally
 
