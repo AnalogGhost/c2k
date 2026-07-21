@@ -36,7 +36,7 @@ Prioritised by impact vs. effort. Out-of-scope items are listed at the bottom wi
 - **Custom workout builder** — let users define their own interval sequences. Requires new UI and data model.
 - **Running cadence metronome** — an audio tick to help users hit a target step rate. Useful for injury prevention.
 - **Home screen widget** — quick-start widget showing current week/day and a start button.
-- **More translations** — German, French, and Brazilian Portuguese are already shipped (`values-de`, `values-fr`, `values-pt-rBR`), alongside Spanish and Galician. Further languages are community-driven; contributions welcome.
+- **More translations** — German, French, Brazilian Portuguese, and Russian are already shipped (`values-de`, `values-fr`, `values-pt-rBR`, `values-ru`), alongside Spanish and Galician. Further languages are community-driven; contributions welcome.
 - **Streak and progress on history screen** — currently streak only shows on the home screen.
 
 ---
