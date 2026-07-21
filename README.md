@@ -14,13 +14,14 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 - One Hour Runner — 13-week progression to 60 minutes continuous running
 - 5K Improver — 8-week speed and stamina program for runners who can already complete 5K
 - Audible voice prompts with mid-run encouragement (Android built-in TTS — no internet needed)
+- Customizable countdown warning thresholds
 - Voice volume and speed controls
 - Music ducking during voice announcements
 - Background timer with lock-screen notification and pause/stop controls
 - Optional GPS tracking (distance & pace) — works without it too
 - Progress tracking across sessions
 - Guide screen with FAQ and glossary
-- Localised in English, Spanish, Galician, German, French, and Brazilian Portuguese
+- Localised in English, Spanish, Galician, German, French, Brazilian Portuguese, and Russian
 - Landscape layouts on tablets and foldables (phones stay portrait)
 - Fully offline — no internet permission
 - Compatible with GrapheneOS and any de-Googled Android device (no Google Play Services)
