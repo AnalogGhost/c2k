@@ -22,6 +22,10 @@ interface WorkoutSessionDao {
     @Query("SELECT * FROM workout_sessions WHERE id = :id")
     suspend fun findById(id: Long): WorkoutSessionEntity?
 
+    // Snapshot of all sessions for backup export.
+    @Query("SELECT * FROM workout_sessions ORDER BY startedAt ASC")
+    suspend fun getAll(): List<WorkoutSessionEntity>
+
     @Query("SELECT DISTINCT week, day FROM workout_sessions WHERE programId = :programId AND completed = 1")
     fun observeCompletedDays(programId: String): Flow<List<CompletedDay>>
 

@@ -1,6 +1,9 @@
 package com.hackerapps.c2k.ui.screen.history
 
 import android.content.Intent
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,11 +19,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +39,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,6 +69,22 @@ fun HistoryScreen(
     val sessions by vm.sessions.collectAsStateWithLifecycle()
     val stats by vm.stats.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val backupMessage by vm.backupMessage.collectAsStateWithLifecycle()
+
+    // SAF: export writes a new .json document; import reads any file the user picks.
+    val exportLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json")
+    ) { uri -> uri?.let { vm.exportHistory(it) } }
+    val importLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri -> uri?.let { vm.importHistory(it) } }
+
+    LaunchedEffect(backupMessage) {
+        backupMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            vm.clearBackupMessage()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -87,6 +110,30 @@ fun HistoryScreen(
                         }) {
                             Icon(Icons.Default.Share, contentDescription = stringResource(R.string.history_export))
                         }
+                    }
+                    var showMenu by remember { mutableStateOf(false) }
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.history_more))
+                    }
+                    DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                        if (sessions.isNotEmpty()) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.history_backup_export)) },
+                                onClick = {
+                                    showMenu = false
+                                    exportLauncher.launch("c2k-history.json")
+                                }
+                            )
+                        }
+                        // Import is available even with no sessions, so a backup can be restored
+                        // onto a fresh install.
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.history_backup_import)) },
+                            onClick = {
+                                showMenu = false
+                                importLauncher.launch(arrayOf("*/*"))
+                            }
+                        )
                     }
                 }
             )

@@ -85,6 +85,12 @@
     <string name="history_stats_workouts">workouts</string>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">time</string>
+    <string name="history_more">More</string>
+    <string name="history_backup_export">Export backup (.json)</string>
+    <string name="history_backup_import">Import backup</string>
+    <string name="history_backup_export_success">Exported %1$d workouts</string>
+    <string name="history_backup_import_success">Imported %1$d workouts (%2$d skipped)</string>
+    <string name="history_backup_error">Backup failed: %1$s</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Workout</string>
