@@ -1,0 +1,1 @@
+• Countdown warning times are now customizable (previously fixed at 10s and 5s)

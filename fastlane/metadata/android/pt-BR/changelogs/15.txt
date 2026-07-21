@@ -1,0 +1,1 @@
+• Os tempos de aviso de contagem regressiva agora são personalizáveis (antes fixos em 10s e 5s)
