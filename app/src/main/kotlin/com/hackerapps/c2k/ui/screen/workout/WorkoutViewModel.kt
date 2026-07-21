@@ -84,6 +84,12 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
             }
             viewModelScope.launch {
                 lb.getWorkoutState().collect { state ->
+                    // Latch the terminal state: once completed, ignore any late/stale Active or
+                    // Idle frame (e.g. a fresh Idle service auto-created by a rebind after the
+                    // foreground service self-stops) so the UI can't revert to a live counter.
+                    if (_workoutState.value is WorkoutState.Completed && state !is WorkoutState.Completed) {
+                        return@collect
+                    }
                     _workoutState.value = state
                     if (state is WorkoutState.Completed && currentProgramId.isNotEmpty()) {
                         loadPersonalBest()
