@@ -188,7 +188,9 @@
     <string name="settings_tts_enabled">Avisos de voz</string>
     <string name="settings_treadmill_mode">Modo esteira (desativa o GPS)</string>
     <string name="settings_gps_enabled">Rastreamento por GPS</string>
-    <string name="settings_countdown_warnings">Avisos de contagem regressiva (10s, 5s)</string>
+    <string name="settings_countdown_warnings">Avisos de contagem regressiva</string>
+    <string name="settings_countdown_warning_1">Primeiro aviso</string>
+    <string name="settings_countdown_warning_2">Segundo aviso</string>
     <string name="settings_mid_interval_cues">Incentivo no meio da corrida</string>
     <string name="settings_keep_screen_on">Manter a tela ligada durante o treino</string>
     <string name="settings_vibration_enabled">Vibrar na troca de intervalo</string>

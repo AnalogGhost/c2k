@@ -188,7 +188,9 @@
     <string name="settings_tts_enabled">Голосовые уведомления</string>
     <string name="settings_treadmill_mode">Режим беговой дорожки (отключает GPS)</string>
     <string name="settings_gps_enabled">GPS-отслеживание</string>
-    <string name="settings_countdown_warnings">Предупреждающий обратный отсчёт (10 с, 5 с)</string>
+    <string name="settings_countdown_warnings">Предупреждающий обратный отсчёт</string>
+    <string name="settings_countdown_warning_1">Первое предупреждение</string>
+    <string name="settings_countdown_warning_2">Второе предупреждение</string>
     <string name="settings_mid_interval_cues">Подбадривания посреди пробежки</string>
     <string name="settings_keep_screen_on">Оставлять экран включённым во время тренировки</string>
     <string name="settings_vibration_enabled">Вибрировать при смене интервала</string>
