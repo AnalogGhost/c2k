@@ -188,7 +188,9 @@
     <string name="settings_tts_enabled">Annonces vocales</string>
     <string name="settings_treadmill_mode">Mode tapis de course (désactive le GPS)</string>
     <string name="settings_gps_enabled">Suivi GPS</string>
-    <string name="settings_countdown_warnings">Avertissements du compte à rebours (10 s, 5 s)</string>
+    <string name="settings_countdown_warnings">Avertissements du compte à rebours</string>
+    <string name="settings_countdown_warning_1">Premier avertissement</string>
+    <string name="settings_countdown_warning_2">Second avertissement</string>
     <string name="settings_mid_interval_cues">Encouragements en milieu de course</string>
     <string name="settings_keep_screen_on">Garder l\'écran allumé pendant la séance</string>
     <string name="settings_vibration_enabled">Vibrer au changement d\'intervalle</string>

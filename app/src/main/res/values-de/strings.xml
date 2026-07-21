@@ -188,7 +188,9 @@
     <string name="settings_tts_enabled">Sprachansagen</string>
     <string name="settings_treadmill_mode">Laufband-Modus (deaktiviert GPS)</string>
     <string name="settings_gps_enabled">GPS-Tracking</string>
-    <string name="settings_countdown_warnings">Countdown-Warnungen (10s, 5s)</string>
+    <string name="settings_countdown_warnings">Countdown-Warnungen</string>
+    <string name="settings_countdown_warning_1">Erste Warnung</string>
+    <string name="settings_countdown_warning_2">Zweite Warnung</string>
     <string name="settings_mid_interval_cues">Motivation während des Laufens</string>
     <string name="settings_keep_screen_on">Bildschirm während des Trainings an lassen</string>
     <string name="settings_vibration_enabled">Vibrieren bei Intervallwechsel</string>

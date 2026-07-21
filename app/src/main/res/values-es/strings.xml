@@ -187,7 +187,9 @@
     <string name="settings_tts_enabled">Indicaciones por voz</string>
     <string name="settings_treadmill_mode">Modo cinta de correr (desactiva GPS)</string>
     <string name="settings_gps_enabled">Seguimiento con GPS</string>
-    <string name="settings_countdown_warnings">Avisos de cuenta atrás (10s, 5s)</string>
+    <string name="settings_countdown_warnings">Avisos de cuenta atrás</string>
+    <string name="settings_countdown_warning_1">Primer aviso</string>
+    <string name="settings_countdown_warning_2">Segundo aviso</string>
     <string name="settings_mid_interval_cues">Motivación a mitad de carrera</string>
     <string name="settings_keep_screen_on">Pantalla encendida durante el entrenamiento</string>
     <string name="settings_vibration_enabled">Vibrar al cambiar de intervalo</string>
