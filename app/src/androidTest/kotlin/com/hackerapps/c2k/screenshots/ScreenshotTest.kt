@@ -2,6 +2,7 @@ package com.hackerapps.c2k.screenshots
 
 import android.Manifest
 import android.app.Application
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -93,6 +94,10 @@ class ScreenshotTest {
             repo().observeAllSessions().first().forEach { repo().deleteSession(it.id) }
             val prefs = UserPreferences(app())
             prefs.setTreadmillMode(true)
+            // Pin to defaults — otherwise leftover values from manual on-device testing bleed
+            // into the 07_settings store screenshot.
+            prefs.setCountdownWarning1(10)
+            prefs.setCountdownWarning2(5)
             // Otherwise WorkoutViewModel.checkBatteryOptimization() shows a real AlertDialog on
             // top of the workout screen the first time a workout starts, right where 04_workout
             // gets captured.
@@ -177,6 +182,12 @@ class ScreenshotTest {
         composeRule.onNodeWithContentDescription(string(R.string.settings_title)).performClick()
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithText(string(R.string.settings_title)).assertExists()
+        }
+        // SettingsViewModel's StateFlows seed from a hardcoded default before the real DataStore
+        // value propagates — without this wait, the screenshot can race ahead and capture the
+        // seed default (treadmillMode=false) instead of what setUp() actually persisted (true).
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("toggle_treadmill_mode").assertIsOn()
         }
         Screengrab.screenshot("07_settings")
     }
