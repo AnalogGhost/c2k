@@ -170,7 +170,9 @@ fun WorkoutScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("$programName · ${stringResource(R.string.history_week_day, week, day)}") })
+            TopAppBar(title = {
+                Text(stringResource(R.string.workout_title, programName, stringResource(R.string.history_week_day, week, day)))
+            })
         }
     ) { padding ->
         val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
