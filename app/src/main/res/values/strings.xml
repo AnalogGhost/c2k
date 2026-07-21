@@ -68,6 +68,10 @@
     <string name="workout_starting">Starting…</string>
     <string name="workout_new_best">New personal best!</string>
     <string name="workout_previous_best">Previous best: %1$s</string>
+    <string name="workout_minimize">Minimize</string>
+    <string name="workout_more">More</string>
+    <string name="workout_view_steps">View steps</string>
+    <string name="workout_steps_title">Week %1$d, Day %2$d</string>
 
     <!-- History screen -->
     <string name="history_title">History</string>

@@ -73,7 +73,11 @@ fun NavGraph() {
                 programId = args.getString("programId")!!,
                 week      = args.getInt("week"),
                 day       = args.getInt("day"),
-                onFinished = { navController.popBackStack(Routes.HOME, inclusive = false) }
+                onFinished = { navController.popBackStack(Routes.HOME, inclusive = false) },
+                // Minimize leaves the workout running in the service and returns to Home, where the
+                // "workout in progress" banner navigates back into it.
+                onMinimize = { navController.popBackStack(Routes.HOME, inclusive = false) },
+                onOpenSettings = { navController.navigate(Routes.SETTINGS) }
             )
         }
 

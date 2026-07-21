@@ -19,14 +19,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -56,6 +61,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.IntervalType
+import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.service.WorkoutService
 import com.hackerapps.c2k.ui.component.RequestActivityRecognitionPermission
@@ -74,6 +80,8 @@ fun WorkoutScreen(
     week: Int,
     day: Int,
     onFinished: () -> Unit,
+    onMinimize: () -> Unit,
+    onOpenSettings: () -> Unit,
     vm: WorkoutViewModel = viewModel()
 ) {
     val context = LocalContext.current
@@ -95,6 +103,10 @@ fun WorkoutScreen(
     // In treadmill mode skip the location permission request entirely
     var permissionResolved by remember(treadmillMode) { mutableStateOf(treadmillMode) }
     var showStopDialog by remember { mutableStateOf(false) }
+    var showStepsSheet by remember { mutableStateOf(false) }
+    val workoutDay = remember(programId, week, day) {
+        Programs.byId(programId).weeks.getOrNull(week - 1)?.getOrNull(day - 1)
+    }
 
     val nameResId = remember(programId) { programNameRes(programId) }
     val programName = nameResId?.let { stringResource(it) } ?: programId
@@ -112,8 +124,10 @@ fun WorkoutScreen(
     }
 
     BackHandler {
+        // Back minimizes to Home while the workout keeps running in the service (return via the
+        // "workout in progress" banner). Stopping is an explicit action via the Stop button.
         if (workoutState is WorkoutState.Completed) onFinished()
-        else showStopDialog = true
+        else onMinimize()
     }
 
     DisposableEffect(keepScreenOn) {
@@ -168,11 +182,48 @@ fun WorkoutScreen(
         )
     }
 
+    if (showStepsSheet && workoutDay != null) {
+        WorkoutStepsSheet(
+            week = week,
+            day = day,
+            workoutDay = workoutDay,
+            onDismiss = { showStepsSheet = false }
+        )
+    }
+
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Text(stringResource(R.string.workout_title, programName, stringResource(R.string.history_week_day, week, day)))
-            })
+            TopAppBar(
+                title = {
+                    Text(stringResource(R.string.workout_title, programName, stringResource(R.string.history_week_day, week, day)))
+                },
+                navigationIcon = {
+                    IconButton(onClick = onMinimize) {
+                        Icon(
+                            Icons.Default.KeyboardArrowDown,
+                            contentDescription = stringResource(R.string.workout_minimize)
+                        )
+                    }
+                },
+                actions = {
+                    var showMenu by remember { mutableStateOf(false) }
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.workout_more))
+                    }
+                    DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                        if (workoutDay != null) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.workout_view_steps)) },
+                                onClick = { showMenu = false; showStepsSheet = true }
+                            )
+                        }
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.settings_title)) },
+                            onClick = { showMenu = false; onOpenSettings() }
+                        )
+                    }
+                }
+            )
         }
     ) { padding ->
         val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
