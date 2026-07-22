@@ -183,6 +183,7 @@ private fun guideSections(): List<GuideSection> = listOf(
             GuideEntry(stringResource(R.string.guide_q_doms),             stringResource(R.string.guide_a_doms)),
             GuideEntry(stringResource(R.string.guide_q_shin_splints),     stringResource(R.string.guide_a_shin_splints)),
             GuideEntry(stringResource(R.string.guide_q_rpe),              stringResource(R.string.guide_a_rpe)),
+            GuideEntry(stringResource(R.string.guide_q_calorie_estimate), stringResource(R.string.guide_a_calorie_estimate)),
         )
     ),
 )

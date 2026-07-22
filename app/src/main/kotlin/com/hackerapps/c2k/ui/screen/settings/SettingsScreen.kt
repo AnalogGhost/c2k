@@ -1,34 +1,49 @@
 package com.hackerapps.c2k.ui.screen.settings
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.WeightUnit
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +64,8 @@ fun SettingsScreen(
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
     val ttsVolume            by vm.ttsVolume.collectAsStateWithLifecycle()
     val ttsAvailableOnDevice by vm.ttsAvailableOnDevice.collectAsStateWithLifecycle()
+    val weightKg             by vm.weightKg.collectAsStateWithLifecycle()
+    val weightUnit           by vm.weightUnit.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -66,6 +83,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .verticalScroll(rememberScrollState())
         ) {
             SettingsToggle(
                 label = stringResource(R.string.settings_tts_enabled),
@@ -230,9 +248,92 @@ fun SettingsScreen(
                 testTag = "toggle_keep_screen_on",
                 onCheckedChange = vm::setKeepScreenOn
             )
+            HorizontalDivider()
+            WeightSetting(
+                weightKg = weightKg,
+                weightUnit = weightUnit,
+                onWeightChange = vm::setWeightKg,
+                onUnitChange = vm::setWeightUnit
+            )
         }
     }
 }
+
+@Composable
+private fun WeightSetting(
+    weightKg: Float?,
+    weightUnit: WeightUnit,
+    onWeightChange: (Float) -> Unit,
+    onUnitChange: (WeightUnit) -> Unit
+) {
+    var showUnitMenu by remember { mutableStateOf(false) }
+    // null = "showing whatever weightKg currently resolves to" (stays reactive to the async
+    // DataStore load); becomes non-null the moment the user types, so their in-progress edit
+    // (e.g. "6.") isn't clobbered by the round-tripped value. Resets to null on unit switch so
+    // the field re-syncs freshly converted into the new unit.
+    var pendingText by remember(weightUnit) { mutableStateOf<String?>(null) }
+    val weightText = pendingText ?: (weightKg?.let { formatWeight(weightUnit.fromKg(it)) } ?: "")
+    ListItem(
+        headlineContent = {
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(stringResource(R.string.settings_weight))
+                    Spacer(Modifier.width(16.dp))
+                    OutlinedTextField(
+                        value = weightText,
+                        onValueChange = { newText ->
+                            pendingText = newText
+                            val parsed = newText.toFloatOrNull()
+                            if (parsed != null && parsed > 0f) {
+                                onWeightChange(weightUnit.toKg(parsed))
+                            }
+                        },
+                        placeholder = { Text(stringResource(R.string.settings_weight_not_set)) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        singleLine = true,
+                        modifier = Modifier
+                            .weight(1f)
+                            .testTag("field_weight")
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Box {
+                        TextButton(
+                            onClick = { showUnitMenu = true },
+                            modifier = Modifier.testTag("button_weight_unit")
+                        ) {
+                            Text(stringResource(weightUnit.labelRes))
+                        }
+                        DropdownMenu(
+                            expanded = showUnitMenu,
+                            onDismissRequest = { showUnitMenu = false }
+                        ) {
+                            WeightUnit.entries.forEach { unit ->
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(unit.labelRes)) },
+                                    onClick = {
+                                        showUnitMenu = false
+                                        onUnitChange(unit)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+                Text(
+                    stringResource(R.string.settings_weight_hint),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
+            }
+        }
+    )
+}
+
+private fun formatWeight(value: Float): String =
+    "%.1f".format(value).trimEnd('0').trimEnd('.')
 
 @Composable
 private fun SecondsSlider(

@@ -68,6 +68,8 @@
     <string name="workout_starting">Wird gestartet…</string>
     <string name="workout_new_best">Neue persönliche Bestleistung!</string>
     <string name="workout_previous_best">Bisherige Bestleistung: %1$s</string>
+    <string name="workout_calories_burned">%1$d kcal verbrannt (geschätzt)</string>
+    <string name="workout_calories_hint">Lege dein Gewicht in den Einstellungen fest, um verbrannte Kalorien zu sehen</string>
 
     <!-- History screen -->
     <string name="history_title">Verlauf</string>
@@ -85,6 +87,7 @@
     <string name="history_stats_workouts">Trainingseinheiten</string>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">Zeit</string>
+    <string name="history_stats_calories">kcal</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Training</string>
@@ -174,6 +177,8 @@
     <string name="guide_a_shin_splints">Schmerzen entlang der Vorder- oder Innenkante des Unterschenkels, häufig bei neuen Läufern. Meist verursacht durch zu viel zu früh oder durch abgelaufene Schuhe.\n\nWenn du ein Schienbeinkantensyndrom entwickelst, ruh dich 3–5 Tage aus. Überprüfe danach deine Schuhe und achte darauf, dass dein Lauftempo nicht zu hoch ist. Anhaltende Schienbeinschmerzen sollten von einem Physiotherapeuten untersucht werden.</string>
     <string name="guide_q_rpe">RPE (subjektiv empfundene Anstrengung)</string>
     <string name="guide_a_rpe">Eine einfache Skala von 1 bis 10 dafür, wie anstrengend sich eine Belastung anfühlt, wobei 1 Stillsitzen und 10 ein Sprint mit voller Kraft ist, den du nur wenige Sekunden durchhalten könntest.\n\nDer Großteil deines C25K-Laufens sollte sich wie eine 5–6 anfühlen: spürbar anstrengend, aber tragbar. Unterhaltungstempo.</string>
+    <string name="guide_q_calorie_estimate">Wie werden verbrannte Kalorien geschätzt?</string>
+    <string name="guide_a_calorie_estimate">Sie basieren auf deiner Durchschnittsgeschwindigkeit, deinem Körpergewicht und der Dauer deiner Bewegung, unter Verwendung von MET-Werten (Metabolisches Äquivalent) — einem Standardmaß dafür, wie anstrengend eine Aktivität im Verhältnis zur Geschwindigkeit ist: Kalorien = MET × Gewicht (kg) × Dauer (Stunden).\n\nEs handelt sich um eine Schätzung, keine Messung — Fitnesslevel, Gelände und Herzfrequenz werden nicht berücksichtigt, betrachte den Wert also eher als groben Anhaltspunkt. Er erscheint erst, wenn du dein Gewicht in den Einstellungen festgelegt hast, und dieser Wert verlässt niemals dein Gerät.</string>
 
     <!-- Contributors -->
     <string name="contributors_title">Mitwirkende</string>
@@ -201,6 +206,12 @@
     <string name="settings_tts_volume">Sprachlautstärke</string>
     <string name="settings_tts_volume_quiet">Leise</string>
     <string name="settings_tts_volume_loud">Laut</string>
+    <string name="settings_weight">Gewicht</string>
+    <string name="settings_weight_not_set">Nicht festgelegt</string>
+    <string name="settings_weight_hint">Wird nur zur Schätzung der verbrannten Kalorien verwendet. Verlässt niemals dein Gerät.</string>
+    <string name="weight_unit_kg">kg</string>
+    <string name="weight_unit_lb">lb</string>
+    <string name="weight_unit_stone">st</string>
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Akku-Optimierung</string>

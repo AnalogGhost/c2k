@@ -68,6 +68,8 @@
     <string name="workout_starting">Iniciando…</string>
     <string name="workout_new_best">Novo recorde pessoal!</string>
     <string name="workout_previous_best">Recorde anterior: %1$s</string>
+    <string name="workout_calories_burned">%1$d kcal queimadas (estimativa)</string>
+    <string name="workout_calories_hint">Defina seu peso nas Configurações para ver as calorias queimadas</string>
 
     <!-- History screen -->
     <string name="history_title">Histórico</string>
@@ -85,6 +87,7 @@
     <string name="history_stats_workouts">treinos</string>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">tempo</string>
+    <string name="history_stats_calories">kcal</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Treino</string>
@@ -174,6 +177,8 @@
     <string name="guide_a_shin_splints">Dor ao longo da parte frontal ou interna da parte inferior da perna, comum em corredores iniciantes. Geralmente causada por fazer demais cedo demais, ou por correr com tênis gastos.\n\nSe você desenvolver canelite, descanse por 3 a 5 dias. Ao voltar, verifique seus tênis e certifique-se de que seu ritmo de corrida não está rápido demais. Dor persistente na canela deve ser avaliada por um fisioterapeuta.</string>
     <string name="guide_q_rpe">PSE (Percepção Subjetiva de Esforço)</string>
     <string name="guide_a_rpe">Uma escala simples de 1 a 10 de quão difícil um esforço parece, onde 1 é ficar parado sentado e 10 é um sprint máximo que você não conseguiria sustentar por mais de alguns segundos.\n\nA maior parte da sua corrida no C25K deve parecer um 5–6: claramente um esforço, mas sustentável. Ritmo de conversa.</string>
+    <string name="guide_q_calorie_estimate">Como as calorias queimadas são estimadas?</string>
+    <string name="guide_a_calorie_estimate">É baseado na sua velocidade média, no seu peso corporal e no tempo em que você esteve em movimento, usando valores MET (Equivalente Metabólico de Tarefa) — uma medida padrão de quão exigente é uma atividade em relação à velocidade: calorias = MET × peso (kg) × duração (horas).\n\nÉ uma estimativa, não uma medição — ela não leva em conta seu nível de condicionamento físico, o terreno ou a frequência cardíaca, então trate-a como uma referência aproximada, não um número exato. Ela só aparece depois que você define seu peso nas Configurações, e esse valor nunca sai do seu dispositivo.</string>
 
     <!-- Contributors -->
     <string name="contributors_title">Colaboradores</string>
@@ -201,6 +206,12 @@
     <string name="settings_tts_volume">Volume da voz</string>
     <string name="settings_tts_volume_quiet">Baixo</string>
     <string name="settings_tts_volume_loud">Alto</string>
+    <string name="settings_weight">Peso</string>
+    <string name="settings_weight_not_set">Não definido</string>
+    <string name="settings_weight_hint">Usado apenas para estimar as calorias queimadas. Nunca sai do seu dispositivo.</string>
+    <string name="weight_unit_kg">kg</string>
+    <string name="weight_unit_lb">lb</string>
+    <string name="weight_unit_stone">st</string>
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Otimização de bateria</string>

@@ -2,9 +2,11 @@ package com.hackerapps.c2k
 
 import com.hackerapps.c2k.data.db.entity.RoutePointEntity
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
+import com.hackerapps.c2k.engine.CalorieCalculator
 import com.hackerapps.c2k.ui.screen.history.HistoryViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -60,6 +62,26 @@ class HistoryViewModelTest {
         val stats = HistoryViewModel.computeStats(sessions)
         assertEquals(3, stats.totalSessions)
         assertEquals(2, stats.completedSessions)
+    }
+
+    @Test
+    fun total_calories_is_null_when_weight_not_provided() {
+        val sessions = listOf(session(durationSeconds = 600, distanceMeters = 1000f))
+        val stats = HistoryViewModel.computeStats(sessions)
+        assertNull(stats.totalCalories)
+    }
+
+    @Test
+    fun total_calories_sums_per_session_estimates_when_weight_provided() {
+        val sessions = listOf(
+            session(durationSeconds = 600, distanceMeters = 1000f),
+            session(durationSeconds = 300, distanceMeters = 500f)
+        )
+        val stats = HistoryViewModel.computeStats(sessions, 70f)
+        val expected = sessions.sumOf { s ->
+            CalorieCalculator.estimateCalories(s.distanceMeters, s.durationSeconds, 70f) ?: 0
+        }
+        assertEquals(expected, stats.totalCalories)
     }
 
     // --- generateGpx ---

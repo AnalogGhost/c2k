@@ -5,12 +5,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.db.entity.RoutePointEntity
+import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.engine.CalorieCalculator
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -19,18 +21,23 @@ data class HistoryStats(
     val totalSessions: Int,
     val completedSessions: Int,
     val totalKm: Float,
-    val totalTimeSeconds: Int
+    val totalTimeSeconds: Int,
+    val totalCalories: Int?
 )
 
 class HistoryViewModel(app: Application) : AndroidViewModel(app) {
 
     private val repo = (app as C2KApp).sessionRepository
+    private val prefs = UserPreferences(app)
 
     val sessions: StateFlow<List<WorkoutSessionEntity>> = repo.observeAllSessions()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    val stats: StateFlow<HistoryStats> = sessions.map { list -> computeStats(list) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HistoryStats(0, 0, 0f, 0))
+    val weightKg: StateFlow<Float?> = prefs.weightKg
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    val stats: StateFlow<HistoryStats> = combine(sessions, weightKg) { list, kg -> computeStats(list, kg) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HistoryStats(0, 0, 0f, 0, null))
 
     fun deleteSession(sessionId: Long) {
         viewModelScope.launch { repo.deleteSession(sessionId) }
@@ -44,11 +51,14 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     companion object {
-        internal fun computeStats(sessions: List<WorkoutSessionEntity>): HistoryStats = HistoryStats(
+        internal fun computeStats(sessions: List<WorkoutSessionEntity>, weightKg: Float? = null): HistoryStats = HistoryStats(
             totalSessions     = sessions.size,
             completedSessions = sessions.count { it.completed },
             totalKm           = sessions.sumOf { it.distanceMeters.toDouble() }.toFloat() / 1000f,
-            totalTimeSeconds  = sessions.sumOf { it.durationSeconds }
+            totalTimeSeconds  = sessions.sumOf { it.durationSeconds },
+            totalCalories     = weightKg?.let { kg ->
+                sessions.sumOf { s -> CalorieCalculator.estimateCalories(s.distanceMeters, s.durationSeconds, kg) ?: 0 }
+            }
         )
 
         internal fun generateGpx(session: WorkoutSessionEntity, points: List<RoutePointEntity>): String {

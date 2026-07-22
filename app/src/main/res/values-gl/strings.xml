@@ -68,6 +68,8 @@
     <string name="workout_starting">Comezando…</string>
     <string name="workout_new_best">Nova marca persoal!</string>
     <string name="workout_previous_best">Marca anterior: %1$s</string>
+    <string name="workout_calories_burned">%1$d kcal queimadas (estimado)</string>
+    <string name="workout_calories_hint">Configura o teu peso en Configuración para ver as calorías queimadas</string>
 
     <!-- History screen -->
     <string name="history_title">Historial</string>
@@ -85,6 +87,7 @@
     <string name="history_stats_workouts">adestramentos</string>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">tempo</string>
+    <string name="history_stats_calories">kcal</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Adestramento</string>
@@ -174,6 +177,8 @@
     <string name="guide_a_shin_splints">A dor na parte anterior do bordo interno da parte inferior das pernas, común en principiantes. Normalmente débese a facer moito demasiado axiña, ou correr con calzado moi gastado.\n\nSe tes esta molestia, descansa entre 3 e 5 días. Cando volvas a correr comproba o estado do calzado e corre máis amodo. Se persiste a dor deberías consultalo cun servizo de saúde especializado.</string>
     <string name="guide_q_rpe">RPE (en inglés: Rate of Perceived Exertion)</string>
     <string name="guide_a_rpe">Unha escala simple do 1 ao 10 para describir o esforzo percibido, onde 1 é permanecer inmóvil e 10 é un esprint a tope que non poderías manter máis duns segundos.\n\nA maioría do programa C25K debería sentirse como un 5–6: notando claramente o esforzo, pero de xeito sustentable. Ritmo conversacional.</string>
+    <string name="guide_q_calorie_estimate">Como se estiman as calorías queimadas?</string>
+    <string name="guide_a_calorie_estimate">Baséase na túa velocidade media, no teu peso corporal e no tempo que estiveches en movemento, empregando valores MET (Equivalente Metabólico de Tarefa) — unha medida estándar de canto esixente é unha actividade en relación coa velocidade: calorías = MET × peso (kg) × duración (horas).\n\nÉ unha estimación, non unha medición — non ten en conta o teu nivel de forma física, o terreo nin a frecuencia cardíaca, así que téxao como unha referencia aproximada e non como un número exacto. Só aparece cando configuras o teu peso en Configuración, e ese dato nunca sae do teu dispositivo.</string>
 
         <!-- Contributors -->
     <string name="contributors_title">Colaboracións</string>
@@ -200,6 +205,12 @@
     <string name="settings_tts_volume">Volume da voz</string>
     <string name="settings_tts_volume_quiet">Baixo</string>
     <string name="settings_tts_volume_loud">Alto</string>
+    <string name="settings_weight">Peso</string>
+    <string name="settings_weight_not_set">Sen definir</string>
+    <string name="settings_weight_hint">Só se usa para estimar as calorías queimadas. Nunca sae do teu dispositivo.</string>
+    <string name="weight_unit_kg">kg</string>
+    <string name="weight_unit_lb">lb</string>
+    <string name="weight_unit_stone">st</string>
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Optimización da batería</string>
