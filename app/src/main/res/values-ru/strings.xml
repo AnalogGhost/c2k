@@ -88,6 +88,10 @@
     <string name="history_stats_km">км</string>
     <string name="history_stats_time">время</string>
     <string name="history_stats_calories">ккал</string>
+    <string name="history_stats_pace">темп</string>
+    <string name="history_stats_longest">макс. дист.</string>
+    <string name="history_stats_section_totals">Всего</string>
+    <string name="history_stats_section_bests">Личные рекорды</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Тренировка</string>

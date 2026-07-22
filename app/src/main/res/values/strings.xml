@@ -88,6 +88,10 @@
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">time</string>
     <string name="history_stats_calories">kcal</string>
+    <string name="history_stats_pace">pace</string>
+    <string name="history_stats_longest">longest</string>
+    <string name="history_stats_section_totals">Totals</string>
+    <string name="history_stats_section_bests">Personal bests</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Workout</string>
