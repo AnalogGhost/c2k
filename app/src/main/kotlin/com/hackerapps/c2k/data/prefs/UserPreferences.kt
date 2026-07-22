@@ -30,6 +30,8 @@ class UserPreferences(private val context: Context) {
         val TREADMILL_MODE           = booleanPreferencesKey("treadmill_mode")
         val COUNTDOWN_WARNING_1      = intPreferencesKey("countdown_warning_1")
         val COUNTDOWN_WARNING_2      = intPreferencesKey("countdown_warning_2")
+        val WEIGHT_KG                = floatPreferencesKey("weight_kg")
+        val WEIGHT_UNIT              = stringPreferencesKey("weight_unit")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -109,4 +111,16 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setTreadmillMode(enabled: Boolean) =
         context.dataStore.edit { it[TREADMILL_MODE] = enabled }
+
+    val weightKg: Flow<Float?> = context.dataStore.data
+        .map { it[WEIGHT_KG] }
+
+    val weightUnit: Flow<WeightUnit> = context.dataStore.data
+        .map { WeightUnit.valueOf(it[WEIGHT_UNIT] ?: WeightUnit.KG.name) }
+
+    suspend fun setWeightKg(kg: Float) =
+        context.dataStore.edit { it[WEIGHT_KG] = kg }
+
+    suspend fun setWeightUnit(unit: WeightUnit) =
+        context.dataStore.edit { it[WEIGHT_UNIT] = unit.name }
 }

@@ -68,6 +68,8 @@
     <string name="workout_starting">Démarrage…</string>
     <string name="workout_new_best">Nouveau record personnel !</string>
     <string name="workout_previous_best">Record précédent : %1$s</string>
+    <string name="workout_calories_burned">%1$d kcal brûlées (estimation)</string>
+    <string name="workout_calories_hint">Définissez votre poids dans les paramètres pour voir les calories brûlées</string>
 
     <!-- History screen -->
     <string name="history_title">Historique</string>
@@ -85,6 +87,7 @@
     <string name="history_stats_workouts">séances</string>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">temps</string>
+    <string name="history_stats_calories">kcal</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Entraînement</string>
@@ -174,6 +177,8 @@
     <string name="guide_a_shin_splints">Douleur le long du bord avant ou intérieur du bas de la jambe, fréquente chez les nouveaux coureurs. Généralement causée par une progression trop rapide ou des chaussures usées.\n\nSi vous développez une périostite, reposez-vous 3 à 5 jours. À votre retour, vérifiez vos chaussures et assurez-vous que votre allure de course n\'est pas trop rapide. Une douleur tibiale persistante doit être évaluée par un kinésithérapeute.</string>
     <string name="guide_q_rpe">RPE (perception de l\'effort)</string>
     <string name="guide_a_rpe">Une échelle simple de 1 à 10 pour évaluer la difficulté ressentie d\'un effort, où 1 correspond à être assis immobile et 10 à un sprint maximal que vous ne pourriez tenir que quelques secondes.\n\nLa majeure partie de votre course C25K devrait se situer autour de 5–6 : un effort clair, mais tenable. L\'allure conversationnelle.</string>
+    <string name="guide_q_calorie_estimate">Comment les calories brûlées sont-elles estimées ?</string>
+    <string name="guide_a_calorie_estimate">Elles sont basées sur votre vitesse moyenne, votre poids et la durée de votre activité, à l\'aide de valeurs MET (équivalent métabolique) — une mesure standard de l\'intensité d\'une activité par rapport à la vitesse : calories = MET × poids (kg) × durée (heures).\n\nC\'est une estimation, pas une mesure — elle ne tient pas compte de votre niveau de forme physique, du terrain ni de votre fréquence cardiaque ; considérez-la donc comme une indication approximative plutôt qu\'un chiffre exact. Elle n\'apparaît qu\'une fois votre poids défini dans les paramètres, et cette donnée ne quitte jamais votre appareil.</string>
 
     <!-- Contributors -->
     <string name="contributors_title">Contributeurs</string>
@@ -201,6 +206,12 @@
     <string name="settings_tts_volume">Volume de la voix</string>
     <string name="settings_tts_volume_quiet">Faible</string>
     <string name="settings_tts_volume_loud">Fort</string>
+    <string name="settings_weight">Poids</string>
+    <string name="settings_weight_not_set">Non défini</string>
+    <string name="settings_weight_hint">Utilisé uniquement pour estimer les calories brûlées. Ne quitte jamais votre appareil.</string>
+    <string name="weight_unit_kg">kg</string>
+    <string name="weight_unit_lb">lb</string>
+    <string name="weight_unit_stone">st</string>
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Optimisation de la batterie</string>

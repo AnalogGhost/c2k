@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.TtsManager
 
 class SettingsViewModel(app: Application) : AndroidViewModel(app) {
@@ -61,4 +62,13 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     fun setTreadmillMode(v: Boolean)     { viewModelScope.launch { prefs.setTreadmillMode(v) } }
+
+    val weightKg = prefs.weightKg
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    val weightUnit = prefs.weightUnit
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), WeightUnit.KG)
+
+    fun setWeightKg(v: Float)            { viewModelScope.launch { prefs.setWeightKg(v) } }
+    fun setWeightUnit(v: WeightUnit)      { viewModelScope.launch { prefs.setWeightUnit(v) } }
 }

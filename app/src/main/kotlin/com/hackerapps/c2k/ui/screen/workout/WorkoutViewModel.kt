@@ -63,6 +63,9 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
     val treadmillMode: StateFlow<Boolean> = prefs.treadmillMode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
+    val weightKg: StateFlow<Float?> = prefs.weightKg
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
     private val _showBatteryPrompt = MutableStateFlow(false)
     val showBatteryPrompt: StateFlow<Boolean> = _showBatteryPrompt.asStateFlow()
 

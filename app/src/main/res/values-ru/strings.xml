@@ -68,6 +68,8 @@
     <string name="workout_starting">Начинаем…</string>
     <string name="workout_new_best">Новый личный рекорд!</string>
     <string name="workout_previous_best">Прошлый рекорд: %1$s</string>
+    <string name="workout_calories_burned">%1$d ккал сожжено (оценка)</string>
+    <string name="workout_calories_hint">Укажите свой вес в настройках, чтобы видеть сожжённые калории</string>
 
     <!-- History screen -->
     <string name="history_title">История</string>
@@ -85,6 +87,7 @@
     <string name="history_stats_workouts">тренировки</string>
     <string name="history_stats_km">км</string>
     <string name="history_stats_time">время</string>
+    <string name="history_stats_calories">ккал</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Тренировка</string>
@@ -174,6 +177,8 @@
     <string name="guide_a_shin_splints">Боль вдоль внешнего или внутреннего края голеней, обычная ситуация у бегунов-новичков. Обычно возникает из-за попытки прикладывания слишком большого количества усилий слишком рано или из-за изношенности обуви.\n\nПри возникновении рекомендуется отдохнуть в течение 3–5 дней. После возвращения убедитесь, что ваша обувь в порядке, и ваш темп бега не слишком высокий. При постоянной боли в области голеней проконсультируйтесь с врачом.</string>
     <string name="guide_q_rpe">Уровень воспринимаемой нагрузки</string>
     <string name="guide_a_rpe">Простая шкала от 1 до 10 по оценке прилагаемых усилий, где 1 означает сидение на месте, а 10 означает спринт максимальной интенсивности, который вы не можете поддерживать больше нескольких секунд.\n\nБольшая часть бега по программе C25K должна ощущаться на 5–6: вы прикладываете усилия, но спокойной поддерживаете их. Разговорный темп.</string>
+    <string name="guide_q_calorie_estimate">Как оценивается количество сожжённых калорий?</string>
+    <string name="guide_a_calorie_estimate">Оценка основана на вашей средней скорости, весе тела и продолжительности движения с использованием значений MET (метаболический эквивалент задачи) — стандартной меры интенсивности активности относительно скорости: калории = MET × вес (кг) × продолжительность (часы).\n\nЭто оценка, а не точное измерение — она не учитывает уровень физической подготовки, рельеф местности или частоту сердечных сокращений, поэтому воспринимайте её как приблизительный ориентир, а не точное число. Она появляется только после того, как вы укажете свой вес в настройках, и это значение никогда не покидает ваше устройство.</string>
 
     <!-- Contributors -->
     <string name="contributors_title">Авторы</string>
@@ -201,6 +206,12 @@
     <string name="settings_tts_volume">Громкость речи</string>
     <string name="settings_tts_volume_quiet">Тихо</string>
     <string name="settings_tts_volume_loud">Громко</string>
+    <string name="settings_weight">Вес</string>
+    <string name="settings_weight_not_set">Не задан</string>
+    <string name="settings_weight_hint">Используется только для оценки сожжённых калорий. Никогда не покидает ваше устройство.</string>
+    <string name="weight_unit_kg">кг</string>
+    <string name="weight_unit_lb">фунт</string>
+    <string name="weight_unit_stone">стоун</string>
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Оптимизация энергопотребления</string>

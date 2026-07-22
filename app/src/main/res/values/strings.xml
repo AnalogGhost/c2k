@@ -68,6 +68,8 @@
     <string name="workout_starting">Starting…</string>
     <string name="workout_new_best">New personal best!</string>
     <string name="workout_previous_best">Previous best: %1$s</string>
+    <string name="workout_calories_burned">%1$d kcal burned (estimate)</string>
+    <string name="workout_calories_hint">Set your weight in Settings to see calories burned</string>
 
     <!-- History screen -->
     <string name="history_title">History</string>
@@ -85,6 +87,7 @@
     <string name="history_stats_workouts">workouts</string>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">time</string>
+    <string name="history_stats_calories">kcal</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Workout</string>
@@ -174,6 +177,8 @@
     <string name="guide_a_shin_splints">Pain along the front or inner edge of the lower leg, common in new runners. Usually caused by doing too much too soon, or running in worn-out shoes.\n\nIf you develop shin splints, rest for 3–5 days. When you return, check your shoes and make sure your running pace isn\'t too fast. Persistent shin pain should be assessed by a physio.</string>
     <string name="guide_q_rpe">RPE (Rate of Perceived Exertion)</string>
     <string name="guide_a_rpe">A simple 1–10 scale for how hard an effort feels, where 1 is sitting still and 10 is an all-out sprint you couldn\'t sustain for more than a few seconds.\n\nMost of your C25K running should feel like a 5–6: clearly working, but sustainable. Conversational pace.</string>
+    <string name="guide_q_calorie_estimate">How is calories burned estimated?</string>
+    <string name="guide_a_calorie_estimate">It\'s based on your average speed, body weight, and how long you were moving, using MET (Metabolic Equivalent of Task) values — a standard measure of how demanding an activity is relative to speed: calories = MET × weight (kg) × duration (hours).\n\nIt\'s an estimate, not a measurement — it doesn\'t account for fitness level, terrain, or heart rate, so treat it as a rough guide rather than an exact number. It only appears once you\'ve set your weight in Settings, and that number never leaves your device.</string>
 
     <!-- Contributors -->
     <string name="contributors_title">Contributors</string>
@@ -201,6 +206,12 @@
     <string name="settings_tts_volume">Voice volume</string>
     <string name="settings_tts_volume_quiet">Quiet</string>
     <string name="settings_tts_volume_loud">Loud</string>
+    <string name="settings_weight">Weight</string>
+    <string name="settings_weight_not_set">Not set</string>
+    <string name="settings_weight_hint">Used only to estimate calories burned. Never leaves your device.</string>
+    <string name="weight_unit_kg">kg</string>
+    <string name="weight_unit_lb">lb</string>
+    <string name="weight_unit_stone">st</string>
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Battery Optimization</string>
