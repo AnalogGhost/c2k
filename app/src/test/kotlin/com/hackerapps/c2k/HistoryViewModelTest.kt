@@ -84,6 +84,52 @@ class HistoryViewModelTest {
         assertEquals(expected, stats.totalCalories)
     }
 
+    @Test
+    fun fastest_pace_is_null_when_no_session_has_distance() {
+        val sessions = listOf(session(durationSeconds = 600, distanceMeters = 0f))
+        val stats = HistoryViewModel.computeStats(sessions)
+        assertNull(stats.fastestPaceSecPerKm)
+    }
+
+    @Test
+    fun fastest_pace_ignores_incomplete_sessions() {
+        val sessions = listOf(
+            session(durationSeconds = 100, distanceMeters = 1000f, completed = false), // would be fastest if counted
+            session(durationSeconds = 300, distanceMeters = 1000f, completed = true)
+        )
+        val stats = HistoryViewModel.computeStats(sessions)
+        assertEquals(300f, stats.fastestPaceSecPerKm!!, 0.0001f)
+    }
+
+    @Test
+    fun fastest_pace_picks_the_quickest_session() {
+        val sessions = listOf(
+            session(durationSeconds = 600, distanceMeters = 1000f), // 600 s/km
+            session(durationSeconds = 300, distanceMeters = 1000f), // 300 s/km, fastest
+            session(durationSeconds = 900, distanceMeters = 1500f)  // 600 s/km
+        )
+        val stats = HistoryViewModel.computeStats(sessions)
+        assertEquals(300f, stats.fastestPaceSecPerKm!!, 0.0001f)
+    }
+
+    @Test
+    fun longest_run_is_null_when_no_session_has_distance() {
+        val sessions = listOf(session(durationSeconds = 600, distanceMeters = 0f))
+        val stats = HistoryViewModel.computeStats(sessions)
+        assertNull(stats.longestRunMeters)
+    }
+
+    @Test
+    fun longest_run_picks_the_longest_completed_session() {
+        val sessions = listOf(
+            session(distanceMeters = 3000f, completed = true),
+            session(distanceMeters = 5000f, completed = false), // would be longest if counted
+            session(distanceMeters = 4000f, completed = true)
+        )
+        val stats = HistoryViewModel.computeStats(sessions)
+        assertEquals(4000f, stats.longestRunMeters!!, 0.0001f)
+    }
+
     // --- generateGpx ---
 
     @Test

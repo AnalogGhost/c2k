@@ -121,6 +121,9 @@ class UserPreferences(private val context: Context) {
     suspend fun setWeightKg(kg: Float) =
         context.dataStore.edit { it[WEIGHT_KG] = kg }
 
+    suspend fun clearWeightKg() =
+        context.dataStore.edit { it.remove(WEIGHT_KG) }
+
     suspend fun setWeightUnit(unit: WeightUnit) =
         context.dataStore.edit { it[WEIGHT_UNIT] = unit.name }
 }

@@ -88,6 +88,10 @@
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">temps</string>
     <string name="history_stats_calories">kcal</string>
+    <string name="history_stats_pace">allure</string>
+    <string name="history_stats_longest">plus longue</string>
+    <string name="history_stats_section_totals">Totaux</string>
+    <string name="history_stats_section_bests">Meilleures performances</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Entraînement</string>

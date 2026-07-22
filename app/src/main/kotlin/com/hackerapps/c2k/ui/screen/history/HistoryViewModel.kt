@@ -22,7 +22,9 @@ data class HistoryStats(
     val completedSessions: Int,
     val totalKm: Float,
     val totalTimeSeconds: Int,
-    val totalCalories: Int?
+    val totalCalories: Int?,
+    val fastestPaceSecPerKm: Float?,
+    val longestRunMeters: Float?
 )
 
 class HistoryViewModel(app: Application) : AndroidViewModel(app) {
@@ -37,7 +39,7 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val stats: StateFlow<HistoryStats> = combine(sessions, weightKg) { list, kg -> computeStats(list, kg) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HistoryStats(0, 0, 0f, 0, null))
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HistoryStats(0, 0, 0f, 0, null, null, null))
 
     fun deleteSession(sessionId: Long) {
         viewModelScope.launch { repo.deleteSession(sessionId) }
@@ -51,15 +53,20 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     companion object {
-        internal fun computeStats(sessions: List<WorkoutSessionEntity>, weightKg: Float? = null): HistoryStats = HistoryStats(
-            totalSessions     = sessions.size,
-            completedSessions = sessions.count { it.completed },
-            totalKm           = sessions.sumOf { it.distanceMeters.toDouble() }.toFloat() / 1000f,
-            totalTimeSeconds  = sessions.sumOf { it.durationSeconds },
-            totalCalories     = weightKg?.let { kg ->
-                sessions.sumOf { s -> CalorieCalculator.estimateCalories(s.distanceMeters, s.durationSeconds, kg) ?: 0 }
-            }
-        )
+        internal fun computeStats(sessions: List<WorkoutSessionEntity>, weightKg: Float? = null): HistoryStats {
+            val eligible = sessions.filter { it.completed && it.distanceMeters > 0f }
+            return HistoryStats(
+                totalSessions       = sessions.size,
+                completedSessions   = sessions.count { it.completed },
+                totalKm             = sessions.sumOf { it.distanceMeters.toDouble() }.toFloat() / 1000f,
+                totalTimeSeconds    = sessions.sumOf { it.durationSeconds },
+                totalCalories       = weightKg?.let { kg ->
+                    sessions.sumOf { s -> CalorieCalculator.estimateCalories(s.distanceMeters, s.durationSeconds, kg) ?: 0 }
+                },
+                fastestPaceSecPerKm = eligible.minOfOrNull { it.durationSeconds / (it.distanceMeters / 1000f) },
+                longestRunMeters    = eligible.maxOfOrNull { it.distanceMeters }
+            )
+        }
 
         internal fun generateGpx(session: WorkoutSessionEntity, points: List<RoutePointEntity>): String {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)

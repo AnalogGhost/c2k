@@ -174,8 +174,12 @@ class ScreenshotTest {
         }
 
         composeRule.onNodeWithContentDescription(string(R.string.history_title)).performClick()
+        // Waiting for the title alone isn't enough: the stats card and session list load
+        // asynchronously from Room after the title renders, so capturing right after the title
+        // exists can race ahead and grab a still-empty screen. The pace tile only ever renders
+        // once real (seeded) session data has arrived, so wait for that specifically.
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithText(string(R.string.history_title)).assertExists()
+            composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertExists()
         }
         Screengrab.screenshot("05_history")
         composeRule.onNodeWithContentDescription(string(R.string.nav_back)).performClick()

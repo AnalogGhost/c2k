@@ -156,32 +156,65 @@ private fun StatsCard(stats: HistoryStats) {
             containerColor = MaterialTheme.colorScheme.secondaryContainer
         )
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            StatItem(
-                value = stats.completedSessions.toString(),
-                label = stringResource(R.string.history_stats_workouts)
-            )
-            StatItem(
-                value = "%.1f".format(stats.totalKm),
-                label = stringResource(R.string.history_stats_km)
-            )
-            StatItem(
-                value = formatDuration(stats.totalTimeSeconds),
-                label = stringResource(R.string.history_stats_time)
-            )
-            if (stats.totalCalories != null) {
+        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+            StatsSectionLabel(stringResource(R.string.history_stats_section_totals))
+            Spacer(Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
                 StatItem(
-                    value = stats.totalCalories.toString(),
-                    label = stringResource(R.string.history_stats_calories)
+                    value = stats.completedSessions.toString(),
+                    label = stringResource(R.string.history_stats_workouts)
                 )
+                StatItem(
+                    value = "%.1f".format(stats.totalKm),
+                    label = stringResource(R.string.history_stats_km)
+                )
+                StatItem(
+                    value = formatDuration(stats.totalTimeSeconds),
+                    label = stringResource(R.string.history_stats_time)
+                )
+            }
+            if (stats.totalCalories != null || stats.fastestPaceSecPerKm != null || stats.longestRunMeters != null) {
+                Spacer(Modifier.height(16.dp))
+                StatsSectionLabel(stringResource(R.string.history_stats_section_bests))
+                Spacer(Modifier.height(4.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    if (stats.totalCalories != null) {
+                        StatItem(
+                            value = stats.totalCalories.toString(),
+                            label = stringResource(R.string.history_stats_calories)
+                        )
+                    }
+                    stats.fastestPaceSecPerKm?.let { pace ->
+                        StatItem(
+                            value = "%d:%02d".format((pace / 60).toInt(), (pace % 60).toInt()),
+                            label = stringResource(R.string.history_stats_pace)
+                        )
+                    }
+                    stats.longestRunMeters?.let { meters ->
+                        StatItem(
+                            value = "%.2f".format(meters / 1000f),
+                            label = stringResource(R.string.history_stats_longest)
+                        )
+                    }
+                }
             }
         }
     }
+}
+
+@Composable
+private fun StatsSectionLabel(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.6f)
+    )
 }
 
 @Composable

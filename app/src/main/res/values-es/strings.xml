@@ -88,6 +88,10 @@
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">tiempo</string>
     <string name="history_stats_calories">kcal</string>
+    <string name="history_stats_pace">ritmo</string>
+    <string name="history_stats_longest">más larga</string>
+    <string name="history_stats_section_totals">Totales</string>
+    <string name="history_stats_section_bests">Mejores marcas</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Entrenamiento</string>
