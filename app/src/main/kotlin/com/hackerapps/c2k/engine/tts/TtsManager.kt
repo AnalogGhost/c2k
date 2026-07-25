@@ -157,6 +157,7 @@ class TtsManager(
             phrases[announcement.phraseIndex % phrases.size]
         }
         TtsAnnouncement.WorkoutComplete -> context.getString(R.string.tts_workout_complete)
+        TtsAnnouncement.CooldownComplete -> context.getString(R.string.tts_cooldown_complete)
         TtsAnnouncement.Halfway         -> context.getString(R.string.tts_halfway)
         TtsAnnouncement.LastRunInterval -> context.getString(R.string.tts_last_run)
     }

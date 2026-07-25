@@ -8,6 +8,7 @@ sealed class TtsAnnouncement {
     data class NextInterval(val interval: Interval)     : TtsAnnouncement()
     data class IntervalMidpoint(val phraseIndex: Int)   : TtsAnnouncement()
     object WorkoutComplete  : TtsAnnouncement()
+    object CooldownComplete : TtsAnnouncement()
     object Halfway          : TtsAnnouncement()
     object LastRunInterval  : TtsAnnouncement()
 }

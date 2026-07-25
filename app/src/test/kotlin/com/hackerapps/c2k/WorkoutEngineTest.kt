@@ -149,6 +149,28 @@ class WorkoutEngineTest {
     }
 
     @Test
+    fun tts_announces_cooldown_complete_when_session_ends_on_cooldown() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 1),
+            Interval(IntervalType.COOLDOWN, 1)
+        )
+        engine.start(1L)
+        advanceTimeBy(2_500)  // both 1s intervals finish
+        assertTrue("Expected CooldownComplete announcement",
+            announcements.any { it is TtsAnnouncement.CooldownComplete })
+        assertTrue("WorkoutComplete should still fire",
+            announcements.any { it is TtsAnnouncement.WorkoutComplete })
+    }
+
+    @Test
+    fun no_cooldown_cue_when_session_does_not_end_on_cooldown() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 1))
+        engine.start(1L)
+        advanceTimeBy(1_500)
+        assertEquals(0, announcements.count { it is TtsAnnouncement.CooldownComplete })
+    }
+
+    @Test
     fun mid_interval_cue_fires_at_halfway_for_long_run() = testScope.runTest {
         val engine = makeEngine(Interval(IntervalType.RUN, 60), midIntervalCues = true)
         engine.start(1L)

@@ -229,6 +229,7 @@
         <item>You\'re doing brilliantly, keep pushing!</item>
     </string-array>
     <string name="tts_workout_complete">Workout complete. Great job!</string>
+    <string name="tts_cooldown_complete">Cool-down complete.</string>
     <string name="tts_halfway">Halfway there, keep it up!</string>
     <string name="tts_last_run">Last run, finish strong!</string>
     <string name="tts_duration_min_sec">%1$s and %2$s</string>

@@ -98,7 +98,16 @@ class WorkoutEngine(
             if (remaining <= 0) {
                 intervalIndex++
                 if (intervalIndex >= intervals.size) {
-                    if (ttsEnabled) tts.announce(TtsAnnouncement.WorkoutComplete)
+                    if (ttsEnabled) {
+                        // When the session ends on a cool-down, call it out before the overall
+                        // completion cue: "Cool-down complete. Workout complete. Great job!"
+                        if (currentInterval.type == IntervalType.COOLDOWN) {
+                            tts.announce(TtsAnnouncement.CooldownComplete)
+                            tts.announce(TtsAnnouncement.WorkoutComplete, queueAdd = true)
+                        } else {
+                            tts.announce(TtsAnnouncement.WorkoutComplete)
+                        }
+                    }
                     _state.value = WorkoutState.Completed(sessionId, sessionElapsed)
                     tickJob?.cancel()
                     return
