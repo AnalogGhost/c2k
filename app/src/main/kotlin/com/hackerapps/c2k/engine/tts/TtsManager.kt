@@ -11,6 +11,8 @@ import android.util.Log
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.IntervalType
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.util.Locale
 
 class TtsManager(
@@ -49,6 +51,12 @@ class TtsManager(
     private val focusLock = Any()
     private val pending = HashSet<String>()
     private var holdsFocus = false
+
+    private val _speaking = MutableStateFlow(false)
+    // True while any announcement is queued or being spoken; drops to false once the queue drains.
+    // Lets the caller (e.g. the service on workout completion) wait for a final cue like
+    // "Workout complete" to finish before shutting TTS down, instead of cutting it off.
+    val speaking: StateFlow<Boolean> = _speaking.asStateFlow()
 
     override var isAvailable: Boolean = false
         private set
@@ -96,6 +104,7 @@ class TtsManager(
         synchronized(focusLock) {
             if (!queueAdd) pending.clear()
             pending.add(utteranceId)
+            _speaking.value = true
             if (!holdsFocus) {
                 val res = audioManager.requestAudioFocus(focusRequest)
                 holdsFocus = res != AudioManager.AUDIOFOCUS_REQUEST_FAILED
@@ -118,6 +127,7 @@ class TtsManager(
                 audioManager.abandonAudioFocusRequest(focusRequest)
                 holdsFocus = false
             }
+            _speaking.value = pending.isNotEmpty()
         }
     }
 
@@ -128,6 +138,7 @@ class TtsManager(
                 audioManager.abandonAudioFocusRequest(focusRequest)
                 holdsFocus = false
             }
+            _speaking.value = false
         }
     }
 
