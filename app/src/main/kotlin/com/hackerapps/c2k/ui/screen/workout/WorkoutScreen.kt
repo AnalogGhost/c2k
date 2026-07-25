@@ -56,6 +56,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.IntervalType
+import com.hackerapps.c2k.engine.CalorieCalculator
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.service.WorkoutService
 import com.hackerapps.c2k.ui.component.RequestActivityRecognitionPermission
@@ -87,6 +88,7 @@ fun WorkoutScreen(
     val gpsActive by vm.gpsActive.collectAsStateWithLifecycle()
     val hasGpsLock by vm.hasGpsLock.collectAsStateWithLifecycle()
     val personalBest by vm.personalBest.collectAsStateWithLifecycle()
+    val weightKg by vm.weightKg.collectAsStateWithLifecycle()
 
     var notificationPermissionDone by remember { mutableStateOf(false) }
     // Needed every workout, GPS or not — WorkoutService always starts as a "health" foreground
@@ -207,6 +209,7 @@ fun WorkoutScreen(
                     state = s,
                     distanceMeters = distanceMeters,
                     personalBest = personalBest,
+                    weightKg = weightKg,
                     onDone = onFinished
                 )
                 else -> Text(if (serviceRunning) stringResource(R.string.workout_reconnecting) else stringResource(R.string.workout_starting))
@@ -446,6 +449,7 @@ private fun CompletedContent(
     state: WorkoutState.Completed,
     distanceMeters: Float,
     personalBest: WorkoutSessionEntity?,
+    weightKg: Float?,
     onDone: () -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -470,6 +474,23 @@ private fun CompletedContent(
                 stringResource(R.string.workout_distance_km, distanceMeters / 1000f),
                 style = MaterialTheme.typography.titleLarge
             )
+            Spacer(Modifier.height(4.dp))
+            val calories = weightKg?.let {
+                CalorieCalculator.estimateCalories(distanceMeters, state.elapsedSessionSeconds, it)
+            }
+            if (calories != null) {
+                Text(
+                    stringResource(R.string.workout_calories_burned, calories),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                )
+            } else {
+                Text(
+                    stringResource(R.string.workout_calories_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
         }
 
         // Personal best comparison

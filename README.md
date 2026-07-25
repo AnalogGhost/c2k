@@ -178,7 +178,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute, including translat
 
 ## License
 
-Copyright (C) 2026 Contributors
+Copyright (C) 2026 Matt Brown
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

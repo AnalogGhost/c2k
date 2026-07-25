@@ -13,11 +13,14 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.test.performTextReplacement
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.data.prefs.WeightUnit
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -66,6 +69,8 @@ class SettingsScreenTest {
             prefs.setTtsVolume(1.0f)
             prefs.setMidIntervalCues(true)
             prefs.setTreadmillMode(false)
+            prefs.setWeightKg(70f)
+            prefs.setWeightUnit(WeightUnit.KG)
         }
     }
 
@@ -87,6 +92,7 @@ class SettingsScreenTest {
         composeRule.onNodeWithText(string(R.string.settings_vibration_enabled)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_treadmill_mode)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_keep_screen_on)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_weight)).assertExists()
     }
 
     @Test
@@ -188,6 +194,40 @@ class SettingsScreenTest {
 
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithTag("toggle_gps_enabled").assertIsNotEnabled()
+        }
+    }
+
+    @Test
+    fun weight_field_shown_with_current_value() {
+        setContent()
+        composeRule.onNodeWithTag("field_weight").assertExists()
+        composeRule.onNodeWithText("70").assertExists()
+    }
+
+    @Test
+    fun typing_a_weight_updates_the_field() {
+        setContent()
+        composeRule.onNodeWithText("70").assertExists()
+
+        composeRule.onNodeWithTag("field_weight").performScrollTo().performTextReplacement("65")
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText("65").assertExists()
+        }
+    }
+
+    @Test
+    fun switching_weight_unit_converts_displayed_value() {
+        setContent()
+        composeRule.onNodeWithTag("button_weight_unit").performScrollTo().performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.weight_unit_lb)).assertExists()
+        }
+        composeRule.onNodeWithText(string(R.string.weight_unit_lb)).performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText("154.3").assertExists()
         }
     }
 
