@@ -12,7 +12,7 @@ Prioritised by impact vs. effort. Out-of-scope items are listed at the bottom wi
 - ~~**Treadmill mode** — disables GPS and switches pace display to effort cues. A simple flag in settings.~~ *(done: fa8d08c)*
 - ~~**Haptic pattern variety** — different vibration patterns for run vs. walk vs. workout complete, rather than a single pulse on any change.~~ *(done: 9ccdd9c)*
 - ~~**Strength and rest day suggestions** — static content recommending cross-training on rest days. Fits naturally alongside the existing Guide screen.~~ *(done: 2d8d1a1)*
-- **Calories burned estimate** — local calculation based on user weight, distance, and pace. No external dependencies.
+- ~~**Calories burned estimate** — local calculation based on user weight, distance, and pace. No external dependencies.~~ *(done: 2924aea)*
 
 ---
 
@@ -23,7 +23,7 @@ Prioritised by impact vs. effort. Out-of-scope items are listed at the bottom wi
 - **Watch notifications (Wear OS)** — optimise the existing workout notification for Wear OS so interval state, time remaining, and pause/resume actions display cleanly on a paired watch. A meaningful step up from the phone notification with little overhead.
 - **Weekly and monthly summary** — aggregate stats from existing history data (total distance, total time, sessions completed).
 - **Health Connect integration** — write completed workouts to Android Health Connect. Data stays on device; no third-party service involved. Open source friendly.
-- **Personal bests and milestones** — track fastest pace, longest run, total distance badges. All local. *(partially done: per-day best-time comparison already exists on the workout-complete screen — fastest pace, longest run, and total-distance badges are still open)*
+- ~~**Personal bests and milestones** — track fastest pace, longest run, total distance badges. All local.~~ *(done: ae0f329; per-day best-time comparison on the workout-complete screen shipped earlier)*
 - **Adaptive progression** — detect when a user fails to complete intervals multiple times and surface a suggestion to repeat the day or try the pre-C25K plan.
 - **Announce pace or distance mid-interval** — periodic spoken updates during run intervals using GPS data already being collected.
 

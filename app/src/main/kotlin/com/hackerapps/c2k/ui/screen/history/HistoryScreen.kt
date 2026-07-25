@@ -47,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.Programs
+import com.hackerapps.c2k.engine.CalorieCalculator
 import com.hackerapps.c2k.ui.programNameRes
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 import java.text.SimpleDateFormat
@@ -61,6 +62,7 @@ fun HistoryScreen(
 ) {
     val sessions by vm.sessions.collectAsStateWithLifecycle()
     val stats by vm.stats.collectAsStateWithLifecycle()
+    val weightKg by vm.weightKg.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     Scaffold(
@@ -122,6 +124,7 @@ fun HistoryScreen(
                 items(sessions, key = { it.id }) { session ->
                     SwipeToDeleteSession(
                         session = session,
+                        weightKg = weightKg,
                         onDelete = { vm.deleteSession(session.id) },
                         onExportGpx = { hasRoute ->
                             if (hasRoute) {
@@ -153,26 +156,65 @@ private fun StatsCard(stats: HistoryStats) {
             containerColor = MaterialTheme.colorScheme.secondaryContainer
         )
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            StatItem(
-                value = stats.completedSessions.toString(),
-                label = stringResource(R.string.history_stats_workouts)
-            )
-            StatItem(
-                value = "%.1f".format(stats.totalKm),
-                label = stringResource(R.string.history_stats_km)
-            )
-            StatItem(
-                value = formatDuration(stats.totalTimeSeconds),
-                label = stringResource(R.string.history_stats_time)
-            )
+        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+            StatsSectionLabel(stringResource(R.string.history_stats_section_totals))
+            Spacer(Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                StatItem(
+                    value = stats.completedSessions.toString(),
+                    label = stringResource(R.string.history_stats_workouts)
+                )
+                StatItem(
+                    value = "%.1f".format(stats.totalKm),
+                    label = stringResource(R.string.history_stats_km)
+                )
+                StatItem(
+                    value = formatDuration(stats.totalTimeSeconds),
+                    label = stringResource(R.string.history_stats_time)
+                )
+            }
+            if (stats.totalCalories != null || stats.fastestPaceSecPerKm != null || stats.longestRunMeters != null) {
+                Spacer(Modifier.height(16.dp))
+                StatsSectionLabel(stringResource(R.string.history_stats_section_bests))
+                Spacer(Modifier.height(4.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    if (stats.totalCalories != null) {
+                        StatItem(
+                            value = stats.totalCalories.toString(),
+                            label = stringResource(R.string.history_stats_calories)
+                        )
+                    }
+                    stats.fastestPaceSecPerKm?.let { pace ->
+                        StatItem(
+                            value = "%d:%02d".format((pace / 60).toInt(), (pace % 60).toInt()),
+                            label = stringResource(R.string.history_stats_pace)
+                        )
+                    }
+                    stats.longestRunMeters?.let { meters ->
+                        StatItem(
+                            value = "%.2f".format(meters / 1000f),
+                            label = stringResource(R.string.history_stats_longest)
+                        )
+                    }
+                }
+            }
         }
     }
+}
+
+@Composable
+private fun StatsSectionLabel(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.6f)
+    )
 }
 
 @Composable
@@ -191,6 +233,7 @@ private fun StatItem(value: String, label: String) {
 @Composable
 private fun SwipeToDeleteSession(
     session: WorkoutSessionEntity,
+    weightKg: Float?,
     onDelete: () -> Unit,
     onExportGpx: (hasRoute: Boolean) -> Unit
 ) {
@@ -241,6 +284,7 @@ private fun SwipeToDeleteSession(
     ) {
         SessionCard(
             session = session,
+            weightKg = weightKg,
             onExportGpx = { onExportGpx(session.distanceMeters > 0f) }
         )
     }
@@ -249,6 +293,7 @@ private fun SwipeToDeleteSession(
 @Composable
 private fun SessionCard(
     session: WorkoutSessionEntity,
+    weightKg: Float?,
     onExportGpx: () -> Unit
 ) {
     val nameRes = programNameRes(session.programId)
@@ -289,10 +334,14 @@ private fun SessionCard(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
             if (session.distanceMeters > 0f) {
+                val base = "%.2f km  •  ${formatDuration(session.durationSeconds)}".format(
+                    session.distanceMeters / 1000f
+                )
+                val calories = weightKg?.let {
+                    CalorieCalculator.estimateCalories(session.distanceMeters, session.durationSeconds, it)
+                }
                 Text(
-                    "%.2f km  •  ${formatDuration(session.durationSeconds)}".format(
-                        session.distanceMeters / 1000f
-                    ),
+                    if (calories != null) "$base  •  $calories kcal" else base,
                     style = MaterialTheme.typography.bodyLarge
                 )
             } else {

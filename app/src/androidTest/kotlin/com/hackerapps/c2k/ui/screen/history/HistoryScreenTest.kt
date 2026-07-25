@@ -9,6 +9,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.data.prefs.WeightUnit
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -55,14 +57,26 @@ class HistoryScreenTest {
         }
     }
 
+    // weightKg is a real persisted DataStore value (same store SettingsScreenTest and this
+    // class both touch), so a test that sets it would otherwise leak into every test that runs
+    // after it within the same instrumentation invocation — clear it every time, not just
+    // when a test happens to need it unset.
+    private fun clearWeight() {
+        runBlocking {
+            UserPreferences(ApplicationProvider.getApplicationContext()).clearWeightKg()
+        }
+    }
+
     @Before
     fun clearBefore() {
         clearAllSessions()
+        clearWeight()
     }
 
     @After
     fun clearAfter() {
         clearAllSessions()
+        clearWeight()
     }
 
     private fun setContent(onBack: () -> Unit = {}) {
@@ -122,5 +136,75 @@ class HistoryScreenTest {
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithText(string(R.string.history_empty)).assertDoesNotExist()
         }
+    }
+
+    @Test
+    fun totals_section_label_always_shown_but_bests_hidden_without_distance() {
+        runBlocking {
+            // Treadmill-style session: completed but no distance, so it can't feed a pace/longest-run best.
+            val id = repo().startSession(PROGRAM_ID, week = 1, day = 1)
+            repo().finishSession(id, durationSeconds = 1800, distanceMeters = 0f, completed = true)
+        }
+        setContent()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.history_stats_section_totals)).assertExists()
+        }
+        composeRule.onNodeWithText(string(R.string.history_stats_section_bests)).assertDoesNotExist()
+        composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertDoesNotExist()
+        composeRule.onNodeWithText(string(R.string.history_stats_longest)).assertDoesNotExist()
+    }
+
+    @Test
+    fun pace_and_longest_tiles_ignore_incomplete_sessions() {
+        runBlocking {
+            val id = repo().startSession(PROGRAM_ID, week = 1, day = 1)
+            repo().finishSession(id, durationSeconds = 600, distanceMeters = 3000f, completed = false)
+        }
+        setContent()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.history_stats_section_totals)).assertExists()
+        }
+        composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertDoesNotExist()
+        composeRule.onNodeWithText(string(R.string.history_stats_longest)).assertDoesNotExist()
+    }
+
+    @Test
+    fun pace_and_longest_tiles_show_correct_values() {
+        runBlocking {
+            // 1200s / 4.5km = 266.67 s/km = 4:26 pace; 4.5km is also the longest of the two.
+            val id1 = repo().startSession(PROGRAM_ID, week = 1, day = 1)
+            repo().finishSession(id1, durationSeconds = 1200, distanceMeters = 4500f, completed = true)
+            val id2 = repo().startSession(PROGRAM_ID, week = 1, day = 2)
+            repo().finishSession(id2, durationSeconds = 1500, distanceMeters = 3000f, completed = true)
+        }
+        setContent()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.history_stats_section_bests)).assertExists()
+        }
+        composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertExists()
+        composeRule.onNodeWithText("4:26").assertExists()
+        composeRule.onNodeWithText(string(R.string.history_stats_longest)).assertExists()
+        composeRule.onNodeWithText("4.50").assertExists()
+    }
+
+    @Test
+    fun calories_tile_appears_alongside_pace_and_longest_when_weight_is_set() {
+        runBlocking {
+            val prefs = UserPreferences(ApplicationProvider.getApplicationContext())
+            prefs.setWeightKg(70f)
+            prefs.setWeightUnit(WeightUnit.KG)
+            val id = repo().startSession(PROGRAM_ID, week = 1, day = 1)
+            repo().finishSession(id, durationSeconds = 1500, distanceMeters = 3000f, completed = true)
+        }
+        setContent()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.history_stats_calories)).assertExists()
+        }
+        composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertExists()
+        composeRule.onNodeWithText(string(R.string.history_stats_longest)).assertExists()
     }
 }

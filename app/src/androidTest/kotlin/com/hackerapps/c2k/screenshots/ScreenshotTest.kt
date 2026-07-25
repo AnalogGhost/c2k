@@ -16,6 +16,7 @@ import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.ui.MainActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -102,12 +103,19 @@ class ScreenshotTest {
             // top of the workout screen the first time a workout starts, right where 04_workout
             // gets captured.
             prefs.setBatteryPromptDismissed()
+            // Pinned for the same reason as the countdown warnings above — without this, leftover
+            // weight/unit values from manual on-device testing bleed into 07_settings, and
+            // 05_history's calorie figures would be non-deterministic across runs.
+            prefs.setWeightKg(70f)
+            prefs.setWeightUnit(WeightUnit.KG)
             seedHistory()
         }
     }
 
     // A 3-day streak plus recent-workout history, while leaving Week 1 Day 3 uncompleted so
     // there's a natural "Start" (not "Redo") flow for the workout preview/active screenshots.
+    // distanceMeters is non-zero (unlike the treadmill mode used live in this test) so
+    // 05_history's km/pace and calorie figures have something real to display.
     private suspend fun seedHistory() {
         val now = System.currentTimeMillis()
         fun completedSession(week: Int, day: Int, daysAgo: Long) = WorkoutSessionEntity(
@@ -117,7 +125,7 @@ class ScreenshotTest {
             startedAt = now - daysAgo * MS_PER_DAY,
             completedAt = now - daysAgo * MS_PER_DAY + 25 * 60 * 1000,
             durationSeconds = 25 * 60,
-            distanceMeters = 0f,
+            distanceMeters = 3000f,
             completed = true
         )
         sessionDao().insert(completedSession(week = 1, day = 1, daysAgo = 2))
@@ -166,8 +174,12 @@ class ScreenshotTest {
         }
 
         composeRule.onNodeWithContentDescription(string(R.string.history_title)).performClick()
+        // Waiting for the title alone isn't enough: the stats card and session list load
+        // asynchronously from Room after the title renders, so capturing right after the title
+        // exists can race ahead and grab a still-empty screen. The pace tile only ever renders
+        // once real (seeded) session data has arrived, so wait for that specifically.
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithText(string(R.string.history_title)).assertExists()
+            composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertExists()
         }
         Screengrab.screenshot("05_history")
         composeRule.onNodeWithContentDescription(string(R.string.nav_back)).performClick()
