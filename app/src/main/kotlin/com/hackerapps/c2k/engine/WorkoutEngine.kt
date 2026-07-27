@@ -98,6 +98,19 @@ class WorkoutEngine(
             if (remaining <= 0) {
                 intervalIndex++
                 if (intervalIndex >= intervals.size) {
+                    // Pin a final Active frame to 0 before completing. When the screen is locked
+                    // the UI's lifecycle-aware collector is suspended and freezes on the last
+                    // Active value it received; without this it stays showing 1-3s left (the last
+                    // tick before the boundary) even though the workout is already done.
+                    _state.value = WorkoutState.Active(
+                        currentInterval = currentInterval,
+                        nextInterval = null,
+                        intervalIndex = intervalIndex - 1,
+                        totalIntervals = intervals.size,
+                        secondsRemainingInInterval = 0,
+                        elapsedSessionSeconds = sessionElapsed,
+                        sessionId = sessionId
+                    )
                     if (ttsEnabled) tts.announce(TtsAnnouncement.WorkoutComplete)
                     _state.value = WorkoutState.Completed(sessionId, sessionElapsed)
                     tickJob?.cancel()
