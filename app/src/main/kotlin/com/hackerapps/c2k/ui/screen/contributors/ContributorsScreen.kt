@@ -46,7 +46,10 @@ private val contributors = listOf(
     Contributor(
         name = "Andrew Farabee",
         github = "andrewfarabee",
-        contributionRes = listOf(R.string.contributor_fix_tts_ducking)
+        contributionRes = listOf(
+            R.string.contributor_fix_tts_ducking,
+            R.string.contributor_fix_completion_counter
+        )
     ),
     Contributor(
         name = "Ilyushenok Ilya",
