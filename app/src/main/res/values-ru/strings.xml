@@ -200,6 +200,7 @@
     <string name="contributor_translation_gl">Перевод на галисийский (gl)</string>
     <string name="contributor_translation_ru">Перевод на русский (ru)</string>
     <string name="contributor_fix_tts_ducking">Исправление: голосовые уведомления теперь приглушают фоновое воспроизведения музыки вместо установки её на паузу</string>
+    <string name="contributor_fix_completion_counter">Исправление: счётчик завершения больше не зависает, и объявление о завершении больше не обрывается при блокировке экрана</string>
 
     <!-- Settings -->
     <string name="settings_title">Настройки</string>
