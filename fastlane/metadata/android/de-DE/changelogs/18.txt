@@ -1,0 +1,4 @@
+• Korrektur: Die Trainingsdistanz enthält keine Bewegung mehr, die während einer Pause aufgezeichnet wurde
+• Korrektur: Serien und Verlauf konnten in manchen Zeitzonen um einen Tag verschoben sein
+• Korrektur: Verlaufseinträge mit umgebrochenem Text sind jetzt korrekt ausgerichtet, und Programm-/Tagesbezeichnungen brechen nicht mehr ungünstig mitten im Ausdruck um
+• Korrektur: Die Eingabe eines ganzzahligen Gewichts hinterlässt kein überflüssiges Dezimaltrennzeichen mehr
