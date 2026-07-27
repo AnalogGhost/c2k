@@ -7,7 +7,9 @@ import com.hackerapps.c2k.data.db.dao.CompletedDay
 import com.hackerapps.c2k.data.db.entity.RoutePointEntity
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 
-class SessionRepository(private val db: AppDatabase) {
+// Open so instrumented tests can substitute a subclass that fails finishSession() on demand,
+// to verify WorkoutService's completion teardown still runs when the DB write throws.
+open class SessionRepository(private val db: AppDatabase) {
 
     fun observeAllSessions(): Flow<List<WorkoutSessionEntity>> =
         db.sessionDao().observeAll()
@@ -27,7 +29,7 @@ class SessionRepository(private val db: AppDatabase) {
         return db.sessionDao().insert(entity)
     }
 
-    suspend fun finishSession(
+    open suspend fun finishSession(
         sessionId: Long,
         durationSeconds: Int,
         distanceMeters: Float,

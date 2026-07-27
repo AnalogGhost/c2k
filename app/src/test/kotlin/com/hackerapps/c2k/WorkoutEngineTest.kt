@@ -24,9 +24,22 @@ class WorkoutEngineTest {
 
     private val announcements = mutableListOf<TtsAnnouncement>()
 
+    // WorkoutComplete is announced synchronously in between the engine's final Active(0) write
+    // and its Completed write (see WorkoutEngine.runLoop), with no suspension point in between —
+    // so a StateFlow collector can't reliably observe that intermediate frame (it gets conflated
+    // away). Snapshotting engine.state.value from inside this synchronous callback is the only
+    // deterministic way to catch it.
+    private lateinit var engineUnderTest: WorkoutEngine
+    private var stateAtCompletionAnnouncement: WorkoutState? = null
+
     private val fakeTts = object : TtsInterface {
         override val isAvailable = true
-        override fun announce(a: TtsAnnouncement, queueAdd: Boolean) { announcements.add(a) }
+        override fun announce(a: TtsAnnouncement, queueAdd: Boolean) {
+            announcements.add(a)
+            if (a is TtsAnnouncement.WorkoutComplete) {
+                stateAtCompletionAnnouncement = engineUnderTest.state.value
+            }
+        }
         override fun shutdown() {}
     }
 
@@ -48,7 +61,7 @@ class WorkoutEngineTest {
             scope = testScope,
             // Virtual clock: testScope.currentTime advances with advanceTimeBy()
             clock = { testScope.testScheduler.currentTime }
-        )
+        ).also { engineUnderTest = it }
 
     @Test
     fun transitions_to_active_after_start() = testScope.runTest {
@@ -90,6 +103,21 @@ class WorkoutEngineTest {
         engine.start(1L)
         advanceTimeBy(1_500)  // 1.5s → 1s interval finishes
         assertTrue("Expected Completed", engine.state.value is WorkoutState.Completed)
+    }
+
+    @Test
+    fun emits_final_zeroed_frame_before_completing() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 2))
+        engine.start(1L)
+        advanceTimeBy(2_500)  // 2.5s → 2s interval finishes
+        assertTrue("Expected Completed", engine.state.value is WorkoutState.Completed)
+        val frame = stateAtCompletionAnnouncement
+        assertTrue("Expected an Active frame at the moment of the WorkoutComplete announcement",
+            frame is WorkoutState.Active)
+        assertEquals(
+            "The frame right before completion should show 0 seconds remaining, not a stale tick",
+            0, (frame as WorkoutState.Active).secondsRemainingInInterval
+        )
     }
 
     @Test
