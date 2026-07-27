@@ -45,6 +45,9 @@
     <string name="workout_interval_walk">CAMIÑAR</string>
     <string name="workout_interval_warmup">QUECEMENTO</string>
     <string name="workout_interval_cooldown">VOLTA Á CALMA</string>
+    <string name="duration_unit_minute_short">m</string>
+    <string name="duration_unit_second_short">s</string>
+    <string name="duration_unit_minute_word">min</string>
     <string name="workout_pause">Pausa</string>
     <string name="workout_resume">Retormar</string>
     <string name="workout_stop">Deter</string>
@@ -194,6 +197,8 @@
     <string name="contributor_translation_es">Tradución ao español (es)</string>
     <string name="contributor_translation_gl">Tradución ao galego (gl)</string>
     <string name="contributor_translation_ru">Tradución ao ruso (ru)</string>
+    <string name="contributor_fix_tts_ducking">Corrección: os avisos de voz agora atenúan a música de fondo en vez de pausala</string>
+    <string name="contributor_fix_completion_counter">Corrección: o contador de finalización xa non se conxela e o anuncio de finalización xa non se corta cando a pantalla se bloquea</string>
 
     <!-- Settings -->
     <string name="settings_title">Axustes</string>

@@ -45,6 +45,9 @@
     <string name="workout_interval_walk">MARCHE</string>
     <string name="workout_interval_warmup">ÉCHAUFFEMENT</string>
     <string name="workout_interval_cooldown">RETOUR AU CALME</string>
+    <string name="duration_unit_minute_short">m</string>
+    <string name="duration_unit_second_short">s</string>
+    <string name="duration_unit_minute_word">min</string>
     <string name="workout_pause">Pause</string>
     <string name="workout_resume">Reprendre</string>
     <string name="workout_stop">Arrêter</string>
@@ -195,6 +198,7 @@
     <string name="contributor_translation_gl">Traduction en galicien (gl)</string>
     <string name="contributor_translation_ru">Traduction en russe (ru)</string>
     <string name="contributor_fix_tts_ducking">Correction : les annonces vocales atténuent désormais la musique de fond au lieu de la mettre en pause</string>
+    <string name="contributor_fix_completion_counter">Correction : le compteur de fin ne se fige plus et l\'annonce de fin n\'est plus coupée lorsque l\'écran se verrouille</string>
 
     <!-- Settings -->
     <string name="settings_title">Paramètres</string>
