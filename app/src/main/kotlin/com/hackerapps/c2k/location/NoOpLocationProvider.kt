@@ -10,4 +10,6 @@ class NoOpLocationProvider : LocationProvider {
     override val hasValidFix: Boolean = false
     override fun start() {}
     override fun stop() {}
+    override fun pause() {}
+    override fun resume() {}
 }
