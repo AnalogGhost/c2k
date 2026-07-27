@@ -1,0 +1,2 @@
+• Correção: o contador de conclusão não trava mais e o anúncio de conclusão não é mais cortado quando a tela é bloqueada
+• Correção: a notificação do treino podia ficar travada após a conclusão, exigindo forçar o encerramento do app para removê-la

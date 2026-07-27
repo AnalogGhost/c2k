@@ -1,0 +1,2 @@
+• Fix: completion counter no longer freezes and the completion announcement no longer gets cut off when the screen locks
+• Fix: the workout notification could get stuck after finishing, requiring a force-stop to clear it

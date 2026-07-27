@@ -1,0 +1,2 @@
+• Correction : le compteur de fin ne se fige plus et l'annonce de fin n'est plus coupée lorsque l'écran se verrouille
+• Correction : la notification de séance pouvait rester bloquée après la fin de l'entraînement, obligeant à forcer l'arrêt de l'application pour la supprimer

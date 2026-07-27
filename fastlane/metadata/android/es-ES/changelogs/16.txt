@@ -1,0 +1,2 @@
+• Corrección: el contador de finalización ya no se congela y el anuncio de finalización ya no se corta cuando la pantalla se bloquea
+• Corrección: la notificación del entrenamiento podía quedarse bloqueada al terminar, obligando a forzar el cierre de la app para eliminarla
