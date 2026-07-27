@@ -1,0 +1,4 @@
+• Corrección: la distancia del entrenamiento ya no incluye el movimiento registrado durante la pausa
+• Corrección: las rachas y el historial podían desajustarse un día en algunas zonas horarias
+• Corrección: los elementos del historial con texto que se ajusta a varias líneas ahora se alinean correctamente, y las etiquetas de programa/día ya no se cortan de forma incómoda a mitad de frase
+• Corrección: al introducir un peso sin decimales ya no queda un separador decimal suelto

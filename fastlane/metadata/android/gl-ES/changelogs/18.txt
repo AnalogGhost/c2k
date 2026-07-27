@@ -1,0 +1,4 @@
+• Corrección: a distancia do adestramento xa non inclúe o movemento rexistrado durante a pausa
+• Corrección: as raichas e o historial podían desaxustarse un día nalgúns fusos horarios
+• Corrección: os elementos do historial con texto que se axusta a varias liñas agora aliñanse correctamente, e as etiquetas de programa/día xa non se cortan de forma incómoda a metade de frase
+• Corrección: ao introducir un peso sen decimais xa non queda un separador decimal solto

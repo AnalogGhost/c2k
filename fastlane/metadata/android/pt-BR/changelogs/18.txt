@@ -1,0 +1,4 @@
+• Correção: a distância do treino não inclui mais o movimento registrado durante a pausa
+• Correção: sequências e histórico podiam ficar desalinhados em um dia em alguns fusos horários
+• Correção: itens do histórico com texto que quebra em várias linhas agora ficam alinhados corretamente, e os rótulos de programa/dia não quebram mais de forma estranha no meio da frase
+• Correção: inserir um peso inteiro não deixa mais um separador decimal solto

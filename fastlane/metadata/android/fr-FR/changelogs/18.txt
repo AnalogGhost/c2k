@@ -1,0 +1,4 @@
+• Correction : la distance de l'entraînement n'inclut plus les mouvements enregistrés pendant une pause
+• Correction : les séries et l'historique pouvaient être décalés d'un jour selon le fuseau horaire
+• Correction : les éléments de l'historique dont le texte passe à la ligne sont désormais correctement alignés, et les libellés programme/jour ne se coupent plus maladroitement au milieu d'une phrase
+• Correction : la saisie d'un poids entier ne laisse plus de séparateur décimal superflu

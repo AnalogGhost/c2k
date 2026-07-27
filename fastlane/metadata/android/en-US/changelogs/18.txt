@@ -1,0 +1,4 @@
+• Fix: workout distance no longer includes movement recorded while paused
+• Fix: streaks and history could misalign by a day for some timezones
+• Fix: history items with wrapped text now line up correctly, and program name/day labels won't awkwardly break mid-phrase
+• Fix: entering a whole-number weight no longer leaves a stray decimal separator
