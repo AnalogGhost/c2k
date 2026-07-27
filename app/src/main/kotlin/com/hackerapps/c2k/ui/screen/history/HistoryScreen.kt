@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -311,10 +312,17 @@ private fun SessionCard(
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                     if (session.completed) {
                         Icon(Icons.Default.CheckCircle, contentDescription = null, tint = WarmCoolGreen)
+                        Spacer(Modifier.width(8.dp))
                     }
+                    // weight(1f) here (not just on the enclosing Row above) matters when this
+                    // text wraps to a second line: without it, Compose measures Text's wrap width
+                    // against the row's full width rather than what's actually left after the
+                    // icon, so a wrapped second line renders back under the icon instead of
+                    // staying indented under the first line.
                     Text(
-                        "  $displayName  •  ${stringResource(R.string.history_week_day, session.week, session.day)}",
-                        style = MaterialTheme.typography.titleMedium
+                        "$displayName  •  ${stringResource(R.string.history_week_day, session.week, session.day)}",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.weight(1f)
                     )
                 }
                 // GPX export button — only shown when the session has GPS distance recorded
