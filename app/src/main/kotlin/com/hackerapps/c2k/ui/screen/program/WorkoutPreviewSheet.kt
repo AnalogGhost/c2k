@@ -74,8 +74,9 @@ fun WorkoutPreviewSheet(
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(Modifier.height(4.dp))
+            val previewDurationMin = workoutDay.totalDurationSeconds / 60
             Text(
-                pluralStringResource(R.plurals.program_preview_duration, workoutDay.totalDurationSeconds / 60, workoutDay.totalDurationSeconds / 60),
+                pluralStringResource(R.plurals.program_preview_duration, previewDurationMin, previewDurationMin),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
