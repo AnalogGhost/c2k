@@ -43,6 +43,25 @@ platform :android do
     )
   end
 
+  desc "Upload only changelogs (release notes) to Google Play — no build, no AAB, no images,"
+  desc "no listing text. For fixing or adding a missed changelog translation after a release."
+  desc "Requires version_code (the release this changelog belongs to)."
+  desc "Defaults to a dry run; pass validate_only:false to publish."
+  lane :changelogs do |options|
+    UI.user_error!("Pass version_code: e.g. fastlane changelogs version_code:16") unless options[:version_code]
+    upload_to_play_store(
+      track: options[:track] || "production",
+      metadata_path: "./fastlane/metadata/android",
+      version_code: options[:version_code],
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_metadata: true,
+      validate_only: options[:validate_only].nil? ? true : options[:validate_only]
+    )
+  end
+
   desc "Tag, reproducibly build, sign, and publish a GitHub release for F-Droid."
   desc "Run this only after the version bump + changelog commit is already made and pushed-"
   desc "worthy — see project release checklist. Pauses for confirmation before anything public"
