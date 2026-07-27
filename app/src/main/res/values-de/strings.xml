@@ -84,7 +84,10 @@
     <string name="history_delete_message">Diese Sitzung wird dauerhaft aus deinem Verlauf entfernt.</string>
     <string name="history_delete_confirm">Löschen</string>
     <string name="history_delete_cancel">Abbrechen</string>
-    <string name="history_stats_workouts">Trainingseinheiten</string>
+    <plurals name="history_stats_workouts">
+        <item quantity="one">Trainingseinheit</item>
+        <item quantity="other">Trainingseinheiten</item>
+    </plurals>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">Zeit</string>
     <string name="history_stats_calories">kcal</string>

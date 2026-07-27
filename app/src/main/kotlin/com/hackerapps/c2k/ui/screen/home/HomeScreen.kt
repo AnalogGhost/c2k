@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -194,9 +195,15 @@ private fun ProgramCard(plan: WorkoutPlan, onClick: () -> Unit) {
         Column(Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(displayName, style = MaterialTheme.typography.headlineMedium)
+                // weight(1f) so a long translated title wraps within its own reserved space
+                // instead of crowding the "X weeks" label with no gap between them.
+                Text(
+                    displayName,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.weight(1f)
+                )
                 Text(
                     stringResource(R.string.home_program_weeks, plan.totalWeeks),
                     style = MaterialTheme.typography.bodyLarge,
@@ -253,6 +260,7 @@ private fun ActiveWorkoutBanner(
 
 @Composable
 private fun ContinueWorkoutCard(next: NextWorkout, onClick: () -> Unit) {
+    val displayName = programNameRes(next.programId)?.let { stringResource(it) } ?: next.displayName
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -268,7 +276,7 @@ private fun ContinueWorkoutCard(next: NextWorkout, onClick: () -> Unit) {
         ) {
             Icon(Icons.Default.PlayArrow, contentDescription = null)
             Text(
-                stringResource(R.string.home_continue_workout, next.displayName, next.week, next.day),
+                stringResource(R.string.home_continue_workout, displayName, next.week, next.day),
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -285,9 +293,17 @@ private fun RecentSessionRow(session: WorkoutSessionEntity) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text("${stringResource(R.string.history_week_day, session.week, session.day)}  •  $displayName")
+        // weight(1f) + ellipsis so a long program name can never crowd the date out with no gap
+        // between them (SpaceBetween alone collapses to zero gap once the two texts' combined
+        // natural width exceeds the row).
+        Text(
+            "${stringResource(R.string.history_week_day, session.week, session.day)}  •  $displayName",
+            modifier = Modifier.weight(1f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
         Text(date, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
     }
 }

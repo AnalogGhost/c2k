@@ -126,12 +126,16 @@ private fun IntervalGroupRow(group: IntervalGroup) {
     }
 }
 
+@Composable
 private fun formatIntervalDuration(seconds: Int): String {
     val m = seconds / 60
     val s = seconds % 60
+    val minShort = stringResource(R.string.duration_unit_minute_short)
+    val secShort = stringResource(R.string.duration_unit_second_short)
+    val minWord = stringResource(R.string.duration_unit_minute_word)
     return when {
-        m > 0 && s > 0 -> "${m}m ${s}s"
-        m > 0 -> "${m} min"
-        else -> "${s}s"
+        m > 0 && s > 0 -> "$m$minShort $s$secShort"
+        m > 0 -> "$m $minWord"
+        else -> "$s$secShort"
     }
 }

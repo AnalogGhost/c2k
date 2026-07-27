@@ -40,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -165,7 +166,7 @@ private fun StatsCard(stats: HistoryStats) {
             ) {
                 StatItem(
                     value = stats.completedSessions.toString(),
-                    label = stringResource(R.string.history_stats_workouts)
+                    label = pluralStringResource(R.plurals.history_stats_workouts, stats.completedSessions)
                 )
                 StatItem(
                     value = "%.1f".format(stats.totalKm),
@@ -333,15 +334,15 @@ private fun SessionCard(
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
+            Spacer(Modifier.height(4.dp))
             if (session.distanceMeters > 0f) {
-                val base = "%.2f km  •  ${formatDuration(session.durationSeconds)}".format(
-                    session.distanceMeters / 1000f
-                )
+                val km = "%.2f".format(session.distanceMeters / 1000f)
+                val base = "$km ${stringResource(R.string.history_stats_km)}  •  ${formatDuration(session.durationSeconds)}"
                 val calories = weightKg?.let {
                     CalorieCalculator.estimateCalories(session.distanceMeters, session.durationSeconds, it)
                 }
                 Text(
-                    if (calories != null) "$base  •  $calories kcal" else base,
+                    if (calories != null) "$base  •  $calories ${stringResource(R.string.history_stats_calories)}" else base,
                     style = MaterialTheme.typography.bodyLarge
                 )
             } else {

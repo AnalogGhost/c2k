@@ -47,6 +47,20 @@ no AAB, no images, no changelogs. For listing-copy fixes between releases.
 
 Defaults to a dry run; pass validate_only:false to publish.
 
+### android changelogs
+
+```sh
+[bundle exec] fastlane android changelogs
+```
+
+Upload only changelogs (release notes) to Google Play — no build, no AAB, no images,
+
+no listing text. For fixing or adding a missed changelog translation after a release.
+
+Requires version_code (the release this changelog belongs to).
+
+Defaults to a dry run; pass validate_only:false to publish.
+
 ### android release
 
 ```sh

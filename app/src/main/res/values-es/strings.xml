@@ -84,7 +84,10 @@
     <string name="history_delete_message">Esto eliminará de modo permanente esta sesión del historial.</string>
     <string name="history_delete_confirm">Eliminar</string>
     <string name="history_delete_cancel">Cancelar</string>
-    <string name="history_stats_workouts">entrenamientos</string>
+    <plurals name="history_stats_workouts">
+        <item quantity="one">entrenamiento</item>
+        <item quantity="other">entrenamientos</item>
+    </plurals>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">tiempo</string>
     <string name="history_stats_calories">kcal</string>
