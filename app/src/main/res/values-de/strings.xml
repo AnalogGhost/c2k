@@ -77,7 +77,7 @@
     <!-- History screen -->
     <string name="history_title">Verlauf</string>
     <string name="history_empty">Noch keine abgeschlossenen Trainingseinheiten.</string>
-    <string name="history_week_day">Woche %1$d, Tag %2$d</string>
+    <string name="history_week_day">Woche %1$d, Tag %2$d</string>
     <string name="history_duration">%1$s</string>
     <string name="history_export">CSV exportieren</string>
     <string name="history_export_chooser">Trainingsverlauf exportieren</string>
