@@ -161,9 +161,12 @@ class WorkoutServiceNotificationTest {
             "Expected the ongoing notification to be dropped once the workout completes naturally",
             waitUntil(timeoutMs = 12_000) { ongoingNotificationId !in activeNotificationIds() }
         )
+        // stopForeground() and the completion notify() are two separate async binder calls with
+        // no atomicity guarantee between them, so a bare one-shot check here can lose a genuine
+        // (harmless) race on slower/CI emulators even though the first waitUntil already passed.
         assertTrue(
             "Expected a dismissible completion notification to replace it",
-            completionNotificationId in activeNotificationIds()
+            waitUntil(timeoutMs = 2_000) { completionNotificationId in activeNotificationIds() }
         )
     }
 
@@ -186,9 +189,12 @@ class WorkoutServiceNotificationTest {
                 "finishSession() threw",
             waitUntil(timeoutMs = 12_000) { ongoingNotificationId !in activeNotificationIds() }
         )
+        // stopForeground() and the completion notify() are two separate async binder calls with
+        // no atomicity guarantee between them, so a bare one-shot check here can lose a genuine
+        // (harmless) race on slower/CI emulators even though the first waitUntil already passed.
         assertTrue(
             "Expected the dismissible completion notification to be posted despite the DB failure",
-            completionNotificationId in activeNotificationIds()
+            waitUntil(timeoutMs = 2_000) { completionNotificationId in activeNotificationIds() }
         )
         assertTrue(
             "Expected cleanup() to have run, clearing the running flag",
