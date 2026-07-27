@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -83,6 +84,13 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                // imePadding() must come before verticalScroll(), not after: applied first, it
+                // shrinks this Column's own measured viewport by the keyboard height, so Compose's
+                // automatic scroll-into-view-on-focus (used by the weight field below) correctly
+                // sees the focused field as out of view and scrolls to it. Applied after scroll
+                // instead, it only pads the scrollable content itself — the viewport never shrinks,
+                // so nothing looks "out of view" and the keyboard just sits on top, covering fields.
+                .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
             SettingsToggle(
