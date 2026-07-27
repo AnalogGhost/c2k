@@ -45,6 +45,9 @@
     <string name="workout_interval_walk">ХОДЬБА</string>
     <string name="workout_interval_warmup">РАЗМИНКА</string>
     <string name="workout_interval_cooldown">ЗАМИНКА</string>
+    <string name="duration_unit_minute_short">м</string>
+    <string name="duration_unit_second_short">с</string>
+    <string name="duration_unit_minute_word">мин</string>
     <string name="workout_pause">Пауза</string>
     <string name="workout_resume">Продолжить</string>
     <string name="workout_stop">Стоп</string>
@@ -84,7 +87,12 @@
     <string name="history_delete_message">Безвозвратно удалит эту сессию из вашей истории.</string>
     <string name="history_delete_confirm">Удалить</string>
     <string name="history_delete_cancel">Отмена</string>
-    <string name="history_stats_workouts">тренировки</string>
+    <plurals name="history_stats_workouts">
+        <item quantity="one">тренировка</item>
+        <item quantity="few">тренировки</item>
+        <item quantity="many">тренировок</item>
+        <item quantity="other">тренировок</item>
+    </plurals>
     <string name="history_stats_km">км</string>
     <string name="history_stats_time">время</string>
     <string name="history_stats_calories">ккал</string>
