@@ -59,4 +59,15 @@ class GpsLocationProvider(private val context: Context) : LocationProvider {
     override fun stop() {
         locationManager.removeUpdates(listener)
     }
+
+    override fun pause() {
+        locationManager.removeUpdates(listener)
+    }
+
+    override fun resume() {
+        // Drop the pre-pause fix so the first post-resume update doesn't compute a distance delta
+        // spanning however far the user moved (or GPS drifted) while the workout was paused.
+        lastLocation = null
+        start()
+    }
 }

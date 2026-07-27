@@ -170,8 +170,12 @@ class WorkoutService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START  -> handleStart(intent)
-            ACTION_PAUSE  -> if (::engine.isInitialized) engine.pause()
-            ACTION_RESUME -> if (::engine.isInitialized) engine.resume()
+            // locationProvider is paused/resumed alongside the engine: otherwise GPS fixes keep
+            // arriving and accumulating into totalDistanceMeters for the entire duration of the
+            // pause, even though the paused time is correctly excluded from elapsedSessionSeconds
+            // — silently inflating the recorded distance for any run with a real-world pause.
+            ACTION_PAUSE  -> if (::engine.isInitialized) { engine.pause(); locationProvider.pause() }
+            ACTION_RESUME -> if (::engine.isInitialized) { engine.resume(); locationProvider.resume() }
             ACTION_STOP   -> handleStop()
         }
         return START_NOT_STICKY
@@ -326,6 +330,11 @@ class WorkoutService : Service() {
         val distance = locationProvider.totalDistanceMeters
 
         if (!::engine.isInitialized) {
+            // Same reasoning as the sessionJob?.cancel() below: without this, a Stop tapped during
+            // handleStart()'s async setup (before engine is assigned) leaves that coroutine
+            // running — it goes on to create the DB session row and assign engine/ttsManager
+            // after the service was supposed to have stopped.
+            sessionJob?.cancel()
             cleanup()
             stopSelf()
             return

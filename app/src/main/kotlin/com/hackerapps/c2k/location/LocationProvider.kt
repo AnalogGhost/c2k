@@ -9,4 +9,9 @@ interface LocationProvider {
     val hasValidFix: Boolean
     fun start()
     fun stop()
+    // Distinct from stop(): pause()/resume() bracket a workout pause, where fixes should stop
+    // being collected (and, on resume, the gap shouldn't be counted as distance travelled) but
+    // totalDistanceMeters must be preserved rather than reset.
+    fun pause()
+    fun resume()
 }

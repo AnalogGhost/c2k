@@ -9,6 +9,8 @@ import com.hackerapps.c2k.ui.screen.home.HomeViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
+import java.time.Instant
+import java.util.TimeZone
 
 class HomeViewModelTest {
 
@@ -88,6 +90,25 @@ class HomeViewModelTest {
     fun streak_dedupes_multiple_sessions_on_same_day() {
         val sessions = listOf(session(now()), session(now() + 1000), session(now() - msPerDay))
         assertEquals(2, HomeViewModel.computeStreak(sessions, now()))
+    }
+
+    @Test
+    fun streak_uses_local_calendar_day_not_utc_day() {
+        // Denver is UTC-7 in January (no DST). Both instants below fall on the *same* UTC
+        // calendar day (2026-01-01), but on two different *local* calendar days: 2025-12-31
+        // 19:00 local, and 2026-01-01 13:00 local. If streak bucketing used raw UTC epoch-day
+        // division (the bug being regression-tested here), these would collapse into a single
+        // day and understate the streak as 1 instead of the correct 2.
+        val originalTimeZone = TimeZone.getDefault()
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Denver"))
+        try {
+            val sessionA = session(Instant.parse("2026-01-01T02:00:00Z").toEpochMilli()) // Dec 31, 19:00 local
+            val sessionB = session(Instant.parse("2026-01-01T20:00:00Z").toEpochMilli()) // Jan 1, 13:00 local
+            val now = Instant.parse("2026-01-01T21:00:00Z").toEpochMilli() // Jan 1, 14:00 local
+            assertEquals(2, HomeViewModel.computeStreak(listOf(sessionA, sessionB), now))
+        } finally {
+            TimeZone.setDefault(originalTimeZone)
+        }
     }
 
     // --- computeNextWorkout ---

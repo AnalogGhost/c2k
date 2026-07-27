@@ -17,6 +17,8 @@ import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.data.model.WorkoutPlan
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.service.WorkoutService
+import java.time.Instant
+import java.time.ZoneId
 
 data class NextWorkout(
     val programId: String,
@@ -69,7 +71,14 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState())
 
     companion object {
-        private const val MS_PER_DAY = 24 * 60 * 60 * 1000L
+        // Local calendar day, not a raw UTC epoch-millis division: HistoryScreen already displays
+        // session dates via SimpleDateFormat(..., Locale.getDefault()), which is local-timezone
+        // aware. Bucketing streaks by UTC day instead would disagree with what the user sees
+        // there, and — for any non-UTC timezone — can misplace a late-evening/early-morning
+        // session onto the "wrong" side of the day boundary relative to their actual calendar day,
+        // silently breaking or inflating the streak.
+        private fun localDayNumber(millis: Long): Long =
+            Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay()
 
         internal fun computeNextWorkout(
             plan: WorkoutPlan,
@@ -90,12 +99,12 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         internal fun computeStreak(sessions: List<WorkoutSessionEntity>, nowMillis: Long): Int {
             val completedDays = sessions
                 .filter { it.completed }
-                .map { it.startedAt / MS_PER_DAY }
+                .map { localDayNumber(it.startedAt) }
                 .toSortedSet()
 
             if (completedDays.isEmpty()) return 0
 
-            val today = nowMillis / MS_PER_DAY
+            val today = localDayNumber(nowMillis)
             val yesterday = today - 1
 
             if (completedDays.last() < yesterday) return 0
