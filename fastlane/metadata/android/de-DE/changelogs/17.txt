@@ -1,0 +1,4 @@
+• Korrektur: Die Tastatur verdeckt das Gewichtsfeld in den Einstellungen nicht mehr
+• Korrektur: Entfernungs-, Kalorien- und Dauereinheiten werden jetzt im gesamten Trainingsverlauf und in der Vorschau korrekt übersetzt
+• Korrektur: Lange, umgebrochene Programmtitel konnten auf manchen Geräten eine übermäßig große Lücke vor ihrer Beschreibung hinterlassen
+• Korrektur: Fehlender Abstand zwischen Programmname und Datum bei den letzten Trainingseinheiten

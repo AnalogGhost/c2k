@@ -1,0 +1,4 @@
+• Correction : le clavier ne recouvre plus le champ du poids dans les Paramètres
+• Correction : les unités de distance, de calories et de durée sont désormais correctement traduites dans tout l'historique et les aperçus d'entraînement
+• Correction : les titres de programme longs qui passaient à la ligne pouvaient laisser un grand espace vide avant leur description sur certains appareils
+• Correction : espace manquant entre le nom du programme et la date dans les séances récentes

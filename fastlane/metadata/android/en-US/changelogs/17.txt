@@ -1,0 +1,4 @@
+• Fix: keyboard no longer covers the weight input field in Settings
+• Fix: distance, calorie, and duration units now translate correctly throughout workout history and previews
+• Fix: long wrapped program titles could leave an oversized empty gap before their description on some devices
+• Fix: missing spacing between program name and date in recent workouts

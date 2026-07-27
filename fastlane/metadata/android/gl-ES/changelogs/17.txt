@@ -1,0 +1,4 @@
+• Corrección: o teclado xa non cobre o campo de peso en Configuración
+• Corrección: as unidades de distancia, calorías e duración agora tradúcense correctamente en todo o historial e as vistas previas dos adestramentos
+• Corrección: os títulos de programa longos que se axustaban a varias liñas podían deixar un espazo baleiro excesivo antes da súa descrición nalgúns dispositivos
+• Corrección: faltaba espazo entre o nome do programa e a data nos adestramentos recentes

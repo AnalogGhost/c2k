@@ -1,0 +1,4 @@
+• Corrección: el teclado ya no cubre el campo de peso en Ajustes
+• Corrección: las unidades de distancia, calorías y duración ahora se traducen correctamente en todo el historial y las vistas previas de entrenamientos
+• Corrección: los títulos de programa largos que se ajustaban a varias líneas podían dejar un espacio vacío excesivo antes de su descripción en algunos dispositivos
+• Corrección: faltaba espacio entre el nombre del programa y la fecha en entrenamientos recientes
