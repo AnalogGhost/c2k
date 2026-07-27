@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -292,16 +293,15 @@ private fun DayButton(
     val durationMin = workoutDay.totalDurationSeconds / 60
     if (completed) {
         OutlinedButton(onClick = onClick, modifier = modifier) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Default.CheckCircle,
-                        contentDescription = null,
-                        modifier = Modifier.size(14.dp),
-                        tint = WarmCoolGreen
-                    )
-                    Text("  ${stringResource(R.string.program_day_label, day)}", color = WarmCoolGreen)
-                }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    modifier = Modifier.size(14.dp),
+                    tint = WarmCoolGreen
+                )
+                Spacer(Modifier.width(4.dp))
+                Text(stringResource(R.string.program_day_label, day), color = WarmCoolGreen)
             }
         }
     } else {
