@@ -15,10 +15,14 @@ import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.util.Log
+import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -33,7 +37,9 @@ import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.Programs
+import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.data.repository.SessionRepository
 import com.hackerapps.c2k.engine.WorkoutEngine
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.engine.tts.TtsManager
@@ -60,17 +66,64 @@ class WorkoutService : Service() {
         const val EXTRA_TREADMILL_MODE = "treadmill_mode"
 
         private const val NOTIFICATION_ID  = 1
+        // Separate ID from the ongoing workout notification so posting one never clobbers the
+        // other; distinct from it specifically so completion can show a dismissible notification
+        // side by side with (briefly) or in place of the non-swipable in-progress one.
+        private const val COMPLETION_NOTIFICATION_ID = 2
         private const val CHANNEL_ID       = "workout_channel"
         private const val WAKELOCK_TAG     = "C2K::WorkoutLock"
         private const val WAKELOCK_TIMEOUT = 90 * 60 * 1000L
         // Upper bound on how long completion waits for the final spoken cue before tearing down.
         private const val COMPLETION_SPEECH_TIMEOUT_MS = 8_000L
+        private const val TAG = "WorkoutService"
 
         val isRunning = MutableStateFlow(false)
         val currentWorkout = MutableStateFlow<WorkoutInfo?>(null)
+
+        // Test-only seams. Left null in production, where handleStart() falls back to resolving
+        // a real WorkoutDay from Programs and the app's real SessionRepository. Instrumented
+        // tests use these to (a) drive a real Completed transition in seconds instead of waiting
+        // out a multi-minute program, and (b) inject a repository that fails finishSession() to
+        // verify the completion teardown (stopForeground + notification swap + stopSelf) still
+        // runs when the DB write throws — the suspected root cause of the notification getting
+        // stuck until the app is force-stopped.
+        @VisibleForTesting
+        var testWorkoutDayOverride: WorkoutDay? = null
+
+        @VisibleForTesting
+        var testSessionRepositoryOverride: SessionRepository? = null
+
+        // Pure given a Context, so it can be built and asserted on directly in tests without a
+        // running service instance. Unlike the in-progress notification, this one is dismissible:
+        // the workout is over, there's nothing ongoing left to represent.
+        fun buildCompletionNotification(context: Context): Notification {
+            val openIntent = PendingIntent.getActivity(
+                context, 0,
+                Intent(context, MainActivity::class.java),
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            return NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(context.getString(R.string.workout_complete_title))
+                .setContentText(context.getString(R.string.workout_complete_message))
+                .setContentIntent(openIntent)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .build()
+        }
     }
 
-    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    // A CoroutineExceptionHandler here matters specifically because of the try/finally in the
+    // Completed branch below: the finally block does the real teardown work (drop the ongoing
+    // notification, post the completion one, stop the service) before an exception from the try
+    // (e.g. a DB write failure) is allowed to propagate. Without a handler, that propagation would
+    // crash the whole process — this logs it instead so a single failed write can't take down an
+    // otherwise-completed workout.
+    private val serviceScope = CoroutineScope(
+        SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, e ->
+            Log.e(TAG, "Unhandled exception in WorkoutService coroutine", e)
+        }
+    )
 
     private lateinit var ttsManager: TtsManager
     private lateinit var engine: WorkoutEngine
@@ -78,6 +131,13 @@ class WorkoutService : Service() {
     private var locationProvider: LocationProvider = NoOpLocationProvider()
     private lateinit var wakeLock: PowerManager.WakeLock
     private lateinit var prefs: UserPreferences
+
+    // The Job for handleStart()'s whole per-session setup, including the engine.state collector.
+    // engine.stop() only cancels the tick loop, not this — without also cancelling this on manual
+    // stop, the collector keeps running and, if a new workout starts before it winds down, it
+    // observes the reassigned engine field (a shared var) and double-processes its completion
+    // using this session's stale captured sessionRepository/ttsManager.
+    private var sessionJob: Job? = null
 
     // Exposed via binder — safe to collect immediately; populated once setup coroutine runs.
     val workoutStateFlow = MutableStateFlow<WorkoutState>(WorkoutState.Idle)
@@ -148,10 +208,11 @@ class WorkoutService : Service() {
             startForeground(NOTIFICATION_ID, buildNotification(getString(R.string.workout_starting)))
         }
 
-        val workoutDay = Programs.byId(programId).weeks[week - 1][day - 1]
+        val workoutDay = testWorkoutDayOverride ?: Programs.byId(programId).weeks[week - 1][day - 1]
         val app = application as C2KApp
+        val sessionRepository = testSessionRepositoryOverride ?: app.sessionRepository
 
-        serviceScope.launch {
+        sessionJob = serviceScope.launch {
             val ttsEnabled        = prefs.ttsEnabled.first()
             val gpsEnabled        = prefs.gpsEnabled.first()
             val treadmillMode     = prefs.treadmillMode.first()
@@ -178,7 +239,7 @@ class WorkoutService : Service() {
 
             _gpsActive.value = locationProvider.isAvailable
 
-            val sessionId = app.sessionRepository.startSession(programId, week, day)
+            val sessionId = sessionRepository.startSession(programId, week, day)
 
             engine = WorkoutEngine(
                 day = workoutDay,
@@ -199,7 +260,7 @@ class WorkoutService : Service() {
                     _locationUpdates.emit(update)
                     val s = engine.state.value
                     if (s is WorkoutState.Active) {
-                        app.sessionRepository.addRoutePoint(update.toEntity(s.sessionId))
+                        sessionRepository.addRoutePoint(update.toEntity(s.sessionId))
                     }
                 }
             }
@@ -218,29 +279,41 @@ class WorkoutService : Service() {
                         }
                         is WorkoutState.Paused -> updateNotificationPaused()
                         is WorkoutState.Completed -> {
-                            if (vibrationEnabled) vibrateCompletion()
-                            app.sessionRepository.finishSession(
-                                sessionId = state.sessionId,
-                                durationSeconds = state.elapsedSessionSeconds,
-                                distanceMeters = locationProvider.totalDistanceMeters,
-                                completed = true
-                            )
-                            // Clear the user-facing "running" state immediately (before the speech
-                            // wait) so the app doesn't show a workout in progress while the final
-                            // cue plays. Full teardown (TTS/location/wakelock) happens in cleanup().
-                            isRunning.value = false
-                            currentWorkout.value = null
-                            // Let the final "Workout complete" announcement finish speaking before
-                            // tearing down: cleanup() calls ttsManager.shutdown() -> tts.stop(),
-                            // which otherwise cuts the cue off. Bounded so a stuck/again TTS engine
-                            // can't keep the service alive indefinitely.
-                            if (::ttsManager.isInitialized) {
-                                withTimeoutOrNull(COMPLETION_SPEECH_TIMEOUT_MS) {
-                                    ttsManager.speaking.first { !it }
+                            try {
+                                if (vibrationEnabled) vibrateCompletion()
+                                sessionRepository.finishSession(
+                                    sessionId = state.sessionId,
+                                    durationSeconds = state.elapsedSessionSeconds,
+                                    distanceMeters = locationProvider.totalDistanceMeters,
+                                    completed = true
+                                )
+                            } finally {
+                                // Drop the ongoing (non-swipable) notification and swap in a
+                                // dismissible completion one right away, in a finally so it happens
+                                // even if the DB write above throws — otherwise the service never
+                                // reaches cleanup()/stopSelf() below and the ongoing notification
+                                // is stuck showing a stale countdown until the app is force-stopped.
+                                stopForeground(STOP_FOREGROUND_REMOVE)
+                                (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+                                    .notify(COMPLETION_NOTIFICATION_ID, buildCompletionNotification(this@WorkoutService))
+                                // Clear the user-facing "running" state immediately (before the
+                                // speech wait) so the app doesn't show a workout in progress while
+                                // the final cue plays. Full teardown (TTS/location/wakelock)
+                                // happens in cleanup().
+                                isRunning.value = false
+                                currentWorkout.value = null
+                                // Let the final "Workout complete" announcement finish speaking
+                                // before tearing down: cleanup() calls ttsManager.shutdown() ->
+                                // tts.stop(), which otherwise cuts the cue off. Bounded so a
+                                // stuck/again TTS engine can't keep the service alive indefinitely.
+                                if (::ttsManager.isInitialized) {
+                                    withTimeoutOrNull(COMPLETION_SPEECH_TIMEOUT_MS) {
+                                        ttsManager.speaking.first { !it }
+                                    }
                                 }
+                                cleanup()
+                                stopSelf()
                             }
-                            cleanup()
-                            stopSelf()
                         }
                         is WorkoutState.Idle -> { /* initial state — no action needed */ }
                     }
@@ -270,9 +343,15 @@ class WorkoutService : Service() {
             else -> 0
         }
 
-        // stop() cancels the tick loop without emitting Idle, so the state collector
-        // won't race with the finishSession coroutine below.
+        // stop() cancels the tick loop without emitting Idle, so the state collector won't race
+        // with the finishSession coroutine below. Cancelling sessionJob (handleStart()'s whole
+        // per-session setup, including that collector) matters for what comes *after* this
+        // method returns: without it, the collector keeps running and, if a new workout starts
+        // before it winds down, it observes the reassigned engine field (a shared var) and
+        // double-processes that new workout's completion using this session's stale
+        // sessionRepository/ttsManager.
         engine.stop()
+        sessionJob?.cancel()
         cleanup()
 
         if (sessionId < 0) {
@@ -280,9 +359,9 @@ class WorkoutService : Service() {
             return
         }
 
-        val app = application as C2KApp
+        val sessionRepository = testSessionRepositoryOverride ?: (application as C2KApp).sessionRepository
         serviceScope.launch {
-            app.sessionRepository.finishSession(
+            sessionRepository.finishSession(
                 sessionId = sessionId,
                 durationSeconds = elapsed,
                 distanceMeters = distance,
