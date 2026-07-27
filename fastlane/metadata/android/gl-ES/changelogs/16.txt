@@ -1,0 +1,2 @@
+• Corrección: o contador de finalización xa non se conxela e o anuncio de finalización xa non se corta cando a pantalla se bloquea
+• Corrección: a notificación do adestramento podía quedar atascada ao rematar, obrigando a forzar o peche da app para eliminala

@@ -1,0 +1,2 @@
+• Korrektur: Der Abschlusszähler bleibt nicht mehr hängen und die Abschlussansage wird nicht mehr abgeschnitten, wenn der Bildschirm gesperrt wird
+• Korrektur: Die Workout-Benachrichtigung konnte nach Abschluss hängen bleiben und erforderte einen erzwungenen Stopp der App, um sie zu entfernen
