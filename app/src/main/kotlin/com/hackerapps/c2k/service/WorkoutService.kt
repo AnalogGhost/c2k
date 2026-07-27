@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.IntervalType
@@ -62,6 +63,8 @@ class WorkoutService : Service() {
         private const val CHANNEL_ID       = "workout_channel"
         private const val WAKELOCK_TAG     = "C2K::WorkoutLock"
         private const val WAKELOCK_TIMEOUT = 90 * 60 * 1000L
+        // Upper bound on how long completion waits for the final spoken cue before tearing down.
+        private const val COMPLETION_SPEECH_TIMEOUT_MS = 8_000L
 
         val isRunning = MutableStateFlow(false)
         val currentWorkout = MutableStateFlow<WorkoutInfo?>(null)
@@ -82,7 +85,10 @@ class WorkoutService : Service() {
     private val _gpsActive = MutableStateFlow(false)
 
     private var workoutRunning = false
-    private var cleanedUp = false
+    // Guards cleanup() against running twice. @Volatile + @Synchronized on cleanup() because the
+    // completion-speech wait means cleanup() can now be reached concurrently from the completion
+    // collector (Dispatchers.Default) and handleStop()/onDestroy() (main thread).
+    @Volatile private var cleanedUp = false
 
     inner class LocalBinder : Binder() {
         fun getWorkoutState(): StateFlow<WorkoutState> = workoutStateFlow
@@ -219,6 +225,20 @@ class WorkoutService : Service() {
                                 distanceMeters = locationProvider.totalDistanceMeters,
                                 completed = true
                             )
+                            // Clear the user-facing "running" state immediately (before the speech
+                            // wait) so the app doesn't show a workout in progress while the final
+                            // cue plays. Full teardown (TTS/location/wakelock) happens in cleanup().
+                            isRunning.value = false
+                            currentWorkout.value = null
+                            // Let the final "Workout complete" announcement finish speaking before
+                            // tearing down: cleanup() calls ttsManager.shutdown() -> tts.stop(),
+                            // which otherwise cuts the cue off. Bounded so a stuck/again TTS engine
+                            // can't keep the service alive indefinitely.
+                            if (::ttsManager.isInitialized) {
+                                withTimeoutOrNull(COMPLETION_SPEECH_TIMEOUT_MS) {
+                                    ttsManager.speaking.first { !it }
+                                }
+                            }
                             cleanup()
                             stopSelf()
                         }
@@ -272,6 +292,7 @@ class WorkoutService : Service() {
         }
     }
 
+    @Synchronized
     private fun cleanup() {
         if (cleanedUp) return
         cleanedUp = true
