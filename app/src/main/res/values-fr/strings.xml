@@ -77,7 +77,7 @@
     <!-- History screen -->
     <string name="history_title">Historique</string>
     <string name="history_empty">Aucune séance terminée pour l\'instant.</string>
-    <string name="history_week_day">Semaine %1$d, Jour %2$d</string>
+    <string name="history_week_day">Semaine %1$d, Jour %2$d</string>
     <string name="history_duration">%1$s</string>
     <string name="history_export">Exporter en CSV</string>
     <string name="history_export_chooser">Exporter l\'historique des séances</string>

@@ -77,7 +77,7 @@
     <!-- History screen -->
     <string name="history_title">История</string>
     <string name="history_empty">Пока нет завершённых тренировок.</string>
-    <string name="history_week_day">Неделя %1$d, День %2$d</string>
+    <string name="history_week_day">Неделя %1$d, День %2$d</string>
     <string name="history_duration">%1$s</string>
     <string name="history_export">Экспорт CSV</string>
     <string name="history_export_chooser">Экспорт истории тренировок</string>

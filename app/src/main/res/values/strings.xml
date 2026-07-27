@@ -78,7 +78,9 @@
     <!-- History screen -->
     <string name="history_title">History</string>
     <string name="history_empty">No completed workouts yet.</string>
-    <string name="history_week_day">Week %1$d, Day %2$d</string>
+    <!-- U+00A0 (non-breaking space) between each word and its number so a wrap can't split
+         e.g. "Week" from "1"; only the ", " between the two clauses is a valid wrap point. -->
+    <string name="history_week_day">Week %1$d, Day %2$d</string>
     <string name="history_duration">%1$s</string>
     <string name="history_export">Export CSV</string>
     <string name="history_export_chooser">Export workout history</string>
