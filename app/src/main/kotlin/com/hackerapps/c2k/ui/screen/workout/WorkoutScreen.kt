@@ -48,6 +48,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -453,15 +454,21 @@ private fun CompletedContent(
     onDone: () -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        // Column only centers each Text's own bounding box — a Text that wraps to multiple lines
+        // (a longer translation, or a narrow screen) still left-aligns its lines by default
+        // unless textAlign is set explicitly, which looked inconsistent next to everything else
+        // on this screen being centered.
         Text(
             stringResource(R.string.workout_complete_title),
             style = MaterialTheme.typography.headlineLarge,
-            color = WarmCoolGreen
+            color = WarmCoolGreen,
+            textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(8.dp))
         Text(
             stringResource(R.string.workout_complete_message),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(24.dp))
         Text(

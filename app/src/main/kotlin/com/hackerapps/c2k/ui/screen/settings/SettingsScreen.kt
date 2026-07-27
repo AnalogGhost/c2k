@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -37,14 +38,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.prefs.WeightUnit
+import java.text.DecimalFormatSymbols
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -275,6 +279,7 @@ private fun WeightSetting(
     onUnitChange: (WeightUnit) -> Unit
 ) {
     var showUnitMenu by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     // null = "showing whatever weightKg currently resolves to" (stays reactive to the async
     // DataStore load); becomes non-null the moment the user types, so their in-progress edit
     // (e.g. "6.") isn't clobbered by the round-tripped value. Resets to null on unit switch so
@@ -300,7 +305,8 @@ private fun WeightSetting(
                             }
                         },
                         placeholder = { Text(stringResource(R.string.settings_weight_not_set)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         singleLine = true,
                         modifier = Modifier
                             .weight(1f)
@@ -340,8 +346,14 @@ private fun WeightSetting(
     )
 }
 
-private fun formatWeight(value: Float): String =
-    "%.1f".format(value).trimEnd('0').trimEnd('.')
+private fun formatWeight(value: Float): String {
+    // "%.1f".format(...) renders using the default locale's decimal separator (a comma in
+    // Russian and many others), but this always trimmed a literal '.' — so a whole-number value
+    // like 103 became "103,0" -> trimEnd('0') -> "103," -> trimEnd('.') is a no-op on a comma,
+    // leaving the dangling separator on screen. Trim whatever character the locale actually used.
+    val separator = DecimalFormatSymbols.getInstance().decimalSeparator
+    return "%.1f".format(value).trimEnd('0').trimEnd(separator)
+}
 
 @Composable
 private fun SecondsSlider(
