@@ -15,7 +15,12 @@
     <string name="home_no_workouts">Пока нет тренировок. Выберите программу, чтобы начать!</string>
     <string name="home_workout_active">Идёт тренировка — нажмите для возврата</string>
     <string name="home_continue_workout">Продолжить: %1$s · Неделя %2$d, День %3$d</string>
-    <string name="home_streak">Серия в %1$d дн.! 🔥</string>
+    <plurals name="home_streak">
+        <item quantity="one">Серия в %1$d день! 🔥</item>
+        <item quantity="few">Серия в %1$d дня! 🔥</item>
+        <item quantity="many">Серия в %1$d дней! 🔥</item>
+        <item quantity="other">Серия в %1$d дней! 🔥</item>
+    </plurals>
     <string name="home_program_weeks">%1$d нед.</string>
     <string name="home_program_prerequisite">%1$s</string>
 
@@ -29,7 +34,12 @@
     <string name="program_preview_title">Неделя %1$d, День %2$d</string>
     <string name="program_preview_start">Начать</string>
     <string name="program_preview_redo">Заново</string>
-    <string name="program_preview_duration">~%1$d минут</string>
+    <plurals name="program_preview_duration">
+        <item quantity="one">~%1$d минута</item>
+        <item quantity="few">~%1$d минуты</item>
+        <item quantity="many">~%1$d минут</item>
+        <item quantity="other">~%1$d минут</item>
+    </plurals>
     <string name="program_reset_title">Сбросить прогресс</string>
     <string name="program_reset_message">Полностью удалить весь прогресс завершённых сессий для этой программы. Ваша общая история будет сохранена.</string>
     <string name="program_reset_confirm">Сбросить</string>
@@ -237,10 +247,15 @@
 
     <!-- TTS announcements -->
     <string name="tts_interval_warmup">Начните разминочную ходьбу</string>
-    <string name="tts_interval_run">Начните бег на %1$s</string>
+    <string name="tts_interval_run">Побежали! Бег %1$s</string>
     <string name="tts_interval_walk">Ходьба %1$s</string>
     <string name="tts_interval_cooldown">Начните заминочную ходьбу</string>
-    <string name="tts_seconds_remaining">Осталось %1$d секунд</string>
+    <plurals name="tts_seconds_remaining">
+        <item quantity="one">Осталась %1$d секунда</item>
+        <item quantity="few">Осталось %1$d секунды</item>
+        <item quantity="many">Осталось %1$d секунд</item>
+        <item quantity="other">Осталось %1$d секунд</item>
+    </plurals>
     <string name="tts_next_run">Приготовьтесь к бегу</string>
     <string name="tts_next_walk">Приготовьтесь к ходьбе</string>
     <string name="tts_next_warmup">Приготовьтесь к разминке</string>
