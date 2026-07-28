@@ -15,7 +15,10 @@
     <string name="home_no_workouts">No workouts yet. Start a program to begin!</string>
     <string name="home_workout_active">Workout in progress — tap to return</string>
     <string name="home_continue_workout">Continue: %1$s · Week %2$d, Day %3$d</string>
-    <string name="home_streak">%1$d-day streak 🔥</string>
+    <plurals name="home_streak">
+        <item quantity="one">%1$d-day streak 🔥</item>
+        <item quantity="other">%1$d-day streak 🔥</item>
+    </plurals>
     <string name="home_program_weeks">%1$d weeks</string>
     <string name="home_program_prerequisite">%1$s</string>
 
@@ -29,7 +32,10 @@
     <string name="program_preview_title">Week %1$d, Day %2$d</string>
     <string name="program_preview_start">Start</string>
     <string name="program_preview_redo">Redo</string>
-    <string name="program_preview_duration">~%1$d min</string>
+    <plurals name="program_preview_duration">
+        <item quantity="one">~%1$d min</item>
+        <item quantity="other">~%1$d mins</item>
+    </plurals>
     <string name="program_reset_title">Reset progress</string>
     <string name="program_reset_message">This will permanently remove all completed sessions for this program. Your overall history is kept.</string>
     <string name="program_reset_confirm">Reset</string>
@@ -241,7 +247,10 @@
     <string name="tts_interval_run">Start running for %1$s</string>
     <string name="tts_interval_walk">Walk for %1$s</string>
     <string name="tts_interval_cooldown">Begin cool-down walk</string>
-    <string name="tts_seconds_remaining">%1$d seconds remaining</string>
+    <plurals name="tts_seconds_remaining">
+        <item quantity="one">%1$d second remaining</item>
+        <item quantity="other">%1$d seconds remaining</item>
+    </plurals>
     <string name="tts_next_run">Get ready to run</string>
     <string name="tts_next_walk">Get ready to walk</string>
     <string name="tts_next_warmup">Get ready to warm up</string>

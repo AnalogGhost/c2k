@@ -130,7 +130,7 @@ class HomeScreenTest {
         setContent()
 
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithText(string(R.string.home_streak, 1), substring = true).assertExists()
+            composeRule.onNodeWithText(string(R.plurals.home_streak, 1), substring = true).assertExists()
         }
     }
 

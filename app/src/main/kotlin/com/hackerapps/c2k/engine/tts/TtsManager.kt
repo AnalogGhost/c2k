@@ -156,7 +156,7 @@ class TtsManager(
             IntervalType.RUN      -> context.getString(R.string.tts_interval_run, ttsDuration(announcement.interval.durationSeconds))
             IntervalType.WALK     -> context.getString(R.string.tts_interval_walk, ttsDuration(announcement.interval.durationSeconds))
         }
-        is TtsAnnouncement.CountdownWarning -> context.getString(R.string.tts_seconds_remaining, announcement.secondsRemaining)
+        is TtsAnnouncement.CountdownWarning -> context.getQuantityString(R.plurals.tts_seconds_remaining, announcement.secondsRemaining, announcement.secondsRemaining)
         is TtsAnnouncement.NextInterval -> when (announcement.interval.type) {
             IntervalType.RUN      -> context.getString(R.string.tts_next_run)
             IntervalType.WALK     -> context.getString(R.string.tts_next_walk)
