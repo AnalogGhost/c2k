@@ -244,7 +244,6 @@
     <string name="tts_interval_run">Corra por %1$s</string>
     <string name="tts_interval_walk">Caminhe por %1$s</string>
     <string name="tts_interval_cooldown">Comece a caminhada de desaquecimento</string>
-    <string name="tts_seconds_remaining">%1$d segundos restantes</string>
     <plurals name="tts_seconds_remaining">
         <item quantity="one">%1$d segundo restante</item>
         <item quantity="other">%1$d segundos restantes</item>
