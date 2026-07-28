@@ -15,7 +15,10 @@
     <string name="home_no_workouts">No hai entrenamientos. Inicia un programa primero!</string>
     <string name="home_workout_active">Entrenamiento en marcha — toca para volver</string>
     <string name="home_continue_workout">Continuar: %1$s · Semana %2$d, Día %3$d</string>
-    <string name="home_streak">Racha de %1$d días 🔥</string>
+    <plurals name="home_streak">
+        <item quantity="one">Racha de %1$d día 🔥</item>
+        <item quantity="other">Racha de %1$d días 🔥</item>
+    </plurals>
     <string name="home_program_weeks">%1$d semanas</string>
     <string name="home_program_prerequisite">%1$s</string>
 
@@ -29,7 +32,10 @@
     <string name="program_preview_title">Semana %1$d, Día %2$d</string>
     <string name="program_preview_start">Comenzar</string>
     <string name="program_preview_redo">Volver hacer</string>
-    <string name="program_preview_duration">~%1$d min</string>
+    <plurals name="program_preview_duration">
+        <item quantity="one">~%1$d min</item>
+        <item quantity="other">~%1$d mins</item>
+    </plurals>
     <string name="program_reset_title">Reiniciar progreso</string>
     <string name="program_reset_message">Con esto vas a eliminar todas las sesiones del programa que has completado. El historial general se mantiene.</string>
     <string name="program_reset_confirm">Reiniciar</string>
@@ -238,7 +244,10 @@
     <string name="tts_interval_run">Comienza a correr durante %1$s</string>
     <string name="tts_interval_walk">Camina durante %1$s</string>
     <string name="tts_interval_cooldown">Comienza el enfriamiento caminando</string>
-    <string name="tts_seconds_remaining">%1$d segundos restantes</string>
+    <plurals name="tts_seconds_remaining">
+        <item quantity="one">%1$d segundo restante</item>
+        <item quantity="other">%1$d segundos restantes</item>
+    </plurals>
     <string name="tts_next_run">Prepárate para correr</string>
     <string name="tts_next_walk">Prepárate para camiñar</string>
     <string name="tts_next_warmup">Prepárate para el calentamiento</string>
