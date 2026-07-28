@@ -45,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -308,7 +309,7 @@ private fun DayButton(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(stringResource(R.string.program_day_label, day))
                 Text(
-                    stringResource(R.string.program_preview_duration, durationMin),
+                    pluralStringResource(R.plurals.program_preview_duration, durationMin, durationMin),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
                 )

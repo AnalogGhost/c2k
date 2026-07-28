@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -120,7 +121,7 @@ fun HomeScreen(
             if (state.streak > 0) {
                 item {
                     Text(
-                        stringResource(R.string.home_streak, state.streak),
+                        pluralStringResource(R.plurals.home_streak, state.streak, state.streak),
                         style = MaterialTheme.typography.bodyMedium,
                         color = RunOrange
                     )
