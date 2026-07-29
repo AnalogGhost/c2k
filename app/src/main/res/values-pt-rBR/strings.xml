@@ -34,7 +34,7 @@
     <string name="program_preview_redo">Refazer</string>
     <plurals name="program_preview_duration">
         <item quantity="one">~%1$d min</item>
-        <item quantity="other">~%1$d mins</item>
+        <item quantity="other">~%1$d min</item>
     </plurals>
     <string name="program_reset_title">Reiniciar progresso</string>
     <string name="program_reset_message">Isso removerá permanentemente todas as sessões concluídas deste programa. Seu histórico geral será mantido.</string>

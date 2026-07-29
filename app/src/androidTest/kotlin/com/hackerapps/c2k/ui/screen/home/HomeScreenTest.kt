@@ -85,6 +85,9 @@ class HomeScreenTest {
 
     private fun string(resId: Int, vararg args: Any) = composeRule.activity.getString(resId, *args)
 
+    private fun quantityString(resId: Int, quantity: Int, vararg args: Any) =
+        composeRule.activity.resources.getQuantityString(resId, quantity, *args)
+
     @Test
     fun program_list_is_displayed() {
         setContent()
@@ -130,7 +133,7 @@ class HomeScreenTest {
         setContent()
 
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithText(string(R.plurals.home_streak, 1), substring = true).assertExists()
+            composeRule.onNodeWithText(quantityString(R.plurals.home_streak, 1, 1), substring = true).assertExists()
         }
     }
 

@@ -34,7 +34,7 @@
     <string name="program_preview_redo">Refaire</string>
     <plurals name="program_preview_duration">
         <item quantity="one">~%1$d min</item>
-        <item quantity="other">~%1$d mins</item>
+        <item quantity="other">~%1$d min</item>
     </plurals>
     <string name="program_reset_title">Réinitialiser la progression</string>
     <string name="program_reset_message">Cette action supprimera définitivement toutes les séances terminées de ce programme. Votre historique global est conservé.</string>
