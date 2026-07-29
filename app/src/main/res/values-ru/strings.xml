@@ -246,10 +246,10 @@
     <string name="tts_unavailable">Синтез речи недоступен на данном устройстве. Голосовые уведомления отключены.</string>
 
     <!-- TTS announcements -->
-    <string name="tts_interval_warmup">Начните разминочную ходьбу</string>
+    <string name="tts_interval_warmup">Начните разми́ночную ходьбу</string>
     <string name="tts_interval_run">Побежали! Бег %1$s</string>
     <string name="tts_interval_walk">Ходьба %1$s</string>
-    <string name="tts_interval_cooldown">Начните заминочную ходьбу</string>
+    <string name="tts_interval_cooldown">Начните зами́ночную ходьбу</string>
     <plurals name="tts_seconds_remaining">
         <item quantity="one">Осталась %1$d секунда</item>
         <item quantity="few">Осталось %1$d секунды</item>
@@ -258,8 +258,8 @@
     </plurals>
     <string name="tts_next_run">Приготовьтесь к бегу</string>
     <string name="tts_next_walk">Приготовьтесь к ходьбе</string>
-    <string name="tts_next_warmup">Приготовьтесь к разминке</string>
-    <string name="tts_next_cooldown">Приготовьтесь к скорой заминке</string>
+    <string name="tts_next_warmup">Приготовьтесь к разми́нке</string>
+    <string name="tts_next_cooldown">Приготовьтесь к скорой зами́нке</string>
     <string-array name="tts_encouragement_phrases">
         <item>У вас отлично получается, продолжайте!</item>
         <item>Уже на полпути, не сдавайтесь!</item>
