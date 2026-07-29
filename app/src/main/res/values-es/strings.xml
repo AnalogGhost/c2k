@@ -34,7 +34,7 @@
     <string name="program_preview_redo">Volver hacer</string>
     <plurals name="program_preview_duration">
         <item quantity="one">~%1$d min</item>
-        <item quantity="other">~%1$d mins</item>
+        <item quantity="other">~%1$d min</item>
     </plurals>
     <string name="program_reset_title">Reiniciar progreso</string>
     <string name="program_reset_message">Con esto vas a eliminar todas las sesiones del programa que has completado. El historial general se mantiene.</string>
