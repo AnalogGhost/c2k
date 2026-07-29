@@ -1,0 +1,3 @@
+• Corrección: agora empréganse as formas correctas de singular/plural (p. ex., "1 minuto" fronte a "5 minutos") para a duración do adestramento, as raichas e os avisos de voz da conta atrás en todos os idiomas
+• Corrección: o botón dun día de adestramento completado tiña un tamaño excesivo nalgunhas pantallas
+• Corrección: os avisos de voz en ruso para a quecemento/volta á calma xa non acentúan mal "разминочную"/"заминочную"

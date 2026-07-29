@@ -1,0 +1,3 @@
+• Fix: correct singular/plural word forms (e.g. "1 minute" vs "5 minutes") are now used for workout duration, streaks, and countdown voice announcements in every language
+• Fix: the completed-day button was oversized on some screens
+• Fix: Russian voice prompts for warm-up/cool-down no longer mis-stress "разминочную"/"заминочную"

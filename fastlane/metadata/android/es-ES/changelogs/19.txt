@@ -1,0 +1,3 @@
+• Corrección: ahora se usan las formas correctas de singular/plural (p. ej., "1 minuto" frente a "5 minutos") para la duración del entrenamiento, las rachas y los avisos de voz de la cuenta atrás en todos los idiomas
+• Corrección: el botón de un día de entrenamiento completado tenía un tamaño excesivo en algunas pantallas
+• Corrección: los avisos de voz en ruso para el calentamiento/enfriamiento ya no acentúan mal "разминочную"/"заминочную"

@@ -1,0 +1,3 @@
+• Correction : les bonnes formes singulier/pluriel (par ex. « 1 minute » contre « 5 minutes ») sont désormais utilisées pour la durée d'entraînement, les séries et les annonces vocales du compte à rebours dans toutes les langues
+• Correction : le bouton d'un jour d'entraînement terminé était surdimensionné sur certains écrans
+• Correction : les annonces vocales en russe pour l'échauffement/le retour au calme n'accentuent plus mal « разминочную »/« заминочную »
