@@ -1,12 +1,24 @@
-C2K est un entraîneur de course gratuit et open-source pour Android qui vous guide du canapé jusqu'à la course de 5 km ou 10 km — sans publicité et sans suivi.
+C2K est un entraîneur de course gratuit et open-source pour Android qui vous guide du canapé jusqu'à la course de 5 km, 10 km et au-delà — sans publicité et sans suivi.
+
+Programmes :
+• Pre-C25K — démarrage en douceur de 3 semaines pour les débutants absolus
+• Du canapé au 5K (C25K) — programme de 9 semaines, 3 courses par semaine
+• Pont vers le 10K (B210K) — pont de 6 semaines pour les diplômés de C25K
+• Du canapé au 10K (C210K) — programme de 14 semaines, poursuite de C25K
+• One Hour Runner — progression de 13 semaines de 30 à 60 minutes de course continue
+• 5K Improver — programme de 8 semaines de vitesse et d'endurance pour les coureurs qui peuvent déjà courir 5 km
 
 Fonctionnalités :
-• Du canapé au 5K (C25K) — programme de 9 semaines, 3 courses par semaine
-• Du canapé au 10K (C210K) — programme de 14 semaines
 • Annonces vocales audibles — « Commencez à courir », « Marchez pendant 90 secondes », avertissements de compte à rebours
+• Coaching personnalisable — réglez la vitesse/le volume de la voix, le moment des comptes à rebours et les annonces à mi-intervalle
+• Signaux vibrants en complément ou en remplacement de la voix
 • Minuteur d'entraînement en arrière-plan — continue même écran éteint
 • Suivi GPS (optionnel) — enregistre la distance et l'allure ; fonctionne aussi sans GPS
-• Suivi de la progression — se souvient des semaines et jours que vous avez complétés
+• Mode tapis de course — pour courir en intérieur sans GPS
+• Historique d'entraînement — journal des séances avec distance totale, temps, meilleure allure, course la plus longue et calories estimées
+• Suivi de la progression — se souvient des semaines et jours que vous avez complétés, avec option de réinitialisation
+• Guide de course intégré — FAQ sur l'allure, l'équipement et le vocabulaire
+• Disponible en 7 langues — anglais, allemand, espagnol, français, galicien, portugais (Brésil), russe
 • Fonctionne hors ligne — aucune permission internet requise
 • Aucun service propriétaire requis — compatible avec GrapheneOS et les appareils axés sur la confidentialité
 
@@ -15,5 +27,6 @@ Autorisations :
 • WAKE_LOCK — empêche le processeur de se mettre en veille pendant l'entraînement
 • ACCESS_FINE_LOCATION — GPS optionnel pour le suivi de la distance/allure (vous pouvez l'ignorer)
 • POST_NOTIFICATIONS — notification d'entraînement avec contrôles pause/arrêt
+• VIBRATE — signaux vibrants optionnels pendant l'entraînement
 
 C2K est un logiciel libre publié sous licence GNU General Public License v3.

@@ -1,12 +1,24 @@
-C2K ist ein kostenloser Open-Source-Lauftrainer für Android, der dich vom Sofa bis zum 5K- oder 10K-Lauf begleitet — ohne Werbung und ohne Tracking.
+C2K ist ein kostenloser Open-Source-Lauftrainer für Android, der dich vom Sofa bis zum 5K-, 10K-Lauf und darüber hinaus begleitet — ohne Werbung und ohne Tracking.
+
+Programme:
+• Pre-C25K — 3-wöchiger sanfter Einstieg für absolute Anfänger
+• Vom Sofa zum 5K (C25K) — 9-wöchiges Programm, 3 Läufe pro Woche
+• Brücke zum 10K (B210K) — 6-wöchige Brücke für C25K-Absolventen
+• Vom Sofa zum 10K (C210K) — 14-wöchiges Programm, Fortsetzung von C25K
+• One Hour Runner — 13-wöchige Steigerung von 30 auf 60 Minuten Dauerlauf
+• 5K Improver — 8-wöchiges Tempo- und Ausdauerprogramm für Läufer, die bereits 5K schaffen
 
 Funktionen:
-• Vom Sofa zum 5K (C25K) — 9-wöchiges Programm, 3 Läufe pro Woche
-• Vom Sofa zum 10K (C210K) — 14-wöchiges Programm
 • Hörbare Sprachansagen — „Beginne zu laufen", „Gehe 90 Sekunden", Countdown-Warnungen
+• Anpassbares Coaching — Sprachtempo/-lautstärke, Countdown-Warnzeiten und Zwischenansagen einstellbar
+• Vibrationssignale als Alternative oder Ergänzung zur Sprachausgabe
 • Trainings-Timer im Hintergrund — läuft weiter, auch wenn der Bildschirm aus ist
 • GPS-Tracking (optional) — zeichnet Distanz und Tempo auf; funktioniert auch ohne GPS
-• Fortschrittsverfolgung — merkt sich, welche Wochen und Tage du abgeschlossen hast
+• Laufbandmodus — für Läufe drinnen ohne GPS
+• Trainingsverlauf — Sitzungsprotokoll mit Gesamtdistanz, -zeit, bestem Tempo, längstem Lauf und geschätztem Kalorienverbrauch
+• Fortschrittsverfolgung — merkt sich, welche Wochen und Tage du abgeschlossen hast, mit Zurücksetzen-Option
+• Integrierter Lauf-Ratgeber — FAQ zu Lauftempo, Ausrüstung und Fachbegriffen
+• Verfügbar in 7 Sprachen — Englisch, Deutsch, Spanisch, Französisch, Galicisch, brasilianisches Portugiesisch, Russisch
 • Funktioniert offline — keine Internetberechtigung erforderlich
 • Keine proprietären Dienste erforderlich — kompatibel mit GrapheneOS und datenschutzfreundlichen Geräten
 
@@ -15,5 +27,6 @@ Berechtigungen:
 • WAKE_LOCK — verhindert, dass die CPU während des Trainings in den Ruhezustand geht
 • ACCESS_FINE_LOCATION — optionales GPS zur Distanz-/Tempoerfassung (kann übersprungen werden)
 • POST_NOTIFICATIONS — Trainingsbenachrichtigung mit Pause-/Stopp-Steuerung
+• VIBRATE — optionale Vibrationssignale während des Trainings
 
 C2K ist freie Software, veröffentlicht unter der GNU General Public License v3.
