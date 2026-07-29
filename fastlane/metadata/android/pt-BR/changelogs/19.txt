@@ -1,0 +1,3 @@
+• Correção: agora são usadas as formas corretas de singular/plural (ex.: "1 minuto" x "5 minutos") para a duração do treino, sequências e anúncios de voz da contagem regressiva em todos os idiomas
+• Correção: o botão de um dia de treino concluído estava com tamanho excessivo em algumas telas
+• Correção: os anúncios de voz em russo para aquecimento/desaquecimento não acentuam mais incorretamente "разминочную"/"заминочную"
