@@ -1,12 +1,24 @@
-C2K is a free, open-source running trainer for Android that guides you from the couch to running 5K or 10K — with no ads and no tracking.
+C2K is a free, open-source running trainer for Android that guides you from the couch to running 5K, 10K, and beyond — with no ads and no tracking.
+
+Programs:
+• Pre-C25K — 3-week gentle starter for absolute beginners
+• Couch to 5K (C25K) — 9-week program, 3 runs per week
+• Bridge to 10K (B210K) — 6-week bridge for C25K graduates
+• Couch to 10K (C210K) — 14-week program, continues from C25K
+• One Hour Runner — 13-week progression from 30 to 60 minutes continuous running
+• 5K Improver — 8-week speed and stamina program for runners who can already complete 5K
 
 Features:
-• Couch to 5K (C25K) — 9-week program, 3 runs per week
-• Couch to 10K (C210K) — 14-week program
 • Audible voice prompts — "Start running", "Walk for 90 seconds", countdown warnings
+• Customizable coaching — adjust voice speed/volume, countdown warning timing, and mid-interval cues
+• Vibration cues as an alternative or addition to voice
 • Background workout timer — continues with screen off
 • GPS tracking (optional) — records distance and pace; works without GPS too
-• Progress tracking — remembers which weeks and days you've completed
+• Treadmill mode — indoor runs without GPS
+• Workout history — session log with total distance, time, best pace, longest run, and calorie estimates
+• Progress tracking — remembers which weeks and days you've completed, with the option to reset
+• In-app running guide — FAQ covering pacing, gear, and terminology
+• Available in 7 languages — English, German, Spanish, French, Galician, Portuguese (Brazil), Russian
 • Works offline — no internet permission required
 • No proprietary services required — compatible with GrapheneOS and privacy-focused devices
 
@@ -15,5 +27,6 @@ Permissions:
 • WAKE_LOCK — prevents the CPU sleeping mid-workout
 • ACCESS_FINE_LOCATION — optional GPS for distance/pace tracking (you can skip this)
 • POST_NOTIFICATIONS — workout notification with pause/stop controls
+• VIBRATE — optional vibration cues during workouts
 
 C2K is free software released under the GNU General Public License v3.

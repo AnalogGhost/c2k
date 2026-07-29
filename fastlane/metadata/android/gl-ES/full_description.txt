@@ -1,12 +1,24 @@
-Prepárate con C2K, unha aplicación para Android libre e de código aberto que te acompaña desde o nivel máis básico ata completar 5K ou 10K — non te rastrexa e non ten publicidade.
+Prepárate con C2K, unha aplicación para Android libre e de código aberto que te acompaña desde o nivel máis básico ata completar 5K, 10K e máis alá — non te rastrexa e non ten publicidade.
+
+Programas:
+• Pre-C25K — inicio suave de 3 semanas para principiantes absolutos
+• Do sofá ao 5K (C25K) — programa de 9 semanas, 3 adestramentos por semana
+• Ponte ao 10K (B210K) — ponte de 6 semanas para quen completou o C25K
+• Do sofá ao 10K (C210K) — programa de 14 semanas, continuación do C25K
+• One Hour Runner — progresión de 13 semanas de 30 a 60 minutos de carreira continua
+• 5K Improver — programa de 8 semanas de velocidade e resistencia para quen xa pode completar 5K
 
 Características:
-• Do sofá ao 5K (C25K) — programa de 9 semanas, 3 adestramentos por semana
-• Do sofá ao 10K (C210K) — programa de 14 semanas
 • Anuncios por voz — "Comeza a correr", "Camiña durante 90 segundos", avisos de conta atrás
+• Adestramento personalizable — axusta a velocidade/volume da voz, o momento dos avisos de conta atrás e os avisos intermedios
+• Avisos por vibración como alternativa ou complemento á voz
 • Temporizador en segundo plano — funciona coa pantalla apagada
 • Rexistro con GPS (optativo) — grava a distancia e ritmo; funciona igualmente sen GPS
-• Seguimento do progreso — lembra os días e semanas que xa completaches
+• Modo cinta de andar — para adestrar en interiores sen GPS
+• Historial de adestramentos — rexistro de sesións con distancia total, tempo, mellor ritmo, carreira máis longa e calorías estimadas
+• Seguimento do progreso — lembra os días e semanas que xa completaches, con opción de reiniciar
+• Guía de carreira integrada — preguntas frecuentes sobre ritmo, equipamento e terminoloxía
+• Dispoñible en 7 idiomas — inglés, alemán, español, francés, galego, portugués (Brasil), ruso
 • Funciona sen conexión á rede — non precisa acceso a internet
 • Non precisa servizos propietarios — compatible con GrapheneOS e dispositivos centrados na privacidade
 
@@ -15,5 +27,6 @@ Permisos:
 • WAKE_LOCK — evita que a CPU durma durante os adestramentos
 • ACCESS_FINE_LOCATION — GPS optativo para seguimento da distancia/ritmo (podes omitir isto)
 • POST_NOTIFICATIONS — notificacións do adestramento con controis para pausa/deter
+• VIBRATE — avisos por vibración optativos durante o adestramento
 
 C2K é software libre publicado con licenza GNU General Public License v3.
