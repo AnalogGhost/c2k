@@ -15,7 +15,10 @@
     <string name="home_no_workouts">Noch keine Trainingseinheiten. Starte ein Programm, um loszulegen!</string>
     <string name="home_workout_active">Training läuft – tippen, um zurückzukehren</string>
     <string name="home_continue_workout">Fortsetzen: %1$s · Woche %2$d, Tag %3$d</string>
-    <string name="home_streak">%1$d Tage in Folge 🔥</string>
+    <plurals name="home_streak">
+        <item quantity="one">%1$d Tag in Folge 🔥</item>
+        <item quantity="other">%1$d Tage in Folge 🔥</item>
+    </plurals>
     <string name="home_program_weeks">%1$d Wochen</string>
     <string name="home_program_prerequisite">%1$s</string>
 
@@ -29,7 +32,10 @@
     <string name="program_preview_title">Woche %1$d, Tag %2$d</string>
     <string name="program_preview_start">Start</string>
     <string name="program_preview_redo">Wiederholen</string>
-    <string name="program_preview_duration">~%1$d Min.</string>
+    <plurals name="program_preview_duration">
+        <item quantity="one">~%1$d Min.</item>
+        <item quantity="other">~%1$d Min.</item>
+    </plurals>
     <string name="program_reset_title">Fortschritt zurücksetzen</string>
     <string name="program_reset_message">Dadurch werden alle abgeschlossenen Sitzungen für dieses Programm dauerhaft gelöscht. Dein gesamter Verlauf bleibt erhalten.</string>
     <string name="program_reset_confirm">Zurücksetzen</string>
@@ -238,7 +244,10 @@
     <string name="tts_interval_run">Beginne, %1$s zu laufen</string>
     <string name="tts_interval_walk">Gehe %1$s</string>
     <string name="tts_interval_cooldown">Cool-down-Spaziergang beginnen</string>
-    <string name="tts_seconds_remaining">%1$d Sekunden verbleibend</string>
+    <plurals name="tts_seconds_remaining">
+        <item quantity="one">%1$d Sekunde verbleibend</item>
+        <item quantity="other">%1$d Sekunden verbleibend</item>
+    </plurals>
     <string name="tts_next_run">Mach dich bereit zu laufen</string>
     <string name="tts_next_walk">Mach dich bereit zu gehen</string>
     <string name="tts_next_warmup">Mach dich bereit zum Aufwärmen</string>

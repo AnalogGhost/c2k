@@ -15,7 +15,10 @@
     <string name="home_no_workouts">Aucune séance pour l\'instant. Lancez un programme pour commencer !</string>
     <string name="home_workout_active">Séance en cours — touchez pour y retourner</string>
     <string name="home_continue_workout">Continuer : %1$s · Semaine %2$d, Jour %3$d</string>
-    <string name="home_streak">%1$d jours d\'affilée 🔥</string>
+    <plurals name="home_streak">
+        <item quantity="one">%1$d jour d\'affilée 🔥</item>
+        <item quantity="other">%1$d jours d\'affilée 🔥</item>
+    </plurals>
     <string name="home_program_weeks">%1$d semaines</string>
     <string name="home_program_prerequisite">%1$s</string>
 
@@ -29,7 +32,10 @@
     <string name="program_preview_title">Semaine %1$d, Jour %2$d</string>
     <string name="program_preview_start">Commencer</string>
     <string name="program_preview_redo">Refaire</string>
-    <string name="program_preview_duration">~%1$d min</string>
+    <plurals name="program_preview_duration">
+        <item quantity="one">~%1$d min</item>
+        <item quantity="other">~%1$d min</item>
+    </plurals>
     <string name="program_reset_title">Réinitialiser la progression</string>
     <string name="program_reset_message">Cette action supprimera définitivement toutes les séances terminées de ce programme. Votre historique global est conservé.</string>
     <string name="program_reset_confirm">Réinitialiser</string>
@@ -238,7 +244,10 @@
     <string name="tts_interval_run">Courez pendant %1$s</string>
     <string name="tts_interval_walk">Marchez pendant %1$s</string>
     <string name="tts_interval_cooldown">Débutez la marche de retour au calme</string>
-    <string name="tts_seconds_remaining">%1$d secondes restantes</string>
+    <plurals name="tts_seconds_remaining">
+        <item quantity="one">%1$d seconde restante</item>
+        <item quantity="other">%1$d secondes restantes</item>
+    </plurals>
     <string name="tts_next_run">Préparez-vous à courir</string>
     <string name="tts_next_walk">Préparez-vous à marcher</string>
     <string name="tts_next_warmup">Préparez-vous à vous échauffer</string>

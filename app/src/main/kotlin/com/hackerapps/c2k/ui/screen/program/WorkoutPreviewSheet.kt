@@ -17,6 +17,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hackerapps.c2k.R
@@ -74,7 +75,7 @@ fun WorkoutPreviewSheet(
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                stringResource(R.string.program_preview_duration, workoutDay.totalDurationSeconds / 60),
+                pluralStringResource(R.plurals.program_preview_duration, workoutDay.totalDurationSeconds / 60, workoutDay.totalDurationSeconds / 60),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
