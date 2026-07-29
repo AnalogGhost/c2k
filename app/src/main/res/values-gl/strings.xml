@@ -15,7 +15,10 @@
     <string name="home_no_workouts">Aínda non hai adestramentos. Inicia un programa primeiro!</string>
     <string name="home_workout_active">Realizando un adestramento — toca para volver</string>
     <string name="home_continue_workout">Continuar: %1$s · Semana %2$d, Día %3$d</string>
-    <string name="home_streak">Xeira de %1$d días 🔥</string>
+    <plurals name="home_streak">
+        <item quantity="one">Xeira de %1$d día 🔥</item>
+        <item quantity="other">Xeira de %1$d días 🔥</item>
+    </plurals>
     <string name="home_program_weeks">%1$d semanas</string>
     <string name="home_program_prerequisite">%1$s</string>
 
@@ -29,7 +32,10 @@
     <string name="program_preview_title">Semana %1$d, Día %2$d</string>
     <string name="program_preview_start">Comezar</string>
     <string name="program_preview_redo">Volver facer</string>
-    <string name="program_preview_duration">~%1$d min</string>
+    <plurals name="program_preview_duration">
+        <item quantity="one">~%1$d min</item>
+        <item quantity="other">~%1$d min</item>
+    </plurals>
     <string name="program_reset_title">Restablecer progreso</string>
     <string name="program_reset_message">Con isto vas eliminar todas as sesións completadas para o programa, pero o historial xeral vaise manter.</string>
     <string name="program_reset_confirm">Restablecer</string>
@@ -238,7 +244,10 @@
     <string name="tts_interval_run">Corre durante %1$s</string>
     <string name="tts_interval_walk">Camiña durante %1$s</string>
     <string name="tts_interval_cooldown">Comeza a camiñar para volver á calma</string>
-    <string name="tts_seconds_remaining">restan %1$d segundos</string>
+    <plurals name="tts_seconds_remaining">
+        <item quantity="one">resta %1$d segundo</item>
+        <item quantity="other">restan %1$d segundos</item>
+    </plurals>
     <string name="tts_next_run">Prepárate para correr</string>
     <string name="tts_next_walk">Prepárate para camiñar</string>
     <string name="tts_next_warmup">Prepárate para o quecemento</string>
