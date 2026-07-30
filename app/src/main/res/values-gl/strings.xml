@@ -51,6 +51,7 @@
     <string name="workout_interval_walk">CAMIÑAR</string>
     <string name="workout_interval_warmup">QUECEMENTO</string>
     <string name="workout_interval_cooldown">VOLTA Á CALMA</string>
+    <!-- Compact per-interval duration abbreviations in the workout preview, e.g. "5m 30s" / "5 min" -->
     <string name="duration_unit_minute_short">m</string>
     <string name="duration_unit_second_short">s</string>
     <string name="duration_unit_minute_word">min</string>
@@ -83,6 +84,8 @@
     <!-- History screen -->
     <string name="history_title">Historial</string>
     <string name="history_empty">Aínda non completaches ningún adestramento.</string>
+    <!-- U+00A0 (non-breaking space) between each word and its number so a wrap can't split
+         e.g. "Week" from "1"; only the ", " between the two clauses is a valid wrap point. -->
     <string name="history_week_day">Semana %1$d, Día %2$d</string>
     <string name="history_duration">%1$s</string>
     <string name="history_export">Exportar CSV</string>
