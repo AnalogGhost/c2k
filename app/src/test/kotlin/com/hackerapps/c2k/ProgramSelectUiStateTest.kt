@@ -47,6 +47,13 @@ class ProgramSelectUiStateTest {
     }
 
     @Test
+    fun next_incomplete_day_follows_latest_completed_when_user_skipped_ahead() {
+        // Same skip-ahead rule as the Home screen's continue shortcut (issue #28).
+        val state = ProgramSelectUiState(plan = plan(4), completedDays = setOf(3 to 1))
+        assertEquals(3 to 2, state.nextIncompleteDay)
+    }
+
+    @Test
     fun next_incomplete_day_is_null_when_all_days_completed() {
         val completed = setOf(1 to 1, 1 to 2, 1 to 3, 2 to 1, 2 to 2, 2 to 3)
         val state = ProgramSelectUiState(plan = plan(2), completedDays = completed)

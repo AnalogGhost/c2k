@@ -84,16 +84,9 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             plan: WorkoutPlan,
             completedDays: Set<Pair<Int, Int>>
         ): NextWorkout? {
-            for ((weekIdx, days) in plan.weeks.withIndex()) {
-                for (dayIdx in days.indices) {
-                    val week = weekIdx + 1; val day = dayIdx + 1
-                    if ((week to day) !in completedDays) {
-                        return NextWorkout(plan.programId, plan.displayName, week, day,
-                            plan.weeks[weekIdx][dayIdx])
-                    }
-                }
-            }
-            return null
+            val (week, day) = plan.nextWorkout(completedDays) ?: return null
+            return NextWorkout(plan.programId, plan.displayName, week, day,
+                plan.weeks[week - 1][day - 1])
         }
 
         internal fun computeStreak(sessions: List<WorkoutSessionEntity>, nowMillis: Long): Int {
