@@ -1,0 +1,4 @@
+• Novidade: as xeiras agora contan semanas en lugar de días — os días de descanso xa non reinician a túa xeira
+• Corrección: «Continuar» agora suxire o adestramento posterior ao último día completado, para poder saltar semanas
+• Corrección: as lecturas GPS erróneas xa non inflan a distancia; as distancias infladas repáranse automaticamente
+• Corrección: os botóns de día xa non se parten en pantallas pequenas

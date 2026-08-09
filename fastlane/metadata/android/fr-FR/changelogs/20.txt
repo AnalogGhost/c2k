@@ -1,0 +1,4 @@
+• Nouveau : les séries comptent désormais les semaines et non les jours — les jours de repos ne réinitialisent plus votre série
+• Correctif : « Continuer » propose désormais la séance suivant votre dernier jour complété, pour pouvoir sauter des semaines
+• Correctif : les relevés GPS erronés ne gonflent plus la distance ; les distances gonflées sont réparées automatiquement
+• Correctif : les boutons de jour ne passent plus à la ligne sur petits écrans

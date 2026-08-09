@@ -1,0 +1,4 @@
+• Novedad: las rachas ahora cuentan semanas en lugar de días — los días de descanso ya no reinician tu racha
+• Corrección: «Continuar» ahora sugiere el entrenamiento posterior al último día completado, para poder saltar semanas
+• Corrección: las lecturas GPS erróneas ya no inflan la distancia; las distancias infladas se reparan automáticamente
+• Corrección: los botones de día ya no se parten en pantallas pequeñas

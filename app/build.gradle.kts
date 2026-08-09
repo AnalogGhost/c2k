@@ -21,8 +21,8 @@ android {
         applicationId = "com.hackerapps.c2k"
         minSdk = 26
         targetSdk = 36
-        versionCode = 19
-        versionName = "1.2.12"
+        versionCode = 20
+        versionName = "1.2.13"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
