@@ -1,0 +1,4 @@
+• Neu: Serien zählen jetzt Wochen statt Tage — Ruhetage setzen die Serie nicht mehr zurück
+• Fix: „Fortsetzen" schlägt jetzt das Training nach dem zuletzt absolvierten Tag vor — Vorspringen funktioniert
+• Fix: fehlerhafte GPS-Messungen blähen die Distanz nicht mehr auf; betroffene Distanzen werden automatisch repariert
+• Fix: Tages-Buttons brechen auf kleinen Bildschirmen nicht mehr um

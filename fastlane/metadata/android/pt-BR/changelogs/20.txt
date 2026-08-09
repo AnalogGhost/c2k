@@ -1,0 +1,4 @@
+• Novo: sequências agora contam semanas em vez de dias — dias de descanso não zeram mais sua sequência
+• Correção: "Continuar" agora sugere o treino após o último dia concluído, permitindo pular semanas
+• Correção: leituras de GPS defeituosas não inflam mais a distância; distâncias infladas são corrigidas automaticamente
+• Correção: os botões de dia não quebram mais em telas pequenas

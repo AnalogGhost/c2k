@@ -1,0 +1,4 @@
+• New: streaks now count weeks instead of days — rest days no longer reset your streak
+• Fix: "Continue" now suggests the workout after your latest completed day, so skipping ahead works
+• Fix: faulty GPS readings no longer inflate distance; previously inflated workout distances are repaired automatically
+• Fix: day buttons no longer wrap on small screens; cleaner continue button
