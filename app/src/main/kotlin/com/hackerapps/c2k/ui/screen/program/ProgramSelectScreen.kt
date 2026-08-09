@@ -3,6 +3,7 @@ package com.hackerapps.c2k.ui.screen.program
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -192,8 +193,9 @@ fun ProgramSelectScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Icon(Icons.Default.PlayArrow, contentDescription = null)
+                            Spacer(Modifier.width(8.dp))
                             Text(
-                                "  " + stringResource(R.string.program_next_workout, nextWeek, nextDay),
+                                stringResource(R.string.program_next_workout, nextWeek, nextDay),
                                 modifier = Modifier.weight(1f)
                             )
                         }
@@ -291,8 +293,12 @@ private fun DayButton(
     onClick: () -> Unit
 ) {
     val durationMin = workoutDay.totalDurationSeconds / 60
+    // The Material default of 24.dp horizontal content padding leaves three of these buttons
+    // per row too little text space on small screens, wrapping "Day N" onto two lines
+    // (issue #21, item 8).
+    val dayButtonPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
     if (completed) {
-        OutlinedButton(onClick = onClick, modifier = modifier) {
+        OutlinedButton(onClick = onClick, modifier = modifier, contentPadding = dayButtonPadding) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Default.CheckCircle,
@@ -305,7 +311,7 @@ private fun DayButton(
             }
         }
     } else {
-        Button(onClick = onClick, modifier = modifier) {
+        Button(onClick = onClick, modifier = modifier, contentPadding = dayButtonPadding) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(stringResource(R.string.program_day_label, day))
                 Text(

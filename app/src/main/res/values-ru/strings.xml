@@ -30,7 +30,7 @@
     <string name="program_completed_badge">Готово</string>
     <string name="program_start_workout">Начать Тренировку</string>
     <string name="program_progress">%1$d из %2$d дн. завершено</string>
-    <string name="program_next_workout">Продолжить: Неделя %1$d, День %2$d →</string>
+    <string name="program_next_workout">Продолжить: Неделя %1$d, День %2$d</string>
     <string name="program_preview_title">Неделя %1$d, День %2$d</string>
     <string name="program_preview_start">Начать</string>
     <string name="program_preview_redo">Заново</string>
