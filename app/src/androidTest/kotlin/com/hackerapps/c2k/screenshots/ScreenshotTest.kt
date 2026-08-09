@@ -112,8 +112,13 @@ class ScreenshotTest {
         }
     }
 
-    // A 3-day streak plus recent-workout history, while leaving Week 1 Day 3 uncompleted so
-    // there's a natural "Start" (not "Redo") flow for the workout preview/active screenshots.
+    // A 2-week streak plus recent-workout history, leaving Week 1 Day 3 uncompleted so
+    // there's a natural "Start" (not "Redo") flow for the workout preview/active screenshots
+    // AND so the continue button coherently points at Week 1 Day 3 (it follows the latest
+    // completed day, so completing anything later would make it skip past Day 3 on-screen).
+    // Sessions sit exactly 14/7 days back: same weekday, two consecutive streak weeks (kept
+    // alive by the current week's grace period) regardless of which day of the week the
+    // capture runs on — a day-based spread would flip the count at week boundaries.
     // distanceMeters is non-zero (unlike the treadmill mode used live in this test) so
     // 05_history's km/pace and calorie figures have something real to display.
     private suspend fun seedHistory() {
@@ -128,9 +133,8 @@ class ScreenshotTest {
             distanceMeters = 3000f,
             completed = true
         )
-        sessionDao().insert(completedSession(week = 1, day = 1, daysAgo = 2))
-        sessionDao().insert(completedSession(week = 1, day = 2, daysAgo = 1))
-        sessionDao().insert(completedSession(week = 2, day = 1, daysAgo = 0))
+        sessionDao().insert(completedSession(week = 1, day = 1, daysAgo = 14))
+        sessionDao().insert(completedSession(week = 1, day = 2, daysAgo = 7))
     }
 
     @Test
