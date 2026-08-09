@@ -43,6 +43,23 @@ platform :android do
     )
   end
 
+  desc "Upload only store screenshots/images to Google Play — no build, no AAB, no listing"
+  desc "text, no changelogs. For refreshed screenshots between releases."
+  desc "Defaults to a dry run; pass validate_only:false to publish."
+  lane :images do |options|
+    upload_to_play_store(
+      track: options[:track] || "production",
+      metadata_path: "./fastlane/metadata/android",
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: false,
+      skip_upload_screenshots: false,
+      validate_only: options[:validate_only].nil? ? true : options[:validate_only]
+    )
+  end
+
   desc "Upload only changelogs (release notes) to Google Play — no build, no AAB, no images,"
   desc "no listing text. For fixing or adding a missed changelog translation after a release."
   desc "Requires version_code (the release this changelog belongs to)."
