@@ -16,8 +16,8 @@
     <string name="home_workout_active">Workout in progress — tap to return</string>
     <string name="home_continue_workout">Continue: %1$s · Week %2$d, Day %3$d</string>
     <plurals name="home_streak">
-        <item quantity="one">%1$d-day streak 🔥</item>
-        <item quantity="other">%1$d-day streak 🔥</item>
+        <item quantity="one">%1$d-week streak 🔥</item>
+        <item quantity="other">%1$d-week streak 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d weeks</string>
     <string name="home_program_prerequisite">%1$s</string>

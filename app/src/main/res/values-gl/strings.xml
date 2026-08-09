@@ -16,8 +16,8 @@
     <string name="home_workout_active">Realizando un adestramento — toca para volver</string>
     <string name="home_continue_workout">Continuar: %1$s · Semana %2$d, Día %3$d</string>
     <plurals name="home_streak">
-        <item quantity="one">Xeira de %1$d día 🔥</item>
-        <item quantity="other">Xeira de %1$d días 🔥</item>
+        <item quantity="one">Xeira de %1$d semana 🔥</item>
+        <item quantity="other">Xeira de %1$d semanas 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d semanas</string>
     <string name="home_program_prerequisite">%1$s</string>

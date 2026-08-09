@@ -16,8 +16,8 @@
     <string name="home_workout_active">Training läuft – tippen, um zurückzukehren</string>
     <string name="home_continue_workout">Fortsetzen: %1$s · Woche %2$d, Tag %3$d</string>
     <plurals name="home_streak">
-        <item quantity="one">%1$d Tag in Folge 🔥</item>
-        <item quantity="other">%1$d Tage in Folge 🔥</item>
+        <item quantity="one">%1$d Woche in Folge 🔥</item>
+        <item quantity="other">%1$d Wochen in Folge 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d Wochen</string>
     <string name="home_program_prerequisite">%1$s</string>
