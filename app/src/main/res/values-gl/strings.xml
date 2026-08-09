@@ -28,7 +28,7 @@
     <string name="program_completed_badge">Feito</string>
     <string name="program_start_workout">Iniciar adestramento</string>
     <string name="program_progress">%1$d de %2$d días completados</string>
-    <string name="program_next_workout">Continuar: Semana %1$d, Día %2$d →</string>
+    <string name="program_next_workout">Continuar: Semana %1$d, Día %2$d</string>
     <string name="program_preview_title">Semana %1$d, Día %2$d</string>
     <string name="program_preview_start">Comezar</string>
     <string name="program_preview_redo">Volver facer</string>

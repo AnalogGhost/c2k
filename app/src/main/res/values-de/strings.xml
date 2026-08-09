@@ -28,7 +28,7 @@
     <string name="program_completed_badge">Erledigt</string>
     <string name="program_start_workout">Training starten</string>
     <string name="program_progress">%1$d von %2$d Tagen abgeschlossen</string>
-    <string name="program_next_workout">Fortsetzen: Woche %1$d, Tag %2$d →</string>
+    <string name="program_next_workout">Fortsetzen: Woche %1$d, Tag %2$d</string>
     <string name="program_preview_title">Woche %1$d, Tag %2$d</string>
     <string name="program_preview_start">Start</string>
     <string name="program_preview_redo">Wiederholen</string>
