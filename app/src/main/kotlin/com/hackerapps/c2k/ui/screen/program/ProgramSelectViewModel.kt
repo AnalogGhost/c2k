@@ -17,16 +17,7 @@ data class ProgramSelectUiState(
     val plan: WorkoutPlan? = null,
     val completedDays: Set<Pair<Int, Int>> = emptySet()
 ) {
-    val nextIncompleteDay: Pair<Int, Int>? get() {
-        val p = plan ?: return null
-        for ((wIdx, days) in p.weeks.withIndex()) {
-            for (dIdx in days.indices) {
-                val w = wIdx + 1; val d = dIdx + 1
-                if ((w to d) !in completedDays) return w to d
-            }
-        }
-        return null
-    }
+    val nextIncompleteDay: Pair<Int, Int>? get() = plan?.nextWorkout(completedDays)
 }
 
 class ProgramSelectViewModel(

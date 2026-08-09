@@ -148,6 +148,40 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun next_workout_follows_latest_completed_when_user_skipped_ahead() {
+        // User skipped weeks 1-2 and started at week 3 (issue #28): the suggestion must
+        // move forward from their latest completed day, not point back at the earliest gap.
+        val completed = setOf(3 to 1, 3 to 2)
+        val next = HomeViewModel.computeNextWorkout(plan(4), completed)
+        assertEquals(3, next?.week)
+        assertEquals(3, next?.day)
+    }
+
+    @Test
+    fun next_workout_crosses_week_after_skipped_ahead_week_completes() {
+        val completed = setOf(3 to 1, 3 to 2, 3 to 3)
+        val next = HomeViewModel.computeNextWorkout(plan(4), completed)
+        assertEquals(4, next?.week)
+        assertEquals(1, next?.day)
+    }
+
+    @Test
+    fun next_workout_ignores_gaps_behind_the_latest_completed_day() {
+        // Day 1-2 was skipped but 1-3 is done: suggest 2-1, not the 1-2 gap.
+        val completed = setOf(1 to 1, 1 to 3)
+        val next = HomeViewModel.computeNextWorkout(plan(2), completed)
+        assertEquals(2, next?.week)
+        assertEquals(1, next?.day)
+    }
+
+    @Test
+    fun next_workout_is_null_when_final_day_completed_despite_earlier_gaps() {
+        val completed = setOf(2 to 3)
+        val next = HomeViewModel.computeNextWorkout(plan(2), completed)
+        assertNull(next)
+    }
+
+    @Test
     fun next_workout_is_null_when_program_fully_completed() {
         val completed = setOf(1 to 1, 1 to 2, 1 to 3, 2 to 1, 2 to 2, 2 to 3)
         val next = HomeViewModel.computeNextWorkout(plan(2), completed)
