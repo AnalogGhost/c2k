@@ -32,7 +32,18 @@ class GpsLocationProvider(private val context: Context) : LocationProvider {
         // Skip inaccurate fixes (cold-start drift can add 50–100 m to distance)
         if (location.hasAccuracy() && location.accuracy > 25f) return@LocationListener
         if (!_hasValidFix) _hasValidFix = true
-        lastLocation?.let { prev -> _totalDistance += prev.distanceTo(location) }
+        lastLocation?.let { prev ->
+            val dtSeconds = (location.elapsedRealtimeNanos - prev.elapsedRealtimeNanos) / 1e9
+            val meters = prev.distanceTo(location)
+            if (dtSeconds <= 0 || meters / dtSeconds > DistanceCalculator.MAX_SPEED_MPS) {
+                // A fix implying impossible speed is bad data, not movement (issue #30: one
+                // teleporting fix added 584 km). Skip the delta and the route point, but
+                // rebase on the new position so tracking resumes from wherever GPS settles.
+                lastLocation = location
+                return@LocationListener
+            }
+            _totalDistance += meters
+        }
         lastLocation = location
         _updates.tryEmit(
             LocationUpdate(

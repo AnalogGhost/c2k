@@ -32,6 +32,7 @@ class UserPreferences(private val context: Context) {
         val COUNTDOWN_WARNING_2      = intPreferencesKey("countdown_warning_2")
         val WEIGHT_KG                = floatPreferencesKey("weight_kg")
         val WEIGHT_UNIT              = stringPreferencesKey("weight_unit")
+        val GPS_DISTANCES_RECOMPUTED = booleanPreferencesKey("gps_distances_recomputed")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -126,4 +127,10 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setWeightUnit(unit: WeightUnit) =
         context.dataStore.edit { it[WEIGHT_UNIT] = unit.name }
+
+    val gpsDistancesRecomputed: Flow<Boolean> = context.dataStore.data
+        .map { it[GPS_DISTANCES_RECOMPUTED] ?: false }
+
+    suspend fun setGpsDistancesRecomputed() =
+        context.dataStore.edit { it[GPS_DISTANCES_RECOMPUTED] = true }
 }

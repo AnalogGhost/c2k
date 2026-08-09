@@ -6,6 +6,7 @@ import com.hackerapps.c2k.data.db.AppDatabase
 import com.hackerapps.c2k.data.db.dao.CompletedDay
 import com.hackerapps.c2k.data.db.entity.RoutePointEntity
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
+import com.hackerapps.c2k.location.DistanceCalculator
 
 // Open so instrumented tests can substitute a subclass that fails finishSession() on demand,
 // to verify WorkoutService's completion teardown still runs when the DB write throws.
@@ -61,6 +62,26 @@ open class SessionRepository(private val db: AppDatabase) {
 
     suspend fun getBestForDay(programId: String, week: Int, day: Int): WorkoutSessionEntity? =
         db.sessionDao().getBestByDay(programId, week, day)
+
+    /**
+     * Re-derives every session's distance from its stored route points, applying the same
+     * implied-speed filter the live tracker now uses, so sessions recorded before that
+     * filter existed lose their teleporting-GPS kilometres (issue #30). Sessions without a
+     * route (treadmill mode, GPS off) are left untouched. Idempotent, so it's safe to re-run
+     * if interrupted.
+     */
+    suspend fun recomputeSessionDistances() {
+        for (session in db.sessionDao().getAll()) {
+            val points = db.routePointDao().getRoute(session.id)
+            if (points.size < 2) continue
+            val filtered = DistanceCalculator.filteredDistanceMeters(points)
+            // 1 m tolerance: haversine vs the platform's geodesic distance differ by
+            // fractions of a metre, which shouldn't rewrite every clean session.
+            if (kotlin.math.abs(filtered - session.distanceMeters) > 1f) {
+                db.sessionDao().update(session.copy(distanceMeters = filtered))
+            }
+        }
+    }
 
     suspend fun deleteSession(sessionId: Long) =
         db.sessionDao().deleteById(sessionId)
