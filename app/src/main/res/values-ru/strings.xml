@@ -16,10 +16,10 @@
     <string name="home_workout_active">Идёт тренировка — нажмите для возврата</string>
     <string name="home_continue_workout">Продолжить: %1$s · Неделя %2$d, День %3$d</string>
     <plurals name="home_streak">
-        <item quantity="one">Серия в %1$d день! 🔥</item>
-        <item quantity="few">Серия в %1$d дня! 🔥</item>
-        <item quantity="many">Серия в %1$d дней! 🔥</item>
-        <item quantity="other">Серия в %1$d дней! 🔥</item>
+        <item quantity="one">Серия в %1$d неделю! 🔥</item>
+        <item quantity="few">Серия в %1$d недели! 🔥</item>
+        <item quantity="many">Серия в %1$d недель! 🔥</item>
+        <item quantity="other">Серия в %1$d недели! 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d нед.</string>
     <string name="home_program_prerequisite">%1$s</string>
