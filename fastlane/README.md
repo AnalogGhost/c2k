@@ -47,6 +47,18 @@ no AAB, no images, no changelogs. For listing-copy fixes between releases.
 
 Defaults to a dry run; pass validate_only:false to publish.
 
+### android images
+
+```sh
+[bundle exec] fastlane android images
+```
+
+Upload only store screenshots/images to Google Play — no build, no AAB, no listing
+
+text, no changelogs. For refreshed screenshots between releases.
+
+Defaults to a dry run; pass validate_only:false to publish.
+
 ### android changelogs
 
 ```sh
