@@ -193,21 +193,41 @@ class WorkoutService : Service() {
         currentWorkout.value = WorkoutInfo(programId, week, day)
         acquireWakeLock()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            // "health" always — it's the base type for the workout timer/notification itself,
-            // and unlike "location" it doesn't depend on GPS being available or permitted, so it
-            // covers treadmill-mode workouts too. "location" is OR'd in on top of that when this
-            // session is actually going to track GPS, since a foreground service that accesses
-            // location must include the "location" type or the OS blocks the location access
-            // outright — declaring only "health" would silently break GPS tracking.
+            // "health" only counts toward the service type if ACTIVITY_RECOGNITION is actually
+            // granted — the OS validates that permission against the type at startForeground()
+            // time and throws a SecurityException if it's missing, same as it does for
+            // "location" below. RequestActivityRecognitionPermission (PermissionGate.kt) lets the
+            // user deny that prompt and proceeds anyway, so this can't assume it was granted.
+            val hasActivityRecognition = ContextCompat.checkSelfPermission(
+                this, android.Manifest.permission.ACTIVITY_RECOGNITION
+            ) == PackageManager.PERMISSION_GRANTED
+            // "location" is OR'd in on top of "health" when this session is actually going to
+            // track GPS, since a foreground service that accesses location must include the
+            // "location" type or the OS blocks the location access outright — declaring only
+            // "health" would silently break GPS tracking.
             val hasLocation = ContextCompat.checkSelfPermission(
                 this, android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
             // Read treadmill mode synchronously from the intent extra set by the service starter;
             // prefs aren't available yet (setup coroutine hasn't run), so WorkoutViewModel embeds it.
             val treadmill = intent.getBooleanExtra(EXTRA_TREADMILL_MODE, false)
-            var type = android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_HEALTH
+            var type = 0
+            if (hasActivityRecognition) type = type or android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_HEALTH
             if (hasLocation && !treadmill) type = type or android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
-            startForeground(NOTIFICATION_ID, buildNotification(getString(R.string.workout_starting)), type)
+            val notification = buildNotification(getString(R.string.workout_starting))
+            try {
+                if (type != 0) startForeground(NOTIFICATION_ID, notification, type)
+                else startForeground(NOTIFICATION_ID, notification)
+            } catch (e: SecurityException) {
+                // Last-resort net: neither permission granted (or the platform validates some
+                // other type requirement we don't know about) shouldn't be able to crash the
+                // whole process — abort this start cleanly instead. This is the exact crash
+                // reported from the Play Store (SecurityException out of handleStart -> startForeground).
+                Log.e(TAG, "startForeground rejected for type=$type, aborting workout start", e)
+                cleanup()
+                stopSelf()
+                return
+            }
         } else {
             startForeground(NOTIFICATION_ID, buildNotification(getString(R.string.workout_starting)))
         }
