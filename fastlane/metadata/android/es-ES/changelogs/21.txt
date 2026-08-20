@@ -1,0 +1,1 @@
+• Corrección: el entrenamiento podía fallar al iniciarse si se denegaba un permiso (reconocimiento de actividad o ubicación)

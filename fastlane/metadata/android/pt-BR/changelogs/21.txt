@@ -1,0 +1,1 @@
+• Correção: o treino podia travar ao iniciar se uma permissão (reconhecimento de atividade ou localização) fosse negada

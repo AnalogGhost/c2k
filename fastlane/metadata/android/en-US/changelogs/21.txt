@@ -1,0 +1,1 @@
+• Fix: workout could crash on start if a permission prompt (activity recognition or location) was denied

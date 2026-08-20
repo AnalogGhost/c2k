@@ -1,0 +1,1 @@
+• Fix: Training konnte beim Start abstürzen, wenn eine Berechtigungsabfrage (Aktivitätserkennung oder Standort) abgelehnt wurde

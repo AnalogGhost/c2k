@@ -1,0 +1,1 @@
+• Corrección: o adestramento podía fallar ao iniciarse se se denegaba un permiso (recoñecemento de actividade ou localización)
