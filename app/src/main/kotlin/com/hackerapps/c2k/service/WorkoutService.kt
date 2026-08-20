@@ -93,6 +93,30 @@ class WorkoutService : Service() {
         @VisibleForTesting
         var testSessionRepositoryOverride: SessionRepository? = null
 
+        // Pure so it can be unit-tested on the JVM without a device — the OS kills any process
+        // whose currently-granted runtime permission gets revoked mid-session, which made an
+        // earlier instrumented version of this check (revoking ACTIVITY_RECOGNITION/location on
+        // the live test process) crash CI's shared-process instrumentation run instead of testing
+        // anything about WorkoutService itself. "health" only counts toward the type if
+        // ACTIVITY_RECOGNITION is actually granted — the OS validates that permission against the
+        // type at startForeground() time and throws a SecurityException if it's missing, same as
+        // it does for "location". RequestActivityRecognitionPermission (PermissionGate.kt) lets
+        // the user deny that prompt and proceeds anyway, so callers can't assume it was granted.
+        // "location" is OR'd in on top of "health" only when this session is actually going to
+        // track GPS, since a foreground service that accesses location must include the
+        // "location" type or the OS blocks the location access outright.
+        @VisibleForTesting
+        internal fun foregroundServiceType(
+            hasActivityRecognition: Boolean,
+            hasLocation: Boolean,
+            treadmill: Boolean
+        ): Int {
+            var type = 0
+            if (hasActivityRecognition) type = type or android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_HEALTH
+            if (hasLocation && !treadmill) type = type or android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
+            return type
+        }
+
         // Pure given a Context, so it can be built and asserted on directly in tests without a
         // running service instance. Unlike the in-progress notification, this one is dismissible:
         // the workout is over, there's nothing ongoing left to represent.
@@ -193,27 +217,16 @@ class WorkoutService : Service() {
         currentWorkout.value = WorkoutInfo(programId, week, day)
         acquireWakeLock()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            // "health" only counts toward the service type if ACTIVITY_RECOGNITION is actually
-            // granted — the OS validates that permission against the type at startForeground()
-            // time and throws a SecurityException if it's missing, same as it does for
-            // "location" below. RequestActivityRecognitionPermission (PermissionGate.kt) lets the
-            // user deny that prompt and proceeds anyway, so this can't assume it was granted.
             val hasActivityRecognition = ContextCompat.checkSelfPermission(
                 this, android.Manifest.permission.ACTIVITY_RECOGNITION
             ) == PackageManager.PERMISSION_GRANTED
-            // "location" is OR'd in on top of "health" when this session is actually going to
-            // track GPS, since a foreground service that accesses location must include the
-            // "location" type or the OS blocks the location access outright — declaring only
-            // "health" would silently break GPS tracking.
             val hasLocation = ContextCompat.checkSelfPermission(
                 this, android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
             // Read treadmill mode synchronously from the intent extra set by the service starter;
             // prefs aren't available yet (setup coroutine hasn't run), so WorkoutViewModel embeds it.
             val treadmill = intent.getBooleanExtra(EXTRA_TREADMILL_MODE, false)
-            var type = 0
-            if (hasActivityRecognition) type = type or android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_HEALTH
-            if (hasLocation && !treadmill) type = type or android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
+            val type = foregroundServiceType(hasActivityRecognition, hasLocation, treadmill)
             val notification = buildNotification(getString(R.string.workout_starting))
             try {
                 if (type != 0) startForeground(NOTIFICATION_ID, notification, type)
