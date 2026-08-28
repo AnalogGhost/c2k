@@ -21,7 +21,7 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 - Optional GPS tracking (distance & pace) — works without it too
 - Progress tracking across sessions
 - Guide screen with FAQ and glossary
-- Localised in English, Spanish, Galician, German, French, Brazilian Portuguese, and Russian
+- Localised in English, Spanish, Galician, German, French, Brazilian Portuguese, Russian, and Turkish
 - Landscape layouts on tablets and foldables (phones stay portrait)
 - Fully offline — no internet permission
 - Compatible with GrapheneOS and any de-Googled Android device (no Google Play Services)

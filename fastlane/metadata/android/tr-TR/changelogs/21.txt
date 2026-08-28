@@ -1,0 +1,1 @@
+• Düzeltme: Bir izin istemi (fiziksel aktivite veya konum) reddedildiğinde antrenmanın başlangıçta çökmesi düzeltildi
