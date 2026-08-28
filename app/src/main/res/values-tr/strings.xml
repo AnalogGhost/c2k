@@ -86,7 +86,7 @@
     <string name="history_empty">Henüz tamamlanmış antrenman yok.</string>
     <!-- U+00A0 (non-breaking space) between each word and its number so a wrap can't split
          e.g. "Week" from "1"; only the ", " between the two clauses is a valid wrap point. -->
-    <string name="history_week_day">%1$d. Hafta, %2$d. Gün</string>
+    <string name="history_week_day">%1$d. Hafta, %2$d. Gün</string>
     <string name="history_duration">%1$s</string>
     <string name="history_export">CSV Dışa Aktar</string>
     <string name="history_export_chooser">Antrenman geçmişini dışa aktar</string>
@@ -114,11 +114,11 @@
     <string name="notification_action_pause">Duraklat</string>
     <string name="notification_action_resume">Devam Et</string>
     <string name="notification_action_stop">Durdur</string>
-    <string name="notification_title">KOŞ! Antrenman</string>
+    <string name="notification_title">C2K Antrenman</string>
     <string name="workout_paused_notification">Duraklatıldı</string>
 
     <!-- Permissions -->
-    <string name="permission_location_rationale">KOŞ!, GPS kullanarak mesafenizi ve temponuzu takip edebilir. Bu isteğe bağlıdır — antrenman zamanlayıcısı GPS olmadan da çalışır.</string>
+    <string name="permission_location_rationale">C2K, GPS kullanarak mesafenizi ve temponuzu takip edebilir. Bu isteğe bağlıdır — antrenman zamanlayıcısı GPS olmadan da çalışır.</string>
     <string name="permission_location_deny">GPS\'i Atla</string>
     <string name="permission_location_allow">GPS\'e İzin Ver</string>
 
@@ -238,7 +238,7 @@
 
     <!-- Battery optimization warning -->
     <string name="battery_opt_title">Pil Optimizasyonu</string>
-    <string name="battery_opt_message">Kesintisiz antrenmanlar için KOŞ!\'un arka planda çalışmasına izin verin. Pil ayarlarını açmak için dokunun.</string>
+    <string name="battery_opt_message">Kesintisiz antrenmanlar için C2K\'nin arka planda çalışmasına izin verin. Pil ayarlarını açmak için dokunun.</string>
     <string name="battery_opt_open_settings">Ayarları Aç</string>
     <string name="battery_opt_dismiss">Kapat</string>
 
