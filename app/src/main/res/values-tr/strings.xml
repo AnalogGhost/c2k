@@ -84,8 +84,10 @@
     <!-- History screen -->
     <string name="history_title">Geçmiş</string>
     <string name="history_empty">Henüz tamamlanmış antrenman yok.</string>
-<string name="history_week_day">%1$d.&#160;Hafta, %2$d.&#160;Gün</string>
-<string name="history_duration">%1$s</string>
+    <!-- U+00A0 (non-breaking space, encoded as &#160;) keeps each number with its
+         label; only the ", " between clauses is a valid wrap point. -->
+    <string name="history_week_day">%1$d.&#160;Hafta, %2$d.&#160;Gün</string>
+    <string name="history_duration">%1$s</string>
     <string name="history_export">CSV Dışa Aktar</string>
     <string name="history_export_chooser">Antrenman geçmişini dışa aktar</string>
     <string name="history_export_gpx">GPX rotasını dışa aktar</string>
