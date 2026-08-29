@@ -101,7 +101,7 @@ class HomeScreenTest {
 
         composeRule.onNodeWithText(string(R.string.program_c25k)).performClick()
 
-        composeRule.waitUntilAssertion {
+        composeRule.runOnIdle {
             assertEquals("C25K", selected)
         }
     }
@@ -155,6 +155,8 @@ class HomeScreenTest {
         composeRule.onNodeWithContentDescription(string(R.string.guide_title)).performClick()
         composeRule.onNodeWithContentDescription(string(R.string.contributors_title)).performClick()
 
-        assertEquals(listOf(true, true, true, true), listOf(history, settings, guide, contributors))
+        composeRule.runOnIdle {
+            assertEquals(listOf(true, true, true, true), listOf(history, settings, guide, contributors))
+        }
     }
 }
