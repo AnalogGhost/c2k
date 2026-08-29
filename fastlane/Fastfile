@@ -129,7 +129,7 @@ platform :android do
     UI.important("Local tag created but NOT pushed yet — nothing public has happened.")
     UI.user_error!("Aborted — tag left local, nothing pushed.") unless UI.confirm("Push #{tag} to origin and create the GitHub release now?")
 
-    push_to_git_remote(tags: true)
+    sh("git push origin #{tag.shellescape}")
 
     changelog_path = File.join(project_dir, "fastlane/metadata/android/en-US/changelogs/#{version_code}.txt")
     notes = File.exist?(changelog_path) ? File.read(changelog_path) : ""
