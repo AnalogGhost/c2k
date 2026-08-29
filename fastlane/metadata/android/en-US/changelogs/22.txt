@@ -1,0 +1,1 @@
+• Added Turkish language support. Thanks to Ahmet Emre for the translation.
