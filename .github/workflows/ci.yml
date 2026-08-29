@@ -22,7 +22,7 @@ jobs:
 
       - name: Upload test report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: unit-test-report
           path: app/build/reports/tests/testFossDebugUnitTest/
@@ -55,7 +55,7 @@ jobs:
 
       - name: Upload instrumented test report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: instrumented-test-report
           path: app/build/reports/androidTests/connected/
