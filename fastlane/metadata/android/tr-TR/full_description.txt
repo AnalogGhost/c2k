@@ -1,0 +1,31 @@
+C2K, koltuğunuzdan 5K, 10K ve ötesine koşmanıza rehberlik eden ücretsiz ve açık kaynaklı bir Android koşu antrenörüdür — reklamsız ve takipsiz.
+
+Programlar:
+• 5K Ön Hazırlık — Tam yeni başlayanlar için 3 haftalık hafif başlangıç
+• Koltuğundan 5K'ya (C25K) — 9 haftalık program, haftada 3 koşu
+• 10K'ya Köprü (B210K) — C25K mezunları için 6 haftalık köprü programı
+• Koltuğundan 10K'ya (C210K) — C25K'nın devamı niteliğinde 14 haftalık program
+• 1 Saat Koşucusu — 30 dakikadan 60 dakikaya kesintisiz koşu için 13 haftalık ilerleme programı
+• 5K Geliştirici — Halihazırda 5K koşabilenler için 8 haftalık hız ve dayanıklılık programı
+
+Özellikler:
+• Sesli yönlendirmeler — "Koşmaya başlayın", "90 saniye yürüyün", geri sayım uyarıları
+• Özelleştirilebilir yönlendirme — ses hızını/düzeyini, geri sayım uyarı zamanlamasını ve aralık ortası ipuçlarını ayarlayın
+• Sese alternatif veya ek olarak titreşimli uyarılar
+• Arka planda çalışan antrenman zamanlayıcısı — ekran kapalıyken çalışmaya devam eder
+• GPS takibi (isteğe bağlı) — mesafe ve tempoyu kaydeder; GPS olmadan da çalışır
+• Koşu bandı modu — GPS olmadan kapalı alan koşuları
+• Antrenman geçmişi — toplam mesafe, süre, en iyi tempo, en uzun koşu ve kalori tahminlerini içeren oturum günlüğü
+• İlerleme takibi — tamamladığınız haftaları ve günleri hatırlar, sıfırlama seçeneği sunar
+• Uygulama içi koşu rehberi — tempo, ekipman ve terimleri kapsayan SSS
+• Çevrimdışı çalışır — internet izni gerektirmez
+• Tescilli servisler gerektirmez — GrapheneOS ve gizlilik odaklı cihazlarla uyumlu
+
+İzinler:
+• FOREGROUND_SERVICE — ekran kapalıyken antrenman zamanlayıcısının çalışmasını sağlar
+• WAKE_LOCK — antrenman sırasında işlemcinin uykuya geçmesini önler
+• ACCESS_FINE_LOCATION — mesafe/tempo takibi için isteğe bağlı GPS (bunu atlayabilirsiniz)
+• POST_NOTIFICATIONS — duraklatma/durdurma kontrolleri içeren antrenman bildirimi
+• VIBRATE — antrenmanlar sırasında isteğe bağlı titreşimli uyarılar
+
+C2K, GNU Genel Kamu Lisansı v3 altında yayınlanan özgür bir yazılımdır.

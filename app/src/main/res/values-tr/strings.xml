@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">C2K</string>
+
+    <!-- Programs -->
+    <string name="program_c25k">Koltuğundan 5K\'ya</string>
+    <string name="program_c210k">Koltuğundan 10K\'ya</string>
+    <string name="program_c25k_desc">Durmadan 5K koşmak için 9 haftalık program</string>
+    <string name="program_c210k_desc">Durmadan 10K koşmak için 14 haftalık program</string>
+
+    <!-- Home screen -->
+    <string name="home_title">C2K</string>
+    <string name="home_choose_program">Bir program seçin</string>
+    <string name="home_recent_workouts">Son antrenmanlar</string>
+    <string name="home_no_workouts">Henüz antrenman yok. Başlamak için bir program seçin!</string>
+    <string name="home_workout_active">Antrenman sürüyor — dönmek için dokunun</string>
+    <string name="home_continue_workout">Devam et: %1$s · %2$d. Hafta, %3$d. Gün</string>
+    <plurals name="home_streak">
+        <item quantity="one">%1$d haftalık seri 🔥</item>
+        <item quantity="other">%1$d haftalık seri 🔥</item>
+    </plurals>
+    <string name="home_program_weeks">%1$d hafta</string>
+    <string name="home_program_prerequisite">%1$s</string>
+
+    <!-- Program select screen -->
+    <string name="program_week_label">%1$d. Hafta</string>
+    <string name="program_day_label">%1$d. Gün</string>
+    <string name="program_completed_badge">Bitti</string>
+    <string name="program_start_workout">Antrenmanı Başlat</string>
+    <string name="program_progress">%1$d / %2$d gün tamamlandı</string>
+    <string name="program_next_workout">Devam et: %1$d. Hafta, %2$d. Gün</string>
+    <string name="program_preview_title">%1$d. Hafta, %2$d. Gün</string>
+    <string name="program_preview_start">Başlat</string>
+    <string name="program_preview_redo">Yeniden Yap</string>
+    <plurals name="program_preview_duration">
+        <item quantity="one">~%1$d dk</item>
+        <item quantity="other">~%1$d dk</item>
+    </plurals>
+    <string name="program_reset_title">İlerlemeyi sıfırla</string>
+    <string name="program_reset_message">Bu işlem bu programdaki tüm tamamlanmış antrenmanları kalıcı olarak kaldıracaktır. Genel antrenman geçmişiniz korunur.</string>
+    <string name="program_reset_confirm">Sıfırla</string>
+    <string name="program_reset_cancel">İptal</string>
+
+    <!-- Workout screen -->
+    <string name="workout_title">%1$s · %2$s</string>
+    <string name="workout_stop_title">Antrenman durdurulsun mu?</string>
+    <string name="workout_stop_message">İlerlemeniz tamamlanmadı olarak kaydedilecek.</string>
+    <string name="workout_stop_confirm">Durdur</string>
+    <string name="workout_stop_cancel">İptal</string>
+    <string name="workout_interval_run">KOŞ</string>
+    <string name="workout_interval_walk">YÜRÜ</string>
+    <string name="workout_interval_warmup">ISINMA</string>
+    <string name="workout_interval_cooldown">SOĞUMA</string>
+    <!-- Compact per-interval duration abbreviations in the workout preview, e.g. "5m 30s" / "5 min" -->
+    <string name="duration_unit_minute_short">dk</string>
+    <string name="duration_unit_second_short">sn</string>
+    <string name="duration_unit_minute_word">dk</string>
+    <string name="workout_pause">Duraklat</string>
+    <string name="workout_resume">Devam Et</string>
+    <string name="workout_stop">Durdur</string>
+    <string name="workout_elapsed">Geçen süre: %1$s</string>
+    <string name="workout_interval_progress">Aralık: %1$d / %2$d</string>
+    <string name="workout_next_interval">Sıradaki: %1$s %2$s</string>
+    <string name="workout_distance_km">%1$.2f km</string>
+    <string name="workout_pace">%1$s / km</string>
+    <string name="workout_treadmill_effort_run">Rahat koşu temposu</string>
+    <string name="workout_treadmill_effort_walk">Tempolu yürüyüş hızı</string>
+    <string name="workout_treadmill_effort_warmup">Hafif yürüyüş hızı</string>
+    <string name="workout_treadmill_effort_cooldown">Hafif yürüyüş hızı</string>
+    <string name="workout_acquiring_gps">GPS aranıyor…</string>
+    <string name="workout_gps_unavailable">GPS kullanılamıyor</string>
+    <string name="workout_complete_title">Antrenman Tamamlandı!</string>
+    <string name="workout_complete_message">Tebrikler! Harika iş çıkardın.</string>
+    <string name="workout_complete_time">Süre: %1$s</string>
+    <string name="workout_done">Bitti</string>
+    <string name="workout_paused_label">DURAKLATILDI</string>
+    <string name="workout_reconnecting">Yeniden bağlanıyor…</string>
+    <string name="workout_starting">Başlatılıyor…</string>
+    <string name="workout_new_best">Yeni kişisel rekor!</string>
+    <string name="workout_previous_best">Önceki rekor: %1$s</string>
+    <string name="workout_calories_burned">%1$d kcal yakıldı (tahmini)</string>
+    <string name="workout_calories_hint">Yakılan kaloriyi görmek için Ayarlar\'dan kilonuzu girin</string>
+
+    <!-- History screen -->
+    <string name="history_title">Geçmiş</string>
+    <string name="history_empty">Henüz tamamlanmış antrenman yok.</string>
+    <!-- U+00A0 (non-breaking space, encoded as &#160;) keeps each number with its
+         label; only the ", " between clauses is a valid wrap point. -->
+    <string name="history_week_day">%1$d.&#160;Hafta, %2$d.&#160;Gün</string>
+    <string name="history_duration">%1$s</string>
+    <string name="history_export">CSV Dışa Aktar</string>
+    <string name="history_export_chooser">Antrenman geçmişini dışa aktar</string>
+    <string name="history_export_gpx">GPX rotasını dışa aktar</string>
+    <string name="history_export_gpx_chooser">GPX rotasını paylaş</string>
+    <string name="history_delete_title">Antrenman silinsin mi?</string>
+    <string name="history_delete_message">Bu antrenman kalıcı olarak geçmişinizden silinecektir.</string>
+    <string name="history_delete_confirm">Sil</string>
+    <string name="history_delete_cancel">İptal</string>
+    <plurals name="history_stats_workouts">
+        <item quantity="one">antrenman</item>
+        <item quantity="other">antrenman</item>
+    </plurals>
+    <string name="history_stats_km">km</string>
+    <string name="history_stats_time">süre</string>
+    <string name="history_stats_calories">kcal</string>
+    <string name="history_stats_pace">tempo</string>
+    <string name="history_stats_longest">en uzun</string>
+    <string name="history_stats_section_totals">Toplamlar</string>
+    <string name="history_stats_section_bests">Kişisel rekorlar</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">Antrenman</string>
+    <string name="notification_channel_desc">Aktif antrenman zamanlayıcısı</string>
+    <string name="notification_action_pause">Duraklat</string>
+    <string name="notification_action_resume">Devam Et</string>
+    <string name="notification_action_stop">Durdur</string>
+    <string name="notification_title">C2K Antrenman</string>
+    <string name="workout_paused_notification">Duraklatıldı</string>
+
+    <!-- Permissions -->
+    <string name="permission_location_rationale">C2K, GPS kullanarak mesafenizi ve temponuzu takip edebilir. Bu isteğe bağlıdır — antrenman zamanlayıcısı GPS olmadan da çalışır.</string>
+    <string name="permission_location_deny">GPS\'i Atla</string>
+    <string name="permission_location_allow">GPS\'e İzin Ver</string>
+
+    <!-- Navigation content descriptions -->
+    <string name="nav_back">Geri</string>
+    <string name="cd_collapse">Daralt</string>
+    <string name="cd_expand">Genişlet</string>
+
+    <!-- Workout screen title -->
+    <string name="cd_interval_remaining">%1$s: %2$s kaldı</string>
+    <string name="cd_interval_paused">Duraklatıldı: %1$s</string>
+
+    <!-- Additional programs -->
+    <string name="program_pre_c25k">5K Ön Hazırlık</string>
+    <string name="program_pre_c25k_desc">C25K 1. Haftayı çok zor bulan yeni başlayanlar için 3 haftalık başlangıç. C25K\'ya geçiş sağlar.</string>
+    <string name="program_b210k">10K\'ya Köprü</string>
+    <string name="program_b210k_desc">C25K mezunları olup doğrudan C210K\'ya geçmeye hazır olmayanlar için 6 haftalık köprü programı.</string>
+    <string name="program_ohr">1 Saat Koşucusu</string>
+    <string name="program_ohr_desc">30 dakikadan 60 dakikaya kesintisiz koşu için 13 haftalık ilerleme programı.</string>
+    <string name="program_5ki">5K Geliştirici</string>
+    <string name="program_5ki_desc">Halihazırda 5K koşabilen koşucular için 8 haftalık hız ve dayanıklılık programı.</string>
+
+    <!-- Program prerequisites -->
+    <string name="program_prereq_after_c25k">C25K tamamlandıktan sonra</string>
+    <string name="program_prereq_after_b210k_or_c25k">B210K veya C25K tamamlandıktan sonra</string>
+    <string name="program_prereq_for_5k_runners">Halihazırda 5K koşabilen koşucular için</string>
+
+    <!-- Guide -->
+    <string name="guide_title">Rehber</string>
+    <string name="guide_section_before_start">Başlamadan Önce</string>
+    <string name="guide_section_during_workout">Antrenman Sırasında</string>
+    <string name="guide_section_between_workouts">Antrenmanlar Arasında</string>
+    <string name="guide_section_glossary">Terimler Sözlüğü</string>
+
+    <string name="guide_q_conversational_pace">Konuşma temposu nedir?</string>
+    <string name="guide_a_conversational_pace">Konuşma temposu, koşarken kelimeler arasında nefes nefese kalmadan tam cümlelerle rahatça konuşabileceğiniz hızda koşmak anlamına gelir. Konuşamayacak kadar nefesiniz kesiliyorsa yavaşlayın.\n\nBirçok yeni başlayan çok hızlı koşar ve ilk dakikada tükenir. Yavaşlamak zayıflık göstergesi değil, doğru tekniktir. Efor sarf ettiğinizi hissetmeli ama rahat olmalısınız.</string>
+    <string name="guide_q_gear_needed">Gerçekten hangi ekipmanlara ihtiyacım var?</string>
+    <string name="guide_a_gear_needed">Para harcamaya değer tek şey iyi bir koşu ayakkabısıdır. Ayakkabılar eklemlerinize binen tekrarlı darbeleri yumuşatır ve sakatlık riskini önemli ölçüde azaltır. Mümkünse uzman bir koşu mağazasına gidip ayağınıza uygun bir model seçin.\n\nBunun dışındaki her şey — özel kıyafetler, nabız bantları, GPS saatler — isteğe bağlıdır. Başlangıçta halihazırda sahip olduğunuz rahat kıyafetler fazlasıyla yeterlidir.</string>
+    <string name="guide_q_first_week">İlk hafta nasıl hissettirmeli?</string>
+    <string name="guide_a_first_week">Zor. Daha önce koşmadıysanız 1. Haftadaki 60 saniyelik koşu aralıkları bile şaşırtıcı derecede zor gelecektir ve bu tamamen normaldir.\n\nKardiyovasküler sisteminiz kas ve bağ dokularınızdan daha hızlı adapte olur, bu nedenle nefes nefese kalma hissi bacak yorgunluğundan daha önce hafifler. Her seanstan sonra yorgun hissetmeyi bekleyin — bu, antrenmanın işe yaradığını gösterir. 3. veya 4. haftaya geldiğinizde çoğu insan belirgin bir gelişme fark eder.</string>
+    <string name="guide_q_safe_to_start">Yıllardır spor yapmadıysam başlamak güvenli mi?</string>
+    <string name="guide_a_safe_to_start">Çoğu insan için evet — C25K özellikle sıfırdan başlayanlar için tasarlanmıştır. Bir kalp rahatsızlığınız veya eklem probleminiz varsa ya da uzun süredir hareketsizseniz ve 40 yaşın üzerindeyseniz, önce doktorunuza danışmanız mantıklıdır ancak her zaman şart değildir.\n\nProgram, tam olarak yeni başlayanlara yönelik olduğu için çok hafif başlar.</string>
+
+    <string name="guide_q_warmup">Isınma nedir ve neden atlamamalıyım?</string>
+    <string name="guide_a_warmup">Her seansın başındaki 5 dakikalık tempolu yürüyüş kalp atış hızınızı kademeli olarak yükseltir ve kaslarınıza giden kan akışını artırır. Soğuk kaslar daha az esnektir ve zorlanmaya daha yatkındır.\n\nIsınmayı atlamak ilk koşu aralığının gereğinden çok daha zor hissettirmesine neden olur ve kas çekmesi riskini artırır. Beş dakika küçük bir yatırımdır.</string>
+    <string name="guide_q_cooldown">Soğuma nedir?</string>
+    <string name="guide_a_cooldown">Seans sonundaki 5 dakikalık yürüyüş, aniden durmak yerine kalp atış hızınızı kademeli olarak düşürür. Ayrıca vücudunuzun kaslarınızdaki laktik asidi temizlemeye başlamasına yardımcı olur ve antrenman sonrası sertliği azaltır.\n\nSadece 5 dakika sürer ve ertesi gün nasıl hissettiğinizde büyük bir fark yaratır.</string>
+    <string name="guide_q_pain_discomfort">Ağrı ile rahatsızlık hissi — farkı nasıl anlarım?</string>
+    <string name="guide_a_pain_discomfort">Rahatsızlık hissi normaldir ve beklenir: yanan akciğerler, yorgun bacaklar, sızlayan kaslar. Egzersiz yapmak özellikle başlarda böyle hissettirir.\n\nAğrı ise farklıdır. Keskindir, belirli bir noktada odaklanır (diz, kaval kemiği, ayak) veya koştukça kötüleşir. Ağrı, vücudunuzun bir şeylerin ters gittiğini belirten sinyalidir.\n\nRahatsızlık hissi \"bu zor\" der. Ağrı ise \"dur\" der. Bir seans sırasında gerçek bir ağrı hissederseniz durun ve eve yürüyün. Bir gün dinlendikten sonra da devam ederse, tekrar koşmadan önce bir fizyoterapiste veya doktora görünün.</string>
+    <string name="guide_q_breathing">Nasıl nefes almalıyım?</string>
+    <string name="guide_a_breathing">Tek bir doğru teknik yoktur — en çok havayı almanızı sağlayan şekilde nefes alın. Birçok koşucu doğal olarak 2:2 ritmine alışır: 2 adımda nefes al, 2 adımda nefes ver. Diğerleri 3:2 tercih eder veya ihtiyaca göre nefes alır.\n\nHem burundan hem ağızdan nefes almak tamamen normaldir ve yüksek tempoda çalışırken tavsiye edilir. Nefes nefese kalıyorsanız çok hızlı koşuyorsunuz demektir — nefesiniz kontrol edilebilir hissettirene kadar yavaşlayın.</string>
+    <string name="guide_q_cant_finish_interval">Bir koşu aralığını tamamlayamazsam ne olur?</string>
+    <string name="guide_a_cant_finish_interval">Yürüyün. Yürümekte bir başarısızlık yoktur — yürüme molaları programa tam da bu nedenle dahil edilmiştir.\n\nKoşu aralıklarını düzenli olarak tamamlayamıyorsanız, koşu temponuzu daha da yavaşlatmayı deneyin. Birçok insan \"yavaş\" temposunun başlangıçta ne kadar yavaş olması gerektiğine şaşırır. Sürdürebileceğiniz çok yavaş bir hafif tempo koşu, sizi durmaya zorlayan hızlı bir koşudan çok daha iyidir.</string>
+
+    <!-- Guide - Between Workouts -->
+    <string name="guide_q_rest_days">Neden dinlenme günlerine ihtiyacım var?</string>
+    <string name="guide_a_rest_days">Kondisyon kazanımları koşunun kendisinde değil, dinlenme sırasında gerçekleşir. Antrenman kaslarınızda ve bağ dokularınızda küçük mikro yıpranmalar oluşturur; dinlenme günleri vücudunuzun bu yıpranmaları onarıp biraz daha güçlü hale geldiği zamandır.\n\nC25K programının haftada 3 seans olmasının nedeni budur. Yeni başlayan biri olarak her gün koşmak, aşırı kullanım sakatlıkları (stres kırıkları, kaval kemiği ağrısı ve tendon sorunları) riskini önemli ölçüde artırır ve sizi haftalarca kenarda bırakabilir.</string>
+    <string name="guide_q_rest_day_activities">Dinlenme günlerinde ne yapmalıyım?</string>
+    <string name="guide_a_rest_day_activities">Dinlenmek hiçbir şey yapmamak anlamına gelmez. Hafif aktiviteler — yürüyüş, esneme veya vücut ağırlığıyla kuvvet çalışmaları — koşuya özgü stres yaratmadan ağrıyan kaslara kan akışını sürdürür ve tamamen hareketsiz kalmaya kıyasla toparlanmayı hızlandırabilir.\n\nSquat, lunge, plank ve calf raise gibi vücut ağırlığı egzersizleri C25K ile birlikte özellikle faydalıdır: tek başına koşunun çalıştırmadığı kalça, karın (core) ve ayak bileği stabilitesini güçlendirir. Güçlü dengeleyici kaslar, kaval kemiği ağrısı ve koşucu dizi gibi yaygın sakatlıklara karşı en iyi savunmadır. Haftada iki veya üç kısa seans (15–20 dakika) yeterlidir; ana antrenman uyarınız zaten koşu programıdır.</string>
+    <string name="guide_q_repeat_day">Bir günü tekrarlamalı mıyım yoksa devam mı etmeliyim?</string>
+    <string name="guide_a_repeat_day">Seans zor hissettirse bile tamamladığınız sürece devam edin. C25K, neredeyse herkesin her hafta ilerleyebileceği kadar kademeli bir tempoyla tasarlanmıştır.\n\nBir günü yalnızca koşu aralıklarını hiç tamamlayamadıysanız tekrarlayın — örneğin aralıkların ortasında birkaç kez durmak zorunda kaldıysanız. Yorgun, yavaş veya nefessiz hissetmek tekrarlamak için bir neden değildir; 2. Hafta zaten böyle hissettirir.</string>
+    <string name="guide_q_ready_next_session">Bir sonraki seansa ne zaman hazırım?</string>
+    <string name="guide_a_ready_next_session">Önceki seansın kas ağrısı büyük oranda geçtiğinde — genellikle 1 ila 2 gün sonra. Bir koşudan 24–48 saat sonra hafif kas ağrısı olması normaldir (buna DOMS, gecikmiş kas ağrısı denir) ve ilk birkaç haftada vücudunuz alıştıkça şiddeti azalır.\n\nHâlâ belirgin şekilde ağrınız veya kas sertliğiniz varsa fazladan bir gün dinlenin. Bir gün gecikmek sorun yaratmaz; çok yorgun bacaklarla koşmak sakatlık riskini artırır.</string>
+    <string name="guide_q_stretch">Esneme yapmam gerekir mi?</string>
+    <string name="guide_a_stretch">Koşudan sonra (öncesinde değil) hafif esneme hareketleri esnekliğe yardımcı olabilir ve kas sertliğini azaltabilir. Baldırlara, hamstringlere, kalça fleksörlerine ve kuadrisepslere — yani en çok çalışan kaslara — odaklanın.\n\nKaslarınız soğukken koşudan önce statik esneme yapmak daha az faydalıdır ve hatta kas zorlanmalarına yol açabilir. Isınma yürüyüşü, statik esnemeden çok daha etkili bir hazırlıktır.</string>
+
+    <!-- Guide - Glossary -->
+    <string name="guide_q_aerobic_fitness">Aerobik kondisyon</string>
+    <string name="guide_a_aerobic_fitness">Kalbinizin ve akciğerlerinizin sürekli egzersiz sırasında kaslarınıza oksijen iletme kapasitesi. C25K özellikle aerobik kondisyonu — tüm dayanıklılık aktivitelerinin temelini — geliştirir.</string>
+    <string name="guide_q_interval_term">Aralık (Interval)</string>
+    <string name="guide_a_interval_term">Belirli bir süre boyunca belirli bir yoğunlukta yapılan efor dönemi. Her C25K seansı bir dizi koşu ve yürüme aralığı olarak yapılandırılmıştır — örneğin sekiz kez \"60 saniye koş, 90 saniye yürü\".</string>
+    <string name="guide_q_pace_term">Tempo (Pace)</string>
+    <string name="guide_a_pace_term">Ne kadar hızlı koştuğunuz; genellikle kilometre veya mil başına dakika olarak ifade edilir — örneğin 7:30 / km, bir kilometreyi koşmanın 7 dakika 30 saniye sürdüğü anlamına gelir.\n\nC25K\'nın büyük bölümünde tempo önemli değildir; önemli olan aralıkları tamamlamaktır. Programı bitirene kadar tempoyu tamamen göz ardı edin.</string>
+    <string name="guide_q_doms">DOMS (Gecikmiş Kas Ağrısı)</string>
+    <string name="guide_a_doms">Egzersizden 24–48 saat sonra ortaya çıkan, kas liflerinin yeni yüke uyum sağlarken geçirdiği mikroskobik hasarın neden olduğu kas ağrısı. Normaldir, zararlı değildir ve antrenmanın ilk birkaç haftasından sonra belirgin şekilde hafifler.</string>
+    <string name="guide_q_shin_splints">Shin splints (Kaval kemiği ağrısı)</string>
+    <string name="guide_a_shin_splints">Alt bacağın ön veya iç kenarı boyunca hissedilen, yeni koşucularda yaygın ağrı. Genellikle çok kısa sürede çok fazla yüklenmekten veya yıpranmış ayakkabılarla koşmaktan kaynaklanır.\n\nKaval kemiği ağrısı oluşursa 3–5 gün dinlenin. Döndüğünüzde ayakkabılarınızı kontrol edin ve koşu temponuzun çok hızlı olmadığından emin olun. İnatçı kaval kemiği ağrısı bir fizyoterapist tarafından değerlendirilmelidir.</string>
+    <string name="guide_q_rpe">RPE (Algılanan Efor Derecesi)</string>
+    <string name="guide_a_rpe">Bir eforun ne kadar zor hissettirdiğini gösteren 1–10 arası basit bir ölçek; 1 hareketsiz oturmak, 10 ise birkaç saniyeden fazla sürdüremeyeceğiniz tam güçte bir sprinttir.\n\nC25K koşularınızın çoğu 5–6 gibi hissettirmelidir: belirgin şekilde çalışılan ama sürdürülebilir bir tempo. Konuşma temposu.</string>
+    <string name="guide_q_calorie_estimate">Yakılan kalori nasıl tahmin ediliyor?</string>
+    <string name="guide_a_calorie_estimate">Ortalama hızınız, vücut ağırlığınız ve hareket sürenize dayanarak MET (Metabolic Equivalent of Task) değerleri kullanılarak hesaplanır: kalori = MET × ağırlık (kg) × süre (saat).\n\nBu bir ölçüm değil, tahmindir — kondisyon seviyesi, zemin veya kalp atış hızını hesaba katmaz; bu nedenle kesin bir sayı yerine genel bir rehber olarak değerlendirin. Yalnızca Ayarlar\'da kilonuzu girdikten sonra görünür ve bu bilgi asla cihazınızdan dışarı çıkmaz.</string>
+
+    <!-- Contributors -->
+    <string name="contributors_title">Katkıda Bulunanlar</string>
+    <string name="contributor_github_label">GitHub</string>
+    <string name="contributor_fediverse_label">Fediverse</string>
+    <string name="contributor_translation_es">İspanyolca (es) çeviri</string>
+    <string name="contributor_translation_gl">Galiçyaca (gl) çeviri</string>
+    <string name="contributor_translation_ru">Rusça (ru) çeviri</string>
+    <string name="contributor_translation_tr">Türkçe (tr) çeviri</string>
+    <string name="contributor_fix_tts_ducking">Düzeltme: TTS seslendirmeleri artık arka plan müziğini duraklatmak yerine sesini kısıyor</string>
+    <string name="contributor_fix_completion_counter">Düzeltme: Tamamlama sayacı artık ekran kilitlendiğinde donmuyor ve tamamlama anonsu kesilmiyor</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_tts_enabled">Sesli yönlendirmeler</string>
+    <string name="settings_treadmill_mode">Koşu bandı modu (GPS\'i kapatır)</string>
+    <string name="settings_gps_enabled">GPS takibi</string>
+    <string name="settings_countdown_warnings">Geri sayım uyarıları</string>
+    <string name="settings_countdown_warning_1">Birinci uyarı</string>
+    <string name="settings_countdown_warning_2">İkinci uyarı</string>
+    <string name="settings_mid_interval_cues">Aralık ortası motivasyonu</string>
+    <string name="settings_keep_screen_on">Antrenman sırasında ekranı açık tut</string>
+    <string name="settings_vibration_enabled">Aralık değişiminde titreşim</string>
+    <string name="settings_tts_speed">Ses hızı</string>
+    <string name="settings_tts_speed_slow">Yavaş</string>
+    <string name="settings_tts_speed_fast">Hızlı</string>
+    <string name="settings_tts_volume">Ses düzeyi</string>
+    <string name="settings_tts_volume_quiet">Kısık</string>
+    <string name="settings_tts_volume_loud">Yüksek</string>
+    <string name="settings_weight">Kilo</string>
+    <string name="settings_weight_not_set">Belirtilmedi</string>
+    <string name="settings_weight_hint">Yalnızca yakılan kaloriyi tahmin etmek için kullanılır. Cihazınızdan asla ayrılmaz.</string>
+    <string name="weight_unit_kg">kg</string>
+    <string name="weight_unit_lb">lb</string>
+    <string name="weight_unit_stone">st</string>
+
+    <!-- Battery optimization warning -->
+    <string name="battery_opt_title">Pil Optimizasyonu</string>
+    <string name="battery_opt_message">Kesintisiz antrenmanlar için C2K\'nin arka planda çalışmasına izin verin. Pil ayarlarını açmak için dokunun.</string>
+    <string name="battery_opt_open_settings">Ayarları Aç</string>
+    <string name="battery_opt_dismiss">Kapat</string>
+
+    <!-- TTS unavailable warning -->
+    <string name="tts_unavailable">Bu cihazda metin okuma (TTS) kullanılamıyor. Sesli bildirimler devre dışı bırakıldı.</string>
+
+    <!-- TTS announcements -->
+    <string name="tts_interval_warmup">Isınma yürüyüşüne başlayın</string>
+    <string name="tts_interval_run">%1$s koşmaya başlayın</string>
+    <string name="tts_interval_walk">%1$s yürüyün</string>
+    <string name="tts_interval_cooldown">Soğuma yürüyüşüne başlayın</string>
+    <plurals name="tts_seconds_remaining">
+        <item quantity="one">%1$d saniye kaldı</item>
+        <item quantity="other">%1$d saniye kaldı</item>
+    </plurals>
+    <string name="tts_next_run">Koşmaya hazır olun</string>
+    <string name="tts_next_walk">Yürümeye hazır olun</string>
+    <string name="tts_next_warmup">Isınmaya hazır olun</string>
+    <string name="tts_next_cooldown">Soğumaya hazır olun</string>
+    <string-array name="tts_encouragement_phrases">
+        <item>Harika gidiyorsun, aynen devam!</item>
+        <item>Yarısı bitti, güçlü kal!</item>
+        <item>Devam et, başarabilirsin!</item>
+        <item>Harika çaba, az kaldı!</item>
+        <item>Mükemmel gidiyorsun, zorlamaya devam!</item>
+    </string-array>
+    <string name="tts_workout_complete">Antrenman tamamlandı. Harika iş çıkardın!</string>
+    <string name="tts_halfway">Yarı yoldasın, devam et!</string>
+    <string name="tts_last_run">Son koşu, güçlü bitir!</string>
+    <string name="tts_duration_min_sec">%1$s %2$s</string>
+    <plurals name="tts_duration_minutes">
+        <item quantity="one">%d dakika</item>
+        <item quantity="other">%d dakika</item>
+    </plurals>
+    <plurals name="tts_duration_seconds">
+        <item quantity="one">%d saniye</item>
+        <item quantity="other">%d saniye</item>
+    </plurals>
+
+    <!-- Coaching tips - C25K -->
+    <string name="coaching_c25k_w1">Hâlâ konuşabileceğiniz bir tempoda koşun. Yürüme molaları antrenmanın bir parçasıdır.</string>
+    <string name="coaching_c25k_w2">1. haftayı bitirdiniz — vücudunuz şimdiden adapte oluyor. Tempoyu hafif tutun.</string>
+    <string name="coaching_c25k_w3">Bu hafta daha uzun aralıklar var. Düzenli nefes almaya odaklanın: 2 adımda al, 2 adımda ver.</string>
+    <string name="coaching_c25k_w4">Bugün dört farklı koşu süresi var. Bu, kondisyon kadar zihinsel dayanıklılığı da geliştirir.</string>
+    <string name="coaching_c25k_w5">Bu haftanın 3. Günü ünlü dönüm noktası: 20 dakika kesintisiz koşu. Bunu hak ettiniz.</string>
+    <string name="coaching_c25k_w6">Yarıyı geçtiniz. Uzun koşular aerobik temelinizi inşa ediyor.</string>
+    <string name="coaching_c25k_w7">25 dakika kesintisiz koşu. Herkes bu aşamaya gelemez — artık bir koşucusunuz.</string>
+    <string name="coaching_c25k_w8">28 dakika. Hedef neredeyse elinizin altında. Hızlanmayın — enerjinizi gelecek haftaya saklayın.</string>
+    <string name="coaching_c25k_w9">Bu mezuniyet haftası. 30 dakika koşun ve ardından kutlayın!</string>
+
+    <!-- Coaching tips - C210K extension weeks -->
+    <string name="coaching_c210k_w10">Daha uzun mesafe için temelinizi yeniden inşa etmek üzere aralıklara dönüyoruz. Sakin kalın.</string>
+    <string name="coaching_c210k_w11">Daha uzun birleşik eforlar. Tempo boyunca konuşma hızınızı koruyun.</string>
+    <string name="coaching_c210k_w12">Kısa bir mola ile 40 dakika koşu. Rahatlayın ve yarışmayın.</string>
+    <string name="coaching_c210k_w13">50 dakika. Bunu yapabilirseniz 10K bitişi artık çok yakın.</string>
+    <string name="coaching_c210k_w14">60 dakika — 10K mezuniyet koşunuz. Başarabilirsiniz!</string>
+
+    <!-- Coaching tips - Bridge to 10K -->
+    <string name="coaching_b210k_w1">C25K\'dan sonra alışkanlığı yeniden pekiştiriyoruz. Rahat koşun, henüz zorlamaya gerek yok.</string>
+    <string name="coaching_b210k_w2">Kısa bir dinlenmeyle iki uzun blok. Her iki koşuda da dengeli bir tempo hedefleyin.</string>
+    <string name="coaching_b210k_w3">Toplam hacmi artırıyoruz. Her iki aralıkta da istikrarlı efora odaklanın.</string>
+    <string name="coaching_b210k_w4">Neredeyse 45 dakika koşu. Gerçek bir 10K kondisyonu inşa ediyorsunuz.</string>
+    <string name="coaching_b210k_w5">Bu hafta 50 dakika. 60 dakikalık tam mezuniyet koşusuna sadece bir hafta kaldı.</string>
+    <string name="coaching_b210k_w6">60 dakika — B210K bitiş çizgisi. Tebrikler!</string>
+
+    <!-- Coaching tips - One Hour Runner -->
+    <string name="coaching_ohr_w1">33 dakikalık rahat, hafif koşu. Tempoyu dert etmeyin, sadece tamamlayın.</string>
+    <string name="coaching_ohr_w4">40 dakika. Her hafta gerçek bir dayanıklılık inşa ediyorsunuz.</string>
+    <string name="coaching_ohr_w7">Neredeyse 50 dakika. Ortalama bir koşucunun konfor alanının çok ötesindesiniz.</string>
+    <string name="coaching_ohr_w10">55 dakika. Bir saatlik hedefe sadece iyi bir hafta kaldı.</string>
+    <string name="coaching_ohr_w13">60 dakika — işte bu kadar. Artık bir saatlik bir koşucusunuz!</string>
+
+    <!-- Coaching tips - 5K Improver -->
+    <string name="coaching_5ki_w1">Kısa ve sert eforlar bacak hızını artırır. Normal 5K temponuzdan biraz daha fazla zorlayın.</string>
+    <string name="coaching_5ki_w2">5 dakikalık aralıklar aerobik güç oluşturmak için en ideal noktadır.</string>
+    <string name="coaching_5ki_w4">Kombinasyon antrenmanı: bitiriş koşusu ile daha uzun aralıklar. Bu, yarış dayanıklılığı kazandırır.</string>
+    <string name="coaching_5ki_w6">İki adet 15 dakikalık koşu — doğrudan daha hızlı bir 5K\'ya dönüşecek sağlam aerobik çalışma.</string>
+    <string name="coaching_5ki_w8">Mezuniyet koşusu: 5K yarış eforunda 30 dakika. Ne kadar ilerleyebildiğinizi görün — harika hissettirmeli.</string>
+</resources>

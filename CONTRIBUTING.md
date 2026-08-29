@@ -27,3 +27,4 @@ See the [README](README.md) for build requirements and instructions.
 | [xmgz](https://github.com/xmgz) | Spanish (es) and Galician (gl) translations |
 | [andrewfarabee](https://github.com/andrewfarabee) | Fix: TTS announcements duck background music instead of pausing it; Fix: completion counter freeze and cut-off completion announcement |
 | [ilyushenok](https://github.com/ilyushenok) | Russian (ru) translation |
+| [ahmetemrew](https://github.com/ahmetemrew) | Turkish (tr) translation |
