@@ -212,6 +212,16 @@
 
     <!-- Settings -->
     <string name="settings_title">Paramètres</string>
+    <string name="settings_language">Langue</string>
+    <string name="language_system_default">Par défaut</string>
+    <string name="language_en">Anglais (English)</string>
+    <string name="language_de">Allemand (Deutsch)</string>
+    <string name="language_es">Espagnol (Español)</string>
+    <string name="language_fr">Français</string>
+    <string name="language_gl">Galicien (Galego)</string>
+    <string name="language_pt_br">Portugais (Português)</string>
+    <string name="language_ru">Russe (Русский)</string>
+    <string name="language_tr">Turc (Türkçe)</string>
     <string name="settings_tts_enabled">Annonces vocales</string>
     <string name="settings_treadmill_mode">Mode tapis de course (désactive le GPS)</string>
     <string name="settings_gps_enabled">Suivi GPS</string>

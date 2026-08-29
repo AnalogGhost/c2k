@@ -214,6 +214,16 @@
 
     <!-- Settings -->
     <string name="settings_title">Ayarlar</string>
+    <string name="settings_language">Dil</string>
+    <string name="language_system_default">Sistem varsayılanı</string>
+    <string name="language_en">İngilizce (English)</string>
+    <string name="language_de">Almanca (Deutsch)</string>
+    <string name="language_es">İspanyolca (Español)</string>
+    <string name="language_fr">Fransızca (Français)</string>
+    <string name="language_gl">Galiçyaca (Galego)</string>
+    <string name="language_pt_br">Brezilya Portekizcesi (Português)</string>
+    <string name="language_ru">Rusça (Русский)</string>
+    <string name="language_tr">Türkçe</string>
     <string name="settings_tts_enabled">Sesli yönlendirmeler</string>
     <string name="settings_treadmill_mode">Koşu bandı modu (GPS\'i kapatır)</string>
     <string name="settings_gps_enabled">GPS takibi</string>

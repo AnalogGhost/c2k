@@ -212,6 +212,16 @@
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="language_system_default">System default</string>
+    <string name="language_en">English</string>
+    <string name="language_de">Deutsch</string>
+    <string name="language_es">Español</string>
+    <string name="language_fr">Français</string>
+    <string name="language_gl">Galego</string>
+    <string name="language_pt_br">Português (Brasil)</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_tr">Türkçe</string>
     <string name="settings_tts_enabled">Voice announcements</string>
     <string name="settings_treadmill_mode">Treadmill mode (disables GPS)</string>
     <string name="settings_gps_enabled">GPS tracking</string>

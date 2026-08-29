@@ -215,6 +215,16 @@
 
     <!-- Settings -->
     <string name="settings_title">Настройки</string>
+    <string name="settings_language">Язык</string>
+    <string name="language_system_default">Системный по умолчанию</string>
+    <string name="language_en">Английский (English)</string>
+    <string name="language_de">Немецкий (Deutsch)</string>
+    <string name="language_es">Испанский (Español)</string>
+    <string name="language_fr">Французский (Français)</string>
+    <string name="language_gl">Галисийский (Galego)</string>
+    <string name="language_pt_br">Португальский (Português)</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_tr">Турецкий (Türkçe)</string>
     <string name="settings_tts_enabled">Голосовые уведомления</string>
     <string name="settings_treadmill_mode">Режим беговой дорожки (отключает GPS)</string>
     <string name="settings_gps_enabled">GPS-отслеживание</string>

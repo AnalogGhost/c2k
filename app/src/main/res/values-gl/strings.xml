@@ -212,6 +212,16 @@
 
     <!-- Settings -->
     <string name="settings_title">Axustes</string>
+    <string name="settings_language">Idioma</string>
+    <string name="language_system_default">Predeterminado do sistema</string>
+    <string name="language_en">Inglés (English)</string>
+    <string name="language_de">Alemán (Deutsch)</string>
+    <string name="language_es">Español (Español)</string>
+    <string name="language_fr">Francés (Français)</string>
+    <string name="language_gl">Galego</string>
+    <string name="language_pt_br">Portugués (Português)</string>
+    <string name="language_ru">Ruso (Русский)</string>
+    <string name="language_tr">Turco (Türkçe)</string>
     <string name="settings_tts_enabled">Anuncios por voz</string>
     <string name="settings_treadmill_mode">Modo cinta de correr (desactiva GPS)</string>
     <string name="settings_gps_enabled">Gravar con GPS</string>

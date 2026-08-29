@@ -212,6 +212,16 @@
 
     <!-- Settings -->
     <string name="settings_title">Configurações</string>
+    <string name="settings_language">Idioma</string>
+    <string name="language_system_default">Padrão do sistema</string>
+    <string name="language_en">Inglês (English)</string>
+    <string name="language_de">Alemão (Deutsch)</string>
+    <string name="language_es">Espanhol (Español)</string>
+    <string name="language_fr">Francês (Français)</string>
+    <string name="language_gl">Galego (Galego)</string>
+    <string name="language_pt_br">Português (Brasil)</string>
+    <string name="language_ru">Russo (Русский)</string>
+    <string name="language_tr">Turco (Türkçe)</string>
     <string name="settings_tts_enabled">Avisos de voz</string>
     <string name="settings_treadmill_mode">Modo esteira (desativa o GPS)</string>
     <string name="settings_gps_enabled">Rastreamento por GPS</string>
