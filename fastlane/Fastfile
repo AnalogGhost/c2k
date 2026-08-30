@@ -1,10 +1,13 @@
 default_platform(:android)
 
 platform :android do
-  desc "Build the debug APK + test APK and capture store-listing screenshots in every locale"
+  desc "Build the debug APK + test APK, capture raw store-listing screenshots in every locale"
+  desc "(into fastlane/metadata/android — F-Droid's plain set), then composite the framed/"
+  desc "captioned marketing set (into fastlane/metadata/android-play) for Play Store upload."
   lane :screenshots do
     gradle(task: "assembleFossDebug assembleFossDebugAndroidTest")
     capture_android_screenshots
+    gradle(task: ":tools:screenshot-composer:run")
   end
 
   desc "Build the Play release AAB and upload it plus store listing metadata to Google Play"
@@ -45,11 +48,14 @@ platform :android do
 
   desc "Upload only store screenshots/images to Google Play — no build, no AAB, no listing"
   desc "text, no changelogs. For refreshed screenshots between releases."
+  desc "Reads from fastlane/metadata/android-play, the framed/captioned marketing set generated"
+  desc "by `./gradlew :tools:screenshot-composer:run` — NOT fastlane/metadata/android, which"
+  desc "stays plain/raw for F-Droid."
   desc "Defaults to a dry run; pass validate_only:false to publish."
   lane :images do |options|
     upload_to_play_store(
       track: options[:track] || "production",
-      metadata_path: "./fastlane/metadata/android",
+      metadata_path: "./fastlane/metadata/android-play",
       skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_metadata: true,

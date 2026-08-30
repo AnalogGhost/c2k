@@ -1,6 +1,7 @@
 # Build outputs
 /build/
 app/build/
+tools/*/build/
 /captures/
 
 # Gradle caches — never commit these

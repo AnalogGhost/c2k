@@ -21,7 +21,11 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane android screenshots
 ```
 
-Build the debug APK + test APK and capture store-listing screenshots in every locale
+Build the debug APK + test APK, capture raw store-listing screenshots in every locale
+
+(into fastlane/metadata/android — F-Droid's plain set), then composite the framed/
+
+captioned marketing set (into fastlane/metadata/android-play) for Play Store upload.
 
 ### android playstore
 
@@ -56,6 +60,12 @@ Defaults to a dry run; pass validate_only:false to publish.
 Upload only store screenshots/images to Google Play — no build, no AAB, no listing
 
 text, no changelogs. For refreshed screenshots between releases.
+
+Reads from fastlane/metadata/android-play, the framed/captioned marketing set generated
+
+by `./gradlew :tools:screenshot-composer:run` — NOT fastlane/metadata/android, which
+
+stays plain/raw for F-Droid.
 
 Defaults to a dry run; pass validate_only:false to publish.
 

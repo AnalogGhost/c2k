@@ -1,0 +1,61 @@
+# DRAFT — pending approval. See chat: en-US wording is the primary draft; the other 6
+# locales are Claude-drafted translations matching the tone/vocabulary of this repo's existing
+# fastlane/metadata/android/<locale>/*_description.txt files, not yet reviewed by a native
+# speaker. Do not run `fastlane images` against fastlane/metadata/android-play until this file
+# is approved.
+01_home:
+  en-US: "Six programs, beginner to advanced"
+  de-DE: "Sechs Programme, für Anfänger bis Fortgeschrittene"
+  es-ES: "Seis programas, de principiante a avanzado"
+  gl-ES: "Seis programas, de principiante a avanzado"
+  fr-FR: "Six programmes, du débutant à l'avancé"
+  pt-BR: "Seis programas, do iniciante ao avançado"
+  ru-RU: "Шесть программ — от новичка до продвинутого"
+02_program:
+  en-US: "See your whole training plan"
+  de-DE: "Dein ganzer Trainingsplan im Blick"
+  es-ES: "Todo tu plan de entrenamiento, de un vistazo"
+  gl-ES: "Todo o teu plan de adestramento nunha ollada"
+  fr-FR: "Tout votre plan d'entraînement en un coup d'œil"
+  pt-BR: "Todo o seu plano de treino em um só lugar"
+  ru-RU: "Весь план тренировок как на ладони"
+03_preview:
+  en-US: "Preview every workout before you start"
+  de-DE: "Vorschau für jedes Training"
+  es-ES: "Vista previa de cada entrenamiento"
+  gl-ES: "Vista previa de cada adestramento"
+  fr-FR: "Aperçu de chaque entraînement avant de commencer"
+  pt-BR: "Prévia de cada treino antes de começar"
+  ru-RU: "Просмотр тренировки перед началом"
+04_workout:
+  en-US: "Live run/walk interval coaching"
+  de-DE: "Lauf-/Gehintervalle live begleitet"
+  es-ES: "Intervalos de carrera y caminata en vivo"
+  gl-ES: "Intervalos de correr e camiñar en directo"
+  fr-FR: "Intervalles course/marche en direct"
+  pt-BR: "Intervalos de corrida e caminhada ao vivo"
+  ru-RU: "Интервалы бега и ходьбы в реальном времени"
+05_history:
+  en-US: "Track pace, distance, and calories"
+  de-DE: "Tempo, Distanz und Kalorien im Blick"
+  es-ES: "Ritmo, distancia y calorías al día"
+  gl-ES: "Ritmo, distancia e calorías ao día"
+  fr-FR: "Allure, distance et calories suivies"
+  pt-BR: "Ritmo, distância e calorias acompanhados"
+  ru-RU: "Темп, дистанция и калории под рукой"
+06_guide:
+  en-US: "Built-in running guide, no guesswork"
+  de-DE: "Integrierter Lauf-Ratgeber, keine Fragen offen"
+  es-ES: "Guía de carrera integrada, sin dudas"
+  gl-ES: "Guía de carreira integrada, sen dúbidas"
+  fr-FR: "Guide de course intégré, sans hésitation"
+  pt-BR: "Guia de corrida integrado, sem dúvidas"
+  ru-RU: "Встроенный гид по бегу — никаких вопросов"
+07_settings:
+  en-US: "No ads. No tracking. No account."
+  de-DE: "Keine Werbung. Kein Tracking. Kein Konto."
+  es-ES: "Sin publicidad. Sin rastreo. Sin cuenta."
+  gl-ES: "Sen publicidade. Sen rastrexo. Sen conta."
+  fr-FR: "Sans publicité. Sans suivi. Sans compte."
+  pt-BR: "Sem anúncios. Sem rastreamento. Sem conta."
+  ru-RU: "Без рекламы. Без отслеживания. Без аккаунта."
