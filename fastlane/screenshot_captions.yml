@@ -1,8 +1,8 @@
-# DRAFT — pending approval. See chat: en-US wording is the primary draft; the other 6
-# locales are Claude-drafted translations matching the tone/vocabulary of this repo's existing
-# fastlane/metadata/android/<locale>/*_description.txt files, not yet reviewed by a native
-# speaker. Do not run `fastlane images` against fastlane/metadata/android-play until this file
-# is approved.
+# en-US wording is approved and live on Play. The other 6 locales are Claude-drafted
+# translations matching the tone/vocabulary of this repo's existing
+# fastlane/metadata/android/<locale>/*_description.txt files — also live, but not yet checked
+# by a native speaker (ru-RU and gl-ES are the lowest-confidence ones). Worth a native review
+# pass; re-run `./gradlew :tools:screenshot-composer:run` and `fastlane images` after any edits.
 01_home:
   en-US: "Six programs, beginner to advanced"
   de-DE: "Sechs Programme, für Anfänger bis Fortgeschrittene"
