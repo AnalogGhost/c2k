@@ -1,8 +1,11 @@
-# en-US wording is approved and live on Play. The other 6 locales are Claude-drafted
+# en-US wording is approved and live on Play. The other locales are Claude-drafted
 # translations matching the tone/vocabulary of this repo's existing
 # fastlane/metadata/android/<locale>/*_description.txt files — also live, but not yet checked
-# by a native speaker (ru-RU and gl-ES are the lowest-confidence ones). Worth a native review
-# pass; re-run `./gradlew :tools:screenshot-composer:run` and `fastlane images` after any edits.
+# by a native speaker (ru-RU, gl-ES, and now tr-TR are the lowest-confidence ones). Worth a
+# native review pass; re-run `./gradlew :tools:screenshot-composer:run` and `fastlane images`
+# after any edits. tr-TR captions are drafted here but not yet live — no raw tr-TR screenshots
+# exist until `fastlane android screenshots` captures them (tr-TR was just added to
+# Screengrabfile's locales list).
 01_home:
   en-US: "Six programs, beginner to advanced"
   de-DE: "Sechs Programme, für Anfänger bis Fortgeschrittene"
@@ -11,6 +14,7 @@
   fr-FR: "Six programmes, du débutant à l'avancé"
   pt-BR: "Seis programas, do iniciante ao avançado"
   ru-RU: "Шесть программ — от новичка до продвинутого"
+  tr-TR: "Altı program, yeni başlayandan ileri düzeye"
 02_program:
   en-US: "See your whole training plan"
   de-DE: "Dein ganzer Trainingsplan im Blick"
@@ -19,6 +23,7 @@
   fr-FR: "Tout votre plan d'entraînement en un coup d'œil"
   pt-BR: "Todo o seu plano de treino em um só lugar"
   ru-RU: "Весь план тренировок как на ладони"
+  tr-TR: "Tüm antrenman planınızı görün"
 03_preview:
   en-US: "Preview every workout before you start"
   de-DE: "Vorschau für jedes Training"
@@ -27,6 +32,7 @@
   fr-FR: "Aperçu de chaque entraînement avant de commencer"
   pt-BR: "Prévia de cada treino antes de começar"
   ru-RU: "Просмотр тренировки перед началом"
+  tr-TR: "Başlamadan önce her antrenmanı önizleyin"
 04_workout:
   en-US: "Live run/walk interval coaching"
   de-DE: "Lauf-/Gehintervalle live begleitet"
@@ -35,6 +41,7 @@
   fr-FR: "Intervalles course/marche en direct"
   pt-BR: "Intervalos de corrida e caminhada ao vivo"
   ru-RU: "Интервалы бега и ходьбы в реальном времени"
+  tr-TR: "Canlı koşu/yürüyüş aralık yönlendirmesi"
 05_history:
   en-US: "Track pace, distance, and calories"
   de-DE: "Tempo, Distanz und Kalorien im Blick"
@@ -43,6 +50,7 @@
   fr-FR: "Allure, distance et calories suivies"
   pt-BR: "Ritmo, distância e calorias acompanhados"
   ru-RU: "Темп, дистанция и калории под рукой"
+  tr-TR: "Tempo, mesafe ve kaloriyi takip edin"
 06_guide:
   en-US: "Built-in running guide, no guesswork"
   de-DE: "Integrierter Lauf-Ratgeber, keine Fragen offen"
@@ -51,6 +59,7 @@
   fr-FR: "Guide de course intégré, sans hésitation"
   pt-BR: "Guia de corrida integrado, sem dúvidas"
   ru-RU: "Встроенный гид по бегу — никаких вопросов"
+  tr-TR: "Uygulama içi koşu rehberi, tahmine gerek yok"
 07_settings:
   en-US: "No ads. No tracking. No account."
   de-DE: "Keine Werbung. Kein Tracking. Kein Konto."
@@ -59,3 +68,4 @@
   fr-FR: "Sans publicité. Sans suivi. Sans compte."
   pt-BR: "Sem anúncios. Sem rastreamento. Sem conta."
   ru-RU: "Без рекламы. Без отслеживания. Без аккаунта."
+  tr-TR: "Reklamsız. Takipsiz. Hesapsız."
