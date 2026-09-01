@@ -1,0 +1,1 @@
+• Adicionada intensidade de vibração configurável com as opções Fraca, Média e Forte.

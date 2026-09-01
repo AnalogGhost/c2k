@@ -1,0 +1,1 @@
+• Added configurable vibration strength with Light, Medium, and Strong presets.

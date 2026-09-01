@@ -1,0 +1,1 @@
+• Se añadió intensidad de vibración configurable con los ajustes Suave, Media y Fuerte.
