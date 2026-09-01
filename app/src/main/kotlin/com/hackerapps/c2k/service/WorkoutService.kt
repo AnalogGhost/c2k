@@ -12,9 +12,6 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationCompat
@@ -258,6 +255,7 @@ class WorkoutService : Service() {
             val countdownWarning2 = prefs.countdownWarning2.first()
             val midIntervalCues   = prefs.midIntervalCues.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
+            val vibrationStrength = prefs.vibrationStrength.first()
             val speechRate        = prefs.ttsSpeechRate.first()
             val ttsVolume         = prefs.ttsVolume.first()
 
@@ -309,7 +307,15 @@ class WorkoutService : Service() {
                     when (state) {
                         is WorkoutState.Active -> {
                             if (state.intervalIndex != lastIntervalIndex && lastIntervalIndex >= 0) {
-                                if (vibrationEnabled) vibrateForInterval(state.currentInterval.type)
+                                if (vibrationEnabled) {
+                                    VibrationPlayer.play(
+                                        this@WorkoutService,
+                                        VibrationPatterns.forInterval(
+                                            state.currentInterval.type,
+                                            vibrationStrength
+                                        )
+                                    )
+                                }
                             }
                             lastIntervalIndex = state.intervalIndex
                             updateNotification(state)
@@ -317,7 +323,12 @@ class WorkoutService : Service() {
                         is WorkoutState.Paused -> updateNotificationPaused()
                         is WorkoutState.Completed -> {
                             try {
-                                if (vibrationEnabled) vibrateCompletion()
+                                if (vibrationEnabled) {
+                                    VibrationPlayer.play(
+                                        this@WorkoutService,
+                                        VibrationPatterns.forCompletion(vibrationStrength)
+                                    )
+                                }
                                 sessionRepository.finishSession(
                                     sessionId = state.sessionId,
                                     durationSeconds = state.elapsedSessionSeconds,
@@ -437,35 +448,6 @@ class WorkoutService : Service() {
         wakeLock = (getSystemService(Context.POWER_SERVICE) as PowerManager)
             .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG)
         wakeLock.acquire(WAKELOCK_TIMEOUT)
-    }
-
-    // ── Vibration ─────────────────────────────────────────────────────────────
-
-    // RUN gets a double-pulse "go" cue; WALK/WARMUP/COOLDOWN share a single gentler pulse
-    // since they're all lower-intensity segments — distinguishing those three from each
-    // other wasn't worth the extra patterns to learn.
-    private fun vibrateForInterval(type: IntervalType) {
-        val effect = when (type) {
-            IntervalType.RUN -> VibrationEffect.createWaveform(longArrayOf(0, 150, 100, 150), -1)
-            IntervalType.WALK, IntervalType.WARMUP, IntervalType.COOLDOWN ->
-                VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
-        }
-        doVibrate(effect)
-    }
-
-    private fun vibrateCompletion() {
-        val effect = VibrationEffect.createWaveform(longArrayOf(0, 300, 150, 300, 150, 500), -1)
-        doVibrate(effect)
-    }
-
-    private fun doVibrate(effect: VibrationEffect) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            (getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager)
-                .defaultVibrator.vibrate(effect)
-        } else {
-            @Suppress("DEPRECATION")
-            (getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(effect)
-        }
     }
 
     // ── Notification ──────────────────────────────────────────────────────────

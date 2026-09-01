@@ -223,6 +223,10 @@
     <string name="settings_mid_interval_cues">Подбадривания посреди пробежки</string>
     <string name="settings_keep_screen_on">Оставлять экран включённым во время тренировки</string>
     <string name="settings_vibration_enabled">Вибрировать при смене интервала</string>
+    <string name="settings_vibration_strength">Интенсивность вибрации</string>
+    <string name="settings_vibration_strength_light">Слабая</string>
+    <string name="settings_vibration_strength_medium">Средняя</string>
+    <string name="settings_vibration_strength_strong">Сильная</string>
     <string name="settings_tts_speed">Скорость речи</string>
     <string name="settings_tts_speed_slow">Медленно</string>
     <string name="settings_tts_speed_fast">Быстро</string>

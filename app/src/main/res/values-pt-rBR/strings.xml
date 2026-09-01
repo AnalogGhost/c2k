@@ -217,6 +217,10 @@
     <string name="settings_mid_interval_cues">Incentivo no meio da corrida</string>
     <string name="settings_keep_screen_on">Manter a tela ligada durante o treino</string>
     <string name="settings_vibration_enabled">Vibrar na troca de intervalo</string>
+    <string name="settings_vibration_strength">Intensidade da vibração</string>
+    <string name="settings_vibration_strength_light">Fraca</string>
+    <string name="settings_vibration_strength_medium">Média</string>
+    <string name="settings_vibration_strength_strong">Forte</string>
     <string name="settings_tts_speed">Velocidade da voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

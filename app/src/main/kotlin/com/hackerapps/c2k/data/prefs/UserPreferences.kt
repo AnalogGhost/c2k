@@ -24,6 +24,7 @@ class UserPreferences(private val context: Context) {
         val LAST_PROGRAM_ID          = stringPreferencesKey("last_program_id")
         val BATTERY_PROMPT_DISMISSED = booleanPreferencesKey("battery_prompt_dismissed")
         val VIBRATION_ENABLED        = booleanPreferencesKey("vibration_enabled")
+        val VIBRATION_STRENGTH       = stringPreferencesKey("vibration_strength")
         val TTS_SPEECH_RATE          = floatPreferencesKey("tts_speech_rate")
         val TTS_VOLUME               = floatPreferencesKey("tts_volume")
         val MID_INTERVAL_CUES        = booleanPreferencesKey("mid_interval_cues")
@@ -62,6 +63,9 @@ class UserPreferences(private val context: Context) {
     val vibrationEnabled: Flow<Boolean> = context.dataStore.data
         .map { it[VIBRATION_ENABLED] ?: false }
 
+    val vibrationStrength: Flow<VibrationStrength> = context.dataStore.data
+        .map { preferences -> VibrationStrength.fromStored(preferences[VIBRATION_STRENGTH]) }
+
     suspend fun setTtsEnabled(enabled: Boolean) =
         context.dataStore.edit { it[TTS_ENABLED] = enabled }
 
@@ -91,6 +95,9 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setVibrationEnabled(enabled: Boolean) =
         context.dataStore.edit { it[VIBRATION_ENABLED] = enabled }
+
+    suspend fun setVibrationStrength(strength: VibrationStrength) =
+        context.dataStore.edit { it[VIBRATION_STRENGTH] = strength.name }
 
     suspend fun setTtsSpeechRate(rate: Float) =
         context.dataStore.edit { it[TTS_SPEECH_RATE] = rate }
@@ -133,4 +140,15 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setGpsDistancesRecomputed() =
         context.dataStore.edit { it[GPS_DISTANCES_RECOMPUTED] = true }
+}
+
+enum class VibrationStrength {
+    LIGHT,
+    MEDIUM,
+    STRONG;
+
+    companion object {
+        fun fromStored(value: String?): VibrationStrength =
+            entries.firstOrNull { it.name == value } ?: MEDIUM
+    }
 }

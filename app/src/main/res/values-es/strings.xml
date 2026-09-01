@@ -217,6 +217,10 @@
     <string name="settings_mid_interval_cues">Motivación a mitad de carrera</string>
     <string name="settings_keep_screen_on">Pantalla encendida durante el entrenamiento</string>
     <string name="settings_vibration_enabled">Vibrar al cambiar de intervalo</string>
+    <string name="settings_vibration_strength">Intensidad de vibración</string>
+    <string name="settings_vibration_strength_light">Suave</string>
+    <string name="settings_vibration_strength_medium">Media</string>
+    <string name="settings_vibration_strength_strong">Fuerte</string>
     <string name="settings_tts_speed">Velocidad de la voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

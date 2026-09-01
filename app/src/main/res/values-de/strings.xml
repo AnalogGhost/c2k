@@ -217,6 +217,10 @@
     <string name="settings_mid_interval_cues">Motivation während des Laufens</string>
     <string name="settings_keep_screen_on">Bildschirm während des Trainings an lassen</string>
     <string name="settings_vibration_enabled">Vibrieren bei Intervallwechsel</string>
+    <string name="settings_vibration_strength">Vibrationsstärke</string>
+    <string name="settings_vibration_strength_light">Leicht</string>
+    <string name="settings_vibration_strength_medium">Mittel</string>
+    <string name="settings_vibration_strength_strong">Stark</string>
     <string name="settings_tts_speed">Sprechgeschwindigkeit</string>
     <string name="settings_tts_speed_slow">Langsam</string>
     <string name="settings_tts_speed_fast">Schnell</string>

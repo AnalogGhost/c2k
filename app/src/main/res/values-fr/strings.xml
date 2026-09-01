@@ -217,6 +217,10 @@
     <string name="settings_mid_interval_cues">Encouragements en milieu de course</string>
     <string name="settings_keep_screen_on">Garder l\'écran allumé pendant la séance</string>
     <string name="settings_vibration_enabled">Vibrer au changement d\'intervalle</string>
+    <string name="settings_vibration_strength">Intensité des vibrations</string>
+    <string name="settings_vibration_strength_light">Faible</string>
+    <string name="settings_vibration_strength_medium">Moyenne</string>
+    <string name="settings_vibration_strength_strong">Forte</string>
     <string name="settings_tts_speed">Vitesse de la voix</string>
     <string name="settings_tts_speed_slow">Lente</string>
     <string name="settings_tts_speed_fast">Rapide</string>

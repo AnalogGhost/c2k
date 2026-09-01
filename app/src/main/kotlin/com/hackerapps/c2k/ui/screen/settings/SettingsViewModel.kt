@@ -6,9 +6,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.TtsManager
+import com.hackerapps.c2k.service.VibrationPatterns
+import com.hackerapps.c2k.service.VibrationPlayer
 
 class SettingsViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -35,6 +39,9 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     val vibrationEnabled = prefs.vibrationEnabled
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
+    val vibrationStrength = prefs.vibrationStrength
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VibrationStrength.MEDIUM)
+
     val ttsSpeechRate = prefs.ttsSpeechRate
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 1.0f)
 
@@ -53,7 +60,18 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     fun setCountdownWarning1(v: Int)     { viewModelScope.launch { prefs.setCountdownWarning1(v) } }
     fun setCountdownWarning2(v: Int)     { viewModelScope.launch { prefs.setCountdownWarning2(v) } }
     fun setKeepScreenOn(v: Boolean)      { viewModelScope.launch { prefs.setKeepScreenOn(v) } }
-    fun setVibrationEnabled(v: Boolean)  { viewModelScope.launch { prefs.setVibrationEnabled(v) } }
+    fun setVibrationEnabled(v: Boolean)  {
+        viewModelScope.launch {
+            prefs.setVibrationEnabled(v)
+            if (v) previewVibration(vibrationStrength.value)
+        }
+    }
+    fun setVibrationStrength(v: VibrationStrength) {
+        viewModelScope.launch {
+            prefs.setVibrationStrength(v)
+            previewVibration(v)
+        }
+    }
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
     fun setTtsVolume(v: Float)           { viewModelScope.launch { prefs.setTtsVolume(v) } }
     fun setMidIntervalCues(v: Boolean)   { viewModelScope.launch { prefs.setMidIntervalCues(v) } }
@@ -71,4 +89,11 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
 
     fun setWeightKg(v: Float)            { viewModelScope.launch { prefs.setWeightKg(v) } }
     fun setWeightUnit(v: WeightUnit)      { viewModelScope.launch { prefs.setWeightUnit(v) } }
+
+    private fun previewVibration(strength: VibrationStrength) {
+        VibrationPlayer.play(
+            getApplication(),
+            VibrationPatterns.forInterval(IntervalType.RUN, strength)
+        )
+    }
 }

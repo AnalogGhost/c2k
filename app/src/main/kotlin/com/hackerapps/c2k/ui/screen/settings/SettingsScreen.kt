@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import java.text.DecimalFormatSymbols
 import kotlin.math.roundToInt
@@ -66,6 +67,7 @@ fun SettingsScreen(
     val treadmillMode        by vm.treadmillMode.collectAsStateWithLifecycle()
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
+    val vibrationStrength    by vm.vibrationStrength.collectAsStateWithLifecycle()
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
     val ttsVolume            by vm.ttsVolume.collectAsStateWithLifecycle()
     val ttsAvailableOnDevice by vm.ttsAvailableOnDevice.collectAsStateWithLifecycle()
@@ -238,6 +240,12 @@ fun SettingsScreen(
                 testTag = "toggle_vibration_enabled",
                 onCheckedChange = vm::setVibrationEnabled
             )
+            if (vibrationEnabled) {
+                VibrationStrengthSetting(
+                    strength = vibrationStrength,
+                    onStrengthChange = vm::setVibrationStrength
+                )
+            }
             HorizontalDivider()
             SettingsToggle(
                 label = stringResource(R.string.settings_treadmill_mode),
@@ -270,6 +278,51 @@ fun SettingsScreen(
         }
     }
 }
+
+@Composable
+private fun VibrationStrengthSetting(
+    strength: VibrationStrength,
+    onStrengthChange: (VibrationStrength) -> Unit
+) {
+    var showMenu by remember { mutableStateOf(false) }
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.settings_vibration_strength)) },
+        trailingContent = {
+            Box {
+                TextButton(
+                    onClick = { showMenu = true },
+                    modifier = Modifier.testTag("button_vibration_strength")
+                ) {
+                    Text(stringResource(strength.labelRes))
+                }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    VibrationStrength.entries.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(stringResource(option.labelRes)) },
+                            onClick = {
+                                showMenu = false
+                                onStrengthChange(option)
+                            },
+                            modifier = Modifier.testTag(
+                                "vibration_strength_${option.name.lowercase()}"
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    )
+}
+
+private val VibrationStrength.labelRes: Int
+    get() = when (this) {
+        VibrationStrength.LIGHT -> R.string.settings_vibration_strength_light
+        VibrationStrength.MEDIUM -> R.string.settings_vibration_strength_medium
+        VibrationStrength.STRONG -> R.string.settings_vibration_strength_strong
+    }
 
 @Composable
 private fun WeightSetting(

@@ -220,6 +220,10 @@
     <string name="settings_mid_interval_cues">Motivación a metade da carreira</string>
     <string name="settings_keep_screen_on">Manter pantalla acendida durante o adestramento</string>
     <string name="settings_vibration_enabled">Vibrar cando cambia o tipo de intervalo</string>
+    <string name="settings_vibration_strength">Intensidade da vibración</string>
+    <string name="settings_vibration_strength_light">Suave</string>
+    <string name="settings_vibration_strength_medium">Media</string>
+    <string name="settings_vibration_strength_strong">Forte</string>
     <string name="settings_tts_speed">Velocidade da voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

@@ -20,7 +20,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -65,6 +67,7 @@ class SettingsScreenTest {
             prefs.setCountdownWarning2(5)
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
+            prefs.setVibrationStrength(VibrationStrength.MEDIUM)
             prefs.setTtsSpeechRate(1.0f)
             prefs.setTtsVolume(1.0f)
             prefs.setMidIntervalCues(true)
@@ -104,6 +107,26 @@ class SettingsScreenTest {
 
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithTag("toggle_gps_enabled").assertIsOff()
+        }
+    }
+
+    @Test
+    fun vibration_strength_is_shown_when_enabled_and_selection_is_persisted() {
+        setContent()
+        composeRule.onNodeWithText(string(R.string.settings_vibration_strength)).assertDoesNotExist()
+
+        composeRule.onNodeWithTag("toggle_vibration_enabled").performScrollTo().performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.settings_vibration_strength)).assertExists()
+        }
+        composeRule.onNodeWithTag("button_vibration_strength").performScrollTo().performClick()
+        composeRule.onNodeWithTag("vibration_strength_strong").performClick()
+
+        composeRule.waitUntil {
+            runBlocking {
+                val app = ApplicationProvider.getApplicationContext<Application>()
+                UserPreferences(app).vibrationStrength.first() == VibrationStrength.STRONG
+            }
         }
     }
 
