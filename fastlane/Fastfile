@@ -113,9 +113,14 @@ platform :android do
     release_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-release.apk")
 
     require "shellwords"
+    android_sdk = ENV["ANDROID_SDK_ROOT"] || ENV["ANDROID_HOME"] || File.join(ENV["HOME"], "Android/Sdk")
+    apksigner = Dir[File.join(android_sdk, "build-tools", "*", "apksigner")]
+      .max_by { |path| Gem::Version.new(File.basename(File.dirname(path))) }
+    UI.user_error!("Couldn't find apksigner under #{android_sdk}/build-tools") unless apksigner
+
     # Passwords can contain shell metacharacters — escape everything interpolated.
     sh(
-      "#{ENV['HOME']}/Android/Sdk/build-tools/37.0.0/apksigner sign " \
+      "#{apksigner.shellescape} sign " \
       "--ks #{ENV['HOME']}/c2k-release.jks --ks-key-alias c2k " \
       "--ks-pass pass:#{store_pass.shellescape} --key-pass pass:#{key_pass.shellescape} " \
       "--out #{signed_apk.shellescape} #{unsigned_apk.shellescape}",
