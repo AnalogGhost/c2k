@@ -10,6 +10,7 @@ import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.IntervalType
+import com.hackerapps.c2k.utils.localized
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,7 +26,7 @@ class TtsManager(
         private const val TAG = "TtsManager"
     }
 
-    private val context: Context = context.applicationContext
+    private val context: Context = context.applicationContext.localized()
     private val tts = TextToSpeech(this.context, this)
     private var ready = false
     private var initializationFailure: TtsDiagnosticResult? = null

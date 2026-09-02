@@ -46,8 +46,13 @@ import com.hackerapps.c2k.location.LocationUpdate
 import com.hackerapps.c2k.location.NoOpLocationProvider
 import com.hackerapps.c2k.location.toEntity
 import com.hackerapps.c2k.ui.MainActivity
+import com.hackerapps.c2k.utils.localized
 
 class WorkoutService : Service() {
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(newBase.localized())
+    }
 
     data class WorkoutInfo(val programId: String, val week: Int, val day: Int)
 
