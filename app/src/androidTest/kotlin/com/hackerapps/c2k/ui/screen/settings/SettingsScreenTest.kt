@@ -358,7 +358,7 @@ class SettingsScreenTest {
         setContent()
         composeRule.onNodeWithTag("toggle_gps_enabled").assertIsEnabled()
 
-        composeRule.onNodeWithTag("toggle_treadmill_mode").performClick()
+        composeRule.onNodeWithTag("toggle_treadmill_mode").performScrollTo().performClick()
 
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithTag("toggle_gps_enabled").assertIsNotEnabled()

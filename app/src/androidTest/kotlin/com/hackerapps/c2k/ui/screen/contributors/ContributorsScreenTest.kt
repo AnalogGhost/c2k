@@ -30,7 +30,7 @@ class ContributorsScreenTest {
         assertTrue(composeRule.onAllNodesWithText("xmgz").fetchSemanticsNodes().isNotEmpty())
         composeRule.onNodeWithText("Andrew Farabee").assertExists()
         composeRule.onNodeWithText("Ilyushenok Ilya").assertExists()
-        composeRule.onNodeWithText("Unibilens").assertExists()
+        assertTrue(composeRule.onAllNodesWithText("Unibilens").fetchSemanticsNodes().isNotEmpty())
     }
 
     @Test
