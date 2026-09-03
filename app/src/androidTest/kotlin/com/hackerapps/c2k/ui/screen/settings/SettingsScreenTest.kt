@@ -6,10 +6,16 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -22,9 +28,12 @@ import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
+import com.hackerapps.c2k.engine.tts.DiagnosticTts
+import com.hackerapps.c2k.engine.tts.TtsDiagnosticResult
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,6 +55,27 @@ private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 10_000, ass
 
 @RunWith(AndroidJUnit4::class)
 class SettingsScreenTest {
+
+    private class FakeDiagnosticTts : DiagnosticTts {
+        var shutdownCount = 0
+        var diagnosedText: String? = null
+        var speakingCallback: (() -> Unit)? = null
+        var resultCallback: ((TtsDiagnosticResult) -> Unit)? = null
+
+        override fun diagnose(
+            text: String,
+            onSpeaking: () -> Unit,
+            onResult: (TtsDiagnosticResult) -> Unit
+        ) {
+            diagnosedText = text
+            speakingCallback = onSpeaking
+            resultCallback = onResult
+        }
+
+        override fun shutdown() {
+            shutdownCount++
+        }
+    }
 
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
@@ -103,7 +133,7 @@ class SettingsScreenTest {
         setContent()
         composeRule.onNodeWithTag("toggle_gps_enabled").assertIsOn()
 
-        composeRule.onNodeWithTag("toggle_gps_enabled").performClick()
+        composeRule.onNodeWithTag("toggle_gps_enabled").performScrollTo().performClick()
 
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithTag("toggle_gps_enabled").assertIsOff()
@@ -135,6 +165,7 @@ class SettingsScreenTest {
         setContent()
         composeRule.onNodeWithText(string(R.string.settings_tts_speed)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_tts_volume)).assertExists()
+        composeRule.onNodeWithTag("button_test_voice").assertExists()
 
         composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
 
@@ -142,6 +173,120 @@ class SettingsScreenTest {
             composeRule.onNodeWithText(string(R.string.settings_tts_speed)).assertDoesNotExist()
         }
         composeRule.onNodeWithText(string(R.string.settings_tts_volume)).assertDoesNotExist()
+        composeRule.onNodeWithTag("button_test_voice").assertDoesNotExist()
+    }
+
+    @Test
+    fun voice_test_is_disabled_while_initializing_or_speaking() {
+        composeRule.setContent {
+            androidx.compose.foundation.layout.Column {
+                VoiceTestControl(VoiceTestState.Initializing, {}, {})
+                VoiceTestControl(VoiceTestState.Speaking, {}, {})
+            }
+        }
+        composeRule.onAllNodesWithTag("button_test_voice")[0].assertIsNotEnabled()
+        composeRule.onAllNodesWithTag("button_test_voice")[1].assertIsNotEnabled()
+        composeRule.onNodeWithText(string(R.string.settings_tts_test_initializing)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_tts_test_speaking)).assertExists()
+        composeRule.onAllNodesWithTag("text_voice_test_status")[0].assert(
+            SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite)
+        )
+    }
+
+    @Test
+    fun voice_test_displays_success_and_every_failure_with_settings_actions() {
+        composeRule.setContent {
+            androidx.compose.foundation.layout.Column {
+                VoiceTestControl(VoiceTestState.Completed, {}, {})
+                VoiceTestControl(VoiceTestState.Failed(TtsDiagnosticResult.NoEngineInstalled), {}, {})
+                VoiceTestControl(VoiceTestState.Failed(TtsDiagnosticResult.VoiceUnavailable), {}, {})
+                VoiceTestControl(VoiceTestState.Failed(TtsDiagnosticResult.SynthesisOrServiceFailure), {}, {})
+                VoiceTestControl(VoiceTestState.Failed(TtsDiagnosticResult.AudioOutputFailure), {}, {})
+            }
+        }
+        composeRule.onNodeWithText(string(R.string.settings_tts_test_completed)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_tts_test_no_engine)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_tts_test_voice_unavailable)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_tts_test_synthesis_failure)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_tts_test_output_failure)).assertExists()
+        composeRule.onAllNodesWithTag("button_open_tts_settings").assertCountEquals(4)
+    }
+
+    @Test
+    fun repeated_voice_tests_replace_and_clean_up_temporary_tts() {
+        val instances = mutableListOf<FakeDiagnosticTts>()
+        val app = ApplicationProvider.getApplicationContext<Application>()
+        val vm = SettingsViewModel(app) { _, _, _ ->
+            FakeDiagnosticTts().also(instances::add)
+        }
+
+        vm.testVoice()
+        vm.testVoice()
+
+        assertTrue(instances[0].shutdownCount == 1)
+        instances[1].speakingCallback?.invoke()
+        assertTrue(vm.voiceTestState.value == VoiceTestState.Speaking)
+        instances[0].resultCallback?.invoke(TtsDiagnosticResult.AudioOutputFailure)
+        assertTrue(vm.voiceTestState.value == VoiceTestState.Speaking)
+        assertTrue(instances[1].shutdownCount == 0)
+        instances[1].resultCallback?.invoke(TtsDiagnosticResult.Success)
+        assertTrue(instances[1].shutdownCount == 1)
+        assertTrue(vm.voiceTestState.value == VoiceTestState.Completed)
+    }
+
+    @Test
+    fun leaving_settings_shuts_down_temporary_tts() {
+        val fake = FakeDiagnosticTts()
+        val app = ApplicationProvider.getApplicationContext<Application>()
+        val vm = SettingsViewModel(app) { _, _, _ -> fake }
+        lateinit var showSettings: androidx.compose.runtime.MutableState<Boolean>
+        composeRule.setContent {
+            showSettings = androidx.compose.runtime.remember {
+                androidx.compose.runtime.mutableStateOf(true)
+            }
+            if (showSettings.value) SettingsScreen(onBack = {}, vm = vm)
+        }
+        composeRule.runOnIdle { vm.testVoice() }
+        composeRule.runOnIdle { showSettings.value = false }
+        composeRule.waitForIdle()
+
+        assertTrue(fake.shutdownCount == 1)
+        fake.resultCallback?.invoke(TtsDiagnosticResult.AudioOutputFailure)
+        assertTrue(vm.voiceTestState.value == VoiceTestState.Initializing)
+    }
+
+    @Test
+    fun voice_test_uses_selected_rate_volume_and_localized_phrase() {
+        var capturedRate: Float? = null
+        var capturedVolume: Float? = null
+        val fake = FakeDiagnosticTts()
+        val app = ApplicationProvider.getApplicationContext<Application>()
+        val vm = SettingsViewModel(app) { _, rate, volume ->
+            capturedRate = rate
+            capturedVolume = volume
+            fake
+        }
+        composeRule.setContent { SettingsScreen(onBack = {}, vm = vm) }
+
+        composeRule.onNodeWithTag("slider_tts_speed")
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(0.7f) }
+        composeRule.onNodeWithTag("slider_tts_volume")
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(0.2f) }
+        composeRule.waitUntil {
+            vm.ttsSpeechRate.value == 0.7f && vm.ttsVolume.value == 0.2f
+        }
+        composeRule.onNodeWithTag("button_test_voice").performScrollTo().performClick()
+        composeRule.runOnIdle {
+            assertEquals(0.7f, capturedRate)
+            assertEquals(0.2f, capturedVolume)
+            assertEquals(string(R.string.settings_tts_test_phrase), fake.diagnosedText)
+        }
+    }
+
+    @Test
+    fun tts_settings_action_falls_back_when_dedicated_destination_is_unavailable() {
+        assertEquals(TTS_SETTINGS_ACTION, preferredTtsSettingsAction(true))
+        assertEquals(android.provider.Settings.ACTION_SETTINGS, preferredTtsSettingsAction(false))
     }
 
     @Test

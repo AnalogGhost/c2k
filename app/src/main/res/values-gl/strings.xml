@@ -180,7 +180,7 @@
     <string name="guide_q_repeat_day">Debo repetir unha sesión ou seguir adiante?</string>
     <string name="guide_a_repeat_day">Continúa, incluso se unha sesión resultou difícil — sempre que a tiveses completado. C25K deseñouse dun xeito gradual para que case todo o mundo poida avanzar semana a semana.\n\nRepite un día só se non puideches completar os intervalos de ningún xeito  — por exemplo, se tiveches que parar varias veces a metade do intervalo (no só de xeito natural ao finalizar o intervalo). Sentir fatiga, lentitude ou falta de aire non é razón para repetir. Isto é habitual na segunda semana.</string>
     <string name="guide_q_ready_next_session">Cando debo realizar a seguinte sesión?</string>
-    <string name="guide_a_ready_next_session">Cando as molestias da sesión anterior sexan practicamente imperceptibles — normalmente un ou dous días. Cabe agardar certa molestia muscular despois de 24-48 horas despois dun adestramento (en inglés din DOMS, establecemento en diferido da molestia muscular; maniotas) e mellora conforme o corpo se adapta nas primeiras semanas.\n\nSe aínda sentes molestia significativa ou rixidez, toma un día extra de descanso. Un día a maiores non ten gran importancia; correr coas pernas cansadas incrementa o risco de lesión.</string>
+    <string name="guide_a_ready_next_session">Cando as molestias da sesión anterior sexan practicamente imperceptibles — normalmente un ou dous días. Cabe agardar certa molestia muscular despois de 24–48 horas despois dun adestramento (en inglés din DOMS, establecemento en diferido da molestia muscular; maniotas) e mellora conforme o corpo se adapta nas primeiras semanas.\n\nSe aínda sentes molestia significativa ou rixidez, toma un día extra de descanso. Un día a maiores non ten gran importancia; correr coas pernas cansadas incrementa o risco de lesión.</string>
     <string name="guide_q_stretch">Teño que estirar?</string>
     <string name="guide_a_stretch">Un lixeiro estiramento despois de correr (non antes) pode axudar á recuperación e flexibilidade reducindo a rixidez. Céntrate nos xemelgos, biceps femoral, flexores da cadeira e cuádriceps — son os músculos que máis traballan.\n\nOs estiramentos antes de corren cando os músculos aínda están fríos son menos útiles e poden causar estrés. A camiñada de quecemento é máis efectiva que o estiramento estático.</string>
 
@@ -191,7 +191,7 @@
     <string name="guide_q_pace_term">Ritmo</string>
     <string name="guide_a_pace_term">A velocidade á que corres, normalmente expresada como mintuos por quilómetro ou milla — por exemplo, 7:30 por km significa que che leva 7 minutos e 30 segundos completar un quilómetro.\n\nPara o programa C25K o ritmo non importa. O que importa é completar os intervalos. Ignora o ritmo totalmente ata que finalices o programa.</string>
     <string name="guide_q_doms">DOMS (en inglés: Delayed Onset Muscle Soreness)</string>
-    <string name="guide_a_doms">A molestia muscular que aparece entre 24-48 horas despois de facer o adestramento, causada polo dano microscópico nas fibras musculares ao adaptarse ao novo esforzo. Normalmente non é problemátrica, e mellora rápidamente despois das primeiras semanas de adestramento.</string>
+    <string name="guide_a_doms">A molestia muscular que aparece entre 24–48 horas despois de facer o adestramento, causada polo dano microscópico nas fibras musculares ao adaptarse ao novo esforzo. Normalmente non é problemátrica, e mellora rápidamente despois das primeiras semanas de adestramento.</string>
     <string name="guide_q_shin_splints">Dor nas canelas</string>
     <string name="guide_a_shin_splints">A dor na parte anterior do bordo interno da parte inferior das pernas, común en principiantes. Normalmente débese a facer moito demasiado axiña, ou correr con calzado moi gastado.\n\nSe tes esta molestia, descansa entre 3 e 5 días. Cando volvas a correr comproba o estado do calzado e corre máis amodo. Se persiste a dor deberías consultalo cun servizo de saúde especializado.</string>
     <string name="guide_q_rpe">RPE (en inglés: Rate of Perceived Exertion)</string>
@@ -206,6 +206,7 @@
     <string name="contributor_translation_es">Tradución ao español (es)</string>
     <string name="contributor_translation_gl">Tradución ao galego (gl)</string>
     <string name="contributor_translation_ru">Tradución ao ruso (ru)</string>
+    <string name="contributor_translation_tr">Tradución ao turco (tr)</string>
     <string name="contributor_fix_tts_ducking">Corrección: os avisos de voz agora atenúan a música de fondo en vez de pausala</string>
     <string name="contributor_fix_completion_counter">Corrección: o contador de finalización xa non se conxela e o anuncio de finalización xa non se corta cando a pantalla se bloquea</string>
 
@@ -230,6 +231,16 @@
     <string name="settings_tts_volume">Volume da voz</string>
     <string name="settings_tts_volume_quiet">Baixo</string>
     <string name="settings_tts_volume_loud">Alto</string>
+    <string name="settings_tts_test_voice">Probar voz</string>
+    <string name="settings_tts_test_phrase">Os avisos de voz de C2K funcionan.</string>
+    <string name="settings_tts_test_initializing">Inicializando a síntese de voz…</string>
+    <string name="settings_tts_test_speaking">Reproducindo o aviso de proba…</string>
+    <string name="settings_tts_test_completed">Proba completada. Se non a escoitaches, comproba o volume multimedia e a saída de audio.</string>
+    <string name="settings_tts_test_no_engine">Non hai ningún motor de síntese de voz instalado. Instala ou activa un nos axustes de Android.</string>
+    <string name="settings_tts_test_voice_unavailable">Non hai ningunha voz dispoñible para o idioma do dispositivo nin para inglés. Instala datos de voz nos axustes de Android.</string>
+    <string name="settings_tts_test_synthesis_failure">O servizo de síntese de voz non puido crear o aviso. Comproba ou reinicia o motor nos axustes de Android.</string>
+    <string name="settings_tts_test_output_failure">Android non puido reproducir o aviso. Comproba o volume multimedia, a saída de audio e os axustes de síntese de voz.</string>
+    <string name="settings_tts_open_settings">Abrir axustes de síntese de voz</string>
     <string name="settings_weight">Peso</string>
     <string name="settings_weight_not_set">Sen definir</string>
     <string name="settings_weight_hint">Só se usa para estimar as calorías queimadas. Nunca sae do teu dispositivo.</string>

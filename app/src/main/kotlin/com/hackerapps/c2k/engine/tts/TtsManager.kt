@@ -13,13 +13,12 @@ import com.hackerapps.c2k.data.model.IntervalType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.util.Locale
 
 class TtsManager(
     context: Context,
     private val speechRate: Float = 1.0f,
     private val volume: Float = 1.0f
-) : TtsInterface, TextToSpeech.OnInitListener {
+) : TtsInterface, DiagnosticTts, TextToSpeech.OnInitListener {
 
     companion object {
         val isAvailableOnDevice = MutableStateFlow<Boolean?>(null)
@@ -29,18 +28,27 @@ class TtsManager(
     private val context: Context = context.applicationContext
     private val tts = TextToSpeech(this.context, this)
     private var ready = false
+    private var initializationFailure: TtsDiagnosticResult? = null
     private var pendingAnnouncement: TtsAnnouncement? = null
+    private var pendingDiagnostic: DiagnosticRequest? = null
+    private val diagnosticRequests = HashMap<String, DiagnosticRequest>()
+
+    private data class DiagnosticRequest(
+        val text: String,
+        val onSpeaking: () -> Unit,
+        val onResult: (TtsDiagnosticResult) -> Unit
+    )
 
     private val audioManager = this.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val ttsAudioAttributes = AudioAttributes.Builder()
-        .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
-        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+        .setUsage(TtsAudioPolicy.USAGE)
+        .setContentType(TtsAudioPolicy.CONTENT_TYPE)
         .build()
 
     // MAY_DUCK so the system ducks the other player rather than pausing it. GAIN_TRANSIENT sends
     // AUDIOFOCUS_LOSS_TRANSIENT to other apps, which causes music players to pause; a paused media
     // service then drops its foreground state and gets killed by the OS.
-    private val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+    private val focusRequest = AudioFocusRequest.Builder(TtsAudioPolicy.FOCUS_GAIN)
         .setAudioAttributes(ttsAudioAttributes)
         .build()
 
@@ -63,29 +71,89 @@ class TtsManager(
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            val result = tts.setLanguage(context.resources.configuration.locales[0])
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                tts.setLanguage(Locale.ENGLISH)
+            val languageAvailable = selectTtsLanguage(
+                context.resources.configuration.locales[0],
+                tts::setLanguage
+            )
+            if (!languageAvailable) {
+                initializationFailure = TtsDiagnosticResult.VoiceUnavailable
+                isAvailableOnDevice.value = false
+                pendingDiagnostic?.onResult?.invoke(TtsDiagnosticResult.VoiceUnavailable)
+                pendingDiagnostic = null
+                Log.w(TAG, "Neither the device locale nor English is available for text-to-speech")
+                return
             }
             tts.setSpeechRate(speechRate)
             tts.setAudioAttributes(ttsAudioAttributes)
             tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                override fun onStart(utteranceId: String?) {}
-                override fun onDone(utteranceId: String?) = finishUtterance(utteranceId)
+                override fun onStart(utteranceId: String?) {
+                    val callback = synchronized(focusLock) {
+                        utteranceId?.let { diagnosticRequests[it]?.onSpeaking }
+                    }
+                    callback?.invoke()
+                }
+                override fun onDone(utteranceId: String?) =
+                    finishUtterance(utteranceId, TtsDiagnosticResult.Success)
                 // onStop fires when an utterance is cancelled by tts.stop() or a later QUEUE_FLUSH
-                override fun onStop(utteranceId: String?, interrupted: Boolean) = finishUtterance(utteranceId)
+                override fun onStop(utteranceId: String?, interrupted: Boolean) =
+                    finishUtterance(utteranceId, TtsDiagnosticResult.SynthesisOrServiceFailure)
                 @Deprecated("Deprecated in Java")
-                override fun onError(utteranceId: String?) = finishUtterance(utteranceId)
-                override fun onError(utteranceId: String?, errorCode: Int) = finishUtterance(utteranceId)
+                override fun onError(utteranceId: String?) =
+                    finishUtterance(utteranceId, TtsDiagnosticResult.SynthesisOrServiceFailure)
+                override fun onError(utteranceId: String?, errorCode: Int) =
+                    finishUtterance(utteranceId, diagnosticResultForError(errorCode))
             })
             ready = true
+            initializationFailure = null
             isAvailable = true
             isAvailableOnDevice.value = true
             pendingAnnouncement?.let { announce(it) }
             pendingAnnouncement = null
+            pendingDiagnostic?.let { speakDiagnostic(it) }
+            pendingDiagnostic = null
         } else {
+            val hasInstalledEngine = runCatching { tts.engines.isNotEmpty() }
+                // A query failure is not evidence that the device has no engine.
+                .getOrDefault(true)
+            val failure = diagnosticResultForInitializationFailure(hasInstalledEngine)
+            initializationFailure = failure
             isAvailableOnDevice.value = false
-            Log.w(TAG, "TextToSpeech initialization failed (status=$status)")
+            pendingDiagnostic?.onResult?.invoke(failure)
+            pendingDiagnostic = null
+            Log.w(TAG, "TextToSpeech initialization failed (status=$status, hasEngine=$hasInstalledEngine)")
+        }
+    }
+
+    override fun diagnose(
+        text: String,
+        onSpeaking: () -> Unit,
+        onResult: (TtsDiagnosticResult) -> Unit
+    ) {
+        val request = DiagnosticRequest(text, onSpeaking, onResult)
+        when {
+            ready -> speakDiagnostic(request)
+            initializationFailure != null -> onResult(initializationFailure!!)
+            else -> pendingDiagnostic = request
+        }
+    }
+
+    private fun speakDiagnostic(request: DiagnosticRequest) {
+        val utteranceId = "c2k_diagnostic_${System.nanoTime()}"
+        synchronized(focusLock) {
+            pending.clear()
+            pending.add(utteranceId)
+            diagnosticRequests[utteranceId] = request
+            _speaking.value = true
+            requestAudioFocusIfNeeded()
+        }
+        val speakResult = tts.speak(
+            request.text,
+            TextToSpeech.QUEUE_FLUSH,
+            speechParams(),
+            utteranceId
+        )
+        if (speakResult == TextToSpeech.ERROR) {
+            finishUtterance(utteranceId, TtsDiagnosticResult.SynthesisOrServiceFailure)
         }
     }
 
@@ -96,20 +164,14 @@ class TtsManager(
         }
         val text = buildText(announcement)
         val mode = if (queueAdd) TextToSpeech.QUEUE_ADD else TextToSpeech.QUEUE_FLUSH
-        val params = if (volume < 1.0f) Bundle().apply {
-            putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
-        } else null
+        val params = speechParams()
         val utteranceId = "c2k_${System.nanoTime()}"
 
         synchronized(focusLock) {
             if (!queueAdd) pending.clear()
             pending.add(utteranceId)
             _speaking.value = true
-            if (!holdsFocus) {
-                val res = audioManager.requestAudioFocus(focusRequest)
-                holdsFocus = res != AudioManager.AUDIOFOCUS_REQUEST_FAILED
-                if (!holdsFocus) Log.w(TAG, "Audio focus not granted (res=$res); speaking without duck")
-            }
+            requestAudioFocusIfNeeded()
         }
 
         // speak() is called outside the lock; the id is already registered so an early
@@ -120,15 +182,35 @@ class TtsManager(
         }
     }
 
-    private fun finishUtterance(utteranceId: String?) {
+    private fun speechParams(): Bundle? = if (volume < 1.0f) Bundle().apply {
+        putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
+    } else null
+
+    private fun requestAudioFocusIfNeeded() {
+        if (!holdsFocus) {
+            val res = audioManager.requestAudioFocus(focusRequest)
+            holdsFocus = res != AudioManager.AUDIOFOCUS_REQUEST_FAILED
+            if (!holdsFocus) Log.w(TAG, "Audio focus not granted (res=$res); speaking without duck")
+        }
+    }
+
+    private fun finishUtterance(
+        utteranceId: String?,
+        diagnosticResult: TtsDiagnosticResult? = null
+    ) {
+        var diagnosticCallback: ((TtsDiagnosticResult) -> Unit)? = null
         synchronized(focusLock) {
-            if (utteranceId != null) pending.remove(utteranceId)
+            if (utteranceId != null) {
+                pending.remove(utteranceId)
+                diagnosticCallback = diagnosticRequests.remove(utteranceId)?.onResult
+            }
             if (pending.isEmpty() && holdsFocus) {
                 audioManager.abandonAudioFocusRequest(focusRequest)
                 holdsFocus = false
             }
             _speaking.value = pending.isNotEmpty()
         }
+        if (diagnosticResult != null) diagnosticCallback?.invoke(diagnosticResult)
     }
 
     private fun forceAbandon() {
@@ -143,10 +225,13 @@ class TtsManager(
     }
 
     override fun shutdown() {
+        pendingDiagnostic = null
+        synchronized(focusLock) { diagnosticRequests.clear() }
         tts.stop()
         tts.shutdown()
         forceAbandon()
         ready = false
+        isAvailable = false
     }
 
     private fun buildText(announcement: TtsAnnouncement): String = when (announcement) {

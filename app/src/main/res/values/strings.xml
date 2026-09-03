@@ -231,6 +231,16 @@
     <string name="settings_tts_volume">Voice volume</string>
     <string name="settings_tts_volume_quiet">Quiet</string>
     <string name="settings_tts_volume_loud">Loud</string>
+    <string name="settings_tts_test_voice">Test voice</string>
+    <string name="settings_tts_test_phrase">C2K voice announcements are working.</string>
+    <string name="settings_tts_test_initializing">Initializing text-to-speech…</string>
+    <string name="settings_tts_test_speaking">Playing test announcement…</string>
+    <string name="settings_tts_test_completed">Test completed. If you did not hear it, check media volume and audio output.</string>
+    <string name="settings_tts_test_no_engine">No text-to-speech engine is installed. Install or enable one in Android settings.</string>
+    <string name="settings_tts_test_voice_unavailable">No voice is available for your device language or English. Install voice data in Android settings.</string>
+    <string name="settings_tts_test_synthesis_failure">The text-to-speech service could not create the announcement. Check or restart the engine in Android settings.</string>
+    <string name="settings_tts_test_output_failure">Android could not play the announcement. Check media volume, the selected audio output, and text-to-speech settings.</string>
+    <string name="settings_tts_open_settings">Open text-to-speech settings</string>
     <string name="settings_weight">Weight</string>
     <string name="settings_weight_not_set">Not set</string>
     <string name="settings_weight_hint">Used only to estimate calories burned. Never leaves your device.</string>

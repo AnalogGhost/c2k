@@ -233,6 +233,16 @@
     <string name="settings_tts_volume">Ses düzeyi</string>
     <string name="settings_tts_volume_quiet">Kısık</string>
     <string name="settings_tts_volume_loud">Yüksek</string>
+    <string name="settings_tts_test_voice">Sesi test et</string>
+    <string name="settings_tts_test_phrase">C2K sesli duyuruları çalışıyor.</string>
+    <string name="settings_tts_test_initializing">Metin okuma başlatılıyor…</string>
+    <string name="settings_tts_test_speaking">Test duyurusu oynatılıyor…</string>
+    <string name="settings_tts_test_completed">Test tamamlandı. Duymadıysanız medya ses düzeyini ve ses çıkışını kontrol edin.</string>
+    <string name="settings_tts_test_no_engine">Yüklü bir metin okuma motoru yok. Android ayarlarından bir motor yükleyin veya etkinleştirin.</string>
+    <string name="settings_tts_test_voice_unavailable">Cihaz diliniz veya İngilizce için kullanılabilir ses yok. Android ayarlarından ses verilerini yükleyin.</string>
+    <string name="settings_tts_test_synthesis_failure">Metin okuma hizmeti duyuruyu oluşturamadı. Android ayarlarından motoru kontrol edin veya yeniden başlatın.</string>
+    <string name="settings_tts_test_output_failure">Android duyuruyu oynatamadı. Medya ses düzeyini, ses çıkışını ve metin okuma ayarlarını kontrol edin.</string>
+    <string name="settings_tts_open_settings">Metin okuma ayarlarını aç</string>
     <string name="settings_weight">Kilo</string>
     <string name="settings_weight_not_set">Belirtilmedi</string>
     <string name="settings_weight_hint">Yalnızca yakılan kaloriyi tahmin etmek için kullanılır. Cihazınızdan asla ayrılmaz.</string>

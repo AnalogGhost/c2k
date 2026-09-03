@@ -3,6 +3,9 @@ package com.hackerapps.c2k.ui.screen.settings
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -13,8 +16,23 @@ import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.TtsManager
 import com.hackerapps.c2k.service.VibrationPatterns
 import com.hackerapps.c2k.service.VibrationPlayer
+import com.hackerapps.c2k.engine.tts.DiagnosticTts
+import com.hackerapps.c2k.engine.tts.TtsDiagnosticResult
+import com.hackerapps.c2k.R
 
-class SettingsViewModel(app: Application) : AndroidViewModel(app) {
+sealed interface VoiceTestState {
+    data object Idle : VoiceTestState
+    data object Initializing : VoiceTestState
+    data object Speaking : VoiceTestState
+    data object Completed : VoiceTestState
+    data class Failed(val result: TtsDiagnosticResult) : VoiceTestState
+}
+
+class SettingsViewModel @JvmOverloads constructor(
+    app: Application,
+    private val diagnosticTtsFactory: (Application, Float, Float) -> DiagnosticTts =
+        { application, rate, volume -> TtsManager(application, rate, volume) }
+) : AndroidViewModel(app) {
 
     private val prefs = UserPreferences(app)
 
@@ -53,6 +71,41 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
 
     val ttsAvailableOnDevice = TtsManager.isAvailableOnDevice
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TtsManager.isAvailableOnDevice.value)
+
+    private val _voiceTestState = MutableStateFlow<VoiceTestState>(VoiceTestState.Idle)
+    val voiceTestState: StateFlow<VoiceTestState> = _voiceTestState.asStateFlow()
+    private var diagnosticTts: DiagnosticTts? = null
+    private var voiceTestGeneration = 0
+
+    fun testVoice() {
+        stopVoiceTest()
+        val generation = ++voiceTestGeneration
+        _voiceTestState.value = VoiceTestState.Initializing
+        val manager = diagnosticTtsFactory(getApplication(), ttsSpeechRate.value, ttsVolume.value)
+        diagnosticTts = manager
+        manager.diagnose(
+            text = getApplication<Application>().getString(R.string.settings_tts_test_phrase),
+            onSpeaking = {
+                if (generation == voiceTestGeneration) _voiceTestState.value = VoiceTestState.Speaking
+            },
+            onResult = { result ->
+                if (generation != voiceTestGeneration) return@diagnose
+                _voiceTestState.value = if (result == TtsDiagnosticResult.Success) {
+                    VoiceTestState.Completed
+                } else {
+                    VoiceTestState.Failed(result)
+                }
+                diagnosticTts?.shutdown()
+                diagnosticTts = null
+            }
+        )
+    }
+
+    fun stopVoiceTest() {
+        voiceTestGeneration++
+        diagnosticTts?.shutdown()
+        diagnosticTts = null
+    }
 
     fun setTtsEnabled(v: Boolean)        { viewModelScope.launch { prefs.setTtsEnabled(v) } }
     fun setGpsEnabled(v: Boolean)        { viewModelScope.launch { prefs.setGpsEnabled(v) } }
@@ -95,5 +148,10 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
             getApplication(),
             VibrationPatterns.forInterval(IntervalType.RUN, strength)
         )
+    }
+
+    override fun onCleared() {
+        stopVoiceTest()
+        super.onCleared()
     }
 }

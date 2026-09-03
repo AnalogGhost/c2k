@@ -18,6 +18,7 @@
     <plurals name="home_streak">
         <item quantity="one">%1$d semaine d\'affilée 🔥</item>
         <item quantity="other">%1$d semaines d\'affilée 🔥</item>
+        <item quantity="many">%1$d semaines d\'affilée 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d semaines</string>
     <string name="home_program_prerequisite">%1$s</string>
@@ -35,6 +36,7 @@
     <plurals name="program_preview_duration">
         <item quantity="one">~%1$d min</item>
         <item quantity="other">~%1$d min</item>
+        <item quantity="many">~%1$d min</item>
     </plurals>
     <string name="program_reset_title">Réinitialiser la progression</string>
     <string name="program_reset_message">Cette action supprimera définitivement toutes les séances terminées de ce programme. Votre historique global est conservé.</string>
@@ -94,8 +96,9 @@
     <string name="history_delete_confirm">Supprimer</string>
     <string name="history_delete_cancel">Annuler</string>
     <plurals name="history_stats_workouts">
-        <item quantity="one">séance</item>
-        <item quantity="other">séances</item>
+        <item quantity="one">%1$d séance</item>
+        <item quantity="other">%1$d séances</item>
+        <item quantity="many">%1$d séances</item>
     </plurals>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">temps</string>
@@ -203,6 +206,7 @@
     <string name="contributor_translation_es">Traduction en espagnol (es)</string>
     <string name="contributor_translation_gl">Traduction en galicien (gl)</string>
     <string name="contributor_translation_ru">Traduction en russe (ru)</string>
+    <string name="contributor_translation_tr">Traduction en turc (tr)</string>
     <string name="contributor_fix_tts_ducking">Correction : les annonces vocales atténuent désormais la musique de fond au lieu de la mettre en pause</string>
     <string name="contributor_fix_completion_counter">Correction : le compteur de fin ne se fige plus et l\'annonce de fin n\'est plus coupée lorsque l\'écran se verrouille</string>
 
@@ -227,6 +231,16 @@
     <string name="settings_tts_volume">Volume de la voix</string>
     <string name="settings_tts_volume_quiet">Faible</string>
     <string name="settings_tts_volume_loud">Fort</string>
+    <string name="settings_tts_test_voice">Tester la voix</string>
+    <string name="settings_tts_test_phrase">Les annonces vocales de C2K fonctionnent.</string>
+    <string name="settings_tts_test_initializing">Initialisation de la synthèse vocale…</string>
+    <string name="settings_tts_test_speaking">Lecture de l’annonce test…</string>
+    <string name="settings_tts_test_completed">Test terminé. Si vous n’avez rien entendu, vérifiez le volume multimédia et la sortie audio.</string>
+    <string name="settings_tts_test_no_engine">Aucun moteur de synthèse vocale n’est installé. Installez-en ou activez-en un dans les paramètres Android.</string>
+    <string name="settings_tts_test_voice_unavailable">Aucune voix n’est disponible pour la langue de l’appareil ni pour l’anglais. Installez des données vocales dans les paramètres Android.</string>
+    <string name="settings_tts_test_synthesis_failure">Le service de synthèse vocale n’a pas pu créer l’annonce. Vérifiez ou redémarrez le moteur dans les paramètres Android.</string>
+    <string name="settings_tts_test_output_failure">Android n’a pas pu lire l’annonce. Vérifiez le volume multimédia, la sortie audio et les paramètres de synthèse vocale.</string>
+    <string name="settings_tts_open_settings">Ouvrir les paramètres de synthèse vocale</string>
     <string name="settings_weight">Poids</string>
     <string name="settings_weight_not_set">Non défini</string>
     <string name="settings_weight_hint">Utilisé uniquement pour estimer les calories brûlées. Ne quitte jamais votre appareil.</string>
@@ -251,6 +265,7 @@
     <plurals name="tts_seconds_remaining">
         <item quantity="one">%1$d seconde restante</item>
         <item quantity="other">%1$d secondes restantes</item>
+        <item quantity="many">%1$d secondes restantes</item>
     </plurals>
     <string name="tts_next_run">Préparez-vous à courir</string>
     <string name="tts_next_walk">Préparez-vous à marcher</string>
@@ -270,10 +285,12 @@
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
+        <item quantity="many">%d minutes</item>
     </plurals>
     <plurals name="tts_duration_seconds">
         <item quantity="one">%d seconde</item>
         <item quantity="other">%d secondes</item>
+        <item quantity="many">%d secondes</item>
     </plurals>
 
     <!-- Coaching tips - C25K -->

@@ -203,6 +203,7 @@
     <string name="contributor_translation_es">Spanische (es) Übersetzung</string>
     <string name="contributor_translation_gl">Galicische (gl) Übersetzung</string>
     <string name="contributor_translation_ru">Russische (ru) Übersetzung</string>
+    <string name="contributor_translation_tr">Türkische (tr) Übersetzung</string>
     <string name="contributor_fix_tts_ducking">Fix: Sprachansagen dämpfen jetzt die Hintergrundmusik, statt sie zu pausieren</string>
     <string name="contributor_fix_completion_counter">Korrektur: Der Abschlusszähler bleibt nicht mehr hängen und die Abschlussansage wird nicht mehr abgeschnitten, wenn der Bildschirm gesperrt wird</string>
 
@@ -227,6 +228,16 @@
     <string name="settings_tts_volume">Sprachlautstärke</string>
     <string name="settings_tts_volume_quiet">Leise</string>
     <string name="settings_tts_volume_loud">Laut</string>
+    <string name="settings_tts_test_voice">Stimme testen</string>
+    <string name="settings_tts_test_phrase">Die Sprachansagen von C2K funktionieren.</string>
+    <string name="settings_tts_test_initializing">Sprachausgabe wird initialisiert…</string>
+    <string name="settings_tts_test_speaking">Testansage wird wiedergegeben…</string>
+    <string name="settings_tts_test_completed">Test abgeschlossen. Falls du nichts gehört hast, prüfe die Medienlautstärke und die Audioausgabe.</string>
+    <string name="settings_tts_test_no_engine">Keine Sprachausgabe-Engine installiert. Installiere oder aktiviere eine in den Android-Einstellungen.</string>
+    <string name="settings_tts_test_voice_unavailable">Für deine Gerätesprache oder Englisch ist keine Stimme verfügbar. Installiere Sprachdaten in den Android-Einstellungen.</string>
+    <string name="settings_tts_test_synthesis_failure">Der Sprachausgabedienst konnte die Ansage nicht erstellen. Prüfe die Engine in den Android-Einstellungen oder starte sie neu.</string>
+    <string name="settings_tts_test_output_failure">Android konnte die Ansage nicht wiedergeben. Prüfe Medienlautstärke, Audioausgabe und Sprachausgabe-Einstellungen.</string>
+    <string name="settings_tts_open_settings">Sprachausgabe-Einstellungen öffnen</string>
     <string name="settings_weight">Gewicht</string>
     <string name="settings_weight_not_set">Nicht festgelegt</string>
     <string name="settings_weight_hint">Wird nur zur Schätzung der verbrannten Kalorien verwendet. Verlässt niemals dein Gerät.</string>

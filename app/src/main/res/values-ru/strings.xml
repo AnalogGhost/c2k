@@ -98,10 +98,10 @@
     <string name="history_delete_confirm">Удалить</string>
     <string name="history_delete_cancel">Отмена</string>
     <plurals name="history_stats_workouts">
-        <item quantity="one">тренировка</item>
-        <item quantity="few">тренировки</item>
-        <item quantity="many">тренировок</item>
-        <item quantity="other">тренировок</item>
+        <item quantity="one">%1$d тренировка</item>
+        <item quantity="few">%1$d тренировки</item>
+        <item quantity="many">%1$d тренировок</item>
+        <item quantity="other">%1$d тренировок</item>
     </plurals>
     <string name="history_stats_km">км</string>
     <string name="history_stats_time">время</string>
@@ -194,7 +194,7 @@
     <string name="guide_q_pace_term">Темп</string>
     <string name="guide_a_pace_term">Как быстро вы бежите, обычно выражен в виде минут на километр или милю — например, 7:30 на км означает, что бег на один километр занимает 7 минут и 30 секунд.\n\nДля большей части программ C25K темп не важен. Важно именно завершение интервалов. Игнорируйте темп полностью до тех пор, пока не завершите программу.</string>
     <string name="guide_q_doms">Крепатура (синдром отсроченной мышечной боли)</string>
-    <string name="guide_a_doms">Мышечная боль, которая наступает через 24-48 часов после упражнений, вызванная микроскопическими повреждениями мышечных тканей в процессе их адаптации к новой нагрузке. Это нормально, не вредно, интенсивность значительно снижается после первых нескольких недель тренировок.</string>
+    <string name="guide_a_doms">Мышечная боль, которая наступает через 24–48 часов после упражнений, вызванная микроскопическими повреждениями мышечных тканей в процессе их адаптации к новой нагрузке. Это нормально, не вредно, интенсивность значительно снижается после первых нескольких недель тренировок.</string>
     <string name="guide_q_shin_splints">Боль в голенях</string>
     <string name="guide_a_shin_splints">Боль вдоль внешнего или внутреннего края голеней, обычная ситуация у бегунов-новичков. Обычно возникает из-за попытки прикладывания слишком большого количества усилий слишком рано или из-за изношенности обуви.\n\nПри возникновении рекомендуется отдохнуть в течение 3–5 дней. После возвращения убедитесь, что ваша обувь в порядке, и ваш темп бега не слишком высокий. При постоянной боли в области голеней проконсультируйтесь с врачом.</string>
     <string name="guide_q_rpe">Уровень воспринимаемой нагрузки</string>
@@ -209,6 +209,7 @@
     <string name="contributor_translation_es">Перевод на испанский (es)</string>
     <string name="contributor_translation_gl">Перевод на галисийский (gl)</string>
     <string name="contributor_translation_ru">Перевод на русский (ru)</string>
+    <string name="contributor_translation_tr">Перевод на турецкий (tr)</string>
     <string name="contributor_fix_tts_ducking">Исправление: голосовые уведомления теперь приглушают фоновое воспроизведения музыки вместо установки её на паузу</string>
     <string name="contributor_fix_completion_counter">Исправление: счётчик завершения больше не зависает, и объявление о завершении больше не обрывается при блокировке экрана</string>
 
@@ -233,6 +234,16 @@
     <string name="settings_tts_volume">Громкость речи</string>
     <string name="settings_tts_volume_quiet">Тихо</string>
     <string name="settings_tts_volume_loud">Громко</string>
+    <string name="settings_tts_test_voice">Проверить голос</string>
+    <string name="settings_tts_test_phrase">Голосовые объявления C2K работают.</string>
+    <string name="settings_tts_test_initializing">Инициализация синтеза речи…</string>
+    <string name="settings_tts_test_speaking">Воспроизведение тестового объявления…</string>
+    <string name="settings_tts_test_completed">Проверка завершена. Если вы ничего не услышали, проверьте громкость мультимедиа и аудиовыход.</string>
+    <string name="settings_tts_test_no_engine">Модуль синтеза речи не установлен. Установите или включите его в настройках Android.</string>
+    <string name="settings_tts_test_voice_unavailable">Нет голоса для языка устройства или английского языка. Установите голосовые данные в настройках Android.</string>
+    <string name="settings_tts_test_synthesis_failure">Службе синтеза речи не удалось создать объявление. Проверьте или перезапустите модуль в настройках Android.</string>
+    <string name="settings_tts_test_output_failure">Android не удалось воспроизвести объявление. Проверьте громкость мультимедиа, аудиовыход и настройки синтеза речи.</string>
+    <string name="settings_tts_open_settings">Открыть настройки синтеза речи</string>
     <string name="settings_weight">Вес</string>
     <string name="settings_weight_not_set">Не задан</string>
     <string name="settings_weight_hint">Используется только для оценки сожжённых калорий. Никогда не покидает ваше устройство.</string>
