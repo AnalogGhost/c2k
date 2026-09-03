@@ -1,0 +1,3 @@
+• Adicionada seleção manual de idioma com notificações e avisos de voz adaptados ao idioma.
+• Adicionado teste de voz e diagnósticos úteis de texto para fala nas configurações.
+• Adicionado crédito pela contribuição para a seleção de idioma.

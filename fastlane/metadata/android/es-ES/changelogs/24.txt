@@ -1,0 +1,3 @@
+• Se añadió la selección manual de idioma con notificaciones y anuncios de voz adaptados al idioma.
+• Se añadió una prueba de voz y diagnósticos prácticos de texto a voz en Configuración.
+• Se añadió el reconocimiento por la contribución a la selección de idioma.

@@ -1,0 +1,3 @@
+• Engadiuse a selección manual do idioma con notificacións e anuncios de voz adaptados ao idioma.
+• Engadiuse unha proba de voz e diagnósticos útiles de texto a voz nos axustes.
+• Engadiuse o crédito pola contribución á selección do idioma.

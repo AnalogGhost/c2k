@@ -1,0 +1,3 @@
+• Ajout de la sélection manuelle de la langue avec des notifications et annonces vocales adaptées.
+• Ajout d’un test vocal et de diagnostics utiles de synthèse vocale dans les paramètres.
+• Ajout d’un crédit pour la contribution à la sélection de la langue.

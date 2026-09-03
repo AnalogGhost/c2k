@@ -1,0 +1,3 @@
+• Dil uyumlu antrenman bildirimleri ve sesli yönlendirmelerle manuel dil seçimi eklendi.
+• Ayarlar’a ses testi ve anlaşılır metin okuma tanılamaları eklendi.
+• Dil seçimine yapılan katkı için teşekkür eklendi.

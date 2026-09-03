@@ -1,0 +1,3 @@
+• Added manual language selection with locale-aware workout notifications and voice announcements.
+• Added a voice test and actionable text-to-speech diagnostics in Settings.
+• Added contributor credit for the language-selection contribution.

@@ -1,0 +1,3 @@
+• Manuelle Sprachauswahl mit sprachabhängigen Trainingsbenachrichtigungen und Sprachansagen hinzugefügt.
+• Sprachtest und hilfreiche Text-to-Speech-Diagnosen in den Einstellungen hinzugefügt.
+• Danksagung für den Beitrag zur Sprachauswahl hinzugefügt.
