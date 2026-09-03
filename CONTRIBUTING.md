@@ -28,3 +28,4 @@ See the [README](README.md) for build requirements and instructions.
 | [andrewfarabee](https://github.com/andrewfarabee) | Fix: TTS announcements duck background music instead of pausing it; Fix: completion counter freeze and cut-off completion announcement |
 | [ilyushenok](https://github.com/ilyushenok) | Russian (ru) translation |
 | [ahmetemrew](https://github.com/ahmetemrew) | Turkish (tr) translation |
+| [Unibilens](https://github.com/Unibilens) | Manual language selection and locale propagation |

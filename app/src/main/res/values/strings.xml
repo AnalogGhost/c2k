@@ -207,6 +207,7 @@
     <string name="contributor_translation_gl">Galician (gl) translation</string>
     <string name="contributor_translation_ru">Russian (ru) translation</string>
     <string name="contributor_translation_tr">Turkish (tr) translation</string>
+    <string name="contributor_language_selection">Manual language selection and locale propagation</string>
     <string name="contributor_fix_tts_ducking">Fix: TTS announcements now duck background music instead of pausing it</string>
     <string name="contributor_fix_completion_counter">Fix: completion counter no longer freezes and the completion announcement no longer gets cut off when the screen locks</string>
 

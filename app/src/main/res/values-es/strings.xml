@@ -207,6 +207,7 @@
     <string name="contributor_translation_gl">Traducción al Gallego (gl)</string>
     <string name="contributor_translation_ru">Traducción al Ruso (ru)</string>
     <string name="contributor_translation_tr">Traducción al turco (tr)</string>
+    <string name="contributor_language_selection">Selección manual de idioma y propagación de la configuración regional</string>
     <string name="contributor_fix_tts_ducking">Corrección: los anuncios de voz ahora atenúan la música de fondo en lugar de pausarla</string>
     <string name="contributor_fix_completion_counter">Corrección: el contador de finalización ya no se congela y el anuncio de finalización ya no se corta cuando la pantalla se bloquea</string>
 

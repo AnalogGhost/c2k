@@ -209,6 +209,7 @@
     <string name="contributor_translation_gl">Galiçyaca (gl) çeviri</string>
     <string name="contributor_translation_ru">Rusça (ru) çeviri</string>
     <string name="contributor_translation_tr">Türkçe (tr) çeviri</string>
+    <string name="contributor_language_selection">Manuel dil seçimi ve yerel ayarların aktarımı</string>
     <string name="contributor_fix_tts_ducking">Düzeltme: TTS seslendirmeleri artık arka plan müziğini duraklatmak yerine sesini kısıyor</string>
     <string name="contributor_fix_completion_counter">Düzeltme: Tamamlama sayacı artık ekran kilitlendiğinde donmuyor ve tamamlama anonsu kesilmiyor</string>
 
