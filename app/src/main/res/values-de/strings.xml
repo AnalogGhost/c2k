@@ -204,11 +204,22 @@
     <string name="contributor_translation_gl">Galicische (gl) Übersetzung</string>
     <string name="contributor_translation_ru">Russische (ru) Übersetzung</string>
     <string name="contributor_translation_tr">Türkische (tr) Übersetzung</string>
+    <string name="contributor_language_selection">Manuelle Sprachauswahl und Weitergabe der Spracheinstellungen</string>
     <string name="contributor_fix_tts_ducking">Fix: Sprachansagen dämpfen jetzt die Hintergrundmusik, statt sie zu pausieren</string>
     <string name="contributor_fix_completion_counter">Korrektur: Der Abschlusszähler bleibt nicht mehr hängen und die Abschlussansage wird nicht mehr abgeschnitten, wenn der Bildschirm gesperrt wird</string>
 
     <!-- Settings -->
     <string name="settings_title">Einstellungen</string>
+    <string name="settings_language">Sprache</string>
+    <string name="language_system_default">Systemstandard</string>
+    <string name="language_en">Englisch (English)</string>
+    <string name="language_de">Deutsch</string>
+    <string name="language_es">Spanisch (Español)</string>
+    <string name="language_fr">Französisch (Français)</string>
+    <string name="language_gl">Galicisch (Galego)</string>
+    <string name="language_pt_br">Portugiesisch (Português)</string>
+    <string name="language_ru">Russisch (Русский)</string>
+    <string name="language_tr">Türkisch (Türkçe)</string>
     <string name="settings_tts_enabled">Sprachansagen</string>
     <string name="settings_treadmill_mode">Laufband-Modus (deaktiviert GPS)</string>
     <string name="settings_gps_enabled">GPS-Tracking</string>

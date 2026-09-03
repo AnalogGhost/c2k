@@ -1,6 +1,8 @@
 package com.hackerapps.c2k.ui.screen.settings
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +35,25 @@ class SettingsViewModel @JvmOverloads constructor(
     private val diagnosticTtsFactory: (Application, Float, Float) -> DiagnosticTts =
         { application, rate, volume -> TtsManager(application, rate, volume) }
 ) : AndroidViewModel(app) {
+
+    private val _currentLanguageTag = MutableStateFlow(
+        AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    )
+    val currentLanguageTag = _currentLanguageTag.asStateFlow()
+
+    fun refreshLanguage() {
+        _currentLanguageTag.value = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    }
+
+    fun setLanguage(tag: String) {
+        val locales = if (tag.isEmpty()) {
+            LocaleListCompat.getEmptyLocaleList()
+        } else {
+            LocaleListCompat.forLanguageTags(tag)
+        }
+        AppCompatDelegate.setApplicationLocales(locales)
+        _currentLanguageTag.value = tag
+    }
 
     private val prefs = UserPreferences(app)
 

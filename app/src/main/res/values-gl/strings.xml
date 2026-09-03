@@ -207,11 +207,22 @@
     <string name="contributor_translation_gl">Tradución ao galego (gl)</string>
     <string name="contributor_translation_ru">Tradución ao ruso (ru)</string>
     <string name="contributor_translation_tr">Tradución ao turco (tr)</string>
+    <string name="contributor_language_selection">Selección manual do idioma e propagación da configuración rexional</string>
     <string name="contributor_fix_tts_ducking">Corrección: os avisos de voz agora atenúan a música de fondo en vez de pausala</string>
     <string name="contributor_fix_completion_counter">Corrección: o contador de finalización xa non se conxela e o anuncio de finalización xa non se corta cando a pantalla se bloquea</string>
 
     <!-- Settings -->
     <string name="settings_title">Axustes</string>
+    <string name="settings_language">Idioma</string>
+    <string name="language_system_default">Predeterminado do sistema</string>
+    <string name="language_en">Inglés (English)</string>
+    <string name="language_de">Alemán (Deutsch)</string>
+    <string name="language_es">Español (Español)</string>
+    <string name="language_fr">Francés (Français)</string>
+    <string name="language_gl">Galego</string>
+    <string name="language_pt_br">Portugués (Português)</string>
+    <string name="language_ru">Ruso (Русский)</string>
+    <string name="language_tr">Turco (Türkçe)</string>
     <string name="settings_tts_enabled">Anuncios por voz</string>
     <string name="settings_treadmill_mode">Modo cinta de correr (desactiva GPS)</string>
     <string name="settings_gps_enabled">Gravar con GPS</string>

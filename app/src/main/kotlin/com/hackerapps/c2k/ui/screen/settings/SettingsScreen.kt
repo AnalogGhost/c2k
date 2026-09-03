@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,10 +87,14 @@ fun SettingsScreen(
     val voiceTestState       by vm.voiceTestState.collectAsStateWithLifecycle()
     val weightKg             by vm.weightKg.collectAsStateWithLifecycle()
     val weightUnit           by vm.weightUnit.collectAsStateWithLifecycle()
+    val currentLanguageTag   by vm.currentLanguageTag.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     DisposableEffect(vm) {
         onDispose { vm.stopVoiceTest() }
+    }
+    LaunchedEffect(Unit) {
+        vm.refreshLanguage()
     }
 
     Scaffold(
@@ -116,6 +122,11 @@ fun SettingsScreen(
                 .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
+            LanguageSetting(
+                currentTag = currentLanguageTag,
+                onTagChange = vm::setLanguage
+            )
+            HorizontalDivider()
             SettingsToggle(
                 label = stringResource(R.string.settings_tts_enabled),
                 checked = ttsEnabled,
@@ -299,6 +310,72 @@ fun SettingsScreen(
                 onWeightChange = vm::setWeightKg,
                 onUnitChange = vm::setWeightUnit
             )
+        }
+    }
+}
+
+@Composable
+private fun LanguageSetting(
+    currentTag: String,
+    onTagChange: (String) -> Unit
+) {
+    val languages = listOf(
+        "" to R.string.language_system_default,
+        "en" to R.string.language_en,
+        "de" to R.string.language_de,
+        "es" to R.string.language_es,
+        "fr" to R.string.language_fr,
+        "gl" to R.string.language_gl,
+        "pt-BR" to R.string.language_pt_br,
+        "ru" to R.string.language_ru,
+        "tr" to R.string.language_tr
+    )
+    val currentLabelRes = languages.find { it.first == currentTag }?.second
+        ?: R.string.language_system_default
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.settings_language)) },
+        trailingContent = {
+            SettingsDropdownPicker(
+                items = languages,
+                itemLabel = { stringResource(it.second) },
+                onItemSelected = { onTagChange(it.first) },
+                anchor = { onClick ->
+                    TextButton(
+                        onClick = onClick,
+                        modifier = Modifier.testTag("button_language")
+                    ) {
+                        Text(stringResource(currentLabelRes))
+                        Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                    }
+                }
+            )
+        }
+    )
+}
+
+@Composable
+private fun <T> SettingsDropdownPicker(
+    items: List<T>,
+    itemLabel: @Composable (T) -> String,
+    onItemSelected: (T) -> Unit,
+    anchor: @Composable (onClick: () -> Unit) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        anchor { expanded = true }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            items.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(itemLabel(item)) },
+                    onClick = {
+                        expanded = false
+                        onItemSelected(item)
+                    }
+                )
+            }
         }
     }
 }

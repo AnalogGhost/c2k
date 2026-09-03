@@ -207,11 +207,22 @@
     <string name="contributor_translation_gl">Galician (gl) translation</string>
     <string name="contributor_translation_ru">Russian (ru) translation</string>
     <string name="contributor_translation_tr">Turkish (tr) translation</string>
+    <string name="contributor_language_selection">Manual language selection and locale propagation</string>
     <string name="contributor_fix_tts_ducking">Fix: TTS announcements now duck background music instead of pausing it</string>
     <string name="contributor_fix_completion_counter">Fix: completion counter no longer freezes and the completion announcement no longer gets cut off when the screen locks</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="language_system_default">System default</string>
+    <string name="language_en">English</string>
+    <string name="language_de">Deutsch</string>
+    <string name="language_es">Español</string>
+    <string name="language_fr">Français</string>
+    <string name="language_gl">Galego</string>
+    <string name="language_pt_br">Português (Brasil)</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_tr">Türkçe</string>
     <string name="settings_tts_enabled">Voice announcements</string>
     <string name="settings_treadmill_mode">Treadmill mode (disables GPS)</string>
     <string name="settings_gps_enabled">GPS tracking</string>
