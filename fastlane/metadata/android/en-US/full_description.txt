@@ -1,4 +1,4 @@
-C2K is a free, open-source running trainer for Android that guides you from the couch to running 5K, 10K, and beyond — with no ads and no tracking.
+C2K is an offline running trainer that guides you from the couch to running 5K, 10K, and beyond. Follow a clear plan, hear hands-free coaching, and keep your progress private — with no ads and no tracking.
 
 Programs:
 • Pre-C25K — 3-week gentle starter for absolute beginners
@@ -11,14 +11,16 @@ Programs:
 Features:
 • Audible voice prompts — "Start running", "Walk for 90 seconds", countdown warnings
 • Customizable coaching — adjust voice speed/volume, countdown warning timing, and mid-interval cues
+• Test voice playback before a workout, with Android text-to-speech diagnostics
 • Vibration cues as an alternative or addition to voice
+• Adjustable vibration strength and language selection
 • Background workout timer — continues with screen off
 • GPS tracking (optional) — records distance and pace; works without GPS too
 • Treadmill mode — indoor runs without GPS
 • Workout history — session log with total distance, time, best pace, longest run, and calorie estimates
 • Progress tracking — remembers which weeks and days you've completed, with the option to reset
 • In-app running guide — FAQ covering pacing, gear, and terminology
-• Available in 7 languages — English, German, Spanish, French, Galician, Portuguese (Brazil), Russian
+• Available in 8 languages — English, German, Spanish, French, Galician, Portuguese (Brazil), Russian, Turkish
 • Works offline — no internet permission required
 • No proprietary services required — compatible with GrapheneOS and privacy-focused devices
 

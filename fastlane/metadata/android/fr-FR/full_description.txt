@@ -11,14 +11,16 @@ Programmes :
 Fonctionnalités :
 • Annonces vocales audibles — « Commencez à courir », « Marchez pendant 90 secondes », avertissements de compte à rebours
 • Coaching personnalisable — réglez la vitesse/le volume de la voix, le moment des comptes à rebours et les annonces à mi-intervalle
+• Testez la voix et diagnostiquez les problèmes de synthèse vocale Android
 • Signaux vibrants en complément ou en remplacement de la voix
+• Réglez l'intensité des vibrations et la langue
 • Minuteur d'entraînement en arrière-plan — continue même écran éteint
 • Suivi GPS (optionnel) — enregistre la distance et l'allure ; fonctionne aussi sans GPS
 • Mode tapis de course — pour courir en intérieur sans GPS
 • Historique d'entraînement — journal des séances avec distance totale, temps, meilleure allure, course la plus longue et calories estimées
 • Suivi de la progression — se souvient des semaines et jours que vous avez complétés, avec option de réinitialisation
 • Guide de course intégré — FAQ sur l'allure, l'équipement et le vocabulaire
-• Disponible en 7 langues — anglais, allemand, espagnol, français, galicien, portugais (Brésil), russe
+• Disponible en 8 langues — anglais, allemand, espagnol, français, galicien, portugais (Brésil), russe, turc
 • Fonctionne hors ligne — aucune permission internet requise
 • Aucun service propriétaire requis — compatible avec GrapheneOS et les appareils axés sur la confidentialité
 

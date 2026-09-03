@@ -11,14 +11,16 @@ Programas:
 Características:
 • Anuncios por voz — "Comeza a correr", "Camiña durante 90 segundos", avisos de conta atrás
 • Adestramento personalizable — axusta a velocidade/volume da voz, o momento dos avisos de conta atrás e os avisos intermedios
+• Proba a voz e diagnostica problemas da síntese de voz de Android
 • Avisos por vibración como alternativa ou complemento á voz
+• Axusta a intensidade da vibración e o idioma
 • Temporizador en segundo plano — funciona coa pantalla apagada
 • Rexistro con GPS (optativo) — grava a distancia e ritmo; funciona igualmente sen GPS
 • Modo cinta de andar — para adestrar en interiores sen GPS
 • Historial de adestramentos — rexistro de sesións con distancia total, tempo, mellor ritmo, carreira máis longa e calorías estimadas
 • Seguimento do progreso — lembra os días e semanas que xa completaches, con opción de reiniciar
 • Guía de carreira integrada — preguntas frecuentes sobre ritmo, equipamento e terminoloxía
-• Dispoñible en 7 idiomas — inglés, alemán, español, francés, galego, portugués (Brasil), ruso
+• Dispoñible en 8 idiomas — inglés, alemán, español, francés, galego, portugués (Brasil), ruso, turco
 • Funciona sen conexión á rede — non precisa acceso a internet
 • Non precisa servizos propietarios — compatible con GrapheneOS e dispositivos centrados na privacidade
 

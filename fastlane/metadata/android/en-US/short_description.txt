@@ -1,1 +1,1 @@
-Open-source C25K/C210K running trainer. No ads, no tracking.
+Offline C25K & C210K trainer with voice coaching. No ads, no tracking.

@@ -11,7 +11,9 @@ Programlar:
 Özellikler:
 • Sesli yönlendirmeler — "Koşmaya başlayın", "90 saniye yürüyün", geri sayım uyarıları
 • Özelleştirilebilir yönlendirme — ses hızını/düzeyini, geri sayım uyarı zamanlamasını ve aralık ortası ipuçlarını ayarlayın
+• Antrenmandan önce sesi test edin ve Android konuşma sentezi sorunlarını tanılayın
 • Sese alternatif veya ek olarak titreşimli uyarılar
+• Titreşim gücünü ve dili ayarlayın
 • Arka planda çalışan antrenman zamanlayıcısı — ekran kapalıyken çalışmaya devam eder
 • GPS takibi (isteğe bağlı) — mesafe ve tempoyu kaydeder; GPS olmadan da çalışır
 • Koşu bandı modu — GPS olmadan kapalı alan koşuları

@@ -16,11 +16,12 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-private val BACKGROUND = Color(0x14, 0x18, 0x1C)
-private val GLOW_CENTER = Color(0x4A, 0x30, 0x1E)
-private val ACCENT = Color(0xFF, 0x6B, 0x35)
-private val CAMERA_DOT = Color(0x2A, 0x2E, 0x33)
-private const val WATERMARK_ALPHA = 0.22f
+private val BACKGROUND = Color(0xF7, 0xF3, 0xEE)
+private val GLOW_CENTER = Color(0xFF, 0xE4, 0xD5)
+private val ACCENT = Color(0xE5, 0x5A, 0x2A)
+private val CAPTION_TEXT = Color(0x1E, 0x23, 0x28)
+private val CAMERA_DOT = Color(0xC8, 0xBE, 0xB6)
+private const val WATERMARK_ALPHA = 0.10f
 
 // Wide enough that the glow/watermark background actually has visible canvas to sit on —
 // at a thin margin the frame covers almost the whole image and both effects render mostly
@@ -29,7 +30,7 @@ private const val SIDE_MARGIN = 220
 private const val CAPTION_BAND_HEIGHT = 420
 private const val FRAME_BORDER = 10
 private const val FRAME_CORNER_RADIUS = 56f
-private const val CAPTION_FONT_SIZE = 64f
+private const val CAPTION_FONT_SIZE = 84f
 private const val CAPTION_LINE_SPACING = 1.15f
 
 fun main() {
@@ -185,7 +186,7 @@ private fun drawWatermarkRunner(g: Graphics2D, canvasWidth: Int, canvasHeight: I
     val oldStroke = g.stroke
 
     g.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, WATERMARK_ALPHA)
-    g.color = Color.WHITE
+    g.color = CAPTION_TEXT
 
     // Local figure bounding box is roughly x:[32,82] y:[18,83] (center ~57,50) — anchor so
     // that center lands near the bottom-right corner margin, letting the figure bleed off the
@@ -223,7 +224,7 @@ private fun drawWatermarkRunner(g: Graphics2D, canvasWidth: Int, canvasHeight: I
 }
 
 private fun drawCaption(g: java.awt.Graphics2D, caption: String, canvasWidth: Int) {
-    g.color = ACCENT
+    g.color = CAPTION_TEXT
     g.font = Font("SansSerif", Font.BOLD, CAPTION_FONT_SIZE.toInt())
     val metrics = g.fontMetrics
     val maxTextWidth = canvasWidth - SIDE_MARGIN * 2

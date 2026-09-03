@@ -11,14 +11,16 @@ Programas:
 Recursos:
 • Avisos de voz audíveis — "Comece a correr", "Caminhe por 90 segundos", avisos de contagem regressiva
 • Treinamento personalizável — ajuste a velocidade/volume da voz, o momento dos avisos de contagem regressiva e os avisos intermediários
+• Teste a voz e diagnostique problemas do mecanismo de conversão de texto em fala do Android
 • Avisos por vibração como alternativa ou complemento à voz
+• Ajuste a intensidade da vibração e o idioma
 • Cronômetro de treino em segundo plano — continua com a tela desligada
 • Rastreamento por GPS (opcional) — registra distância e ritmo; também funciona sem GPS
 • Modo esteira — para treinos internos sem GPS
 • Histórico de treinos — registro de sessões com distância total, tempo, melhor ritmo, corrida mais longa e calorias estimadas
 • Acompanhamento de progresso — lembra quais semanas e dias você já completou, com opção de redefinir
 • Guia de corrida integrado — perguntas frequentes sobre ritmo, equipamentos e terminologia
-• Disponível em 7 idiomas — inglês, alemão, espanhol, francês, galego, português (Brasil), russo
+• Disponível em 8 idiomas — inglês, alemão, espanhol, francês, galego, português (Brasil), russo, turco
 • Funciona offline — não requer permissão de internet
 • Não requer serviços proprietários — compatível com GrapheneOS e dispositivos focados em privacidade
 
