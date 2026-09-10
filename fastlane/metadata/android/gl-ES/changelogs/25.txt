@@ -1,0 +1,1 @@
+• Corrixiuse un fallo pouco frecuente en dispositivos con Android 10 e anteriores que podía producirse ao activar ou desactivar a localización durante un adestramento.

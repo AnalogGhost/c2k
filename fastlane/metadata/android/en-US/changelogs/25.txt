@@ -1,0 +1,1 @@
+• Fixed a rare crash on Android 10 and older devices that could happen when location services were turned on or off during a workout.

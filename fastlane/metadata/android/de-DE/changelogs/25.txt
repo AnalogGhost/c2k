@@ -1,0 +1,1 @@
+• Seltener Absturz auf Geräten mit Android 10 und älter behoben, der auftreten konnte, wenn die Ortungsdienste während eines Trainings ein- oder ausgeschaltet wurden.

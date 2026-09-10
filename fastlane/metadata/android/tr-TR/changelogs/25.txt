@@ -1,0 +1,1 @@
+• Android 10 ve önceki cihazlarda, antrenman sırasında konum hizmetleri açılıp kapatıldığında oluşabilen nadir bir çökme düzeltildi.

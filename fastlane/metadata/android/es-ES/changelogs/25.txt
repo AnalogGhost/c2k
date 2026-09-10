@@ -1,0 +1,1 @@
+• Se corrigió un fallo poco frecuente en dispositivos con Android 10 y anteriores que podía producirse al activar o desactivar la ubicación durante un entrenamiento.

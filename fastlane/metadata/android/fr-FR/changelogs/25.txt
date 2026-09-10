@@ -1,0 +1,1 @@
+• Correction d’un plantage rare sur les appareils Android 10 et antérieurs, pouvant survenir lorsque la localisation était activée ou désactivée pendant une séance.
