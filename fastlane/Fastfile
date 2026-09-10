@@ -114,6 +114,10 @@ platform :android do
     key_pass = local_props[/keyPassword=(.+)/, 1]
     UI.user_error!("Missing storePassword/keyPassword in local.properties") unless store_pass && key_pass
 
+    keystore = local_props[/storeFile=(.+)/, 1]&.strip
+    keystore = File.join(project_dir, "release/c2k-release.jks") unless keystore && File.exist?(keystore)
+    UI.user_error!("Signing keystore not found at #{keystore}") unless File.exist?(keystore)
+
     unsigned_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk")
     signed_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-foss-release-signed.apk")
     release_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-release.apk")
@@ -127,7 +131,7 @@ platform :android do
     # Passwords can contain shell metacharacters — escape everything interpolated.
     sh(
       "#{apksigner.shellescape} sign " \
-      "--ks #{ENV['HOME']}/c2k-release.jks --ks-key-alias c2k " \
+      "--ks #{keystore.shellescape} --ks-key-alias c2k " \
       "--ks-pass pass:#{store_pass.shellescape} --key-pass pass:#{key_pass.shellescape} " \
       "--out #{signed_apk.shellescape} #{unsigned_apk.shellescape}",
       log: false
