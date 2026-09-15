@@ -484,6 +484,11 @@ class WorkoutService : Service() {
             .setContentIntent(openIntent)
             .setOngoing(true)
             .setSilent(true)
+            // No personal data here — just interval/time/progress — so show it in full on a
+            // locked screen instead of NotificationCompat's default VISIBILITY_PRIVATE, which
+            // Android redacts to "Content hidden" unless the user has separately opted in to
+            // showing all notification content on the lock screen.
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .addAction(
                 0,
                 if (isPaused) getString(R.string.notification_action_resume)
