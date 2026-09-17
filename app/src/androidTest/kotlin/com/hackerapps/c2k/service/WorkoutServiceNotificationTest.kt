@@ -9,6 +9,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.AppDatabase
 import com.hackerapps.c2k.data.model.Interval
 import com.hackerapps.c2k.data.model.IntervalType
@@ -53,6 +54,13 @@ class WorkoutServiceNotificationTest {
 
     private fun activeNotificationIds(): Set<Int> =
         notificationManager.activeNotifications.map { it.id }.toSet()
+
+    private fun ongoingNotificationText(): CharSequence? =
+        notificationManager.activeNotifications
+            .firstOrNull { it.id == ongoingNotificationId }
+            ?.notification
+            ?.extras
+            ?.getCharSequence(Notification.EXTRA_TEXT)
 
     private fun waitUntil(timeoutMs: Long = 5_000, pollMs: Long = 100, condition: () -> Boolean): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMs
@@ -167,6 +175,30 @@ class WorkoutServiceNotificationTest {
         assertTrue(
             "Expected a dismissible completion notification to replace it",
             waitUntil(timeoutMs = 2_000) { completionNotificationId in activeNotificationIds() }
+        )
+    }
+
+    @Test
+    fun ongoing_notification_shows_remaining_run_intervals() {
+        // WARMUP first so the notification reflects both RUN intervals before either has started.
+        WorkoutService.testWorkoutDayOverride = WorkoutDay(
+            week = 1, day = 1,
+            intervals = listOf(
+                Interval(IntervalType.WARMUP, 10),
+                Interval(IntervalType.RUN, 10),
+                Interval(IntervalType.WALK, 10),
+                Interval(IntervalType.RUN, 10)
+            )
+        )
+        startWorkout()
+
+        val expectedRunsLeft = context.resources.getQuantityString(
+            R.plurals.notification_runs_remaining, 2, 2
+        )
+        assertTrue(
+            "Expected the ongoing notification to report both RUN intervals as remaining " +
+                "before either has started, got: ${ongoingNotificationText()}",
+            waitUntil { ongoingNotificationText()?.contains(expectedRunsLeft) == true }
         )
     }
 

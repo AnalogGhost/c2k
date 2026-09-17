@@ -102,6 +102,57 @@ class WorkoutEngineTest {
     }
 
     @Test
+    fun remaining_run_intervals_counts_all_runs_from_the_start() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.WARMUP, 5),
+            Interval(IntervalType.RUN, 10),
+            Interval(IntervalType.WALK, 10),
+            Interval(IntervalType.RUN, 10),
+            Interval(IntervalType.COOLDOWN, 5)
+        )
+        engine.start(1L)
+        advanceTimeBy(300)
+        val s = engine.state.value as WorkoutState.Active
+        assertEquals("Should count both RUN intervals before any has started",
+            2, s.remainingRunIntervals)
+        engine.stop()
+    }
+
+    @Test
+    fun remaining_run_intervals_decrements_only_after_a_run_completes() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 2),
+            Interval(IntervalType.WALK, 2),
+            Interval(IntervalType.RUN, 2)
+        )
+        engine.start(1L)
+        advanceTimeBy(300)  // still in the first RUN interval
+        assertEquals(2, (engine.state.value as WorkoutState.Active).remainingRunIntervals)
+
+        advanceTimeBy(2_200)  // first RUN finishes, now in WALK
+        val duringWalk = engine.state.value as WorkoutState.Active
+        assertEquals(IntervalType.WALK, duringWalk.currentInterval.type)
+        assertEquals("A completed RUN should no longer be counted",
+            1, duringWalk.remainingRunIntervals)
+
+        advanceTimeBy(2_200)  // WALK finishes, now in the second RUN
+        val duringSecondRun = engine.state.value as WorkoutState.Active
+        assertEquals(IntervalType.RUN, duringSecondRun.currentInterval.type)
+        assertEquals("The currently active RUN should still count as remaining",
+            1, duringSecondRun.remainingRunIntervals)
+        engine.stop()
+    }
+
+    @Test
+    fun remaining_run_intervals_is_zero_when_no_runs_in_workout() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.WARMUP, 5), Interval(IntervalType.COOLDOWN, 5))
+        engine.start(1L)
+        advanceTimeBy(300)
+        assertEquals(0, (engine.state.value as WorkoutState.Active).remainingRunIntervals)
+        engine.stop()
+    }
+
+    @Test
     fun completes_after_all_intervals() = testScope.runTest {
         val engine = makeEngine(Interval(IntervalType.RUN, 1))
         engine.start(1L)
