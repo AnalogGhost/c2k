@@ -1,0 +1,2 @@
+• The workout notification now shows how many running intervals are left, not just overall progress.
+• Added an optional voice reminder that periodically announces time remaining during an interval, on a cadence you choose in Settings.
