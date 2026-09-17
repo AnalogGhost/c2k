@@ -116,6 +116,11 @@
     <string name="notification_action_stop">Detener</string>
     <string name="notification_title">Entrenamiento C2K</string>
     <string name="workout_paused_notification">Pausado</string>
+    <plurals name="notification_runs_remaining">
+        <item quantity="one">%1$d carrera restante</item>
+        <item quantity="other">%1$d carreras restantes</item>
+        <item quantity="many">%1$d carreras restantes</item>
+    </plurals>
 
     <!-- Permissions -->
     <string name="permission_location_rationale">C2K puede registrar la distancia y ritmo utilizando el GPS. Esto es opcional — el temporizador también funcionará sin él.</string>

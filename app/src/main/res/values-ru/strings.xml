@@ -119,6 +119,12 @@
     <string name="notification_action_stop">Стоп</string>
     <string name="notification_title">Тренировка C2K</string>
     <string name="workout_paused_notification">На паузе</string>
+    <plurals name="notification_runs_remaining">
+        <item quantity="one">Осталось пробежек: %1$d</item>
+        <item quantity="few">Осталось пробежек: %1$d</item>
+        <item quantity="many">Осталось пробежек: %1$d</item>
+        <item quantity="other">Осталось пробежек: %1$d</item>
+    </plurals>
 
     <!-- Permissions -->
     <string name="permission_location_rationale">C2K может отслеживать вашу дистанцию и темп с помощью GPS. Это опционально — таймер тренировки работает без этого.</string>

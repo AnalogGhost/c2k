@@ -116,6 +116,10 @@
     <string name="notification_action_stop">Durdur</string>
     <string name="notification_title">C2K Antrenman</string>
     <string name="workout_paused_notification">Duraklatıldı</string>
+    <plurals name="notification_runs_remaining">
+        <item quantity="one">%1$d koşu kaldı</item>
+        <item quantity="other">%1$d koşu kaldı</item>
+    </plurals>
 
     <!-- Permissions -->
     <string name="permission_location_rationale">C2K, GPS kullanarak mesafenizi ve temponuzu takip edebilir. Bu isteğe bağlıdır — antrenman zamanlayıcısı GPS olmadan da çalışır.</string>

@@ -116,6 +116,11 @@
     <string name="notification_action_stop">Arrêter</string>
     <string name="notification_title">Séance C2K</string>
     <string name="workout_paused_notification">En pause</string>
+    <plurals name="notification_runs_remaining">
+        <item quantity="one">%1$d course restante</item>
+        <item quantity="other">%1$d courses restantes</item>
+        <item quantity="many">%1$d courses restantes</item>
+    </plurals>
 
     <!-- Permissions -->
     <string name="permission_location_rationale">C2K peut suivre votre distance et votre allure via le GPS. C\'est optionnel — le minuteur fonctionne aussi sans.</string>

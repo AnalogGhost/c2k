@@ -116,6 +116,10 @@
     <string name="notification_action_stop">Deter</string>
     <string name="notification_title">Adestramento C2K</string>
     <string name="workout_paused_notification">Detido</string>
+    <plurals name="notification_runs_remaining">
+        <item quantity="one">%1$d carreira restante</item>
+        <item quantity="other">%1$d carreiras restantes</item>
+    </plurals>
 
     <!-- Permissions -->
     <string name="permission_location_rationale">C2K pode rexistrar a distancia e ritmo utilizando o GPS. Isto é optativo — o temporizador do adestramento funciona tamén sen el.</string>

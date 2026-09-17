@@ -107,6 +107,7 @@ class WorkoutEngine(
                         nextInterval = null,
                         intervalIndex = intervalIndex - 1,
                         totalIntervals = intervals.size,
+                        remainingRunIntervals = remainingRunIntervals(intervalIndex - 1),
                         secondsRemainingInInterval = 0,
                         elapsedSessionSeconds = sessionElapsed,
                         sessionId = sessionId
@@ -155,12 +156,16 @@ class WorkoutEngine(
                 nextInterval = intervals.getOrNull(intervalIndex + 1),
                 intervalIndex = intervalIndex,
                 totalIntervals = intervals.size,
+                remainingRunIntervals = remainingRunIntervals(intervalIndex),
                 secondsRemainingInInterval = remaining,
                 elapsedSessionSeconds = sessionElapsed,
                 sessionId = sessionId
             )
         }
     }
+
+    private fun remainingRunIntervals(index: Int): Int =
+        intervals.drop(index).count { it.type == IntervalType.RUN }
 
     private fun announceInterval(index: Int) {
         if (!ttsEnabled) return

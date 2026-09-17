@@ -113,6 +113,10 @@
     <string name="notification_action_stop">Beenden</string>
     <string name="notification_title">C2K-Training</string>
     <string name="workout_paused_notification">Pausiert</string>
+    <plurals name="notification_runs_remaining">
+        <item quantity="one">%1$d Lauf übrig</item>
+        <item quantity="other">%1$d Läufe übrig</item>
+    </plurals>
 
     <!-- Permissions -->
     <string name="permission_location_rationale">C2K kann deine Distanz und dein Tempo per GPS erfassen. Das ist optional – der Trainings-Timer funktioniert auch ohne.</string>

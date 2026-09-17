@@ -11,6 +11,7 @@ sealed class WorkoutState {
         val nextInterval: Interval?,
         val intervalIndex: Int,
         val totalIntervals: Int,
+        val remainingRunIntervals: Int,
         val secondsRemainingInInterval: Int,
         val elapsedSessionSeconds: Int,
         val sessionId: Long

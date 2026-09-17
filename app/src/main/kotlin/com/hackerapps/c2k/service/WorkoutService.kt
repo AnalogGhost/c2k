@@ -504,7 +504,12 @@ class WorkoutService : Service() {
         val secs = state.secondsRemainingInInterval % 60
         val time = "%d:%02d".format(mins, secs)
         val progress = "${state.intervalIndex + 1}/${state.totalIntervals}"
-        val text = "${intervalLabel(state.currentInterval.type)}  $time  •  $progress"
+        val runsLeft = resources.getQuantityString(
+            R.plurals.notification_runs_remaining,
+            state.remainingRunIntervals,
+            state.remainingRunIntervals
+        )
+        val text = "${intervalLabel(state.currentInterval.type)}  $time  •  $progress  •  $runsLeft"
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.notify(NOTIFICATION_ID, buildNotification(text))
     }
