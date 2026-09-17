@@ -77,6 +77,8 @@ fun SettingsScreen(
     val countdownWarning1    by vm.countdownWarning1.collectAsStateWithLifecycle()
     val countdownWarning2    by vm.countdownWarning2.collectAsStateWithLifecycle()
     val midIntervalCues      by vm.midIntervalCues.collectAsStateWithLifecycle()
+    val periodicTimeCues     by vm.periodicTimeCues.collectAsStateWithLifecycle()
+    val periodicTimeCueInterval by vm.periodicTimeCueInterval.collectAsStateWithLifecycle()
     val treadmillMode        by vm.treadmillMode.collectAsStateWithLifecycle()
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
@@ -176,6 +178,23 @@ fun SettingsScreen(
                 testTag = "toggle_mid_interval_cues",
                 onCheckedChange = vm::setMidIntervalCues
             )
+            HorizontalDivider()
+            SettingsToggle(
+                label = stringResource(R.string.settings_periodic_time_cues),
+                checked = periodicTimeCues,
+                enabled = ttsEnabled,
+                testTag = "toggle_periodic_time_cues",
+                onCheckedChange = vm::setPeriodicTimeCues
+            )
+            if (ttsEnabled && periodicTimeCues) {
+                SecondsSlider(
+                    label = stringResource(R.string.settings_periodic_time_cue_interval),
+                    seconds = periodicTimeCueInterval,
+                    range = 15f..120f,
+                    testTag = "slider_periodic_time_cue_interval",
+                    onValueChange = vm::setPeriodicTimeCueInterval
+                )
+            }
             HorizontalDivider()
 
             // Voice speed slider (only shown when TTS enabled)

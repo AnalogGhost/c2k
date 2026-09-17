@@ -31,6 +31,8 @@ class UserPreferences(private val context: Context) {
         val TREADMILL_MODE           = booleanPreferencesKey("treadmill_mode")
         val COUNTDOWN_WARNING_1      = intPreferencesKey("countdown_warning_1")
         val COUNTDOWN_WARNING_2      = intPreferencesKey("countdown_warning_2")
+        val PERIODIC_TIME_CUES         = booleanPreferencesKey("periodic_time_cues")
+        val PERIODIC_TIME_CUE_INTERVAL = intPreferencesKey("periodic_time_cue_interval")
         val WEIGHT_KG                = floatPreferencesKey("weight_kg")
         val WEIGHT_UNIT              = stringPreferencesKey("weight_unit")
         val GPS_DISTANCES_RECOMPUTED = booleanPreferencesKey("gps_distances_recomputed")
@@ -113,6 +115,18 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setMidIntervalCues(enabled: Boolean) =
         context.dataStore.edit { it[MID_INTERVAL_CUES] = enabled }
+
+    val periodicTimeCues: Flow<Boolean> = context.dataStore.data
+        .map { it[PERIODIC_TIME_CUES] ?: false }
+
+    suspend fun setPeriodicTimeCues(enabled: Boolean) =
+        context.dataStore.edit { it[PERIODIC_TIME_CUES] = enabled }
+
+    val periodicTimeCueInterval: Flow<Int> = context.dataStore.data
+        .map { it[PERIODIC_TIME_CUE_INTERVAL] ?: 30 }
+
+    suspend fun setPeriodicTimeCueInterval(seconds: Int) =
+        context.dataStore.edit { it[PERIODIC_TIME_CUE_INTERVAL] = seconds }
 
     val treadmillMode: Flow<Boolean> = context.dataStore.data
         .map { it[TREADMILL_MODE] ?: false }

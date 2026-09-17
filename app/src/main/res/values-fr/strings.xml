@@ -235,6 +235,8 @@
     <string name="settings_countdown_warning_1">Premier avertissement</string>
     <string name="settings_countdown_warning_2">Second avertissement</string>
     <string name="settings_mid_interval_cues">Encouragements en milieu de course</string>
+    <string name="settings_periodic_time_cues">Rappel périodique du temps</string>
+    <string name="settings_periodic_time_cue_interval">Cadence du rappel</string>
     <string name="settings_keep_screen_on">Garder l\'écran allumé pendant la séance</string>
     <string name="settings_vibration_enabled">Vibrer au changement d\'intervalle</string>
     <string name="settings_vibration_strength">Intensité des vibrations</string>
@@ -298,6 +300,7 @@
     <string name="tts_halfway">Vous êtes à mi-chemin, continuez !</string>
     <string name="tts_last_run">Dernière course, finissez fort !</string>
     <string name="tts_duration_min_sec">%1$s et %2$s</string>
+    <string name="tts_time_remaining">%1$s restantes</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>

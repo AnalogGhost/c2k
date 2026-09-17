@@ -236,6 +236,8 @@
     <string name="settings_countdown_warning_1">Birinci uyarı</string>
     <string name="settings_countdown_warning_2">İkinci uyarı</string>
     <string name="settings_mid_interval_cues">Aralık ortası motivasyonu</string>
+    <string name="settings_periodic_time_cues">Periyodik süre hatırlatıcısı</string>
+    <string name="settings_periodic_time_cue_interval">Hatırlatma sıklığı</string>
     <string name="settings_keep_screen_on">Antrenman sırasında ekranı açık tut</string>
     <string name="settings_vibration_enabled">Aralık değişiminde titreşim</string>
     <string name="settings_vibration_strength">Titreşim gücü</string>
@@ -298,6 +300,7 @@
     <string name="tts_halfway">Yarı yoldasın, devam et!</string>
     <string name="tts_last_run">Son koşu, güçlü bitir!</string>
     <string name="tts_duration_min_sec">%1$s %2$s</string>
+    <string name="tts_time_remaining">%1$s kaldı</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d dakika</item>
         <item quantity="other">%d dakika</item>

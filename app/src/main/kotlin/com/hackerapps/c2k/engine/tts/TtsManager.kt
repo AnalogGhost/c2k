@@ -253,6 +253,7 @@ class TtsManager(
             val phrases = context.resources.getStringArray(R.array.tts_encouragement_phrases)
             phrases[announcement.phraseIndex % phrases.size]
         }
+        is TtsAnnouncement.PeriodicTimeRemaining -> context.getString(R.string.tts_time_remaining, ttsDuration(announcement.secondsRemaining))
         TtsAnnouncement.WorkoutComplete -> context.getString(R.string.tts_workout_complete)
         TtsAnnouncement.Halfway         -> context.getString(R.string.tts_halfway)
         TtsAnnouncement.LastRunInterval -> context.getString(R.string.tts_last_run)

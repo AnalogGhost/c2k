@@ -48,7 +48,9 @@ class WorkoutEngineTest {
         midIntervalCues: Boolean = false,
         countdownWarnings: Boolean = false,
         countdownWarningSeconds1: Int = 10,
-        countdownWarningSeconds2: Int = 5
+        countdownWarningSeconds2: Int = 5,
+        periodicTimeCues: Boolean = false,
+        periodicTimeCueIntervalSeconds: Int = 30
     ): WorkoutEngine =
         WorkoutEngine(
             day = WorkoutDay(week = 1, day = 1, intervals = intervals.toList()),
@@ -58,6 +60,8 @@ class WorkoutEngineTest {
             countdownWarningSeconds1 = countdownWarningSeconds1,
             countdownWarningSeconds2 = countdownWarningSeconds2,
             midIntervalCues = midIntervalCues,
+            periodicTimeCues = periodicTimeCues,
+            periodicTimeCueIntervalSeconds = periodicTimeCueIntervalSeconds,
             scope = testScope,
             // Virtual clock: testScope.currentTime advances with advanceTimeBy()
             clock = { testScope.testScheduler.currentTime }
@@ -211,6 +215,61 @@ class WorkoutEngineTest {
         advanceTimeBy(150_500)  // past both run intervals
         val midpoints = announcements.count { it is TtsAnnouncement.IntervalMidpoint }
         assertEquals("One midpoint cue per qualifying run interval", 2, midpoints)
+    }
+
+    @Test
+    fun periodic_time_cues_fire_on_cadence() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 90),
+            periodicTimeCues = true,
+            periodicTimeCueIntervalSeconds = 30
+        )
+        engine.start(1L)
+        advanceTimeBy(30_300)  // 30s elapsed
+        assertEquals(1, announcements.count {
+            it is TtsAnnouncement.PeriodicTimeRemaining && it.secondsRemaining == 60
+        })
+        advanceTimeBy(30_000)  // 60s elapsed
+        assertEquals(1, announcements.count {
+            it is TtsAnnouncement.PeriodicTimeRemaining && it.secondsRemaining == 30
+        })
+        engine.stop()
+    }
+
+    @Test
+    fun periodic_time_cues_do_not_fire_when_disabled() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 90), periodicTimeCues = false)
+        engine.start(1L)
+        advanceTimeBy(60_300)
+        assertEquals(0, announcements.count { it is TtsAnnouncement.PeriodicTimeRemaining })
+        engine.stop()
+    }
+
+    @Test
+    fun periodic_time_cue_fires_only_once_per_cadence_mark() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 90),
+            periodicTimeCues = true,
+            periodicTimeCueIntervalSeconds = 30
+        )
+        engine.start(1L)
+        advanceTimeBy(30_900)  // several 200ms ticks land on the same 30s mark
+        assertEquals(1, announcements.count { it is TtsAnnouncement.PeriodicTimeRemaining })
+        engine.stop()
+    }
+
+    @Test
+    fun periodic_time_cues_reset_per_interval() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 40),
+            Interval(IntervalType.WALK, 40),
+            periodicTimeCues = true,
+            periodicTimeCueIntervalSeconds = 30
+        )
+        engine.start(1L)
+        advanceTimeBy(70_500)  // crosses the 30s-elapsed mark once in each interval
+        assertEquals(2, announcements.count { it is TtsAnnouncement.PeriodicTimeRemaining })
+        engine.stop()
     }
 
     @Test

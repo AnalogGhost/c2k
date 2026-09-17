@@ -231,6 +231,8 @@
     <string name="settings_countdown_warning_1">Erste Warnung</string>
     <string name="settings_countdown_warning_2">Zweite Warnung</string>
     <string name="settings_mid_interval_cues">Motivation während des Laufens</string>
+    <string name="settings_periodic_time_cues">Regelmäßige Zeitansage</string>
+    <string name="settings_periodic_time_cue_interval">Ansageintervall</string>
     <string name="settings_keep_screen_on">Bildschirm während des Trainings an lassen</string>
     <string name="settings_vibration_enabled">Vibrieren bei Intervallwechsel</string>
     <string name="settings_vibration_strength">Vibrationsstärke</string>
@@ -293,6 +295,7 @@
     <string name="tts_halfway">Du bist auf halbem Weg, weiter so!</string>
     <string name="tts_last_run">Letzter Laufabschnitt, gib alles!</string>
     <string name="tts_duration_min_sec">%1$s und %2$s</string>
+    <string name="tts_time_remaining">Noch %1$s</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minuten</item>

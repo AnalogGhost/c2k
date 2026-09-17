@@ -90,6 +90,12 @@ class SettingsViewModel @JvmOverloads constructor(
     val midIntervalCues = prefs.midIntervalCues
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
 
+    val periodicTimeCues = prefs.periodicTimeCues
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    val periodicTimeCueInterval = prefs.periodicTimeCueInterval
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 30)
+
     val ttsAvailableOnDevice = TtsManager.isAvailableOnDevice
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TtsManager.isAvailableOnDevice.value)
 
@@ -149,6 +155,8 @@ class SettingsViewModel @JvmOverloads constructor(
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
     fun setTtsVolume(v: Float)           { viewModelScope.launch { prefs.setTtsVolume(v) } }
     fun setMidIntervalCues(v: Boolean)   { viewModelScope.launch { prefs.setMidIntervalCues(v) } }
+    fun setPeriodicTimeCues(v: Boolean)  { viewModelScope.launch { prefs.setPeriodicTimeCues(v) } }
+    fun setPeriodicTimeCueInterval(v: Int) { viewModelScope.launch { prefs.setPeriodicTimeCueInterval(v) } }
 
     val treadmillMode = prefs.treadmillMode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)

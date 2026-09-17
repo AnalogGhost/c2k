@@ -239,6 +239,8 @@
     <string name="settings_countdown_warning_1">Первое предупреждение</string>
     <string name="settings_countdown_warning_2">Второе предупреждение</string>
     <string name="settings_mid_interval_cues">Подбадривания посреди пробежки</string>
+    <string name="settings_periodic_time_cues">Периодическое напоминание о времени</string>
+    <string name="settings_periodic_time_cue_interval">Интервал напоминания</string>
     <string name="settings_keep_screen_on">Оставлять экран включённым во время тренировки</string>
     <string name="settings_vibration_enabled">Вибрировать при смене интервала</string>
     <string name="settings_vibration_strength">Интенсивность вибрации</string>
@@ -303,6 +305,7 @@
     <string name="tts_halfway">Уже на полпути, не сдавайтесь!</string>
     <string name="tts_last_run">Последняя пробежка, финишируйте на высокой ноте!</string>
     <string name="tts_duration_min_sec">%1$s и %2$s</string>
+    <string name="tts_time_remaining">Осталось %1$s</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d минута</item>
         <item quantity="few">%d минуты</item>

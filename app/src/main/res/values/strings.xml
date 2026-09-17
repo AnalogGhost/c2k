@@ -234,6 +234,8 @@
     <string name="settings_countdown_warning_1">First warning</string>
     <string name="settings_countdown_warning_2">Second warning</string>
     <string name="settings_mid_interval_cues">Mid-run encouragement</string>
+    <string name="settings_periodic_time_cues">Periodic time reminder</string>
+    <string name="settings_periodic_time_cue_interval">Reminder cadence</string>
     <string name="settings_keep_screen_on">Keep screen on during workout</string>
     <string name="settings_vibration_enabled">Vibrate on interval change</string>
     <string name="settings_vibration_strength">Vibration strength</string>
@@ -296,6 +298,7 @@
     <string name="tts_halfway">Halfway there, keep it up!</string>
     <string name="tts_last_run">Last run, finish strong!</string>
     <string name="tts_duration_min_sec">%1$s and %2$s</string>
+    <string name="tts_time_remaining">%1$s remaining</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
