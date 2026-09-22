@@ -107,6 +107,8 @@
     <string name="history_stats_longest">longest</string>
     <string name="history_stats_section_totals">Totals</string>
     <string name="history_stats_section_bests">Personal bests</string>
+    <string name="history_week_section_this_week">This week</string>
+    <string name="history_week_last_week">Last week: %1$s km · %2$s</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Workout</string>

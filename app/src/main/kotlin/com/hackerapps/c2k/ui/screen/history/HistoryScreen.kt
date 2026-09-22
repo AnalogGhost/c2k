@@ -50,6 +50,7 @@ import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.engine.CalorieCalculator
+import com.hackerapps.c2k.engine.WeeklySummary
 import com.hackerapps.c2k.ui.programNameRes
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 import java.text.SimpleDateFormat
@@ -64,6 +65,7 @@ fun HistoryScreen(
 ) {
     val sessions by vm.sessions.collectAsStateWithLifecycle()
     val stats by vm.stats.collectAsStateWithLifecycle()
+    val weeklySummary by vm.weeklySummary.collectAsStateWithLifecycle()
     val weightKg by vm.weightKg.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
@@ -116,6 +118,10 @@ fun HistoryScreen(
             ) {
                 item { Spacer(Modifier.height(4.dp)) }
 
+                item {
+                    WeeklySummaryCard(weeklySummary)
+                }
+
                 // Aggregate stats card
                 item {
                     StatsCard(stats)
@@ -145,6 +151,57 @@ fun HistoryScreen(
                     )
                 }
                 item { Spacer(Modifier.height(16.dp)) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WeeklySummaryCard(summary: WeeklySummary) {
+    val week = summary.thisWeek
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        )
+    ) {
+        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+            StatsSectionLabel(stringResource(R.string.history_week_section_this_week))
+            Spacer(Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                StatItem(
+                    value = week.completedSessions.toString(),
+                    label = pluralStringResource(R.plurals.history_stats_workouts, week.completedSessions)
+                )
+                StatItem(
+                    value = "%.1f".format(week.totalKm),
+                    label = stringResource(R.string.history_stats_km)
+                )
+                StatItem(
+                    value = formatDuration(week.totalTimeSeconds),
+                    label = stringResource(R.string.history_stats_time)
+                )
+                week.totalCalories?.let { kcal ->
+                    StatItem(
+                        value = kcal.toString(),
+                        label = stringResource(R.string.history_stats_calories)
+                    )
+                }
+            }
+            if (summary.lastWeek.hasActivity) {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    stringResource(
+                        R.string.history_week_last_week,
+                        "%.1f".format(summary.lastWeek.totalKm),
+                        formatDuration(summary.lastWeek.totalTimeSeconds)
+                    ),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+                )
             }
         }
     }

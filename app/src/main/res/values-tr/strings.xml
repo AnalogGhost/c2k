@@ -107,6 +107,8 @@
     <string name="history_stats_longest">en uzun</string>
     <string name="history_stats_section_totals">Toplamlar</string>
     <string name="history_stats_section_bests">Kişisel rekorlar</string>
+    <string name="history_week_section_this_week">Bu hafta</string>
+    <string name="history_week_last_week">Geçen hafta: %1$s km · %2$s</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Antrenman</string>

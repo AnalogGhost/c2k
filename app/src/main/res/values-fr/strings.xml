@@ -107,6 +107,8 @@
     <string name="history_stats_longest">plus longue</string>
     <string name="history_stats_section_totals">Totaux</string>
     <string name="history_stats_section_bests">Meilleures performances</string>
+    <string name="history_week_section_this_week">Cette semaine</string>
+    <string name="history_week_last_week">Semaine dernière&#160;: %1$s km · %2$s</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Entraînement</string>
