@@ -112,6 +112,8 @@
     <string name="history_stats_section_bests">Личные рекорды</string>
     <string name="history_week_section_this_week">На этой неделе</string>
     <string name="history_week_last_week">На прошлой неделе: %1$s км · %2$s</string>
+    <string name="history_month_section_this_month">В этом месяце</string>
+    <string name="history_month_last_month">В прошлом месяце: %1$s км · %2$s</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Тренировка</string>

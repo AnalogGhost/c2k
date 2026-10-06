@@ -109,6 +109,8 @@
     <string name="history_stats_section_bests">Mejores marcas</string>
     <string name="history_week_section_this_week">Esta semana</string>
     <string name="history_week_last_week">Semana pasada: %1$s km · %2$s</string>
+    <string name="history_month_section_this_month">Este mes</string>
+    <string name="history_month_last_month">Mes pasado: %1$s km · %2$s</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Entrenamiento</string>

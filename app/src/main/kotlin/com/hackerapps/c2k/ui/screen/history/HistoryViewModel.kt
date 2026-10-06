@@ -13,6 +13,8 @@ import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.db.entity.RoutePointEntity
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.engine.CalorieCalculator
+import com.hackerapps.c2k.engine.MonthlySummary
+import com.hackerapps.c2k.engine.MonthlySummaryCalculator
 import com.hackerapps.c2k.engine.WeeklySummary
 import com.hackerapps.c2k.engine.WeeklySummaryCalculator
 import java.text.SimpleDateFormat
@@ -49,6 +51,14 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
         WeeklySummaryCalculator.compute(emptyList(), System.currentTimeMillis())
+    )
+
+    val monthlySummary: StateFlow<MonthlySummary> = combine(sessions, weightKg) { list, kg ->
+        MonthlySummaryCalculator.compute(list, System.currentTimeMillis(), kg)
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        MonthlySummaryCalculator.compute(emptyList(), System.currentTimeMillis())
     )
 
     fun deleteSession(sessionId: Long) {

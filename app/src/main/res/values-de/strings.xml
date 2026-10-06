@@ -106,6 +106,8 @@
     <string name="history_stats_section_bests">Bestleistungen</string>
     <string name="history_week_section_this_week">Diese Woche</string>
     <string name="history_week_last_week">Letzte Woche: %1$s km · %2$s</string>
+    <string name="history_month_section_this_month">Diesen Monat</string>
+    <string name="history_month_last_month">Letzter Monat: %1$s km · %2$s</string>
 
     <!-- Notification -->
     <string name="notification_channel_name">Training</string>

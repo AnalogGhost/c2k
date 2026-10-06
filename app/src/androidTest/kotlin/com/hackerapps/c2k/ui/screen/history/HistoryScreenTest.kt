@@ -121,11 +121,12 @@ class HistoryScreenTest {
 
         // 2 completed sessions, 1.5 km total — matches HistoryViewModel.computeStats, already
         // unit-tested directly; this just checks the screen actually renders those numbers.
-        // The sessions start "now", so the This week card repeats the same figures as Totals.
+        // The sessions start "now", so the This week and This month cards repeat the same
+        // figures as Totals: three cards, one match each.
         composeRule.waitUntilAssertion {
-            composeRule.onAllNodesWithText("2").assertCountEquals(2)
+            composeRule.onAllNodesWithText("2").assertCountEquals(3)
         }
-        composeRule.onAllNodesWithText("1.5").assertCountEquals(2)
+        composeRule.onAllNodesWithText("1.5").assertCountEquals(3)
     }
 
     @Test
@@ -140,6 +141,21 @@ class HistoryScreenTest {
             composeRule.onNodeWithText(string(R.string.history_week_section_this_week)).assertExists()
         }
         composeRule.onNodeWithText(string(R.string.history_week_last_week, "0.0", "0:00"), substring = true)
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun this_month_card_shows_current_month_totals_and_omits_last_month_when_empty() {
+        runBlocking {
+            val id = repo().startSession(PROGRAM_ID, week = 1, day = 1)
+            repo().finishSession(id, durationSeconds = 600, distanceMeters = 1000f, completed = true)
+        }
+        setContent()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.history_month_section_this_month)).assertExists()
+        }
+        composeRule.onNodeWithText(string(R.string.history_month_last_month, "0.0", "0:00"), substring = true)
             .assertDoesNotExist()
     }
 
@@ -219,9 +235,9 @@ class HistoryScreenTest {
         }
         setContent()
 
-        // One kcal tile in the This week card, one in Totals.
+        // One kcal tile each in This week, This month, and Totals.
         composeRule.waitUntilAssertion {
-            composeRule.onAllNodesWithText(string(R.string.history_stats_calories)).assertCountEquals(2)
+            composeRule.onAllNodesWithText(string(R.string.history_stats_calories)).assertCountEquals(3)
         }
         composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertExists()
         composeRule.onNodeWithText(string(R.string.history_stats_longest)).assertExists()

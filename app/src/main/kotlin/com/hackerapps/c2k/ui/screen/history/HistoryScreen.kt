@@ -50,6 +50,8 @@ import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.engine.CalorieCalculator
+import com.hackerapps.c2k.engine.MonthlySummary
+import com.hackerapps.c2k.engine.PeriodTotals
 import com.hackerapps.c2k.engine.WeeklySummary
 import com.hackerapps.c2k.ui.programNameRes
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
@@ -66,6 +68,7 @@ fun HistoryScreen(
     val sessions by vm.sessions.collectAsStateWithLifecycle()
     val stats by vm.stats.collectAsStateWithLifecycle()
     val weeklySummary by vm.weeklySummary.collectAsStateWithLifecycle()
+    val monthlySummary by vm.monthlySummary.collectAsStateWithLifecycle()
     val weightKg by vm.weightKg.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
@@ -122,6 +125,12 @@ fun HistoryScreen(
                     WeeklySummaryCard(weeklySummary)
                 }
 
+                item { Spacer(Modifier.height(4.dp)) }
+
+                item {
+                    MonthlySummaryCard(monthlySummary)
+                }
+
                 // Aggregate stats card
                 item {
                     StatsCard(stats)
@@ -158,7 +167,36 @@ fun HistoryScreen(
 
 @Composable
 private fun WeeklySummaryCard(summary: WeeklySummary) {
-    val week = summary.thisWeek
+    PeriodSummaryCard(
+        sectionLabel = stringResource(R.string.history_week_section_this_week),
+        totals = summary.thisWeek,
+        comparisonText = if (summary.lastWeek.hasActivity) {
+            stringResource(
+                R.string.history_week_last_week,
+                "%.1f".format(summary.lastWeek.totalKm),
+                formatDuration(summary.lastWeek.totalTimeSeconds)
+            )
+        } else null
+    )
+}
+
+@Composable
+private fun MonthlySummaryCard(summary: MonthlySummary) {
+    PeriodSummaryCard(
+        sectionLabel = stringResource(R.string.history_month_section_this_month),
+        totals = summary.thisMonth,
+        comparisonText = if (summary.lastMonth.hasActivity) {
+            stringResource(
+                R.string.history_month_last_month,
+                "%.1f".format(summary.lastMonth.totalKm),
+                formatDuration(summary.lastMonth.totalTimeSeconds)
+            )
+        } else null
+    )
+}
+
+@Composable
+private fun PeriodSummaryCard(sectionLabel: String, totals: PeriodTotals, comparisonText: String?) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -166,39 +204,35 @@ private fun WeeklySummaryCard(summary: WeeklySummary) {
         )
     ) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-            StatsSectionLabel(stringResource(R.string.history_week_section_this_week))
+            StatsSectionLabel(sectionLabel)
             Spacer(Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 StatItem(
-                    value = week.completedSessions.toString(),
-                    label = pluralStringResource(R.plurals.history_stats_workouts, week.completedSessions)
+                    value = totals.completedSessions.toString(),
+                    label = pluralStringResource(R.plurals.history_stats_workouts, totals.completedSessions)
                 )
                 StatItem(
-                    value = "%.1f".format(week.totalKm),
+                    value = "%.1f".format(totals.totalKm),
                     label = stringResource(R.string.history_stats_km)
                 )
                 StatItem(
-                    value = formatDuration(week.totalTimeSeconds),
+                    value = formatDuration(totals.totalTimeSeconds),
                     label = stringResource(R.string.history_stats_time)
                 )
-                week.totalCalories?.let { kcal ->
+                totals.totalCalories?.let { kcal ->
                     StatItem(
                         value = kcal.toString(),
                         label = stringResource(R.string.history_stats_calories)
                     )
                 }
             }
-            if (summary.lastWeek.hasActivity) {
+            if (comparisonText != null) {
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    stringResource(
-                        R.string.history_week_last_week,
-                        "%.1f".format(summary.lastWeek.totalKm),
-                        formatDuration(summary.lastWeek.totalTimeSeconds)
-                    ),
+                    comparisonText,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
                 )
