@@ -1,0 +1,3 @@
+• See weekly and monthly summaries on the History screen, with a quick comparison to the previous week and month.
+• New setting to skip the warm-up and cool-down, for days when you already walk to and from your run.
+• Fixed a display bug in the French, Portuguese, and Russian translations that showed "%1$d" instead of the word for "workout" on the History screen.
