@@ -96,9 +96,9 @@
     <string name="history_delete_confirm">Excluir</string>
     <string name="history_delete_cancel">Cancelar</string>
     <plurals name="history_stats_workouts">
-        <item quantity="one">%1$d treino</item>
-        <item quantity="other">%1$d treinos</item>
-        <item quantity="many">%1$d treinos</item>
+        <item quantity="one">treino</item>
+        <item quantity="other">treinos</item>
+        <item quantity="many">treinos</item>
     </plurals>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">tempo</string>

@@ -96,9 +96,9 @@
     <string name="history_delete_confirm">Supprimer</string>
     <string name="history_delete_cancel">Annuler</string>
     <plurals name="history_stats_workouts">
-        <item quantity="one">%1$d séance</item>
-        <item quantity="other">%1$d séances</item>
-        <item quantity="many">%1$d séances</item>
+        <item quantity="one">séance</item>
+        <item quantity="other">séances</item>
+        <item quantity="many">séances</item>
     </plurals>
     <string name="history_stats_km">km</string>
     <string name="history_stats_time">temps</string>

@@ -98,10 +98,10 @@
     <string name="history_delete_confirm">Удалить</string>
     <string name="history_delete_cancel">Отмена</string>
     <plurals name="history_stats_workouts">
-        <item quantity="one">%1$d тренировка</item>
-        <item quantity="few">%1$d тренировки</item>
-        <item quantity="many">%1$d тренировок</item>
-        <item quantity="other">%1$d тренировок</item>
+        <item quantity="one">тренировка</item>
+        <item quantity="few">тренировки</item>
+        <item quantity="many">тренировок</item>
+        <item quantity="other">тренировок</item>
     </plurals>
     <string name="history_stats_km">км</string>
     <string name="history_stats_time">время</string>
