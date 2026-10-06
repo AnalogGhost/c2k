@@ -36,6 +36,7 @@ class UserPreferences(private val context: Context) {
         val WEIGHT_KG                = floatPreferencesKey("weight_kg")
         val WEIGHT_UNIT              = stringPreferencesKey("weight_unit")
         val GPS_DISTANCES_RECOMPUTED = booleanPreferencesKey("gps_distances_recomputed")
+        val SKIP_WARMUP_COOLDOWN     = booleanPreferencesKey("skip_warmup_cooldown")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -154,6 +155,12 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setGpsDistancesRecomputed() =
         context.dataStore.edit { it[GPS_DISTANCES_RECOMPUTED] = true }
+
+    val skipWarmupCooldown: Flow<Boolean> = context.dataStore.data
+        .map { it[SKIP_WARMUP_COOLDOWN] ?: false }
+
+    suspend fun setSkipWarmupCooldown(enabled: Boolean) =
+        context.dataStore.edit { it[SKIP_WARMUP_COOLDOWN] = enabled }
 }
 
 enum class VibrationStrength {

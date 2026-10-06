@@ -234,6 +234,8 @@
     <string name="language_tr">Turco (Türkçe)</string>
     <string name="settings_tts_enabled">Indicaciones por voz</string>
     <string name="settings_treadmill_mode">Modo cinta de correr (desactiva GPS)</string>
+    <string name="settings_skip_warmup_cooldown">Omitir calentamiento y enfriamiento</string>
+    <string name="settings_skip_warmup_cooldown_caption">Calentar gradualmente reduce el riesgo de lesiones; omítelo si ya caminas para ir y volver de tu carrera.</string>
     <string name="settings_gps_enabled">Seguimiento con GPS</string>
     <string name="settings_countdown_warnings">Avisos de cuenta atrás</string>
     <string name="settings_countdown_warning_1">Primer aviso</string>

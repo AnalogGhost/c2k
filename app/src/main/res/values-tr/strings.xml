@@ -235,6 +235,8 @@
     <string name="language_tr">Türkçe</string>
     <string name="settings_tts_enabled">Sesli yönlendirmeler</string>
     <string name="settings_treadmill_mode">Koşu bandı modu (GPS\'i kapatır)</string>
+    <string name="settings_skip_warmup_cooldown">Isınmayı ve soğumayı atla</string>
+    <string name="settings_skip_warmup_cooldown_caption">Kademeli ısınma sakatlanma riskini azaltır — koşunuza gidip gelirken zaten yürüyorsanız bunu atlayabilirsiniz.</string>
     <string name="settings_gps_enabled">GPS takibi</string>
     <string name="settings_countdown_warnings">Geri sayım uyarıları</string>
     <string name="settings_countdown_warning_1">Birinci uyarı</string>

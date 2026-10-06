@@ -163,6 +163,11 @@ class SettingsViewModel @JvmOverloads constructor(
 
     fun setTreadmillMode(v: Boolean)     { viewModelScope.launch { prefs.setTreadmillMode(v) } }
 
+    val skipWarmupCooldown = prefs.skipWarmupCooldown
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    fun setSkipWarmupCooldown(v: Boolean) { viewModelScope.launch { prefs.setSkipWarmupCooldown(v) } }
+
     val weightKg = prefs.weightKg
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 

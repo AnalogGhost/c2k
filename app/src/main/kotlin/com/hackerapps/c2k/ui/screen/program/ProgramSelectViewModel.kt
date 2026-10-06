@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutPlan
+import com.hackerapps.c2k.data.prefs.UserPreferences
 
 data class ProgramSelectUiState(
     val plan: WorkoutPlan? = null,
@@ -28,6 +29,7 @@ class ProgramSelectViewModel(
     private val programId: String = savedStateHandle["programId"]!!
     private val plan = Programs.byId(programId)
     private val repo = (app as C2KApp).sessionRepository
+    private val prefs = UserPreferences(app)
 
     val uiState: StateFlow<ProgramSelectUiState> =
         repo.observeCompletedDays(programId)
@@ -37,6 +39,11 @@ class ProgramSelectViewModel(
                 SharingStarted.WhileSubscribed(5_000),
                 ProgramSelectUiState(plan = plan)
             )
+
+    // So the day list and preview sheet show the same duration/intervals the workout will
+    // actually run with (see WorkoutService, which applies this same preference).
+    val skipWarmupCooldown: StateFlow<Boolean> = prefs.skipWarmupCooldown
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     fun resetProgress() {
         viewModelScope.launch { repo.resetProgress(programId) }

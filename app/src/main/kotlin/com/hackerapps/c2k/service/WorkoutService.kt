@@ -265,6 +265,9 @@ class WorkoutService : Service() {
             val vibrationStrength = prefs.vibrationStrength.first()
             val speechRate        = prefs.ttsSpeechRate.first()
             val ttsVolume         = prefs.ttsVolume.first()
+            val skipWarmupCooldown = prefs.skipWarmupCooldown.first()
+            val effectiveWorkoutDay =
+                if (skipWarmupCooldown) workoutDay.withoutWarmupCooldown() else workoutDay
 
             val hasLocationPermission = ContextCompat.checkSelfPermission(
                 this@WorkoutService, android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -284,7 +287,7 @@ class WorkoutService : Service() {
             val sessionId = sessionRepository.startSession(programId, week, day)
 
             engine = WorkoutEngine(
-                day = workoutDay,
+                day = effectiveWorkoutDay,
                 tts = ttsManager,
                 ttsEnabled = ttsEnabled,
                 countdownWarnings = countdownWarnings,

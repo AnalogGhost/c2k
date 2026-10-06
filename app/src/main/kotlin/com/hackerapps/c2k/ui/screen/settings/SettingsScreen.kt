@@ -80,6 +80,7 @@ fun SettingsScreen(
     val periodicTimeCues     by vm.periodicTimeCues.collectAsStateWithLifecycle()
     val periodicTimeCueInterval by vm.periodicTimeCueInterval.collectAsStateWithLifecycle()
     val treadmillMode        by vm.treadmillMode.collectAsStateWithLifecycle()
+    val skipWarmupCooldown   by vm.skipWarmupCooldown.collectAsStateWithLifecycle()
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
     val vibrationStrength    by vm.vibrationStrength.collectAsStateWithLifecycle()
@@ -306,6 +307,14 @@ fun SettingsScreen(
                 checked = treadmillMode,
                 testTag = "toggle_treadmill_mode",
                 onCheckedChange = vm::setTreadmillMode
+            )
+            HorizontalDivider()
+            SettingsToggle(
+                label = stringResource(R.string.settings_skip_warmup_cooldown),
+                checked = skipWarmupCooldown,
+                subtitle = stringResource(R.string.settings_skip_warmup_cooldown_caption),
+                testTag = "toggle_skip_warmup_cooldown",
+                onCheckedChange = vm::setSkipWarmupCooldown
             )
             HorizontalDivider()
             SettingsToggle(
@@ -654,11 +663,13 @@ private fun SettingsToggle(
     label: String,
     checked: Boolean,
     enabled: Boolean = true,
+    subtitle: String? = null,
     testTag: String? = null,
     onCheckedChange: (Boolean) -> Unit
 ) {
     ListItem(
         headlineContent = { Text(label) },
+        supportingContent = subtitle?.let { { Text(it) } },
         trailingContent = {
             Switch(
                 checked = checked,

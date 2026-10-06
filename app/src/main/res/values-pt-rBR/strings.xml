@@ -234,6 +234,8 @@
     <string name="language_tr">Turco (Türkçe)</string>
     <string name="settings_tts_enabled">Avisos de voz</string>
     <string name="settings_treadmill_mode">Modo esteira (desativa o GPS)</string>
+    <string name="settings_skip_warmup_cooldown">Pular aquecimento e desaquecimento</string>
+    <string name="settings_skip_warmup_cooldown_caption">Aquecer gradualmente reduz o risco de lesões — pule esta etapa se você já caminha até o local da corrida e de volta.</string>
     <string name="settings_gps_enabled">Rastreamento por GPS</string>
     <string name="settings_countdown_warnings">Avisos de contagem regressiva</string>
     <string name="settings_countdown_warning_1">Primeiro aviso</string>

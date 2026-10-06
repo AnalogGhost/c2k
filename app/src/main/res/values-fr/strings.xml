@@ -234,6 +234,8 @@
     <string name="language_tr">Turc (Türkçe)</string>
     <string name="settings_tts_enabled">Annonces vocales</string>
     <string name="settings_treadmill_mode">Mode tapis de course (désactive le GPS)</string>
+    <string name="settings_skip_warmup_cooldown">Ignorer l\'échauffement et la récupération</string>
+    <string name="settings_skip_warmup_cooldown_caption">S\'échauffer progressivement réduit le risque de blessure — ignorez cette étape si vous marchez déjà pour aller courir et en revenir.</string>
     <string name="settings_gps_enabled">Suivi GPS</string>
     <string name="settings_countdown_warnings">Avertissements du compte à rebours</string>
     <string name="settings_countdown_warning_1">Premier avertissement</string>

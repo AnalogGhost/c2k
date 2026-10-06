@@ -6,6 +6,15 @@ data class WorkoutDay(
     val intervals: List<Interval>
 ) {
     val totalDurationSeconds: Int get() = intervals.sumOf { it.durationSeconds }
+
+    /**
+     * Drops the warm-up and cool-down intervals, for users who already warm up getting to
+     * their run (issue #43) — the run/walk intervals that are the actual program are untouched.
+     * Every program day has at least one RUN interval outside the warm-up/cool-down, so this
+     * never empties the list.
+     */
+    fun withoutWarmupCooldown(): WorkoutDay =
+        copy(intervals = intervals.filterNot { it.type == IntervalType.WARMUP || it.type == IntervalType.COOLDOWN })
 }
 
 data class WorkoutPlan(

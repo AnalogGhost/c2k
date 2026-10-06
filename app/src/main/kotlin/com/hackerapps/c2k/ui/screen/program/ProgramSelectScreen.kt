@@ -68,7 +68,9 @@ fun ProgramSelectScreen(
     vm: ProgramSelectViewModel = viewModel()
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
+    val skipWarmupCooldown by vm.skipWarmupCooldown.collectAsStateWithLifecycle()
     val plan = state.plan ?: return
+    fun displayDay(day: WorkoutDay) = if (skipWarmupCooldown) day.withoutWarmupCooldown() else day
 
     val totalDays = plan.weeks.sumOf { it.size }
     var previewDay by remember { mutableStateOf<Pair<Int, Int>?>(null) }
@@ -105,7 +107,7 @@ fun ProgramSelectScreen(
     }
 
     previewDay?.let { (previewWeek, previewDayNum) ->
-        val workoutDay = plan.weeks[previewWeek - 1][previewDayNum - 1]
+        val workoutDay = displayDay(plan.weeks[previewWeek - 1][previewDayNum - 1])
         val isCompleted = (previewWeek to previewDayNum) in state.completedDays
         WorkoutPreviewSheet(
             week = previewWeek,
@@ -267,7 +269,7 @@ fun ProgramSelectScreen(
                                         DayButton(
                                             day = day,
                                             completed = done,
-                                            workoutDay = workoutDay,
+                                            workoutDay = displayDay(workoutDay),
                                             modifier = Modifier.weight(1f).testTag("day_${week}_$day"),
                                             onClick = { previewDay = week to day }
                                         )

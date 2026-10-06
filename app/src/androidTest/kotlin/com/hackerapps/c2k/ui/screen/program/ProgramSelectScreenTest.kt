@@ -14,6 +14,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.UserPreferences
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -50,14 +51,23 @@ class ProgramSelectScreenTest {
     // and ends from a clean slate for this program rather than relying on execution order.
     // Block bodies, not `= runBlocking { ... }` — see SettingsScreenTest.resetPreferences for
     // why an expression body risks JUnit rejecting the method as non-void.
+    // skipWarmupCooldown is a real persisted DataStore value (also touched by
+    // SettingsScreenTest), so reset it every time rather than only when a test needs it set —
+    // otherwise it leaks into whichever test runs next within the same instrumentation run.
     @Before
     fun clearProgress() {
-        runBlocking { repo().resetProgress(PROGRAM_ID) }
+        runBlocking {
+            repo().resetProgress(PROGRAM_ID)
+            UserPreferences(ApplicationProvider.getApplicationContext()).setSkipWarmupCooldown(false)
+        }
     }
 
     @After
     fun cleanUpProgress() {
-        runBlocking { repo().resetProgress(PROGRAM_ID) }
+        runBlocking {
+            repo().resetProgress(PROGRAM_ID)
+            UserPreferences(ApplicationProvider.getApplicationContext()).setSkipWarmupCooldown(false)
+        }
     }
 
     private fun setContent(
@@ -134,5 +144,36 @@ class ProgramSelectScreenTest {
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithText(string(R.string.program_reset_message)).assertDoesNotExist()
         }
+    }
+
+    @Test
+    fun preview_sheet_shows_warmup_and_cooldown_by_default() {
+        setContent()
+        composeRule.onNodeWithTag("day_1_1").performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.workout_interval_warmup)).assertExists()
+        }
+        composeRule.onNodeWithText(string(R.string.workout_interval_cooldown)).assertExists()
+    }
+
+    @Test
+    fun preview_sheet_omits_warmup_and_cooldown_when_the_preference_is_enabled() {
+        runBlocking {
+            UserPreferences(ApplicationProvider.getApplicationContext()).setSkipWarmupCooldown(true)
+        }
+        setContent()
+        composeRule.onNodeWithTag("day_1_1").performClick()
+
+        // Wait on something that's always present once the sheet is open, since asserting
+        // absence can't itself distinguish "not shown" from "not yet composed". Week 1 Day 1
+        // alternates RUN/WALK several times, so onNodeWithText(RUN) would match more than one
+        // node — fetchSemanticsNodes() instead of assertExists() to allow that.
+        composeRule.waitUntil {
+            composeRule.onAllNodesWithText(string(R.string.workout_interval_run))
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onNodeWithText(string(R.string.workout_interval_warmup)).assertDoesNotExist()
+        composeRule.onNodeWithText(string(R.string.workout_interval_cooldown)).assertDoesNotExist()
     }
 }

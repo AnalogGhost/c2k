@@ -238,6 +238,8 @@
     <string name="language_tr">Турецкий (Türkçe)</string>
     <string name="settings_tts_enabled">Голосовые уведомления</string>
     <string name="settings_treadmill_mode">Режим беговой дорожки (отключает GPS)</string>
+    <string name="settings_skip_warmup_cooldown">Пропустить разминку и заминку</string>
+    <string name="settings_skip_warmup_cooldown_caption">Постепенная разминка снижает риск травм — пропустите её, если вы уже идёте пешком до места пробежки и обратно.</string>
     <string name="settings_gps_enabled">GPS-отслеживание</string>
     <string name="settings_countdown_warnings">Предупреждающий обратный отсчёт</string>
     <string name="settings_countdown_warning_1">Первое предупреждение</string>
