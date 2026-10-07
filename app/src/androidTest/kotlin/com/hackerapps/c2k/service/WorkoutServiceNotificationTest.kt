@@ -147,10 +147,14 @@ class WorkoutServiceNotificationTest {
 
         context.startService(Intent(context, WorkoutService::class.java).setAction(WorkoutService.ACTION_STOP))
 
+        // Same CI flakiness as the ongoing-notification-removal checks below (slower, 2-core,
+        // software-rendered emulator): stopForeground() is an async binder call, and this one was
+        // left on the 5s default when those were bumped to 12s for the same race. 5/5 local runs
+        // finished in 1.2-2.1s, so this is a timeout-margin fix, not a behavior change.
         assertTrue(
             "Expected the ongoing notification to be removed once the service stops — a stuck, " +
                 "non-swipable notification after the workout ends is exactly what was reported",
-            waitUntil { ongoingNotificationId !in activeNotificationIds() }
+            waitUntil(timeoutMs = 12_000) { ongoingNotificationId !in activeNotificationIds() }
         )
     }
 
