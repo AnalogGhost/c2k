@@ -1,0 +1,3 @@
+• Im Verlauf gibt es jetzt wöchentliche und monatliche Zusammenfassungen mit einem kurzen Vergleich zur Vorwoche bzw. zum Vormonat.
+• Neue Einstellung, um Aufwärmen und Abkühlen zu überspringen – für Tage, an denen du bereits zu deinem Lauf hin- und zurückgehst.
+• Ein Anzeigefehler in der französischen, portugiesischen und russischen Übersetzung wurde behoben, der „%1$d" statt des Worts für „Training" im Verlauf zeigte.

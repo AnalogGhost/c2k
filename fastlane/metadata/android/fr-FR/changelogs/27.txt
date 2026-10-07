@@ -1,0 +1,3 @@
+• L'écran Historique affiche désormais des résumés hebdomadaires et mensuels, avec une comparaison rapide à la semaine et au mois précédents.
+• Nouveau réglage pour ignorer l'échauffement et la récupération, pour les jours où vous marchez déjà pour aller courir et en revenir.
+• Correction d'un bug d'affichage qui montrait « %1$d » au lieu du mot « séance » sur l'écran Historique, dans les traductions française, portugaise et russe.

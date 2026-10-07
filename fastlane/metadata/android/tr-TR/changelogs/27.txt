@@ -1,0 +1,3 @@
+• Geçmiş ekranında artık önceki hafta ve ayla hızlı bir karşılaştırmayla birlikte haftalık ve aylık özetler görüntüleniyor.
+• Koşunuza zaten yürüyerek gidip geliyorsanız ısınmayı ve soğumayı atlamanızı sağlayan yeni bir ayar eklendi.
+• Fransızca, Portekizce ve Rusça çevirilerde Geçmiş ekranında "antrenman" kelimesi yerine "%1$d" görüntülenen bir görüntüleme hatası düzeltildi.

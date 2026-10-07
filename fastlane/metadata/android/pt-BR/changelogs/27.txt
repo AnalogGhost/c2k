@@ -1,0 +1,3 @@
+• A tela de Histórico agora mostra resumos semanais e mensais, com uma comparação rápida com a semana e o mês anteriores.
+• Nova opção para pular o aquecimento e o desaquecimento, para os dias em que você já caminha até o local da corrida e de volta.
+• Corrigido um erro de exibição nas traduções em francês, português e russo que mostrava "%1$d" em vez da palavra "treino" na tela de Histórico.

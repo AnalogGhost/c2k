@@ -1,0 +1,3 @@
+• La pantalla de Historial ahora muestra resúmenes semanales y mensuales, con una comparación rápida con la semana y el mes anteriores.
+• Nuevo ajuste para omitir el calentamiento y el enfriamiento, para los días en que ya caminas para ir y volver de tu carrera.
+• Se corrigió un error de visualización en las traducciones al francés, portugués y ruso que mostraba "%1$d" en lugar de la palabra "entrenamiento" en la pantalla de Historial.

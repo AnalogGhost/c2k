@@ -1,0 +1,3 @@
+• A pantalla de Historial amosa agora resumos semanais e mensuais, cunha comparación rápida coa semana e o mes anteriores.
+• Novo axuste para omitir o quecemento e o arrefecemento, para os días en que xa camiñas de ida e volta á túa carreira.
+• Corrixiuse un erro visual nas traducións ao francés, portugués e ruso que amosaba "%1$d" no canto da palabra para "adestramento" na pantalla de Historial.
