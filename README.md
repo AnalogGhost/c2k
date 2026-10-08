@@ -176,6 +176,10 @@ app/src/main/kotlin/com/hackerapps/c2k/
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute, including translation credits.
 
+## Support
+
+C2K is free, with no ads or tracking. If it's useful to you, you can [sponsor its development on GitHub](https://github.com/sponsors/AnalogGhost).
+
 ## License
 
 Copyright (C) 2026 Matt Brown
