@@ -32,6 +32,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -60,6 +63,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.prefs.VibrationStrength
+import com.hackerapps.c2k.data.prefs.VibrationTarget
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.TtsDiagnosticResult
 import java.text.DecimalFormatSymbols
@@ -84,6 +88,7 @@ fun SettingsScreen(
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
     val vibrationStrength    by vm.vibrationStrength.collectAsStateWithLifecycle()
+    val vibrationTarget      by vm.vibrationTarget.collectAsStateWithLifecycle()
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
     val ttsVolume            by vm.ttsVolume.collectAsStateWithLifecycle()
     val ttsAvailableOnDevice by vm.ttsAvailableOnDevice.collectAsStateWithLifecycle()
@@ -296,10 +301,24 @@ fun SettingsScreen(
                 onCheckedChange = vm::setVibrationEnabled
             )
             if (vibrationEnabled) {
-                VibrationStrengthSetting(
-                    strength = vibrationStrength,
-                    onStrengthChange = vm::setVibrationStrength
+                VibrationTargetSetting(
+                    target = vibrationTarget,
+                    onTargetChange = vm::setVibrationTarget
                 )
+                if (vibrationTarget.phone) {
+                    VibrationStrengthSetting(
+                        strength = vibrationStrength,
+                        onStrengthChange = vm::setVibrationStrength
+                    )
+                }
+                if (vibrationTarget.watch) {
+                    Text(
+                        stringResource(R.string.settings_vibration_watch_caption),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 12.dp)
+                    )
+                }
             }
             HorizontalDivider()
             SettingsToggle(
@@ -409,6 +428,34 @@ private fun <T> SettingsDropdownPicker(
 }
 
 @Composable
+private fun VibrationTargetSetting(
+    target: VibrationTarget,
+    onTargetChange: (VibrationTarget) -> Unit
+) {
+    val labels = listOf(
+        VibrationTarget.PHONE to R.string.settings_vibration_target_phone,
+        VibrationTarget.SMARTWATCH to R.string.settings_vibration_target_smartwatch,
+        VibrationTarget.BOTH to R.string.settings_vibration_target_both
+    )
+    SingleChoiceSegmentedButtonRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        labels.forEachIndexed { index, (option, labelRes) ->
+            SegmentedButton(
+                selected = target == option,
+                onClick = { onTargetChange(option) },
+                shape = SegmentedButtonDefaults.itemShape(index = index, count = labels.size),
+                modifier = Modifier.testTag("segment_vibration_${option.name.lowercase()}")
+            ) {
+                Text(stringResource(labelRes))
+            }
+        }
+    }
+}
+
+@Composable
 private fun VibrationStrengthSetting(
     strength: VibrationStrength,
     onStrengthChange: (VibrationStrength) -> Unit
@@ -416,6 +463,7 @@ private fun VibrationStrengthSetting(
     var showMenu by remember { mutableStateOf(false) }
     ListItem(
         headlineContent = { Text(stringResource(R.string.settings_vibration_strength)) },
+        supportingContent = { Text(stringResource(R.string.settings_vibration_strength_caption)) },
         trailingContent = {
             Box {
                 TextButton(

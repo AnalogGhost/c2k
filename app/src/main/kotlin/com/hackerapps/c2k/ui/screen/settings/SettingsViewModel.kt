@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
+import com.hackerapps.c2k.data.prefs.VibrationTarget
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.TtsManager
 import com.hackerapps.c2k.service.VibrationPatterns
@@ -81,6 +82,9 @@ class SettingsViewModel @JvmOverloads constructor(
     val vibrationStrength = prefs.vibrationStrength
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VibrationStrength.MEDIUM)
 
+    val vibrationTarget = prefs.vibrationTarget
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VibrationTarget.PHONE)
+
     val ttsSpeechRate = prefs.ttsSpeechRate
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 1.0f)
 
@@ -143,7 +147,7 @@ class SettingsViewModel @JvmOverloads constructor(
     fun setVibrationEnabled(v: Boolean)  {
         viewModelScope.launch {
             prefs.setVibrationEnabled(v)
-            if (v) previewVibration(vibrationStrength.value)
+            if (v && vibrationTarget.value.phone) previewVibration(vibrationStrength.value)
         }
     }
     fun setVibrationStrength(v: VibrationStrength) {
@@ -152,6 +156,7 @@ class SettingsViewModel @JvmOverloads constructor(
             previewVibration(v)
         }
     }
+    fun setVibrationTarget(v: VibrationTarget) { viewModelScope.launch { prefs.setVibrationTarget(v) } }
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
     fun setTtsVolume(v: Float)           { viewModelScope.launch { prefs.setTtsVolume(v) } }
     fun setMidIntervalCues(v: Boolean)   { viewModelScope.launch { prefs.setMidIntervalCues(v) } }

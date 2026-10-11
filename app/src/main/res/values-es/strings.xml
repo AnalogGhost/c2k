@@ -115,6 +115,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Entrenamiento</string>
     <string name="notification_channel_desc">Temporizador del entrenamiento actual</string>
+    <string name="notification_cue_channel_name">Avisos de entrenamiento</string>
+    <string name="notification_cue_channel_desc">Avisos breves en los cambios de intervalo y al terminar el entrenamiento, para reenviarlos a un smartwatch</string>
     <string name="notification_action_pause">Pausar</string>
     <string name="notification_action_resume">Retomar</string>
     <string name="notification_action_stop">Detener</string>
@@ -249,6 +251,11 @@
     <string name="settings_vibration_strength_light">Suave</string>
     <string name="settings_vibration_strength_medium">Media</string>
     <string name="settings_vibration_strength_strong">Fuerte</string>
+    <string name="settings_vibration_target_phone">Teléfono</string>
+    <string name="settings_vibration_target_smartwatch">Smartwatch</string>
+    <string name="settings_vibration_target_both">Ambos</string>
+    <string name="settings_vibration_strength_caption">Solo teléfono</string>
+    <string name="settings_vibration_watch_caption">Envía una notificación a tu smartwatch en cada cambio de intervalo y al terminar el entrenamiento.</string>
     <string name="settings_tts_speed">Velocidad de la voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

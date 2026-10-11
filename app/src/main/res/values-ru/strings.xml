@@ -118,6 +118,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Тренировка</string>
     <string name="notification_channel_desc">Таймер активной тренировки</string>
+    <string name="notification_cue_channel_name">Уведомления об интервалах</string>
+    <string name="notification_cue_channel_desc">Короткие уведомления при смене интервалов и в конце тренировки для передачи на смарт-часы</string>
     <string name="notification_action_pause">Пауза</string>
     <string name="notification_action_resume">Продолжить</string>
     <string name="notification_action_stop">Стоп</string>
@@ -253,6 +255,11 @@
     <string name="settings_vibration_strength_light">Слабая</string>
     <string name="settings_vibration_strength_medium">Средняя</string>
     <string name="settings_vibration_strength_strong">Сильная</string>
+    <string name="settings_vibration_target_phone">Телефон</string>
+    <string name="settings_vibration_target_smartwatch">Часы</string>
+    <string name="settings_vibration_target_both">Оба</string>
+    <string name="settings_vibration_strength_caption">Только телефон</string>
+    <string name="settings_vibration_watch_caption">Отправляет уведомление на смарт-часы при каждой смене интервала и в конце тренировки.</string>
     <string name="settings_tts_speed">Скорость речи</string>
     <string name="settings_tts_speed_slow">Медленно</string>
     <string name="settings_tts_speed_fast">Быстро</string>

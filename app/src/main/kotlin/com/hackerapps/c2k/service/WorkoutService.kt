@@ -12,6 +12,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationCompat
@@ -32,6 +33,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.model.Interval
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutDay
@@ -73,6 +75,13 @@ class WorkoutService : Service() {
         // side by side with (briefly) or in place of the non-swipable in-progress one.
         private const val COMPLETION_NOTIFICATION_ID = 2
         private const val CHANNEL_ID       = "workout_channel"
+        // Short-lived cues for smartwatch bridges (see postCue). Their own channel, because the
+        // workout channel is IMPORTANCE_LOW and bridges such as Gadgetbridge skip those.
+        private const val CUE_NOTIFICATION_ID = 3
+        private const val CUE_CHANNEL_ID   = "workout_cues"
+        // Long enough for a bridge to forward it, short enough that a missed cancel can't leave a
+        // stale cue in the shade.
+        private const val CUE_TIMEOUT_MS   = 10_000L
         private const val WAKELOCK_TAG     = "C2K::WorkoutLock"
         private const val WAKELOCK_TIMEOUT = 90 * 60 * 1000L
         // Upper bound on how long completion waits for the final spoken cue before tearing down.
@@ -157,6 +166,8 @@ class WorkoutService : Service() {
     private var locationProvider: LocationProvider = NoOpLocationProvider()
     private lateinit var wakeLock: PowerManager.WakeLock
     private lateinit var prefs: UserPreferences
+    // Tag of the single cue notification currently posted, if any.
+    private var cueTag: String? = null
 
     // The Job for handleStart()'s whole per-session setup, including the engine.state collector.
     // engine.stop() only cancels the tick loop, not this — without also cancelling this on manual
@@ -263,6 +274,10 @@ class WorkoutService : Service() {
             val periodicTimeCueInterval  = prefs.periodicTimeCueInterval.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
             val vibrationStrength = prefs.vibrationStrength.first()
+            val vibrationTarget   = prefs.vibrationTarget.first()
+            // The watch gets a notification at exactly the moments the phone would vibrate.
+            val vibratePhone      = vibrationEnabled && vibrationTarget.phone
+            val notifyWatch       = vibrationEnabled && vibrationTarget.watch
             val speechRate        = prefs.ttsSpeechRate.first()
             val ttsVolume         = prefs.ttsVolume.first()
             val skipWarmupCooldown = prefs.skipWarmupCooldown.first()
@@ -319,7 +334,7 @@ class WorkoutService : Service() {
                     when (state) {
                         is WorkoutState.Active -> {
                             if (state.intervalIndex != lastIntervalIndex && lastIntervalIndex >= 0) {
-                                if (vibrationEnabled) {
+                                if (vibratePhone) {
                                     VibrationPlayer.play(
                                         this@WorkoutService,
                                         VibrationPatterns.forInterval(
@@ -328,6 +343,7 @@ class WorkoutService : Service() {
                                         )
                                     )
                                 }
+                                if (notifyWatch) postIntervalCue(state.currentInterval)
                             }
                             lastIntervalIndex = state.intervalIndex
                             updateNotification(state)
@@ -335,7 +351,7 @@ class WorkoutService : Service() {
                         is WorkoutState.Paused -> updateNotificationPaused()
                         is WorkoutState.Completed -> {
                             try {
-                                if (vibrationEnabled) {
+                                if (vibratePhone) {
                                     VibrationPlayer.play(
                                         this@WorkoutService,
                                         VibrationPatterns.forCompletion(vibrationStrength)
@@ -372,6 +388,9 @@ class WorkoutService : Service() {
                                     }
                                 }
                                 cleanup()
+                                // After cleanup(), which cancels the interval notification: this one
+                                // is meant to still be on the watch once the service is gone.
+                                if (notifyWatch) postCompletionCue()
                                 stopSelf()
                             }
                         }
@@ -442,6 +461,8 @@ class WorkoutService : Service() {
         cleanedUp = true
         locationProvider.stop()
         if (::ttsManager.isInitialized) ttsManager.shutdown()
+        cueTag?.let { (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(it, CUE_NOTIFICATION_ID) }
+        cueTag = null
         if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
         isRunning.value = false
         currentWorkout.value = null
@@ -473,16 +494,26 @@ class WorkoutService : Service() {
             description = getString(R.string.notification_channel_desc)
             setShowBadge(false)
         }
-        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-            .createNotificationChannel(channel)
+        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.createNotificationChannel(channel)
+        // Default importance so smartwatch bridges forward it; silent on the phone because the
+        // spoken cues and vibration already cover that side.
+        nm.createNotificationChannel(
+            NotificationChannel(
+                CUE_CHANNEL_ID,
+                getString(R.string.notification_cue_channel_name),
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = getString(R.string.notification_cue_channel_desc)
+                setSound(null, null)
+                enableVibration(false)
+                setShowBadge(false)
+            }
+        )
     }
 
     private fun buildNotification(text: String): Notification {
-        val openIntent = PendingIntent.getActivity(
-            this, 0,
-            Intent(this, MainActivity::class.java),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val openIntent = openAppIntent()
         val isPaused = ::engine.isInitialized && engine.state.value is WorkoutState.Paused
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -507,9 +538,7 @@ class WorkoutService : Service() {
     }
 
     private fun updateNotification(state: WorkoutState.Active) {
-        val mins = state.secondsRemainingInInterval / 60
-        val secs = state.secondsRemainingInInterval % 60
-        val time = "%d:%02d".format(mins, secs)
+        val time = formatClock(state.secondsRemainingInInterval)
         val progress = "${state.intervalIndex + 1}/${state.totalIntervals}"
         val runsLeft = resources.getQuantityString(
             R.plurals.notification_runs_remaining,
@@ -532,6 +561,58 @@ class WorkoutService : Service() {
         IntervalType.WARMUP   -> getString(R.string.workout_interval_warmup)
         IntervalType.COOLDOWN -> getString(R.string.workout_interval_cooldown)
     }
+
+    private fun formatClock(seconds: Int) = "%d:%02d".format(seconds / 60, seconds % 60)
+
+    private fun openAppIntent(): PendingIntent = PendingIntent.getActivity(
+        this, 0,
+        Intent(this, MainActivity::class.java),
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    // Posts the smartwatch notification as a regular (non-ongoing) notification so a bridge
+    // forwards it; the ongoing workout notification can't do that, bridges skip ongoing and
+    // foreground-service notifications. At most one exists at a time: the previous one is
+    // cancelled before the next is posted, so they never stack up in the shade.
+    @Synchronized
+    private fun postCue(title: String, text: String?) {
+        if (cleanedUp) return
+        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        cueTag?.let { nm.cancel(it, CUE_NOTIFICATION_ID) }
+        // A fresh tag every time. Re-posting one key would count against the system's update rate
+        // limit (the ongoing notification already updates 5x/s) and would not look like a new
+        // notification to a bridge.
+        val tag = "cue_${SystemClock.elapsedRealtimeNanos()}"
+        nm.notify(tag, CUE_NOTIFICATION_ID, buildCueNotification(title, text))
+        cueTag = tag
+    }
+
+    private fun buildCueNotification(title: String, text: String?): Notification =
+        NotificationCompat.Builder(this, CUE_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setContentIntent(openAppIntent())
+            .setAutoCancel(true)
+            .setTimeoutAfter(CUE_TIMEOUT_MS)
+            // Bridges only forward a repeat from the same app when `when` has moved forward.
+            .setWhen(System.currentTimeMillis())
+            .setShowWhen(false)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .build()
+
+    private fun postIntervalCue(interval: Interval) =
+        postCue(intervalLabel(interval.type), formatClock(interval.durationSeconds))
+
+    private fun postCompletionCue() =
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(
+            "cue_complete",
+            CUE_NOTIFICATION_ID,
+            buildCueNotification(
+                getString(R.string.workout_complete_title),
+                getString(R.string.workout_complete_message)
+            )
+        )
 
     private fun actionPending(action: String): PendingIntent =
         PendingIntent.getService(
