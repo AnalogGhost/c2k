@@ -68,9 +68,10 @@ fun ProgramSelectScreen(
     vm: ProgramSelectViewModel = viewModel()
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
-    val skipWarmupCooldown by vm.skipWarmupCooldown.collectAsStateWithLifecycle()
+    val skipWarmup by vm.skipWarmup.collectAsStateWithLifecycle()
+    val skipCooldown by vm.skipCooldown.collectAsStateWithLifecycle()
     val plan = state.plan ?: return
-    fun displayDay(day: WorkoutDay) = if (skipWarmupCooldown) day.withoutWarmupCooldown() else day
+    fun displayDay(day: WorkoutDay) = day.skipping(warmup = skipWarmup, cooldown = skipCooldown)
 
     val totalDays = plan.weeks.sumOf { it.size }
     var previewDay by remember { mutableStateOf<Pair<Int, Int>?>(null) }

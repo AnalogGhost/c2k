@@ -51,14 +51,17 @@ class ProgramSelectScreenTest {
     // and ends from a clean slate for this program rather than relying on execution order.
     // Block bodies, not `= runBlocking { ... }` — see SettingsScreenTest.resetPreferences for
     // why an expression body risks JUnit rejecting the method as non-void.
-    // skipWarmupCooldown is a real persisted DataStore value (also touched by
-    // SettingsScreenTest), so reset it every time rather than only when a test needs it set —
-    // otherwise it leaks into whichever test runs next within the same instrumentation run.
+    // skipWarmup/skipCooldown are real persisted DataStore values (also touched by
+    // SettingsScreenTest), so reset them every time rather than only when a test needs them set —
+    // otherwise they leak into whichever test runs next within the same instrumentation run.
     @Before
     fun clearProgress() {
         runBlocking {
             repo().resetProgress(PROGRAM_ID)
-            UserPreferences(ApplicationProvider.getApplicationContext()).setSkipWarmupCooldown(false)
+            UserPreferences(ApplicationProvider.getApplicationContext()).run {
+                setSkipWarmup(false)
+                setSkipCooldown(false)
+            }
         }
     }
 
@@ -66,7 +69,10 @@ class ProgramSelectScreenTest {
     fun cleanUpProgress() {
         runBlocking {
             repo().resetProgress(PROGRAM_ID)
-            UserPreferences(ApplicationProvider.getApplicationContext()).setSkipWarmupCooldown(false)
+            UserPreferences(ApplicationProvider.getApplicationContext()).run {
+                setSkipWarmup(false)
+                setSkipCooldown(false)
+            }
         }
     }
 
@@ -158,9 +164,12 @@ class ProgramSelectScreenTest {
     }
 
     @Test
-    fun preview_sheet_omits_warmup_and_cooldown_when_the_preference_is_enabled() {
+    fun preview_sheet_omits_warmup_and_cooldown_when_both_preferences_are_enabled() {
         runBlocking {
-            UserPreferences(ApplicationProvider.getApplicationContext()).setSkipWarmupCooldown(true)
+            UserPreferences(ApplicationProvider.getApplicationContext()).run {
+                setSkipWarmup(true)
+                setSkipCooldown(true)
+            }
         }
         setContent()
         composeRule.onNodeWithTag("day_1_1").performClick()
@@ -175,5 +184,21 @@ class ProgramSelectScreenTest {
         }
         composeRule.onNodeWithText(string(R.string.workout_interval_warmup)).assertDoesNotExist()
         composeRule.onNodeWithText(string(R.string.workout_interval_cooldown)).assertDoesNotExist()
+    }
+
+    @Test
+    fun preview_sheet_keeps_cooldown_when_only_warmup_is_skipped() {
+        runBlocking {
+            UserPreferences(ApplicationProvider.getApplicationContext()).setSkipWarmup(true)
+        }
+        setContent()
+        composeRule.onNodeWithTag("day_1_1").performClick()
+
+        composeRule.waitUntil {
+            composeRule.onAllNodesWithText(string(R.string.workout_interval_run))
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onNodeWithText(string(R.string.workout_interval_warmup)).assertDoesNotExist()
+        composeRule.onNodeWithText(string(R.string.workout_interval_cooldown)).assertExists()
     }
 }
