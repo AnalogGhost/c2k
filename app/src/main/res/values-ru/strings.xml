@@ -61,8 +61,6 @@
     <string name="workout_pause">Пауза</string>
     <string name="workout_resume">Продолжить</string>
     <string name="workout_stop">Стоп</string>
-    <string name="workout_skip_warmup">Пропустить разминку</string>
-    <string name="workout_skip_cooldown">Пропустить заминку</string>
     <string name="workout_elapsed">Прошло: %1$s</string>
     <string name="workout_interval_progress">Интервал %1$d из %2$d</string>
     <string name="workout_next_interval">Далее: %1$s %2$s</string>

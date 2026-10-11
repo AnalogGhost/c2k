@@ -341,8 +341,8 @@ private fun ActiveWorkoutContent(
                 }
             }
             val skipLabel = when (state.currentInterval.type) {
-                IntervalType.WARMUP -> R.string.workout_skip_warmup
-                IntervalType.COOLDOWN -> R.string.workout_skip_cooldown
+                IntervalType.WARMUP -> R.string.settings_skip_warmup
+                IntervalType.COOLDOWN -> R.string.settings_skip_cooldown
                 else -> null
             }
             if (skipLabel != null) {

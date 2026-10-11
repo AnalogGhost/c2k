@@ -59,8 +59,6 @@
     <string name="workout_pause">Pausa</string>
     <string name="workout_resume">Retomar</string>
     <string name="workout_stop">Detener</string>
-    <string name="workout_skip_warmup">Omitir calentamiento</string>
-    <string name="workout_skip_cooldown">Omitir enfriamiento</string>
     <string name="workout_elapsed">Transcurrido: %1$s</string>
     <string name="workout_interval_progress">Intervalo %1$d de %2$d</string>
     <string name="workout_next_interval">Siguiente: %1$s %2$s</string>
