@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.CountdownSound
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.TtsDiagnosticResult
@@ -76,6 +77,8 @@ fun SettingsScreen(
     val countdownWarnings    by vm.countdownWarnings.collectAsStateWithLifecycle()
     val countdownWarning1    by vm.countdownWarning1.collectAsStateWithLifecycle()
     val countdownWarning2    by vm.countdownWarning2.collectAsStateWithLifecycle()
+    val countdownSoundEnabled by vm.countdownSoundEnabled.collectAsStateWithLifecycle()
+    val countdownSound       by vm.countdownSound.collectAsStateWithLifecycle()
     val midIntervalCues      by vm.midIntervalCues.collectAsStateWithLifecycle()
     val periodicTimeCues     by vm.periodicTimeCues.collectAsStateWithLifecycle()
     val periodicTimeCueInterval by vm.periodicTimeCueInterval.collectAsStateWithLifecycle()
@@ -170,6 +173,18 @@ fun SettingsScreen(
                     testTag = "slider_countdown_warning_2",
                     onValueChange = vm::setCountdownWarning2
                 )
+                SettingsToggle(
+                    label = stringResource(R.string.settings_countdown_sound_enabled),
+                    checked = countdownSoundEnabled,
+                    testTag = "toggle_countdown_sound",
+                    onCheckedChange = vm::setCountdownSoundEnabled
+                )
+                if (countdownSoundEnabled) {
+                    CountdownSoundSetting(
+                        sound = countdownSound,
+                        onSoundChange = vm::setCountdownSound
+                    )
+                }
             }
             HorizontalDivider()
             SettingsToggle(
@@ -445,6 +460,51 @@ private fun VibrationStrengthSetting(
         }
     )
 }
+
+@Composable
+private fun CountdownSoundSetting(
+    sound: CountdownSound,
+    onSoundChange: (CountdownSound) -> Unit
+) {
+    var showMenu by remember { mutableStateOf(false) }
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.settings_countdown_sound)) },
+        trailingContent = {
+            Box {
+                TextButton(
+                    onClick = { showMenu = true },
+                    modifier = Modifier.testTag("button_countdown_sound")
+                ) {
+                    Text(stringResource(sound.labelRes))
+                }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    CountdownSound.entries.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(stringResource(option.labelRes)) },
+                            onClick = {
+                                showMenu = false
+                                onSoundChange(option)
+                            },
+                            modifier = Modifier.testTag(
+                                "countdown_sound_${option.name.lowercase()}"
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    )
+}
+
+private val CountdownSound.labelRes: Int
+    get() = when (this) {
+        CountdownSound.BEEP -> R.string.settings_countdown_sound_beep
+        CountdownSound.DOUBLE_BEEP -> R.string.settings_countdown_sound_double_beep
+        CountdownSound.PIPS -> R.string.settings_countdown_sound_pips
+    }
 
 private val VibrationStrength.labelRes: Int
     get() = when (this) {

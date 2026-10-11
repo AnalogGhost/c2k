@@ -241,6 +241,11 @@
     <string name="settings_countdown_warnings">Geri sayım uyarıları</string>
     <string name="settings_countdown_warning_1">Birinci uyarı</string>
     <string name="settings_countdown_warning_2">İkinci uyarı</string>
+    <string name="settings_countdown_sound_enabled">Sesli anons yerine bip sesi</string>
+    <string name="settings_countdown_sound">Uyarı sesi</string>
+    <string name="settings_countdown_sound_beep">Bip</string>
+    <string name="settings_countdown_sound_double_beep">Çift bip</string>
+    <string name="settings_countdown_sound_pips">Dört kısa bip</string>
     <string name="settings_mid_interval_cues">Aralık ortası motivasyonu</string>
     <string name="settings_periodic_time_cues">Periyodik süre hatırlatıcısı</string>
     <string name="settings_periodic_time_cue_interval">Hatırlatma sıklığı</string>

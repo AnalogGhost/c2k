@@ -20,6 +20,9 @@ class WorkoutEngine(
     private val countdownWarnings: Boolean,
     countdownWarningSeconds1: Int = 10,
     countdownWarningSeconds2: Int = 5,
+    // When set, replaces the spoken countdown warning (and its next-interval look-ahead) with this
+    // cue; the next interval is still announced when it starts.
+    private val countdownTone: (() -> Unit)? = null,
     private val midIntervalCues: Boolean,
     private val periodicTimeCues: Boolean = false,
     private val periodicTimeCueIntervalSeconds: Int = 30,
@@ -133,15 +136,19 @@ class WorkoutEngine(
                 remaining in warningThresholds && remaining !in warnedCountdowns
             ) {
                 warnedCountdowns.add(remaining)
-                tts.announce(TtsAnnouncement.CountdownWarning(remaining))
-                if (remaining == warningThresholds.last()) {
-                    // Look-ahead: the smallest threshold is the last warning before the interval
-                    // ends, so it also announces what's coming next.
-                    if (intervalIndex + 1 < intervals.size) {
-                        tts.announce(
-                            TtsAnnouncement.NextInterval(intervals[intervalIndex + 1]),
-                            queueAdd = true
-                        )
+                if (countdownTone != null) {
+                    countdownTone()
+                } else {
+                    tts.announce(TtsAnnouncement.CountdownWarning(remaining))
+                    if (remaining == warningThresholds.last()) {
+                        // Look-ahead: the smallest threshold is the last warning before the interval
+                        // ends, so it also announces what's coming next.
+                        if (intervalIndex + 1 < intervals.size) {
+                            tts.announce(
+                                TtsAnnouncement.NextInterval(intervals[intervalIndex + 1]),
+                                queueAdd = true
+                            )
+                        }
                     }
                 }
             }

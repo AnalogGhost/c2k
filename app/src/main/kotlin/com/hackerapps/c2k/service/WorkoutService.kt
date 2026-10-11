@@ -155,6 +155,8 @@ class WorkoutService : Service() {
     private lateinit var engine: WorkoutEngine
     // Initialised to NoOp so binder calls before the setup coroutine finishes are safe.
     private var locationProvider: LocationProvider = NoOpLocationProvider()
+    // Non-null only when the user picked a tone for countdown warnings and the device could create one.
+    private var countdownTonePlayer: CountdownTonePlayer? = null
     private lateinit var wakeLock: PowerManager.WakeLock
     private lateinit var prefs: UserPreferences
 
@@ -265,6 +267,8 @@ class WorkoutService : Service() {
             val vibrationStrength = prefs.vibrationStrength.first()
             val speechRate        = prefs.ttsSpeechRate.first()
             val ttsVolume         = prefs.ttsVolume.first()
+            val countdownSoundEnabled = prefs.countdownSoundEnabled.first()
+            val countdownSound    = prefs.countdownSound.first()
             val skipWarmupCooldown = prefs.skipWarmupCooldown.first()
             val effectiveWorkoutDay =
                 if (skipWarmupCooldown) workoutDay.withoutWarmupCooldown() else workoutDay
@@ -286,6 +290,11 @@ class WorkoutService : Service() {
 
             val sessionId = sessionRepository.startSession(programId, week, day)
 
+            // The player is null when the device can't create a ToneGenerator, which leaves the
+            // spoken countdown warning in place as the fallback.
+            countdownTonePlayer =
+                if (countdownSoundEnabled) CountdownTonePlayer.createOrNull(countdownSound, ttsVolume) else null
+
             engine = WorkoutEngine(
                 day = effectiveWorkoutDay,
                 tts = ttsManager,
@@ -293,6 +302,7 @@ class WorkoutService : Service() {
                 countdownWarnings = countdownWarnings,
                 countdownWarningSeconds1 = countdownWarning1,
                 countdownWarningSeconds2 = countdownWarning2,
+                countdownTone = countdownTonePlayer?.let { player -> { player.play() } },
                 midIntervalCues = midIntervalCues,
                 periodicTimeCues = periodicTimeCues,
                 periodicTimeCueIntervalSeconds = periodicTimeCueInterval,
@@ -442,6 +452,8 @@ class WorkoutService : Service() {
         cleanedUp = true
         locationProvider.stop()
         if (::ttsManager.isInitialized) ttsManager.shutdown()
+        countdownTonePlayer?.release()
+        countdownTonePlayer = null
         if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
         isRunning.value = false
         currentWorkout.value = null

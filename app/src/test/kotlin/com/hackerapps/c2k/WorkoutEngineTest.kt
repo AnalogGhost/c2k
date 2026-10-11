@@ -49,6 +49,7 @@ class WorkoutEngineTest {
         countdownWarnings: Boolean = false,
         countdownWarningSeconds1: Int = 10,
         countdownWarningSeconds2: Int = 5,
+        countdownTone: (() -> Unit)? = null,
         periodicTimeCues: Boolean = false,
         periodicTimeCueIntervalSeconds: Int = 30
     ): WorkoutEngine =
@@ -59,6 +60,7 @@ class WorkoutEngineTest {
             countdownWarnings = countdownWarnings,
             countdownWarningSeconds1 = countdownWarningSeconds1,
             countdownWarningSeconds2 = countdownWarningSeconds2,
+            countdownTone = countdownTone,
             midIntervalCues = midIntervalCues,
             periodicTimeCues = periodicTimeCues,
             periodicTimeCueIntervalSeconds = periodicTimeCueIntervalSeconds,
@@ -341,6 +343,31 @@ class WorkoutEngineTest {
         })
         assertTrue("Final (smallest) threshold should announce the next interval",
             announcements.any { it is TtsAnnouncement.NextInterval })
+        engine.stop()
+    }
+
+    @Test
+    fun countdown_tone_replaces_spoken_warning_and_lookahead() = testScope.runTest {
+        var tones = 0
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            Interval(IntervalType.WALK, 10),
+            countdownWarnings = true,
+            countdownTone = { tones++ }
+        )
+        engine.start(1L)
+        advanceTimeBy(5_300)  // 10s remaining
+        assertEquals(1, tones)
+        advanceTimeBy(5_000)  // 5s remaining
+        assertEquals(2, tones)
+        assertEquals("The tone replaces the spoken warning", 0,
+            announcements.count { it is TtsAnnouncement.CountdownWarning })
+        assertEquals("The tone replaces the next-interval look-ahead", 0,
+            announcements.count { it is TtsAnnouncement.NextInterval })
+        advanceTimeBy(5_000)  // RUN is over; the next interval is still announced when it starts
+        assertTrue(announcements.any {
+            it is TtsAnnouncement.IntervalStart && it.interval.type == IntervalType.WALK
+        })
         engine.stop()
     }
 

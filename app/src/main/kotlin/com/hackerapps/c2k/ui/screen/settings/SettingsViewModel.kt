@@ -11,13 +11,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import com.hackerapps.c2k.data.model.IntervalType
+import com.hackerapps.c2k.data.prefs.CountdownSound
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.TtsManager
 import com.hackerapps.c2k.service.VibrationPatterns
 import com.hackerapps.c2k.service.VibrationPlayer
+import com.hackerapps.c2k.service.CountdownTonePlayer
 import com.hackerapps.c2k.engine.tts.DiagnosticTts
 import com.hackerapps.c2k.engine.tts.TtsDiagnosticResult
 import com.hackerapps.c2k.R
@@ -71,6 +74,12 @@ class SettingsViewModel @JvmOverloads constructor(
 
     val countdownWarning2 = prefs.countdownWarning2
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 5)
+
+    val countdownSoundEnabled = prefs.countdownSoundEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    val countdownSound = prefs.countdownSound
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CountdownSound.BEEP)
 
     val keepScreenOn = prefs.keepScreenOn
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
@@ -139,6 +148,18 @@ class SettingsViewModel @JvmOverloads constructor(
     fun setCountdownWarnings(v: Boolean) { viewModelScope.launch { prefs.setCountdownWarnings(v) } }
     fun setCountdownWarning1(v: Int)     { viewModelScope.launch { prefs.setCountdownWarning1(v) } }
     fun setCountdownWarning2(v: Int)     { viewModelScope.launch { prefs.setCountdownWarning2(v) } }
+    fun setCountdownSoundEnabled(v: Boolean) {
+        viewModelScope.launch {
+            prefs.setCountdownSoundEnabled(v)
+            if (v) previewCountdownSound(countdownSound.value)
+        }
+    }
+    fun setCountdownSound(v: CountdownSound) {
+        viewModelScope.launch {
+            prefs.setCountdownSound(v)
+            previewCountdownSound(v)
+        }
+    }
     fun setKeepScreenOn(v: Boolean)      { viewModelScope.launch { prefs.setKeepScreenOn(v) } }
     fun setVibrationEnabled(v: Boolean)  {
         viewModelScope.launch {
@@ -182,6 +203,15 @@ class SettingsViewModel @JvmOverloads constructor(
             getApplication(),
             VibrationPatterns.forInterval(IntervalType.RUN, strength)
         )
+    }
+
+    private fun previewCountdownSound(sound: CountdownSound) {
+        val player = CountdownTonePlayer.createOrNull(sound, ttsVolume.value) ?: return
+        player.play()
+        viewModelScope.launch {
+            // Let the tone finish before releasing the generator.
+            try { delay(1_000) } finally { player.release() }
+        }
     }
 
     override fun onCleared() {

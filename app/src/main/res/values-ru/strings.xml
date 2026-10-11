@@ -244,6 +244,11 @@
     <string name="settings_countdown_warnings">Предупреждающий обратный отсчёт</string>
     <string name="settings_countdown_warning_1">Первое предупреждение</string>
     <string name="settings_countdown_warning_2">Второе предупреждение</string>
+    <string name="settings_countdown_sound_enabled">Сигнал вместо голоса</string>
+    <string name="settings_countdown_sound">Звук предупреждения</string>
+    <string name="settings_countdown_sound_beep">Сигнал</string>
+    <string name="settings_countdown_sound_double_beep">Двойной сигнал</string>
+    <string name="settings_countdown_sound_pips">Четыре коротких сигнала</string>
     <string name="settings_mid_interval_cues">Подбадривания посреди пробежки</string>
     <string name="settings_periodic_time_cues">Периодическое напоминание о времени</string>
     <string name="settings_periodic_time_cue_interval">Интервал напоминания</string>
