@@ -27,6 +27,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
+import com.hackerapps.c2k.data.prefs.VibrationTarget
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.DiagnosticTts
 import com.hackerapps.c2k.engine.tts.TtsDiagnosticResult
@@ -95,10 +96,10 @@ class SettingsScreenTest {
             prefs.setCountdownWarnings(true)
             prefs.setCountdownWarning1(10)
             prefs.setCountdownWarning2(5)
-            prefs.setWearableCues(false)
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
             prefs.setVibrationStrength(VibrationStrength.MEDIUM)
+            prefs.setVibrationTarget(VibrationTarget.PHONE)
             prefs.setTtsSpeechRate(1.0f)
             prefs.setTtsVolume(1.0f)
             prefs.setMidIntervalCues(true)
@@ -178,6 +179,49 @@ class SettingsScreenTest {
             runBlocking {
                 val app = ApplicationProvider.getApplicationContext<Application>()
                 UserPreferences(app).vibrationStrength.first() == VibrationStrength.STRONG
+            }
+        }
+    }
+
+    @Test
+    fun vibration_target_decides_whether_strength_and_watch_hint_are_shown() {
+        setContent()
+        composeRule.onNodeWithTag("segment_vibration_phone").assertDoesNotExist()
+
+        composeRule.onNodeWithTag("toggle_vibration_enabled").performScrollTo().performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("segment_vibration_phone").assertExists()
+        }
+        composeRule.onNodeWithTag("button_vibration_strength").assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_vibration_watch_caption)).assertDoesNotExist()
+
+        composeRule.onNodeWithTag("segment_vibration_smartwatch").performScrollTo().performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("button_vibration_strength").assertDoesNotExist()
+        }
+        composeRule.onNodeWithText(string(R.string.settings_vibration_watch_caption)).assertExists()
+
+        composeRule.onNodeWithTag("segment_vibration_both").performScrollTo().performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("button_vibration_strength").assertExists()
+        }
+        composeRule.onNodeWithText(string(R.string.settings_vibration_watch_caption)).assertExists()
+    }
+
+    @Test
+    fun vibration_target_choice_is_persisted() {
+        setContent()
+        composeRule.onNodeWithTag("toggle_vibration_enabled").performScrollTo().performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("segment_vibration_smartwatch").assertExists()
+        }
+
+        composeRule.onNodeWithTag("segment_vibration_smartwatch").performScrollTo().performClick()
+
+        composeRule.waitUntil {
+            runBlocking {
+                val app = ApplicationProvider.getApplicationContext<Application>()
+                UserPreferences(app).vibrationTarget.first() == VibrationTarget.SMARTWATCH
             }
         }
     }
@@ -344,22 +388,6 @@ class SettingsScreenTest {
             composeRule.onNodeWithTag("slider_countdown_warning_1").assertDoesNotExist()
         }
         composeRule.onNodeWithTag("slider_countdown_warning_2").assertDoesNotExist()
-    }
-
-    @Test
-    fun wearable_cues_keep_countdown_settings_available_without_voice() {
-        setContent()
-        composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
-        composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsNotEnabled()
-        }
-
-        composeRule.onNodeWithTag("toggle_wearable_cues").performScrollTo().performClick()
-
-        composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsEnabled()
-        }
-        composeRule.onNodeWithTag("slider_countdown_warning_1").assertExists()
     }
 
     @Test

@@ -274,9 +274,12 @@ class WorkoutService : Service() {
             val periodicTimeCueInterval  = prefs.periodicTimeCueInterval.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
             val vibrationStrength = prefs.vibrationStrength.first()
+            val vibrationTarget   = prefs.vibrationTarget.first()
+            // The watch gets a notification at exactly the moments the phone would vibrate.
+            val vibratePhone      = vibrationEnabled && vibrationTarget.phone
+            val notifyWatch       = vibrationEnabled && vibrationTarget.watch
             val speechRate        = prefs.ttsSpeechRate.first()
             val ttsVolume         = prefs.ttsVolume.first()
-            val wearableCues      = prefs.wearableCues.first()
             val skipWarmupCooldown = prefs.skipWarmupCooldown.first()
             val effectiveWorkoutDay =
                 if (skipWarmupCooldown) workoutDay.withoutWarmupCooldown() else workoutDay
@@ -305,7 +308,6 @@ class WorkoutService : Service() {
                 countdownWarnings = countdownWarnings,
                 countdownWarningSeconds1 = countdownWarning1,
                 countdownWarningSeconds2 = countdownWarning2,
-                onCountdownWarning = { seconds, next -> if (wearableCues) postCountdownCue(seconds, next) },
                 midIntervalCues = midIntervalCues,
                 periodicTimeCues = periodicTimeCues,
                 periodicTimeCueIntervalSeconds = periodicTimeCueInterval,
@@ -332,7 +334,7 @@ class WorkoutService : Service() {
                     when (state) {
                         is WorkoutState.Active -> {
                             if (state.intervalIndex != lastIntervalIndex && lastIntervalIndex >= 0) {
-                                if (vibrationEnabled) {
+                                if (vibratePhone) {
                                     VibrationPlayer.play(
                                         this@WorkoutService,
                                         VibrationPatterns.forInterval(
@@ -341,7 +343,7 @@ class WorkoutService : Service() {
                                         )
                                     )
                                 }
-                                if (wearableCues) postIntervalCue(state.currentInterval)
+                                if (notifyWatch) postIntervalCue(state.currentInterval)
                             }
                             lastIntervalIndex = state.intervalIndex
                             updateNotification(state)
@@ -349,7 +351,7 @@ class WorkoutService : Service() {
                         is WorkoutState.Paused -> updateNotificationPaused()
                         is WorkoutState.Completed -> {
                             try {
-                                if (vibrationEnabled) {
+                                if (vibratePhone) {
                                     VibrationPlayer.play(
                                         this@WorkoutService,
                                         VibrationPatterns.forCompletion(vibrationStrength)
@@ -386,6 +388,9 @@ class WorkoutService : Service() {
                                     }
                                 }
                                 cleanup()
+                                // After cleanup(), which cancels the interval notification: this one
+                                // is meant to still be on the watch once the service is gone.
+                                if (notifyWatch) postCompletionCue()
                                 stopSelf()
                             }
                         }
@@ -565,9 +570,9 @@ class WorkoutService : Service() {
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
 
-    // Posts the interval/countdown cue as a regular (non-ongoing) notification so a smartwatch
-    // bridge forwards it; the ongoing workout notification can't do that, bridges skip ongoing and
-    // foreground-service notifications. At most one cue exists at a time: the previous one is
+    // Posts the smartwatch notification as a regular (non-ongoing) notification so a bridge
+    // forwards it; the ongoing workout notification can't do that, bridges skip ongoing and
+    // foreground-service notifications. At most one exists at a time: the previous one is
     // cancelled before the next is posted, so they never stack up in the shade.
     @Synchronized
     private fun postCue(title: String, text: String?) {
@@ -599,12 +604,14 @@ class WorkoutService : Service() {
     private fun postIntervalCue(interval: Interval) =
         postCue(intervalLabel(interval.type), formatClock(interval.durationSeconds))
 
-    private fun postCountdownCue(secondsRemaining: Int, next: Interval?) =
-        postCue(
-            resources.getQuantityString(R.plurals.tts_seconds_remaining, secondsRemaining, secondsRemaining),
-            next?.let {
-                getString(R.string.workout_next_interval, intervalLabel(it.type), formatClock(it.durationSeconds))
-            }
+    private fun postCompletionCue() =
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(
+            "cue_complete",
+            CUE_NOTIFICATION_ID,
+            buildCueNotification(
+                getString(R.string.workout_complete_title),
+                getString(R.string.workout_complete_message)
+            )
         )
 
     private fun actionPending(action: String): PendingIntent =

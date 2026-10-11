@@ -116,7 +116,7 @@
     <string name="notification_channel_name">Adestramento</string>
     <string name="notification_channel_desc">Temporizador do adestramento activo</string>
     <string name="notification_cue_channel_name">Avisos de adestramento</string>
-    <string name="notification_cue_channel_desc">Avisos curtos nos cambios de intervalo e nos avisos de conta atrás, para reenviar a un reloxo intelixente</string>
+    <string name="notification_cue_channel_desc">Avisos curtos nos cambios de intervalo e ao rematar o adestramento, para reenviar a un reloxo intelixente</string>
     <string name="notification_action_pause">Pausar</string>
     <string name="notification_action_resume">Retomar</string>
     <string name="notification_action_stop">Deter</string>
@@ -250,8 +250,11 @@
     <string name="settings_vibration_strength_light">Suave</string>
     <string name="settings_vibration_strength_medium">Media</string>
     <string name="settings_vibration_strength_strong">Forte</string>
-    <string name="settings_wearable_cues">Enviar avisos ao reloxo intelixente</string>
-    <string name="settings_wearable_cues_caption">Mostra unha notificación curta en cada cambio de intervalo e aviso de conta atrás para que Gadgetbridge ou Wear OS a reenvíen. En Gadgetbridge, permite as notificacións de C2K, tamén coa pantalla acendida.</string>
+    <string name="settings_vibration_target_phone">Móbil</string>
+    <string name="settings_vibration_target_smartwatch">Reloxo</string>
+    <string name="settings_vibration_target_both">Ambos</string>
+    <string name="settings_vibration_strength_caption">Só o móbil</string>
+    <string name="settings_vibration_watch_caption">Envía unha notificación ao teu reloxo intelixente en cada cambio de intervalo e ao rematar o adestramento.</string>
     <string name="settings_tts_speed">Velocidade da voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

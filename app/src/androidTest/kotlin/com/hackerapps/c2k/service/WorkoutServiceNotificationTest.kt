@@ -17,6 +17,7 @@ import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.data.repository.SessionRepository
 import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.data.prefs.VibrationTarget
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -95,13 +96,31 @@ class WorkoutServiceNotificationTest {
         context.startForegroundService(startIntent)
     }
 
+    private fun vibrateOn(target: VibrationTarget) = runBlocking {
+        UserPreferences(context).apply {
+            setVibrationEnabled(true)
+            setVibrationTarget(target)
+        }
+    }
+
+    private fun resetVibration() = runBlocking {
+        UserPreferences(context).apply {
+            setVibrationEnabled(false)
+            setVibrationTarget(VibrationTarget.PHONE)
+        }
+    }
+
     @Before
     fun resetServiceState() {
         serviceWasStarted = false
         WorkoutService.testWorkoutDayOverride = null
         WorkoutService.testSessionRepositoryOverride = null
-        runBlocking { UserPreferences(context).setWearableCues(false) }
+        resetVibration()
         notificationManager.cancel(completionNotificationId)
+        // A watch notification from an earlier test can outlive it (it times out after 10 s).
+        notificationManager.activeNotifications
+            .filter { it.id == cueNotificationId }
+            .forEach { notificationManager.cancel(it.tag, it.id) }
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
     }
 
@@ -124,7 +143,7 @@ class WorkoutServiceNotificationTest {
         Thread.sleep(1_000)
         WorkoutService.testWorkoutDayOverride = null
         WorkoutService.testSessionRepositoryOverride = null
-        runBlocking { UserPreferences(context).setWearableCues(false) }
+        resetVibration()
         db.close()
     }
 
@@ -215,7 +234,7 @@ class WorkoutServiceNotificationTest {
 
     @Test
     fun wearable_cue_is_posted_on_interval_change_and_removed_on_stop() {
-        runBlocking { UserPreferences(context).setWearableCues(true) }
+        vibrateOn(VibrationTarget.SMARTWATCH)
         WorkoutService.testWorkoutDayOverride = WorkoutDay(
             week = 1, day = 1,
             intervals = listOf(Interval(IntervalType.WALK, 2), Interval(IntervalType.RUN, 30))
@@ -252,7 +271,7 @@ class WorkoutServiceNotificationTest {
 
     @Test
     fun wearable_cues_replace_each_other_and_never_stack() {
-        runBlocking { UserPreferences(context).setWearableCues(true) }
+        vibrateOn(VibrationTarget.SMARTWATCH)
         WorkoutService.testWorkoutDayOverride = WorkoutDay(
             week = 1, day = 1,
             intervals = listOf(
@@ -277,6 +296,45 @@ class WorkoutServiceNotificationTest {
 
         assertTrue("Expected one cue per interval change, saw ${seenTags.size}", seenTags.size >= 3)
         assertEquals("Each cue must replace the previous one, never pile up", 1, mostAtOnce)
+    }
+
+    @Test
+    fun no_watch_notification_when_only_the_phone_vibrates() {
+        vibrateOn(VibrationTarget.PHONE)
+        WorkoutService.testWorkoutDayOverride = WorkoutDay(
+            week = 1, day = 1,
+            intervals = listOf(Interval(IntervalType.WALK, 1), Interval(IntervalType.RUN, 30))
+        )
+        startWorkout()
+
+        val runLabel = context.getString(R.string.workout_interval_run)
+        assertTrue(
+            "Expected the workout to reach the RUN interval",
+            waitUntil(timeoutMs = 10_000) { ongoingNotificationText()?.contains(runLabel) == true }
+        )
+        assertFalse(
+            "The interval change only vibrates the phone, so no watch notification is expected",
+            waitUntil(timeoutMs = 2_000) { cueNotificationId in activeNotificationIds() }
+        )
+    }
+
+    @Test
+    fun watch_notification_is_posted_when_the_workout_completes() {
+        vibrateOn(VibrationTarget.SMARTWATCH)
+        WorkoutService.testWorkoutDayOverride = fastWorkoutDay
+        startWorkout()
+
+        // fastWorkoutDay has a single interval, so the only watch notification is the completion one.
+        val completeTitle = context.getString(R.string.workout_complete_title)
+        assertTrue(
+            "Expected a watch notification when the workout completes, as the phone vibrates then too",
+            waitUntil(timeoutMs = 12_000) {
+                notificationManager.activeNotifications.any {
+                    it.id == cueNotificationId &&
+                        it.notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() == completeTitle
+                }
+            }
+        )
     }
 
     @Test
