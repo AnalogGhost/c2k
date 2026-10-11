@@ -20,6 +20,7 @@ class WorkoutEngine(
     private val countdownWarnings: Boolean,
     countdownWarningSeconds1: Int = 10,
     countdownWarningSeconds2: Int = 5,
+    countdownWarning2Enabled: Boolean = true,
     private val midIntervalCues: Boolean,
     private val periodicTimeCues: Boolean = false,
     private val periodicTimeCueIntervalSeconds: Int = 30,
@@ -28,10 +29,12 @@ class WorkoutEngine(
 ) {
     // Sorted descending, deduped: fires the larger threshold first, and the smallest one carries
     // the next-interval look-ahead announcement since it's the last warning before the interval ends.
-    private val warningThresholds = listOf(countdownWarningSeconds1, countdownWarningSeconds2)
-        .filter { it > 0 }
-        .distinct()
-        .sortedDescending()
+    // With the second warning off, the first warning is the only (and therefore last) one.
+    private val warningThresholds =
+        listOfNotNull(countdownWarningSeconds1, countdownWarningSeconds2.takeIf { countdownWarning2Enabled })
+            .filter { it > 0 }
+            .distinct()
+            .sortedDescending()
     private val _state = MutableStateFlow<WorkoutState>(WorkoutState.Idle)
     val state: StateFlow<WorkoutState> = _state.asStateFlow()
 

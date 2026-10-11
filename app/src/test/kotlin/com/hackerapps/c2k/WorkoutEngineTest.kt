@@ -49,6 +49,7 @@ class WorkoutEngineTest {
         countdownWarnings: Boolean = false,
         countdownWarningSeconds1: Int = 10,
         countdownWarningSeconds2: Int = 5,
+        countdownWarning2Enabled: Boolean = true,
         periodicTimeCues: Boolean = false,
         periodicTimeCueIntervalSeconds: Int = 30
     ): WorkoutEngine =
@@ -59,6 +60,7 @@ class WorkoutEngineTest {
             countdownWarnings = countdownWarnings,
             countdownWarningSeconds1 = countdownWarningSeconds1,
             countdownWarningSeconds2 = countdownWarningSeconds2,
+            countdownWarning2Enabled = countdownWarning2Enabled,
             midIntervalCues = midIntervalCues,
             periodicTimeCues = periodicTimeCues,
             periodicTimeCueIntervalSeconds = periodicTimeCueIntervalSeconds,
@@ -341,6 +343,29 @@ class WorkoutEngineTest {
         })
         assertTrue("Final (smallest) threshold should announce the next interval",
             announcements.any { it is TtsAnnouncement.NextInterval })
+        engine.stop()
+    }
+
+    @Test
+    fun disabled_second_warning_keeps_first_warning_with_lookahead() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            Interval(IntervalType.WALK, 10),
+            countdownWarnings = true,
+            countdownWarning2Enabled = false
+        )
+        engine.start(1L)
+        advanceTimeBy(5_300)  // 10s remaining
+        assertEquals(1, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 10
+        })
+        assertTrue("With only one warning left, it carries the next-interval look-ahead",
+            announcements.any { it is TtsAnnouncement.NextInterval })
+        advanceTimeBy(5_000)  // 5s remaining: the disabled second threshold must stay silent
+        assertEquals(0, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 5
+        })
+        assertEquals(1, announcements.count { it is TtsAnnouncement.CountdownWarning })
         engine.stop()
     }
 

@@ -76,6 +76,7 @@ fun SettingsScreen(
     val countdownWarnings    by vm.countdownWarnings.collectAsStateWithLifecycle()
     val countdownWarning1    by vm.countdownWarning1.collectAsStateWithLifecycle()
     val countdownWarning2    by vm.countdownWarning2.collectAsStateWithLifecycle()
+    val countdownWarning2Enabled by vm.countdownWarning2Enabled.collectAsStateWithLifecycle()
     val midIntervalCues      by vm.midIntervalCues.collectAsStateWithLifecycle()
     val periodicTimeCues     by vm.periodicTimeCues.collectAsStateWithLifecycle()
     val periodicTimeCueInterval by vm.periodicTimeCueInterval.collectAsStateWithLifecycle()
@@ -163,13 +164,21 @@ fun SettingsScreen(
                     testTag = "slider_countdown_warning_1",
                     onValueChange = vm::setCountdownWarning1
                 )
-                SecondsSlider(
-                    label = stringResource(R.string.settings_countdown_warning_2),
-                    seconds = countdownWarning2,
-                    range = 3f..30f,
-                    testTag = "slider_countdown_warning_2",
-                    onValueChange = vm::setCountdownWarning2
+                SettingsToggle(
+                    label = stringResource(R.string.settings_countdown_warning_2_enabled),
+                    checked = countdownWarning2Enabled,
+                    testTag = "toggle_countdown_warning_2",
+                    onCheckedChange = vm::setCountdownWarning2Enabled
                 )
+                if (countdownWarning2Enabled) {
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_countdown_warning_2),
+                        seconds = countdownWarning2,
+                        range = 3f..30f,
+                        testTag = "slider_countdown_warning_2",
+                        onValueChange = vm::setCountdownWarning2
+                    )
+                }
             }
             HorizontalDivider()
             SettingsToggle(

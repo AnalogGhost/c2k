@@ -240,6 +240,7 @@
     <string name="settings_countdown_warnings">Avisos de contagem regressiva</string>
     <string name="settings_countdown_warning_1">Primeiro aviso</string>
     <string name="settings_countdown_warning_2">Segundo aviso</string>
+    <string name="settings_countdown_warning_2_enabled">Segundo aviso</string>
     <string name="settings_mid_interval_cues">Incentivo no meio da corrida</string>
     <string name="settings_periodic_time_cues">Lembrete periódico de tempo</string>
     <string name="settings_periodic_time_cue_interval">Intervalo do lembrete</string>

@@ -258,6 +258,7 @@ class WorkoutService : Service() {
             val countdownWarnings = prefs.countdownWarnings.first()
             val countdownWarning1 = prefs.countdownWarning1.first()
             val countdownWarning2 = prefs.countdownWarning2.first()
+            val countdownWarning2Enabled = prefs.countdownWarning2Enabled.first()
             val midIntervalCues   = prefs.midIntervalCues.first()
             val periodicTimeCues         = prefs.periodicTimeCues.first()
             val periodicTimeCueInterval  = prefs.periodicTimeCueInterval.first()
@@ -293,6 +294,7 @@ class WorkoutService : Service() {
                 countdownWarnings = countdownWarnings,
                 countdownWarningSeconds1 = countdownWarning1,
                 countdownWarningSeconds2 = countdownWarning2,
+                countdownWarning2Enabled = countdownWarning2Enabled,
                 midIntervalCues = midIntervalCues,
                 periodicTimeCues = periodicTimeCues,
                 periodicTimeCueIntervalSeconds = periodicTimeCueInterval,

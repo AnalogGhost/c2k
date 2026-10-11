@@ -240,6 +240,7 @@
     <string name="settings_countdown_warnings">Avertissements du compte à rebours</string>
     <string name="settings_countdown_warning_1">Premier avertissement</string>
     <string name="settings_countdown_warning_2">Second avertissement</string>
+    <string name="settings_countdown_warning_2_enabled">Second avertissement</string>
     <string name="settings_mid_interval_cues">Encouragements en milieu de course</string>
     <string name="settings_periodic_time_cues">Rappel périodique du temps</string>
     <string name="settings_periodic_time_cue_interval">Cadence du rappel</string>
