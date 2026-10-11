@@ -315,7 +315,8 @@ class SettingsScreenTest {
     fun countdown_warning_sliders_shown_with_default_values() {
         setContent()
         composeRule.onNodeWithText(string(R.string.settings_countdown_warning_1)).assertExists()
-        composeRule.onNodeWithText(string(R.string.settings_countdown_warning_2)).assertExists()
+        // The toggle and the slider share the "Second warning" label, so look the slider up by tag.
+        composeRule.onNodeWithTag("slider_countdown_warning_2").assertExists()
         composeRule.onNodeWithText("10 s").assertExists()
         composeRule.onNodeWithText("5 s").assertExists()
     }
