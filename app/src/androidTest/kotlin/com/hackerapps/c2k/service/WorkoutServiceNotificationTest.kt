@@ -221,7 +221,9 @@ class WorkoutServiceNotificationTest {
         )
 
         context.startService(
-            Intent(context, WorkoutService::class.java).setAction(WorkoutService.ACTION_SKIP_WARMUP_COOLDOWN)
+            Intent(context, WorkoutService::class.java)
+                .setAction(WorkoutService.ACTION_SKIP_WARMUP_COOLDOWN)
+                .putExtra(WorkoutService.EXTRA_INTERVAL_INDEX, 1)  // the cool-down
         )
 
         // The cool-down is 5 minutes; a completion notification within seconds means it was skipped.

@@ -441,7 +441,7 @@ class WorkoutEngineTest {
         )
         engine.start(1L)
         advanceTimeBy(300)
-        engine.skipWarmupOrCooldown()
+        engine.skipWarmupOrCooldown(intervalIndex = 0)
         advanceTimeBy(500)
 
         val s = engine.state.value as WorkoutState.Active
@@ -462,7 +462,7 @@ class WorkoutEngineTest {
         )
         engine.start(1L)
         advanceTimeBy(300)
-        engine.skipWarmupOrCooldown()
+        engine.skipWarmupOrCooldown(intervalIndex = 0)
         advanceTimeBy(1_000)
 
         val s = engine.state.value as WorkoutState.Active
@@ -483,11 +483,28 @@ class WorkoutEngineTest {
             IntervalType.COOLDOWN,
             (engine.state.value as WorkoutState.Active).currentInterval.type
         )
-        engine.skipWarmupOrCooldown()
+        engine.skipWarmupOrCooldown(intervalIndex = 1)
         advanceTimeBy(500)
 
         assertTrue(engine.state.value is WorkoutState.Completed)
         assertTrue(announcements.any { it is TtsAnnouncement.WorkoutComplete })
+    }
+
+    @Test
+    fun skip_meant_for_an_earlier_interval_does_not_cut_the_current_one_short() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.WARMUP, 2),
+            Interval(IntervalType.COOLDOWN, 300)
+        )
+        engine.start(1L)
+        advanceTimeBy(2_500)  // warm-up is over, cool-down has begun
+        // The tap belonged to the warm-up button, which the screen was still showing.
+        engine.skipWarmupOrCooldown(intervalIndex = 0)
+        advanceTimeBy(500)
+
+        val s = engine.state.value as WorkoutState.Active
+        assertEquals(IntervalType.COOLDOWN, s.currentInterval.type)
+        engine.stop()
     }
 
     @Test
@@ -499,7 +516,7 @@ class WorkoutEngineTest {
         engine.start(1L)
         advanceTimeBy(500)
         engine.pause()
-        engine.skipWarmupOrCooldown()
+        engine.skipWarmupOrCooldown(intervalIndex = 0)
         advanceTimeBy(1_000)
         engine.resume()
         advanceTimeBy(1_000)

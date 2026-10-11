@@ -199,7 +199,7 @@ fun WorkoutScreen(
                     treadmillMode = treadmillMode,
                     isLandscape = isLandscape,
                     onPause = { vm.pause() },
-                    onSkipWarmupOrCooldown = { vm.skipWarmupOrCooldown() },
+                    onSkipWarmupOrCooldown = { vm.skipWarmupOrCooldown(s.intervalIndex) },
                     onStop = { showStopDialog = true }
                 )
                 is WorkoutState.Paused -> PausedWorkoutContent(

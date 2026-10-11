@@ -67,6 +67,8 @@ class WorkoutService : Service() {
         const val EXTRA_WEEK          = "week"
         const val EXTRA_DAY           = "day"
         const val EXTRA_TREADMILL_MODE = "treadmill_mode"
+        // The interval the skip button was showing; see WorkoutEngine.skipWarmupOrCooldown.
+        const val EXTRA_INTERVAL_INDEX = "interval_index"
 
         private const val NOTIFICATION_ID  = 1
         // Separate ID from the ongoing workout notification so posting one never clobbers the
@@ -203,7 +205,9 @@ class WorkoutService : Service() {
             // — silently inflating the recorded distance for any run with a real-world pause.
             ACTION_PAUSE  -> if (::engine.isInitialized) { engine.pause(); locationProvider.pause() }
             ACTION_RESUME -> if (::engine.isInitialized) { engine.resume(); locationProvider.resume() }
-            ACTION_SKIP_WARMUP_COOLDOWN -> if (::engine.isInitialized) engine.skipWarmupOrCooldown()
+            ACTION_SKIP_WARMUP_COOLDOWN -> if (::engine.isInitialized) {
+                engine.skipWarmupOrCooldown(intent.getIntExtra(EXTRA_INTERVAL_INDEX, -1))
+            }
             ACTION_STOP   -> handleStop()
         }
         return START_NOT_STICKY

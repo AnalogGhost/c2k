@@ -49,8 +49,9 @@ class WorkoutEngine(
     private val warnedCountdowns = mutableSetOf<Int>()
     private var midpointAnnounced = false
     private var lastPeriodicCueElapsed = -1
-    // Set from the service thread, consumed by the tick loop (see skipWarmupOrCooldown).
-    @Volatile private var skipRequested = false
+    // Index of the interval a skip was requested for, or -1. Set from the service thread,
+    // consumed by the tick loop (see skipWarmupOrCooldown).
+    @Volatile private var skipRequestedFor = -1
 
     fun start(sessionId: Long) {
         this.sessionId = sessionId
@@ -58,7 +59,7 @@ class WorkoutEngine(
         sessionStartMs = clock()
         intervalStartMs = sessionStartMs
         isPaused = false
-        skipRequested = false
+        skipRequestedFor = -1
         warnedCountdowns.clear()
         midpointAnnounced = false
         lastPeriodicCueElapsed = -1
@@ -85,13 +86,14 @@ class WorkoutEngine(
     }
 
     /**
-     * Ends the current warm-up or cool-down early; ignored while paused and during any other
-     * interval. Only raises a flag, which the tick loop applies: all interval state stays on that
-     * one thread, so a request landing just as an interval changes naturally can't cut the
-     * following interval short.
+     * Ends the warm-up or cool-down at [intervalIndex], the interval the skip button was showing
+     * when it was tapped; ignored while paused. Only records the request: the tick loop applies
+     * it, and only if that interval is still the current one and is a warm-up or cool-down. All
+     * interval state stays on that one thread, and a tap that lands just as the interval changes
+     * on its own can't cut the following interval short.
      */
-    fun skipWarmupOrCooldown() {
-        if (!isPaused) skipRequested = true
+    fun skipWarmupOrCooldown(intervalIndex: Int) {
+        if (!isPaused) skipRequestedFor = intervalIndex
     }
 
     fun stop() {
@@ -108,10 +110,13 @@ class WorkoutEngine(
             val now = clock()
             val sessionElapsed = ((now - sessionStartMs) / 1000).toInt()
 
-            if (skipRequested) {
-                skipRequested = false
+            val skipFor = skipRequestedFor
+            if (skipFor >= 0) {
+                skipRequestedFor = -1
                 val skippable = intervals[intervalIndex]
-                if (skippable.type == IntervalType.WARMUP || skippable.type == IntervalType.COOLDOWN) {
+                if (skipFor == intervalIndex &&
+                    (skippable.type == IntervalType.WARMUP || skippable.type == IntervalType.COOLDOWN)
+                ) {
                     // Backdate the interval start so the normal end-of-interval path below runs:
                     // announcement and warning reset, or completion for a final cool-down.
                     intervalStartMs = now - skippable.durationSeconds * 1000L
