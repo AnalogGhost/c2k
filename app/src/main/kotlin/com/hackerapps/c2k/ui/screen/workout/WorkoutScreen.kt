@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -198,6 +199,7 @@ fun WorkoutScreen(
                     treadmillMode = treadmillMode,
                     isLandscape = isLandscape,
                     onPause = { vm.pause() },
+                    onSkipWarmupOrCooldown = { vm.skipWarmupOrCooldown() },
                     onStop = { showStopDialog = true }
                 )
                 is WorkoutState.Paused -> PausedWorkoutContent(
@@ -229,6 +231,7 @@ private fun ActiveWorkoutContent(
     treadmillMode: Boolean,
     isLandscape: Boolean,
     onPause: () -> Unit,
+    onSkipWarmupOrCooldown: () -> Unit,
     onStop: () -> Unit
 ) {
     val ringColor = intervalColor(state.currentInterval.type)
@@ -324,16 +327,34 @@ private fun ActiveWorkoutContent(
     }
 
     val controls: @Composable () -> Unit = {
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            FilledTonalButton(onClick = onPause) {
-                Icon(Icons.Default.Pause, contentDescription = null)
-                Spacer(Modifier.width(4.dp))
-                Text(stringResource(R.string.workout_pause))
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                FilledTonalButton(onClick = onPause) {
+                    Icon(Icons.Default.Pause, contentDescription = null)
+                    Spacer(Modifier.width(4.dp))
+                    Text(stringResource(R.string.workout_pause))
+                }
+                OutlinedButton(onClick = onStop, modifier = Modifier.testTag("workout_stop_button")) {
+                    Icon(Icons.Default.Stop, contentDescription = null)
+                    Spacer(Modifier.width(4.dp))
+                    Text(stringResource(R.string.workout_stop))
+                }
             }
-            OutlinedButton(onClick = onStop, modifier = Modifier.testTag("workout_stop_button")) {
-                Icon(Icons.Default.Stop, contentDescription = null)
-                Spacer(Modifier.width(4.dp))
-                Text(stringResource(R.string.workout_stop))
+            val skipLabel = when (state.currentInterval.type) {
+                IntervalType.WARMUP -> R.string.workout_skip_warmup
+                IntervalType.COOLDOWN -> R.string.workout_skip_cooldown
+                else -> null
+            }
+            if (skipLabel != null) {
+                Spacer(Modifier.height(8.dp))
+                TextButton(
+                    onClick = onSkipWarmupOrCooldown,
+                    modifier = Modifier.testTag("workout_skip_phase_button")
+                ) {
+                    Icon(Icons.Default.SkipNext, contentDescription = null)
+                    Spacer(Modifier.width(4.dp))
+                    Text(stringResource(skipLabel))
+                }
             }
         }
     }

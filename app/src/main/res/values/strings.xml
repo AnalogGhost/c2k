@@ -58,6 +58,8 @@
     <string name="workout_pause">Pause</string>
     <string name="workout_resume">Resume</string>
     <string name="workout_stop">Stop</string>
+    <string name="workout_skip_warmup">Skip warm-up</string>
+    <string name="workout_skip_cooldown">Skip cool-down</string>
     <string name="workout_elapsed">Elapsed: %1$s</string>
     <string name="workout_interval_progress">Interval %1$d of %2$d</string>
     <string name="workout_next_interval">Next: %1$s %2$s</string>
