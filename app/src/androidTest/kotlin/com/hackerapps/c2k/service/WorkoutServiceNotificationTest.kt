@@ -207,6 +207,31 @@ class WorkoutServiceNotificationTest {
     }
 
     @Test
+    fun skip_action_ends_the_final_cooldown_and_completes_the_workout() {
+        WorkoutService.testWorkoutDayOverride = WorkoutDay(
+            week = 1, day = 1,
+            intervals = listOf(Interval(IntervalType.RUN, 1), Interval(IntervalType.COOLDOWN, 300))
+        )
+        startWorkout()
+
+        val cooldownLabel = context.getString(R.string.workout_interval_cooldown)
+        assertTrue(
+            "Expected the workout to reach its cool-down, got: ${ongoingNotificationText()}",
+            waitUntil(timeoutMs = 10_000) { ongoingNotificationText()?.contains(cooldownLabel) == true }
+        )
+
+        context.startService(
+            Intent(context, WorkoutService::class.java).setAction(WorkoutService.ACTION_SKIP_WARMUP_COOLDOWN)
+        )
+
+        // The cool-down is 5 minutes; a completion notification within seconds means it was skipped.
+        assertTrue(
+            "Expected the workout to complete once the cool-down is skipped",
+            waitUntil(timeoutMs = 12_000) { completionNotificationId in activeNotificationIds() }
+        )
+    }
+
+    @Test
     fun completion_teardown_still_happens_when_finishSession_throws() {
         WorkoutService.testWorkoutDayOverride = fastWorkoutDay
         WorkoutService.testSessionRepositoryOverride = ThrowingSessionRepository(db)

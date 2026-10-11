@@ -61,6 +61,7 @@ class WorkoutService : Service() {
         const val ACTION_PAUSE  = "com.hackerapps.c2k.action.PAUSE"
         const val ACTION_RESUME = "com.hackerapps.c2k.action.RESUME"
         const val ACTION_STOP   = "com.hackerapps.c2k.action.STOP"
+        const val ACTION_SKIP_WARMUP_COOLDOWN = "com.hackerapps.c2k.action.SKIP_WARMUP_COOLDOWN"
 
         const val EXTRA_PROGRAM_ID    = "program_id"
         const val EXTRA_WEEK          = "week"
@@ -202,6 +203,7 @@ class WorkoutService : Service() {
             // — silently inflating the recorded distance for any run with a real-world pause.
             ACTION_PAUSE  -> if (::engine.isInitialized) { engine.pause(); locationProvider.pause() }
             ACTION_RESUME -> if (::engine.isInitialized) { engine.resume(); locationProvider.resume() }
+            ACTION_SKIP_WARMUP_COOLDOWN -> if (::engine.isInitialized) engine.skipWarmupOrCooldown()
             ACTION_STOP   -> handleStop()
         }
         return START_NOT_STICKY
