@@ -32,6 +32,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -76,6 +79,7 @@ fun SettingsScreen(
     val countdownWarnings    by vm.countdownWarnings.collectAsStateWithLifecycle()
     val countdownWarning1    by vm.countdownWarning1.collectAsStateWithLifecycle()
     val countdownWarning2    by vm.countdownWarning2.collectAsStateWithLifecycle()
+    val countdownSoundEnabled by vm.countdownSoundEnabled.collectAsStateWithLifecycle()
     val midIntervalCues      by vm.midIntervalCues.collectAsStateWithLifecycle()
     val periodicTimeCues     by vm.periodicTimeCues.collectAsStateWithLifecycle()
     val periodicTimeCueInterval by vm.periodicTimeCueInterval.collectAsStateWithLifecycle()
@@ -147,54 +151,57 @@ fun SettingsScreen(
                 )
             }
 
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_countdown_warnings),
-                checked = countdownWarnings,
-                enabled = ttsEnabled,
-                testTag = "toggle_countdown_warnings",
-                onCheckedChange = vm::setCountdownWarnings
-            )
-            if (ttsEnabled && countdownWarnings) {
-                SecondsSlider(
-                    label = stringResource(R.string.settings_countdown_warning_1),
-                    seconds = countdownWarning1,
-                    range = 3f..30f,
-                    testTag = "slider_countdown_warning_1",
-                    onValueChange = vm::setCountdownWarning1
+            if (ttsEnabled) {
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_countdown_warnings),
+                    checked = countdownWarnings,
+                    testTag = "toggle_countdown_warnings",
+                    onCheckedChange = vm::setCountdownWarnings
                 )
-                SecondsSlider(
-                    label = stringResource(R.string.settings_countdown_warning_2),
-                    seconds = countdownWarning2,
-                    range = 3f..30f,
-                    testTag = "slider_countdown_warning_2",
-                    onValueChange = vm::setCountdownWarning2
+                if (countdownWarnings) {
+                    CountdownModeSetting(
+                        beep = countdownSoundEnabled,
+                        onBeepChange = vm::setCountdownSoundEnabled
+                    )
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_countdown_warning_1),
+                        seconds = countdownWarning1,
+                        range = 3f..30f,
+                        testTag = "slider_countdown_warning_1",
+                        onValueChange = vm::setCountdownWarning1
+                    )
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_countdown_warning_2),
+                        seconds = countdownWarning2,
+                        range = 3f..30f,
+                        testTag = "slider_countdown_warning_2",
+                        onValueChange = vm::setCountdownWarning2
+                    )
+                }
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_mid_interval_cues),
+                    checked = midIntervalCues,
+                    testTag = "toggle_mid_interval_cues",
+                    onCheckedChange = vm::setMidIntervalCues
                 )
-            }
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_mid_interval_cues),
-                checked = midIntervalCues,
-                enabled = ttsEnabled,
-                testTag = "toggle_mid_interval_cues",
-                onCheckedChange = vm::setMidIntervalCues
-            )
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_periodic_time_cues),
-                checked = periodicTimeCues,
-                enabled = ttsEnabled,
-                testTag = "toggle_periodic_time_cues",
-                onCheckedChange = vm::setPeriodicTimeCues
-            )
-            if (ttsEnabled && periodicTimeCues) {
-                SecondsSlider(
-                    label = stringResource(R.string.settings_periodic_time_cue_interval),
-                    seconds = periodicTimeCueInterval,
-                    range = 15f..120f,
-                    testTag = "slider_periodic_time_cue_interval",
-                    onValueChange = vm::setPeriodicTimeCueInterval
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_periodic_time_cues),
+                    checked = periodicTimeCues,
+                    testTag = "toggle_periodic_time_cues",
+                    onCheckedChange = vm::setPeriodicTimeCues
                 )
+                if (periodicTimeCues) {
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_periodic_time_cue_interval),
+                        seconds = periodicTimeCueInterval,
+                        range = 15f..120f,
+                        testTag = "slider_periodic_time_cue_interval",
+                        onValueChange = vm::setPeriodicTimeCueInterval
+                    )
+                }
             }
             HorizontalDivider()
 
@@ -444,6 +451,35 @@ private fun VibrationStrengthSetting(
             }
         }
     )
+}
+
+@Composable
+private fun CountdownModeSetting(
+    beep: Boolean,
+    onBeepChange: (Boolean) -> Unit
+) {
+    SingleChoiceSegmentedButtonRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        SegmentedButton(
+            selected = !beep,
+            onClick = { onBeepChange(false) },
+            shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+            modifier = Modifier.testTag("segment_countdown_voice")
+        ) {
+            Text(stringResource(R.string.settings_countdown_mode_voice))
+        }
+        SegmentedButton(
+            selected = beep,
+            onClick = { onBeepChange(true) },
+            shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+            modifier = Modifier.testTag("segment_countdown_beep")
+        ) {
+            Text(stringResource(R.string.settings_countdown_mode_beep))
+        }
+    }
 }
 
 private val VibrationStrength.labelRes: Int

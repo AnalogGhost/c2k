@@ -233,7 +233,7 @@
     <string name="language_pt_br">Brezilya Portekizcesi (Português)</string>
     <string name="language_ru">Rusça (Русский)</string>
     <string name="language_tr">Türkçe</string>
-    <string name="settings_tts_enabled">Sesli yönlendirmeler</string>
+    <string name="settings_tts_enabled">Yönlendirmeler</string>
     <string name="settings_treadmill_mode">Koşu bandı modu (GPS\'i kapatır)</string>
     <string name="settings_skip_warmup_cooldown">Isınmayı ve soğumayı atla</string>
     <string name="settings_skip_warmup_cooldown_caption">Kademeli ısınma sakatlanma riskini azaltır — koşunuza gidip gelirken zaten yürüyorsanız bunu atlayabilirsiniz.</string>
@@ -241,6 +241,8 @@
     <string name="settings_countdown_warnings">Geri sayım uyarıları</string>
     <string name="settings_countdown_warning_1">Birinci uyarı</string>
     <string name="settings_countdown_warning_2">İkinci uyarı</string>
+    <string name="settings_countdown_mode_voice">Sesli anons</string>
+    <string name="settings_countdown_mode_beep">Bip</string>
     <string name="settings_mid_interval_cues">Aralık ortası motivasyonu</string>
     <string name="settings_periodic_time_cues">Periyodik süre hatırlatıcısı</string>
     <string name="settings_periodic_time_cue_interval">Hatırlatma sıklığı</string>

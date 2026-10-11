@@ -6,6 +6,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.semantics.SemanticsActions
@@ -95,6 +96,7 @@ class SettingsScreenTest {
             prefs.setCountdownWarnings(true)
             prefs.setCountdownWarning1(10)
             prefs.setCountdownWarning2(5)
+            prefs.setCountdownSoundEnabled(false)
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
             prefs.setVibrationStrength(VibrationStrength.MEDIUM)
@@ -346,6 +348,36 @@ class SettingsScreenTest {
     }
 
     @Test
+    fun countdown_voice_beep_selector_persists_the_choice() {
+        setContent()
+        composeRule.onNodeWithTag("segment_countdown_voice").assertIsSelected()
+
+        composeRule.onNodeWithTag("segment_countdown_beep").performScrollTo().performClick()
+
+        val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+        composeRule.waitUntil(10_000) { runBlocking { prefs.countdownSoundEnabled.first() } }
+        composeRule.onNodeWithTag("segment_countdown_beep").assertIsSelected()
+
+        composeRule.onNodeWithTag("segment_countdown_voice").performScrollTo().performClick()
+
+        composeRule.waitUntil(10_000) { !runBlocking { prefs.countdownSoundEnabled.first() } }
+        composeRule.onNodeWithTag("segment_countdown_voice").assertIsSelected()
+    }
+
+    @Test
+    fun countdown_voice_beep_selector_sits_right_below_countdown_warnings_toggle() {
+        setContent()
+        val toggleY = composeRule.onNodeWithTag("toggle_countdown_warnings").fetchSemanticsNode().positionInRoot.y
+        val voiceY = composeRule.onNodeWithTag("segment_countdown_voice").fetchSemanticsNode().positionInRoot.y
+        val beepY = composeRule.onNodeWithTag("segment_countdown_beep").fetchSemanticsNode().positionInRoot.y
+        val sliderY = composeRule.onNodeWithTag("slider_countdown_warning_1").fetchSemanticsNode().positionInRoot.y
+
+        assertTrue(toggleY < voiceY)
+        assertEquals(voiceY, beepY, 0.5f)
+        assertTrue(beepY < sliderY)
+    }
+
+    @Test
     fun dragging_a_countdown_warning_slider_updates_its_displayed_value() {
         setContent()
         composeRule.onNodeWithText("10 s").assertExists()
@@ -359,18 +391,25 @@ class SettingsScreenTest {
     }
 
     @Test
-    fun disabling_tts_also_disables_dependent_toggles() {
+    fun turning_announcements_off_hides_dependent_settings() {
         setContent()
-        composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsEnabled()
-        composeRule.onNodeWithTag("toggle_mid_interval_cues").assertIsEnabled()
+        composeRule.onNodeWithTag("toggle_countdown_warnings").assertExists()
+        composeRule.onNodeWithTag("toggle_mid_interval_cues").assertExists()
+        composeRule.onNodeWithTag("toggle_periodic_time_cues").assertExists()
 
         composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
 
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsNotEnabled()
+            composeRule.onNodeWithTag("toggle_countdown_warnings").assertDoesNotExist()
         }
+        composeRule.onNodeWithTag("segment_countdown_beep").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_mid_interval_cues").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_periodic_time_cues").assertDoesNotExist()
+
+        composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
+
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("toggle_mid_interval_cues").assertIsNotEnabled()
+            composeRule.onNodeWithTag("toggle_countdown_warnings").assertExists()
         }
     }
 

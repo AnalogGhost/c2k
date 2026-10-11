@@ -232,7 +232,7 @@
     <string name="language_pt_br">Portugais (Português)</string>
     <string name="language_ru">Russe (Русский)</string>
     <string name="language_tr">Turc (Türkçe)</string>
-    <string name="settings_tts_enabled">Annonces vocales</string>
+    <string name="settings_tts_enabled">Annonces</string>
     <string name="settings_treadmill_mode">Mode tapis de course (désactive le GPS)</string>
     <string name="settings_skip_warmup_cooldown">Ignorer l\'échauffement et la récupération</string>
     <string name="settings_skip_warmup_cooldown_caption">S\'échauffer progressivement réduit le risque de blessure — ignorez cette étape si vous marchez déjà pour aller courir et en revenir.</string>
@@ -240,6 +240,8 @@
     <string name="settings_countdown_warnings">Avertissements du compte à rebours</string>
     <string name="settings_countdown_warning_1">Premier avertissement</string>
     <string name="settings_countdown_warning_2">Second avertissement</string>
+    <string name="settings_countdown_mode_voice">Voix</string>
+    <string name="settings_countdown_mode_beep">Bip</string>
     <string name="settings_mid_interval_cues">Encouragements en milieu de course</string>
     <string name="settings_periodic_time_cues">Rappel périodique du temps</string>
     <string name="settings_periodic_time_cue_interval">Cadence du rappel</string>

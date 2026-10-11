@@ -236,7 +236,7 @@
     <string name="language_pt_br">Португальский (Português)</string>
     <string name="language_ru">Русский</string>
     <string name="language_tr">Турецкий (Türkçe)</string>
-    <string name="settings_tts_enabled">Голосовые уведомления</string>
+    <string name="settings_tts_enabled">Оповещения</string>
     <string name="settings_treadmill_mode">Режим беговой дорожки (отключает GPS)</string>
     <string name="settings_skip_warmup_cooldown">Пропустить разминку и заминку</string>
     <string name="settings_skip_warmup_cooldown_caption">Постепенная разминка снижает риск травм — пропустите её, если вы уже идёте пешком до места пробежки и обратно.</string>
@@ -244,6 +244,8 @@
     <string name="settings_countdown_warnings">Предупреждающий обратный отсчёт</string>
     <string name="settings_countdown_warning_1">Первое предупреждение</string>
     <string name="settings_countdown_warning_2">Второе предупреждение</string>
+    <string name="settings_countdown_mode_voice">Голос</string>
+    <string name="settings_countdown_mode_beep">Сигнал</string>
     <string name="settings_mid_interval_cues">Подбадривания посреди пробежки</string>
     <string name="settings_periodic_time_cues">Периодическое напоминание о времени</string>
     <string name="settings_periodic_time_cue_interval">Интервал напоминания</string>

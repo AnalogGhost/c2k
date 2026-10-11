@@ -232,7 +232,7 @@
     <string name="language_pt_br">Português (Brasil)</string>
     <string name="language_ru">Russo (Русский)</string>
     <string name="language_tr">Turco (Türkçe)</string>
-    <string name="settings_tts_enabled">Avisos de voz</string>
+    <string name="settings_tts_enabled">Avisos</string>
     <string name="settings_treadmill_mode">Modo esteira (desativa o GPS)</string>
     <string name="settings_skip_warmup_cooldown">Pular aquecimento e desaquecimento</string>
     <string name="settings_skip_warmup_cooldown_caption">Aquecer gradualmente reduz o risco de lesões — pule esta etapa se você já caminha até o local da corrida e de volta.</string>
@@ -240,6 +240,8 @@
     <string name="settings_countdown_warnings">Avisos de contagem regressiva</string>
     <string name="settings_countdown_warning_1">Primeiro aviso</string>
     <string name="settings_countdown_warning_2">Segundo aviso</string>
+    <string name="settings_countdown_mode_voice">Voz</string>
+    <string name="settings_countdown_mode_beep">Bipe</string>
     <string name="settings_mid_interval_cues">Incentivo no meio da corrida</string>
     <string name="settings_periodic_time_cues">Lembrete periódico de tempo</string>
     <string name="settings_periodic_time_cue_interval">Intervalo do lembrete</string>
