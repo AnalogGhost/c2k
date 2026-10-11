@@ -32,7 +32,6 @@ class UserPreferences(private val context: Context) {
         val COUNTDOWN_WARNING_1      = intPreferencesKey("countdown_warning_1")
         val COUNTDOWN_WARNING_2      = intPreferencesKey("countdown_warning_2")
         val COUNTDOWN_SOUND_ENABLED  = booleanPreferencesKey("countdown_sound_enabled")
-        val COUNTDOWN_SOUND          = stringPreferencesKey("countdown_sound")
         val PERIODIC_TIME_CUES         = booleanPreferencesKey("periodic_time_cues")
         val PERIODIC_TIME_CUE_INTERVAL = intPreferencesKey("periodic_time_cue_interval")
         val WEIGHT_KG                = floatPreferencesKey("weight_kg")
@@ -58,9 +57,6 @@ class UserPreferences(private val context: Context) {
 
     val countdownSoundEnabled: Flow<Boolean> = context.dataStore.data
         .map { it[COUNTDOWN_SOUND_ENABLED] ?: false }
-
-    val countdownSound: Flow<CountdownSound> = context.dataStore.data
-        .map { preferences -> CountdownSound.fromStored(preferences[COUNTDOWN_SOUND]) }
 
     val keepScreenOn: Flow<Boolean> = context.dataStore.data
         .map { it[KEEP_SCREEN_ON] ?: true }
@@ -94,9 +90,6 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setCountdownSoundEnabled(enabled: Boolean) =
         context.dataStore.edit { it[COUNTDOWN_SOUND_ENABLED] = enabled }
-
-    suspend fun setCountdownSound(sound: CountdownSound) =
-        context.dataStore.edit { it[COUNTDOWN_SOUND] = sound.name }
 
     suspend fun setKeepScreenOn(enabled: Boolean) =
         context.dataStore.edit { it[KEEP_SCREEN_ON] = enabled }
@@ -185,16 +178,5 @@ enum class VibrationStrength {
     companion object {
         fun fromStored(value: String?): VibrationStrength =
             entries.firstOrNull { it.name == value } ?: MEDIUM
-    }
-}
-
-enum class CountdownSound {
-    BEEP,
-    DOUBLE_BEEP,
-    PIPS;
-
-    companion object {
-        fun fromStored(value: String?): CountdownSound =
-            entries.firstOrNull { it.name == value } ?: BEEP
     }
 }

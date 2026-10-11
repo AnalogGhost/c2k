@@ -21,8 +21,9 @@ class WorkoutEngine(
     countdownWarningSeconds1: Int = 10,
     countdownWarningSeconds2: Int = 5,
     // When set, replaces the spoken countdown warning (and its next-interval look-ahead) with this
-    // cue; the next interval is still announced when it starts.
-    private val countdownTone: (() -> Unit)? = null,
+    // cue, called with the warning's position in firing order (1 = first, 2 = second); the next
+    // interval is still announced when it starts.
+    private val countdownTone: ((warningNumber: Int) -> Unit)? = null,
     private val midIntervalCues: Boolean,
     private val periodicTimeCues: Boolean = false,
     private val periodicTimeCueIntervalSeconds: Int = 30,
@@ -137,7 +138,7 @@ class WorkoutEngine(
             ) {
                 warnedCountdowns.add(remaining)
                 if (countdownTone != null) {
-                    countdownTone()
+                    countdownTone(warningThresholds.indexOf(remaining) + 1)
                 } else {
                     tts.announce(TtsAnnouncement.CountdownWarning(remaining))
                     if (remaining == warningThresholds.last()) {

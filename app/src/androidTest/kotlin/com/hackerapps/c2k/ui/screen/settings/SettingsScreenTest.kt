@@ -6,6 +6,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.semantics.SemanticsActions
@@ -25,7 +26,6 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.R
-import com.hackerapps.c2k.data.prefs.CountdownSound
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
@@ -97,7 +97,6 @@ class SettingsScreenTest {
             prefs.setCountdownWarning1(10)
             prefs.setCountdownWarning2(5)
             prefs.setCountdownSoundEnabled(false)
-            prefs.setCountdownSound(CountdownSound.BEEP)
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
             prefs.setVibrationStrength(VibrationStrength.MEDIUM)
@@ -349,22 +348,33 @@ class SettingsScreenTest {
     }
 
     @Test
-    fun countdown_sound_picker_appears_when_enabled_and_selection_persists() {
+    fun countdown_voice_beep_selector_persists_the_choice() {
         setContent()
-        composeRule.onNodeWithTag("button_countdown_sound").assertDoesNotExist()
+        composeRule.onNodeWithTag("segment_countdown_voice").assertIsSelected()
 
-        composeRule.onNodeWithTag("toggle_countdown_sound").performScrollTo().performClick()
-
-        composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("button_countdown_sound").assertExists()
-        }
-        composeRule.onNodeWithTag("button_countdown_sound").performScrollTo().performClick()
-        composeRule.onNodeWithTag("countdown_sound_double_beep").performClick()
+        composeRule.onNodeWithTag("segment_countdown_beep").performScrollTo().performClick()
 
         val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
-        composeRule.waitUntil(10_000) {
-            runBlocking { prefs.countdownSound.first() } == CountdownSound.DOUBLE_BEEP
-        }
+        composeRule.waitUntil(10_000) { runBlocking { prefs.countdownSoundEnabled.first() } }
+        composeRule.onNodeWithTag("segment_countdown_beep").assertIsSelected()
+
+        composeRule.onNodeWithTag("segment_countdown_voice").performScrollTo().performClick()
+
+        composeRule.waitUntil(10_000) { !runBlocking { prefs.countdownSoundEnabled.first() } }
+        composeRule.onNodeWithTag("segment_countdown_voice").assertIsSelected()
+    }
+
+    @Test
+    fun countdown_voice_beep_selector_sits_right_below_countdown_warnings_toggle() {
+        setContent()
+        val toggleY = composeRule.onNodeWithTag("toggle_countdown_warnings").fetchSemanticsNode().positionInRoot.y
+        val voiceY = composeRule.onNodeWithTag("segment_countdown_voice").fetchSemanticsNode().positionInRoot.y
+        val beepY = composeRule.onNodeWithTag("segment_countdown_beep").fetchSemanticsNode().positionInRoot.y
+        val sliderY = composeRule.onNodeWithTag("slider_countdown_warning_1").fetchSemanticsNode().positionInRoot.y
+
+        assertTrue(toggleY < voiceY)
+        assertEquals(voiceY, beepY, 0.5f)
+        assertTrue(beepY < sliderY)
     }
 
     @Test
@@ -392,7 +402,7 @@ class SettingsScreenTest {
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithTag("toggle_countdown_warnings").assertDoesNotExist()
         }
-        composeRule.onNodeWithTag("toggle_countdown_sound").assertDoesNotExist()
+        composeRule.onNodeWithTag("segment_countdown_beep").assertDoesNotExist()
         composeRule.onNodeWithTag("toggle_mid_interval_cues").assertDoesNotExist()
         composeRule.onNodeWithTag("toggle_periodic_time_cues").assertDoesNotExist()
 

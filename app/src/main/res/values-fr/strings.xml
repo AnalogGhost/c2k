@@ -240,11 +240,8 @@
     <string name="settings_countdown_warnings">Avertissements du compte à rebours</string>
     <string name="settings_countdown_warning_1">Premier avertissement</string>
     <string name="settings_countdown_warning_2">Second avertissement</string>
-    <string name="settings_countdown_sound_enabled">Bip au lieu de la voix</string>
-    <string name="settings_countdown_sound">Son d\'avertissement</string>
-    <string name="settings_countdown_sound_beep">Bip</string>
-    <string name="settings_countdown_sound_double_beep">Double bip</string>
-    <string name="settings_countdown_sound_pips">Quatre bips courts</string>
+    <string name="settings_countdown_mode_voice">Voix</string>
+    <string name="settings_countdown_mode_beep">Bip</string>
     <string name="settings_mid_interval_cues">Encouragements en milieu de course</string>
     <string name="settings_periodic_time_cues">Rappel périodique du temps</string>
     <string name="settings_periodic_time_cue_interval">Cadence du rappel</string>

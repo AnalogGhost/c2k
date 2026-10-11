@@ -49,7 +49,7 @@ class WorkoutEngineTest {
         countdownWarnings: Boolean = false,
         countdownWarningSeconds1: Int = 10,
         countdownWarningSeconds2: Int = 5,
-        countdownTone: (() -> Unit)? = null,
+        countdownTone: ((warningNumber: Int) -> Unit)? = null,
         periodicTimeCues: Boolean = false,
         periodicTimeCueIntervalSeconds: Int = 30
     ): WorkoutEngine =
@@ -348,18 +348,18 @@ class WorkoutEngineTest {
 
     @Test
     fun countdown_tone_replaces_spoken_warning_and_lookahead() = testScope.runTest {
-        var tones = 0
+        val tones = mutableListOf<Int>()
         val engine = makeEngine(
             Interval(IntervalType.RUN, 15),
             Interval(IntervalType.WALK, 10),
             countdownWarnings = true,
-            countdownTone = { tones++ }
+            countdownTone = { tones.add(it) }
         )
         engine.start(1L)
-        advanceTimeBy(5_300)  // 10s remaining
-        assertEquals(1, tones)
-        advanceTimeBy(5_000)  // 5s remaining
-        assertEquals(2, tones)
+        advanceTimeBy(5_300)  // 10s remaining: first warning
+        assertEquals(listOf(1), tones)
+        advanceTimeBy(5_000)  // 5s remaining: second warning
+        assertEquals(listOf(1, 2), tones)
         assertEquals("The tone replaces the spoken warning", 0,
             announcements.count { it is TtsAnnouncement.CountdownWarning })
         assertEquals("The tone replaces the next-interval look-ahead", 0,
@@ -368,6 +368,39 @@ class WorkoutEngineTest {
         assertTrue(announcements.any {
             it is TtsAnnouncement.IntervalStart && it.interval.type == IntervalType.WALK
         })
+        engine.stop()
+    }
+
+    @Test
+    fun countdown_tone_is_numbered_by_firing_order_when_thresholds_are_swapped() = testScope.runTest {
+        val tones = mutableListOf<Int>()
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            countdownWarnings = true,
+            countdownWarningSeconds1 = 5,
+            countdownWarningSeconds2 = 10,
+            countdownTone = { tones.add(it) }
+        )
+        engine.start(1L)
+        advanceTimeBy(5_300)  // 10s remaining fires first
+        advanceTimeBy(5_000)  // 5s remaining fires second
+        assertEquals(listOf(1, 2), tones)
+        engine.stop()
+    }
+
+    @Test
+    fun countdown_tone_with_equal_thresholds_fires_one_single_beep() = testScope.runTest {
+        val tones = mutableListOf<Int>()
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            countdownWarnings = true,
+            countdownWarningSeconds1 = 5,
+            countdownWarningSeconds2 = 5,
+            countdownTone = { tones.add(it) }
+        )
+        engine.start(1L)
+        advanceTimeBy(10_300)  // 5s remaining
+        assertEquals(listOf(1), tones)
         engine.stop()
     }
 

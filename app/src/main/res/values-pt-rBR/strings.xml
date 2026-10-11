@@ -240,11 +240,8 @@
     <string name="settings_countdown_warnings">Avisos de contagem regressiva</string>
     <string name="settings_countdown_warning_1">Primeiro aviso</string>
     <string name="settings_countdown_warning_2">Segundo aviso</string>
-    <string name="settings_countdown_sound_enabled">Bipe em vez de voz</string>
-    <string name="settings_countdown_sound">Som de aviso</string>
-    <string name="settings_countdown_sound_beep">Bipe</string>
-    <string name="settings_countdown_sound_double_beep">Bipe duplo</string>
-    <string name="settings_countdown_sound_pips">Quatro bipes curtos</string>
+    <string name="settings_countdown_mode_voice">Voz</string>
+    <string name="settings_countdown_mode_beep">Bipe</string>
     <string name="settings_mid_interval_cues">Incentivo no meio da corrida</string>
     <string name="settings_periodic_time_cues">Lembrete periódico de tempo</string>
     <string name="settings_periodic_time_cue_interval">Intervalo do lembrete</string>

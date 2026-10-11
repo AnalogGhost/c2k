@@ -240,11 +240,8 @@
     <string name="settings_countdown_warnings">Avisos de cuenta atrás</string>
     <string name="settings_countdown_warning_1">Primer aviso</string>
     <string name="settings_countdown_warning_2">Segundo aviso</string>
-    <string name="settings_countdown_sound_enabled">Pitido en lugar de voz</string>
-    <string name="settings_countdown_sound">Sonido de aviso</string>
-    <string name="settings_countdown_sound_beep">Pitido</string>
-    <string name="settings_countdown_sound_double_beep">Pitido doble</string>
-    <string name="settings_countdown_sound_pips">Cuatro pitidos cortos</string>
+    <string name="settings_countdown_mode_voice">Voz</string>
+    <string name="settings_countdown_mode_beep">Pitido</string>
     <string name="settings_mid_interval_cues">Motivación a mitad de carrera</string>
     <string name="settings_periodic_time_cues">Recordatorio periódico de tiempo</string>
     <string name="settings_periodic_time_cue_interval">Intervalo del recordatorio</string>
