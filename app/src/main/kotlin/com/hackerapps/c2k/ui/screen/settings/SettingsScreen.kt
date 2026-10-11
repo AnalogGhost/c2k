@@ -165,14 +165,14 @@ fun SettingsScreen(
                     onValueChange = vm::setCountdownWarning1
                 )
                 SettingsToggle(
-                    label = stringResource(R.string.settings_countdown_warning_2_enabled),
+                    label = stringResource(R.string.settings_countdown_warning_2),
                     checked = countdownWarning2Enabled,
                     testTag = "toggle_countdown_warning_2",
                     onCheckedChange = vm::setCountdownWarning2Enabled
                 )
                 if (countdownWarning2Enabled) {
                     SecondsSlider(
-                        label = stringResource(R.string.settings_countdown_warning_2),
+                        label = null, // the toggle above already carries the "Second warning" label
                         seconds = countdownWarning2,
                         range = 3f..30f,
                         testTag = "slider_countdown_warning_2",
@@ -634,7 +634,7 @@ private fun formatWeight(value: Float): String {
 
 @Composable
 private fun SecondsSlider(
-    label: String,
+    label: String?,
     seconds: Int,
     range: ClosedFloatingPointRange<Float>,
     testTag: String,
@@ -648,7 +648,7 @@ private fun SecondsSlider(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(label)
+                    Text(label.orEmpty())
                     Text(
                         "%d s".format(seconds),
                         style = MaterialTheme.typography.bodyMedium,

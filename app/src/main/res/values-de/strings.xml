@@ -236,7 +236,6 @@
     <string name="settings_countdown_warnings">Countdown-Warnungen</string>
     <string name="settings_countdown_warning_1">Erste Warnung</string>
     <string name="settings_countdown_warning_2">Zweite Warnung</string>
-    <string name="settings_countdown_warning_2_enabled">Zweite Warnung</string>
     <string name="settings_mid_interval_cues">Motivation während des Laufens</string>
     <string name="settings_periodic_time_cues">Regelmäßige Zeitansage</string>
     <string name="settings_periodic_time_cue_interval">Ansageintervall</string>

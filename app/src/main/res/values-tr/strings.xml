@@ -241,7 +241,6 @@
     <string name="settings_countdown_warnings">Geri sayım uyarıları</string>
     <string name="settings_countdown_warning_1">Birinci uyarı</string>
     <string name="settings_countdown_warning_2">İkinci uyarı</string>
-    <string name="settings_countdown_warning_2_enabled">İkinci uyarı</string>
     <string name="settings_mid_interval_cues">Aralık ortası motivasyonu</string>
     <string name="settings_periodic_time_cues">Periyodik süre hatırlatıcısı</string>
     <string name="settings_periodic_time_cue_interval">Hatırlatma sıklığı</string>
