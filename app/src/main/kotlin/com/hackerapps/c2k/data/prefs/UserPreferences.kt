@@ -37,6 +37,7 @@ class UserPreferences(private val context: Context) {
         val WEIGHT_UNIT              = stringPreferencesKey("weight_unit")
         val GPS_DISTANCES_RECOMPUTED = booleanPreferencesKey("gps_distances_recomputed")
         val SKIP_WARMUP_COOLDOWN     = booleanPreferencesKey("skip_warmup_cooldown")
+        val WEARABLE_CUES            = booleanPreferencesKey("wearable_cues")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -68,6 +69,9 @@ class UserPreferences(private val context: Context) {
 
     val vibrationStrength: Flow<VibrationStrength> = context.dataStore.data
         .map { preferences -> VibrationStrength.fromStored(preferences[VIBRATION_STRENGTH]) }
+
+    val wearableCues: Flow<Boolean> = context.dataStore.data
+        .map { it[WEARABLE_CUES] ?: false }
 
     suspend fun setTtsEnabled(enabled: Boolean) =
         context.dataStore.edit { it[TTS_ENABLED] = enabled }
@@ -101,6 +105,9 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setVibrationStrength(strength: VibrationStrength) =
         context.dataStore.edit { it[VIBRATION_STRENGTH] = strength.name }
+
+    suspend fun setWearableCues(enabled: Boolean) =
+        context.dataStore.edit { it[WEARABLE_CUES] = enabled }
 
     suspend fun setTtsSpeechRate(rate: Float) =
         context.dataStore.edit { it[TTS_SPEECH_RATE] = rate }

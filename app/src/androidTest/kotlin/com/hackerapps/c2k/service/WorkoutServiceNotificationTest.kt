@@ -16,7 +16,10 @@ import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.data.repository.SessionRepository
+import com.hackerapps.c2k.data.prefs.UserPreferences
+import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -45,6 +48,8 @@ class WorkoutServiceNotificationTest {
     // Mirrors WorkoutService's private COMPLETION_NOTIFICATION_ID — kept in sync manually since
     // that constant isn't exposed outside the service.
     private val completionNotificationId = 2
+    // Mirrors WorkoutService's private CUE_NOTIFICATION_ID, same as above.
+    private val cueNotificationId = 3
 
     // A workout that completes in ~1 second of real elapsed time instead of the 20+ minutes a
     // real program takes, so tests can observe a genuine Completed transition without a long wait.
@@ -95,6 +100,7 @@ class WorkoutServiceNotificationTest {
         serviceWasStarted = false
         WorkoutService.testWorkoutDayOverride = null
         WorkoutService.testSessionRepositoryOverride = null
+        runBlocking { UserPreferences(context).setWearableCues(false) }
         notificationManager.cancel(completionNotificationId)
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
     }
@@ -118,6 +124,7 @@ class WorkoutServiceNotificationTest {
         Thread.sleep(1_000)
         WorkoutService.testWorkoutDayOverride = null
         WorkoutService.testSessionRepositoryOverride = null
+        runBlocking { UserPreferences(context).setWearableCues(false) }
         db.close()
     }
 
@@ -204,6 +211,72 @@ class WorkoutServiceNotificationTest {
                 "before either has started, got: ${ongoingNotificationText()}",
             waitUntil { ongoingNotificationText()?.contains(expectedRunsLeft) == true }
         )
+    }
+
+    @Test
+    fun wearable_cue_is_posted_on_interval_change_and_removed_on_stop() {
+        runBlocking { UserPreferences(context).setWearableCues(true) }
+        WorkoutService.testWorkoutDayOverride = WorkoutDay(
+            week = 1, day = 1,
+            intervals = listOf(Interval(IntervalType.WALK, 2), Interval(IntervalType.RUN, 30))
+        )
+        startWorkout()
+
+        assertTrue(
+            "Expected a cue notification when the RUN interval starts",
+            waitUntil(timeoutMs = 10_000) { cueNotificationId in activeNotificationIds() }
+        )
+        val cue = notificationManager.activeNotifications.first { it.id == cueNotificationId }
+        assertEquals(
+            "A cue must not be ongoing, or notification bridges ignore it",
+            0, cue.notification.flags and Notification.FLAG_ONGOING_EVENT
+        )
+        assertEquals(
+            context.getString(R.string.workout_interval_run),
+            cue.notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
+        )
+        assertTrue(
+            "Notification bridges ignore channels below default importance",
+            notificationManager.getNotificationChannel("workout_cues").importance >=
+                NotificationManager.IMPORTANCE_DEFAULT
+        )
+
+        context.startService(Intent(context, WorkoutService::class.java).setAction(WorkoutService.ACTION_STOP))
+
+        // The cue's own timeout is 10s, so being gone after at most 3s means stopping removed it.
+        assertTrue(
+            "Expected the cue to be removed when the workout stops",
+            waitUntil(timeoutMs = 3_000) { cueNotificationId !in activeNotificationIds() }
+        )
+    }
+
+    @Test
+    fun wearable_cues_replace_each_other_and_never_stack() {
+        runBlocking { UserPreferences(context).setWearableCues(true) }
+        WorkoutService.testWorkoutDayOverride = WorkoutDay(
+            week = 1, day = 1,
+            intervals = listOf(
+                Interval(IntervalType.WALK, 1),
+                Interval(IntervalType.RUN, 2),
+                Interval(IntervalType.WALK, 2),
+                Interval(IntervalType.RUN, 30)
+            )
+        )
+        startWorkout()
+
+        // Sample the shade while three interval changes (at ~1s, ~3s and ~5s of the workout) post a cue each.
+        val seenTags = mutableSetOf<String?>()
+        var mostAtOnce = 0
+        val deadline = System.currentTimeMillis() + 10_000
+        while (System.currentTimeMillis() < deadline) {
+            val cues = notificationManager.activeNotifications.filter { it.id == cueNotificationId }
+            mostAtOnce = maxOf(mostAtOnce, cues.size)
+            cues.forEach { seenTags.add(it.tag) }
+            Thread.sleep(50)
+        }
+
+        assertTrue("Expected one cue per interval change, saw ${seenTags.size}", seenTags.size >= 3)
+        assertEquals("Each cue must replace the previous one, never pile up", 1, mostAtOnce)
     }
 
     @Test

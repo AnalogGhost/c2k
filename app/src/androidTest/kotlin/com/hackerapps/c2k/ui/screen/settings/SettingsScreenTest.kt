@@ -95,6 +95,7 @@ class SettingsScreenTest {
             prefs.setCountdownWarnings(true)
             prefs.setCountdownWarning1(10)
             prefs.setCountdownWarning2(5)
+            prefs.setWearableCues(false)
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
             prefs.setVibrationStrength(VibrationStrength.MEDIUM)
@@ -343,6 +344,22 @@ class SettingsScreenTest {
             composeRule.onNodeWithTag("slider_countdown_warning_1").assertDoesNotExist()
         }
         composeRule.onNodeWithTag("slider_countdown_warning_2").assertDoesNotExist()
+    }
+
+    @Test
+    fun wearable_cues_keep_countdown_settings_available_without_voice() {
+        setContent()
+        composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsNotEnabled()
+        }
+
+        composeRule.onNodeWithTag("toggle_wearable_cues").performScrollTo().performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsEnabled()
+        }
+        composeRule.onNodeWithTag("slider_countdown_warning_1").assertExists()
     }
 
     @Test

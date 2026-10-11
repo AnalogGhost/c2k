@@ -84,6 +84,7 @@ fun SettingsScreen(
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
     val vibrationStrength    by vm.vibrationStrength.collectAsStateWithLifecycle()
+    val wearableCues         by vm.wearableCues.collectAsStateWithLifecycle()
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
     val ttsVolume            by vm.ttsVolume.collectAsStateWithLifecycle()
     val ttsAvailableOnDevice by vm.ttsAvailableOnDevice.collectAsStateWithLifecycle()
@@ -151,11 +152,11 @@ fun SettingsScreen(
             SettingsToggle(
                 label = stringResource(R.string.settings_countdown_warnings),
                 checked = countdownWarnings,
-                enabled = ttsEnabled,
+                enabled = ttsEnabled || wearableCues,
                 testTag = "toggle_countdown_warnings",
                 onCheckedChange = vm::setCountdownWarnings
             )
-            if (ttsEnabled && countdownWarnings) {
+            if ((ttsEnabled || wearableCues) && countdownWarnings) {
                 SecondsSlider(
                     label = stringResource(R.string.settings_countdown_warning_1),
                     seconds = countdownWarning1,
@@ -301,6 +302,14 @@ fun SettingsScreen(
                     onStrengthChange = vm::setVibrationStrength
                 )
             }
+            HorizontalDivider()
+            SettingsToggle(
+                label = stringResource(R.string.settings_wearable_cues),
+                checked = wearableCues,
+                subtitle = stringResource(R.string.settings_wearable_cues_caption),
+                testTag = "toggle_wearable_cues",
+                onCheckedChange = vm::setWearableCues
+            )
             HorizontalDivider()
             SettingsToggle(
                 label = stringResource(R.string.settings_treadmill_mode),

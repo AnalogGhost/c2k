@@ -49,16 +49,19 @@ class WorkoutEngineTest {
         countdownWarnings: Boolean = false,
         countdownWarningSeconds1: Int = 10,
         countdownWarningSeconds2: Int = 5,
+        ttsEnabled: Boolean = true,
+        onCountdownWarning: (Int, Interval?) -> Unit = { _, _ -> },
         periodicTimeCues: Boolean = false,
         periodicTimeCueIntervalSeconds: Int = 30
     ): WorkoutEngine =
         WorkoutEngine(
             day = WorkoutDay(week = 1, day = 1, intervals = intervals.toList()),
             tts = fakeTts,
-            ttsEnabled = true,
+            ttsEnabled = ttsEnabled,
             countdownWarnings = countdownWarnings,
             countdownWarningSeconds1 = countdownWarningSeconds1,
             countdownWarningSeconds2 = countdownWarningSeconds2,
+            onCountdownWarning = onCountdownWarning,
             midIntervalCues = midIntervalCues,
             periodicTimeCues = periodicTimeCues,
             periodicTimeCueIntervalSeconds = periodicTimeCueIntervalSeconds,
@@ -376,6 +379,39 @@ class WorkoutEngineTest {
         engine.start(1L)
         advanceTimeBy(10_300)  // crosses both default 10s and 5s thresholds
         assertEquals(0, announcements.count { it is TtsAnnouncement.CountdownWarning })
+        engine.stop()
+    }
+
+    @Test
+    fun countdown_callback_fires_with_next_interval_even_without_tts() = testScope.runTest {
+        val walk = Interval(IntervalType.WALK, 10)
+        val calls = mutableListOf<Pair<Int, Interval?>>()
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            walk,
+            ttsEnabled = false,
+            countdownWarnings = true,
+            onCountdownWarning = { seconds, next -> calls.add(seconds to next) }
+        )
+        engine.start(1L)
+        advanceTimeBy(10_300)  // crosses both default 10s and 5s thresholds
+        assertEquals(listOf(10 to walk, 5 to walk), calls)
+        assertEquals("Spoken warnings stay off when voice is off", 0,
+            announcements.count { it is TtsAnnouncement.CountdownWarning || it is TtsAnnouncement.NextInterval })
+        engine.stop()
+    }
+
+    @Test
+    fun countdown_callback_does_not_fire_when_countdown_warnings_are_off() = testScope.runTest {
+        var calls = 0
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            countdownWarnings = false,
+            onCountdownWarning = { _, _ -> calls++ }
+        )
+        engine.start(1L)
+        advanceTimeBy(10_300)
+        assertEquals(0, calls)
         engine.stop()
     }
 

@@ -115,6 +115,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Antrenman</string>
     <string name="notification_channel_desc">Aktif antrenman zamanlayıcısı</string>
+    <string name="notification_cue_channel_name">Antrenman ipuçları</string>
+    <string name="notification_cue_channel_desc">Aralık değişimlerinde ve geri sayım uyarılarında akıllı saate iletilmek üzere kısa bildirimler</string>
     <string name="notification_action_pause">Duraklat</string>
     <string name="notification_action_resume">Devam Et</string>
     <string name="notification_action_stop">Durdur</string>
@@ -250,6 +252,8 @@
     <string name="settings_vibration_strength_light">Hafif</string>
     <string name="settings_vibration_strength_medium">Orta</string>
     <string name="settings_vibration_strength_strong">Güçlü</string>
+    <string name="settings_wearable_cues">Akıllı saate ipuçları gönder</string>
+    <string name="settings_wearable_cues_caption">Her aralık değişiminde ve geri sayım uyarısında Gadgetbridge veya Wear OS\'un iletebileceği kısa bir bildirim gösterir. Gadgetbridge\'de C2K bildirimlerine, ekran açıkken de izin verin.</string>
     <string name="settings_tts_speed">Ses hızı</string>
     <string name="settings_tts_speed_slow">Yavaş</string>
     <string name="settings_tts_speed_fast">Hızlı</string>

@@ -118,6 +118,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Тренировка</string>
     <string name="notification_channel_desc">Таймер активной тренировки</string>
+    <string name="notification_cue_channel_name">Подсказки тренировки</string>
+    <string name="notification_cue_channel_desc">Короткие уведомления при смене интервалов и обратном отсчёте для передачи на смарт-часы</string>
     <string name="notification_action_pause">Пауза</string>
     <string name="notification_action_resume">Продолжить</string>
     <string name="notification_action_stop">Стоп</string>
@@ -253,6 +255,8 @@
     <string name="settings_vibration_strength_light">Слабая</string>
     <string name="settings_vibration_strength_medium">Средняя</string>
     <string name="settings_vibration_strength_strong">Сильная</string>
+    <string name="settings_wearable_cues">Отправлять подсказки на смарт-часы</string>
+    <string name="settings_wearable_cues_caption">Показывает короткое уведомление при каждой смене интервала и предупреждении обратного отсчёта, которое могут передать Gadgetbridge или Wear OS. В Gadgetbridge разрешите уведомления от C2K, в том числе при включённом экране.</string>
     <string name="settings_tts_speed">Скорость речи</string>
     <string name="settings_tts_speed_slow">Медленно</string>
     <string name="settings_tts_speed_fast">Быстро</string>

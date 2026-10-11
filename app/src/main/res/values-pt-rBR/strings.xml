@@ -115,6 +115,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Treino</string>
     <string name="notification_channel_desc">Cronômetro do treino ativo</string>
+    <string name="notification_cue_channel_name">Avisos de treino</string>
+    <string name="notification_cue_channel_desc">Avisos curtos nas trocas de intervalo e nos avisos de contagem regressiva, para encaminhar a um smartwatch</string>
     <string name="notification_action_pause">Pausar</string>
     <string name="notification_action_resume">Retomar</string>
     <string name="notification_action_stop">Parar</string>
@@ -249,6 +251,8 @@
     <string name="settings_vibration_strength_light">Fraca</string>
     <string name="settings_vibration_strength_medium">Média</string>
     <string name="settings_vibration_strength_strong">Forte</string>
+    <string name="settings_wearable_cues">Enviar avisos para o smartwatch</string>
+    <string name="settings_wearable_cues_caption">Mostra uma notificação curta a cada troca de intervalo e aviso de contagem regressiva para o Gadgetbridge ou o Wear OS encaminharem. No Gadgetbridge, permita as notificações do C2K, inclusive com a tela ligada.</string>
     <string name="settings_tts_speed">Velocidade da voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

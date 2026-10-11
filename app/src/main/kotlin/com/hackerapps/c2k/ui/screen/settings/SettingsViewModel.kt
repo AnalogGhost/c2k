@@ -81,6 +81,9 @@ class SettingsViewModel @JvmOverloads constructor(
     val vibrationStrength = prefs.vibrationStrength
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VibrationStrength.MEDIUM)
 
+    val wearableCues = prefs.wearableCues
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
     val ttsSpeechRate = prefs.ttsSpeechRate
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 1.0f)
 
@@ -152,6 +155,7 @@ class SettingsViewModel @JvmOverloads constructor(
             previewVibration(v)
         }
     }
+    fun setWearableCues(v: Boolean)      { viewModelScope.launch { prefs.setWearableCues(v) } }
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
     fun setTtsVolume(v: Float)           { viewModelScope.launch { prefs.setTtsVolume(v) } }
     fun setMidIntervalCues(v: Boolean)   { viewModelScope.launch { prefs.setMidIntervalCues(v) } }

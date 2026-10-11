@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.hackerapps.c2k.data.model.Interval
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.engine.tts.TtsAnnouncement
@@ -20,6 +21,9 @@ class WorkoutEngine(
     private val countdownWarnings: Boolean,
     countdownWarningSeconds1: Int = 10,
     countdownWarningSeconds2: Int = 5,
+    // Called for every countdown warning, independent of ttsEnabled, so non-spoken outputs (e.g. a
+    // smartwatch notification) can follow the same thresholds. nextInterval is null on the last one.
+    private val onCountdownWarning: (secondsRemaining: Int, nextInterval: Interval?) -> Unit = { _, _ -> },
     private val midIntervalCues: Boolean,
     private val periodicTimeCues: Boolean = false,
     private val periodicTimeCueIntervalSeconds: Int = 30,
@@ -129,21 +133,24 @@ class WorkoutEngine(
                 continue
             }
 
-            if (countdownWarnings && ttsEnabled &&
+            if (countdownWarnings &&
                 remaining in warningThresholds && remaining !in warnedCountdowns
             ) {
                 warnedCountdowns.add(remaining)
-                tts.announce(TtsAnnouncement.CountdownWarning(remaining))
-                if (remaining == warningThresholds.last()) {
-                    // Look-ahead: the smallest threshold is the last warning before the interval
-                    // ends, so it also announces what's coming next.
-                    if (intervalIndex + 1 < intervals.size) {
-                        tts.announce(
-                            TtsAnnouncement.NextInterval(intervals[intervalIndex + 1]),
-                            queueAdd = true
-                        )
+                if (ttsEnabled) {
+                    tts.announce(TtsAnnouncement.CountdownWarning(remaining))
+                    if (remaining == warningThresholds.last()) {
+                        // Look-ahead: the smallest threshold is the last warning before the interval
+                        // ends, so it also announces what's coming next.
+                        if (intervalIndex + 1 < intervals.size) {
+                            tts.announce(
+                                TtsAnnouncement.NextInterval(intervals[intervalIndex + 1]),
+                                queueAdd = true
+                            )
+                        }
                     }
                 }
+                onCountdownWarning(remaining, intervals.getOrNull(intervalIndex + 1))
             }
 
             if (periodicTimeCues && ttsEnabled && periodicTimeCueIntervalSeconds > 0 &&

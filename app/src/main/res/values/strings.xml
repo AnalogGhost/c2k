@@ -115,6 +115,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Workout</string>
     <string name="notification_channel_desc">Active workout timer</string>
+    <string name="notification_cue_channel_name">Workout cues</string>
+    <string name="notification_cue_channel_desc">Short alerts on interval changes and countdown warnings, for forwarding to a smartwatch</string>
     <string name="notification_action_pause">Pause</string>
     <string name="notification_action_resume">Resume</string>
     <string name="notification_action_stop">Stop</string>
@@ -248,6 +250,8 @@
     <string name="settings_vibration_strength_light">Light</string>
     <string name="settings_vibration_strength_medium">Medium</string>
     <string name="settings_vibration_strength_strong">Strong</string>
+    <string name="settings_wearable_cues">Send cues to smartwatch</string>
+    <string name="settings_wearable_cues_caption">Posts a short notification on each interval change and countdown warning for Gadgetbridge or Wear OS to forward. In Gadgetbridge, allow notifications from C2K, also while the screen is on.</string>
     <string name="settings_tts_speed">Voice speed</string>
     <string name="settings_tts_speed_slow">Slow</string>
     <string name="settings_tts_speed_fast">Fast</string>
