@@ -232,7 +232,7 @@
     <string name="language_pt_br">Português (Brasil)</string>
     <string name="language_ru">Russo (Русский)</string>
     <string name="language_tr">Turco (Türkçe)</string>
-    <string name="settings_tts_enabled">Avisos de voz</string>
+    <string name="settings_tts_enabled">Avisos</string>
     <string name="settings_treadmill_mode">Modo esteira (desativa o GPS)</string>
     <string name="settings_skip_warmup_cooldown">Pular aquecimento e desaquecimento</string>
     <string name="settings_skip_warmup_cooldown_caption">Aquecer gradualmente reduz o risco de lesões — pule esta etapa se você já caminha até o local da corrida e de volta.</string>

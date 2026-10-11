@@ -381,18 +381,25 @@ class SettingsScreenTest {
     }
 
     @Test
-    fun disabling_tts_also_disables_dependent_toggles() {
+    fun turning_announcements_off_hides_dependent_settings() {
         setContent()
-        composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsEnabled()
-        composeRule.onNodeWithTag("toggle_mid_interval_cues").assertIsEnabled()
+        composeRule.onNodeWithTag("toggle_countdown_warnings").assertExists()
+        composeRule.onNodeWithTag("toggle_mid_interval_cues").assertExists()
+        composeRule.onNodeWithTag("toggle_periodic_time_cues").assertExists()
 
         composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
 
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("toggle_countdown_warnings").assertIsNotEnabled()
+            composeRule.onNodeWithTag("toggle_countdown_warnings").assertDoesNotExist()
         }
+        composeRule.onNodeWithTag("toggle_countdown_sound").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_mid_interval_cues").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_periodic_time_cues").assertDoesNotExist()
+
+        composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
+
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("toggle_mid_interval_cues").assertIsNotEnabled()
+            composeRule.onNodeWithTag("toggle_countdown_warnings").assertExists()
         }
     }
 

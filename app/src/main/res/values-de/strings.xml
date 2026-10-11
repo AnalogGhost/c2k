@@ -228,7 +228,7 @@
     <string name="language_pt_br">Portugiesisch (Português)</string>
     <string name="language_ru">Russisch (Русский)</string>
     <string name="language_tr">Türkisch (Türkçe)</string>
-    <string name="settings_tts_enabled">Sprachansagen</string>
+    <string name="settings_tts_enabled">Ansagen</string>
     <string name="settings_treadmill_mode">Laufband-Modus (deaktiviert GPS)</string>
     <string name="settings_skip_warmup_cooldown">Aufwärmen und Abkühlen überspringen</string>
     <string name="settings_skip_warmup_cooldown_caption">Langsames Aufwärmen senkt das Verletzungsrisiko – überspringen, wenn du schon zu Fuß zu deiner Laufstrecke gehst.</string>

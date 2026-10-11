@@ -150,66 +150,65 @@ fun SettingsScreen(
                 )
             }
 
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_countdown_warnings),
-                checked = countdownWarnings,
-                enabled = ttsEnabled,
-                testTag = "toggle_countdown_warnings",
-                onCheckedChange = vm::setCountdownWarnings
-            )
-            if (ttsEnabled && countdownWarnings) {
-                SecondsSlider(
-                    label = stringResource(R.string.settings_countdown_warning_1),
-                    seconds = countdownWarning1,
-                    range = 3f..30f,
-                    testTag = "slider_countdown_warning_1",
-                    onValueChange = vm::setCountdownWarning1
-                )
-                SecondsSlider(
-                    label = stringResource(R.string.settings_countdown_warning_2),
-                    seconds = countdownWarning2,
-                    range = 3f..30f,
-                    testTag = "slider_countdown_warning_2",
-                    onValueChange = vm::setCountdownWarning2
-                )
+            if (ttsEnabled) {
+                HorizontalDivider()
                 SettingsToggle(
-                    label = stringResource(R.string.settings_countdown_sound_enabled),
-                    checked = countdownSoundEnabled,
-                    testTag = "toggle_countdown_sound",
-                    onCheckedChange = vm::setCountdownSoundEnabled
+                    label = stringResource(R.string.settings_countdown_warnings),
+                    checked = countdownWarnings,
+                    testTag = "toggle_countdown_warnings",
+                    onCheckedChange = vm::setCountdownWarnings
                 )
-                if (countdownSoundEnabled) {
-                    CountdownSoundSetting(
-                        sound = countdownSound,
-                        onSoundChange = vm::setCountdownSound
+                if (countdownWarnings) {
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_countdown_warning_1),
+                        seconds = countdownWarning1,
+                        range = 3f..30f,
+                        testTag = "slider_countdown_warning_1",
+                        onValueChange = vm::setCountdownWarning1
+                    )
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_countdown_warning_2),
+                        seconds = countdownWarning2,
+                        range = 3f..30f,
+                        testTag = "slider_countdown_warning_2",
+                        onValueChange = vm::setCountdownWarning2
+                    )
+                    SettingsToggle(
+                        label = stringResource(R.string.settings_countdown_sound_enabled),
+                        checked = countdownSoundEnabled,
+                        testTag = "toggle_countdown_sound",
+                        onCheckedChange = vm::setCountdownSoundEnabled
+                    )
+                    if (countdownSoundEnabled) {
+                        CountdownSoundSetting(
+                            sound = countdownSound,
+                            onSoundChange = vm::setCountdownSound
+                        )
+                    }
+                }
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_mid_interval_cues),
+                    checked = midIntervalCues,
+                    testTag = "toggle_mid_interval_cues",
+                    onCheckedChange = vm::setMidIntervalCues
+                )
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_periodic_time_cues),
+                    checked = periodicTimeCues,
+                    testTag = "toggle_periodic_time_cues",
+                    onCheckedChange = vm::setPeriodicTimeCues
+                )
+                if (periodicTimeCues) {
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_periodic_time_cue_interval),
+                        seconds = periodicTimeCueInterval,
+                        range = 15f..120f,
+                        testTag = "slider_periodic_time_cue_interval",
+                        onValueChange = vm::setPeriodicTimeCueInterval
                     )
                 }
-            }
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_mid_interval_cues),
-                checked = midIntervalCues,
-                enabled = ttsEnabled,
-                testTag = "toggle_mid_interval_cues",
-                onCheckedChange = vm::setMidIntervalCues
-            )
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_periodic_time_cues),
-                checked = periodicTimeCues,
-                enabled = ttsEnabled,
-                testTag = "toggle_periodic_time_cues",
-                onCheckedChange = vm::setPeriodicTimeCues
-            )
-            if (ttsEnabled && periodicTimeCues) {
-                SecondsSlider(
-                    label = stringResource(R.string.settings_periodic_time_cue_interval),
-                    seconds = periodicTimeCueInterval,
-                    range = 15f..120f,
-                    testTag = "slider_periodic_time_cue_interval",
-                    onValueChange = vm::setPeriodicTimeCueInterval
-                )
             }
             HorizontalDivider()
 
