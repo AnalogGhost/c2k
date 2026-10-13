@@ -51,6 +51,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -173,7 +174,8 @@ fun SettingsScreen(
                 )
                 if (countdownWarning2Enabled) {
                     SecondsSlider(
-                        label = null, // the toggle above already carries the "Second warning" label
+                        label = stringResource(R.string.settings_countdown_warning_2),
+                        showLabel = false, // the toggle above already carries the "Second warning" label
                         seconds = countdownWarning2,
                         range = 3f..30f,
                         testTag = "slider_countdown_warning_2",
@@ -641,10 +643,11 @@ private fun formatWeight(value: Float): String {
 
 @Composable
 private fun SecondsSlider(
-    label: String?,
+    label: String,
     seconds: Int,
     range: ClosedFloatingPointRange<Float>,
     testTag: String,
+    showLabel: Boolean = true,
     onValueChange: (Int) -> Unit
 ) {
     ListItem(
@@ -655,7 +658,7 @@ private fun SecondsSlider(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(label.orEmpty())
+                    Text(if (showLabel) label else "")
                     Text(
                         "%d s".format(seconds),
                         style = MaterialTheme.typography.bodyMedium,
@@ -667,7 +670,11 @@ private fun SecondsSlider(
                     onValueChange = { onValueChange(it.roundToInt()) },
                     valueRange = range,
                     steps = (range.endInclusive - range.start).toInt() - 1,
-                    modifier = Modifier.testTag(testTag)
+                    // The visible label is a separate node (or hidden), so name the slider itself
+                    // for screen readers.
+                    modifier = Modifier
+                        .testTag(testTag)
+                        .semantics { contentDescription = label }
                 )
             }
         }

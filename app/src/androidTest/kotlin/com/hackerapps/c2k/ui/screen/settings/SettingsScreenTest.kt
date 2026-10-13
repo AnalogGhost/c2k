@@ -2,6 +2,7 @@ package com.hackerapps.c2k.ui.screen.settings
 
 import android.app.Application
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
@@ -316,8 +317,10 @@ class SettingsScreenTest {
     fun countdown_warning_sliders_shown_with_default_values() {
         setContent()
         composeRule.onNodeWithText(string(R.string.settings_countdown_warning_1)).assertExists()
-        // The second slider has no label of its own (the toggle above carries it), so look it up by tag.
-        composeRule.onNodeWithTag("slider_countdown_warning_2").assertExists()
+        // The second slider has no visible label of its own (the toggle above carries it), so look
+        // it up by tag; it must still be named for screen readers.
+        composeRule.onNodeWithTag("slider_countdown_warning_2")
+            .assertContentDescriptionEquals(string(R.string.settings_countdown_warning_2))
         composeRule.onNodeWithText("10 s").assertExists()
         composeRule.onNodeWithText("5 s").assertExists()
     }

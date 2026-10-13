@@ -237,7 +237,7 @@
     <string name="settings_treadmill_mode">Treadmill mode (disables GPS)</string>
     <string name="settings_skip_warmup">Skip warm-up</string>
     <string name="settings_skip_cooldown">Skip cool-down</string>
-    <string name="settings_skip_warmup_cooldown_caption">Warming up gradually reduces injury risk — skip this if you already walk to and from your run.</string>
+    <string name="settings_skip_warmup_cooldown_caption">Warming up gradually reduces injury risk — skip this if you already walk to your run.</string>
     <string name="settings_gps_enabled">GPS tracking</string>
     <string name="settings_countdown_warnings">Countdown warnings</string>
     <string name="settings_countdown_warning_1">First warning</string>

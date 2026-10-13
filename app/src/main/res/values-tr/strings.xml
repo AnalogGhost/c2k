@@ -239,7 +239,7 @@
     <string name="settings_treadmill_mode">Koşu bandı modu (GPS\'i kapatır)</string>
     <string name="settings_skip_warmup">Isınmayı atla</string>
     <string name="settings_skip_cooldown">Soğumayı atla</string>
-    <string name="settings_skip_warmup_cooldown_caption">Kademeli ısınma sakatlanma riskini azaltır — koşunuza gidip gelirken zaten yürüyorsanız bunu atlayabilirsiniz.</string>
+    <string name="settings_skip_warmup_cooldown_caption">Kademeli ısınma sakatlanma riskini azaltır — koşunuza giderken zaten yürüyorsanız bunu atlayabilirsiniz.</string>
     <string name="settings_gps_enabled">GPS takibi</string>
     <string name="settings_countdown_warnings">Geri sayım uyarıları</string>
     <string name="settings_countdown_warning_1">Birinci uyarı</string>

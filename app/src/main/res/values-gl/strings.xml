@@ -237,7 +237,7 @@
     <string name="settings_treadmill_mode">Modo cinta de correr (desactiva GPS)</string>
     <string name="settings_skip_warmup">Omitir quecemento</string>
     <string name="settings_skip_cooldown">Omitir arrefecemento</string>
-    <string name="settings_skip_warmup_cooldown_caption">Quecer gradualmente reduce o risco de lesión; omíteo se xa camiñas para ir e volver da túa carreira.</string>
+    <string name="settings_skip_warmup_cooldown_caption">Quecer gradualmente reduce o risco de lesión; omíteo se xa camiñas para ir á túa carreira.</string>
     <string name="settings_gps_enabled">Gravar con GPS</string>
     <string name="settings_countdown_warnings">Avisos de conta atrás</string>
     <string name="settings_countdown_warning_1">Primeiro aviso</string>
