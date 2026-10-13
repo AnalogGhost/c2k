@@ -95,6 +95,7 @@ class SettingsScreenTest {
             prefs.setCountdownWarnings(true)
             prefs.setCountdownWarning1(10)
             prefs.setCountdownWarning2(5)
+            prefs.setCountdownWarning2Enabled(true)
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
             prefs.setVibrationStrength(VibrationStrength.MEDIUM)
@@ -314,7 +315,8 @@ class SettingsScreenTest {
     fun countdown_warning_sliders_shown_with_default_values() {
         setContent()
         composeRule.onNodeWithText(string(R.string.settings_countdown_warning_1)).assertExists()
-        composeRule.onNodeWithText(string(R.string.settings_countdown_warning_2)).assertExists()
+        // The second slider has no label of its own (the toggle above carries it), so look it up by tag.
+        composeRule.onNodeWithTag("slider_countdown_warning_2").assertExists()
         composeRule.onNodeWithText("10 s").assertExists()
         composeRule.onNodeWithText("5 s").assertExists()
     }
@@ -343,6 +345,23 @@ class SettingsScreenTest {
             composeRule.onNodeWithTag("slider_countdown_warning_1").assertDoesNotExist()
         }
         composeRule.onNodeWithTag("slider_countdown_warning_2").assertDoesNotExist()
+    }
+
+    @Test
+    fun disabling_second_warning_hides_its_slider_and_persists() {
+        setContent()
+        composeRule.onNodeWithTag("slider_countdown_warning_2").assertExists()
+
+        composeRule.onNodeWithTag("toggle_countdown_warning_2").performScrollTo().performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("slider_countdown_warning_2").assertDoesNotExist()
+        }
+        composeRule.onNodeWithTag("slider_countdown_warning_1").assertExists()
+        val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+        composeRule.waitUntil(10_000) {
+            !runBlocking { prefs.countdownWarning2Enabled.first() }
+        }
     }
 
     @Test

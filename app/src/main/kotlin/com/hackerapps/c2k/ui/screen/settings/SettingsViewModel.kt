@@ -72,6 +72,9 @@ class SettingsViewModel @JvmOverloads constructor(
     val countdownWarning2 = prefs.countdownWarning2
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 5)
 
+    val countdownWarning2Enabled = prefs.countdownWarning2Enabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
+
     val keepScreenOn = prefs.keepScreenOn
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
 
@@ -139,6 +142,7 @@ class SettingsViewModel @JvmOverloads constructor(
     fun setCountdownWarnings(v: Boolean) { viewModelScope.launch { prefs.setCountdownWarnings(v) } }
     fun setCountdownWarning1(v: Int)     { viewModelScope.launch { prefs.setCountdownWarning1(v) } }
     fun setCountdownWarning2(v: Int)     { viewModelScope.launch { prefs.setCountdownWarning2(v) } }
+    fun setCountdownWarning2Enabled(v: Boolean) { viewModelScope.launch { prefs.setCountdownWarning2Enabled(v) } }
     fun setKeepScreenOn(v: Boolean)      { viewModelScope.launch { prefs.setKeepScreenOn(v) } }
     fun setVibrationEnabled(v: Boolean)  {
         viewModelScope.launch {
