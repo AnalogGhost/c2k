@@ -58,6 +58,8 @@
     <string name="workout_pause">Pausa</string>
     <string name="workout_resume">Retormar</string>
     <string name="workout_stop">Deter</string>
+    <string name="workout_skip_warmup">Omitir quecemento</string>
+    <string name="workout_skip_cooldown">Omitir arrefecemento</string>
     <string name="workout_elapsed">Tempo: %1$s</string>
     <string name="workout_interval_progress">Intervalo %1$d de %2$d</string>
     <string name="workout_next_interval">Seguinte: %1$s %2$s</string>
@@ -233,7 +235,8 @@
     <string name="language_tr">Turco (Türkçe)</string>
     <string name="settings_tts_enabled">Anuncios por voz</string>
     <string name="settings_treadmill_mode">Modo cinta de correr (desactiva GPS)</string>
-    <string name="settings_skip_warmup_cooldown">Omitir quecemento e arrefecemento</string>
+    <string name="settings_skip_warmup">Omitir quecemento</string>
+    <string name="settings_skip_cooldown">Omitir arrefecemento</string>
     <string name="settings_skip_warmup_cooldown_caption">Quecer gradualmente reduce o risco de lesión; omíteo se xa camiñas para ir e volver da túa carreira.</string>
     <string name="settings_gps_enabled">Gravar con GPS</string>
     <string name="settings_countdown_warnings">Avisos de conta atrás</string>

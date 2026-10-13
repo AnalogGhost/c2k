@@ -59,6 +59,8 @@
     <string name="workout_pause">Pause</string>
     <string name="workout_resume">Reprendre</string>
     <string name="workout_stop">Arrêter</string>
+    <string name="workout_skip_warmup">Ignorer l\'échauffement</string>
+    <string name="workout_skip_cooldown">Ignorer la récupération</string>
     <string name="workout_elapsed">Écoulé : %1$s</string>
     <string name="workout_interval_progress">Intervalle %1$d sur %2$d</string>
     <string name="workout_next_interval">Suivant : %1$s %2$s</string>
@@ -234,7 +236,8 @@
     <string name="language_tr">Turc (Türkçe)</string>
     <string name="settings_tts_enabled">Annonces vocales</string>
     <string name="settings_treadmill_mode">Mode tapis de course (désactive le GPS)</string>
-    <string name="settings_skip_warmup_cooldown">Ignorer l\'échauffement et la récupération</string>
+    <string name="settings_skip_warmup">Ignorer l\'échauffement</string>
+    <string name="settings_skip_cooldown">Ignorer la récupération</string>
     <string name="settings_skip_warmup_cooldown_caption">S\'échauffer progressivement réduit le risque de blessure — ignorez cette étape si vous marchez déjà pour aller courir et en revenir.</string>
     <string name="settings_gps_enabled">Suivi GPS</string>
     <string name="settings_countdown_warnings">Avertissements du compte à rebours</string>

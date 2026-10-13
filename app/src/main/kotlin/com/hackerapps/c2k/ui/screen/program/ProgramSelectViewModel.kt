@@ -41,8 +41,11 @@ class ProgramSelectViewModel(
             )
 
     // So the day list and preview sheet show the same duration/intervals the workout will
-    // actually run with (see WorkoutService, which applies this same preference).
-    val skipWarmupCooldown: StateFlow<Boolean> = prefs.skipWarmupCooldown
+    // actually run with (see WorkoutService, which applies these same preferences).
+    val skipWarmup: StateFlow<Boolean> = prefs.skipWarmup
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    val skipCooldown: StateFlow<Boolean> = prefs.skipCooldown
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     fun resetProgress() {

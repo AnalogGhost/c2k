@@ -37,7 +37,11 @@ class UserPreferences(private val context: Context) {
         val WEIGHT_KG                = floatPreferencesKey("weight_kg")
         val WEIGHT_UNIT              = stringPreferencesKey("weight_unit")
         val GPS_DISTANCES_RECOMPUTED = booleanPreferencesKey("gps_distances_recomputed")
+        // Written by 1.2.20 when there was a single switch; seeds both new flags until the user
+        // changes one of them.
         val SKIP_WARMUP_COOLDOWN     = booleanPreferencesKey("skip_warmup_cooldown")
+        val SKIP_WARMUP              = booleanPreferencesKey("skip_warmup")
+        val SKIP_COOLDOWN            = booleanPreferencesKey("skip_cooldown")
     }
 
     val ttsEnabled: Flow<Boolean> = context.dataStore.data
@@ -163,11 +167,17 @@ class UserPreferences(private val context: Context) {
     suspend fun setGpsDistancesRecomputed() =
         context.dataStore.edit { it[GPS_DISTANCES_RECOMPUTED] = true }
 
-    val skipWarmupCooldown: Flow<Boolean> = context.dataStore.data
-        .map { it[SKIP_WARMUP_COOLDOWN] ?: false }
+    val skipWarmup: Flow<Boolean> = context.dataStore.data
+        .map { it[SKIP_WARMUP] ?: it[SKIP_WARMUP_COOLDOWN] ?: false }
 
-    suspend fun setSkipWarmupCooldown(enabled: Boolean) =
-        context.dataStore.edit { it[SKIP_WARMUP_COOLDOWN] = enabled }
+    val skipCooldown: Flow<Boolean> = context.dataStore.data
+        .map { it[SKIP_COOLDOWN] ?: it[SKIP_WARMUP_COOLDOWN] ?: false }
+
+    suspend fun setSkipWarmup(enabled: Boolean) =
+        context.dataStore.edit { it[SKIP_WARMUP] = enabled }
+
+    suspend fun setSkipCooldown(enabled: Boolean) =
+        context.dataStore.edit { it[SKIP_COOLDOWN] = enabled }
 }
 
 enum class VibrationStrength {

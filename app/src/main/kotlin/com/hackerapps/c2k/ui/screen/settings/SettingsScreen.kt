@@ -81,7 +81,8 @@ fun SettingsScreen(
     val periodicTimeCues     by vm.periodicTimeCues.collectAsStateWithLifecycle()
     val periodicTimeCueInterval by vm.periodicTimeCueInterval.collectAsStateWithLifecycle()
     val treadmillMode        by vm.treadmillMode.collectAsStateWithLifecycle()
-    val skipWarmupCooldown   by vm.skipWarmupCooldown.collectAsStateWithLifecycle()
+    val skipWarmup           by vm.skipWarmup.collectAsStateWithLifecycle()
+    val skipCooldown         by vm.skipCooldown.collectAsStateWithLifecycle()
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
     val vibrationStrength    by vm.vibrationStrength.collectAsStateWithLifecycle()
@@ -319,11 +320,17 @@ fun SettingsScreen(
             )
             HorizontalDivider()
             SettingsToggle(
-                label = stringResource(R.string.settings_skip_warmup_cooldown),
-                checked = skipWarmupCooldown,
+                label = stringResource(R.string.settings_skip_warmup),
+                checked = skipWarmup,
                 subtitle = stringResource(R.string.settings_skip_warmup_cooldown_caption),
-                testTag = "toggle_skip_warmup_cooldown",
-                onCheckedChange = vm::setSkipWarmupCooldown
+                testTag = "toggle_skip_warmup",
+                onCheckedChange = vm::setSkipWarmup
+            )
+            SettingsToggle(
+                label = stringResource(R.string.settings_skip_cooldown),
+                checked = skipCooldown,
+                testTag = "toggle_skip_cooldown",
+                onCheckedChange = vm::setSkipCooldown
             )
             HorizontalDivider()
             SettingsToggle(

@@ -103,7 +103,8 @@ class SettingsScreenTest {
             prefs.setTtsVolume(1.0f)
             prefs.setMidIntervalCues(true)
             prefs.setTreadmillMode(false)
-            prefs.setSkipWarmupCooldown(false)
+            prefs.setSkipWarmup(false)
+            prefs.setSkipCooldown(false)
             prefs.setWeightKg(70f)
             prefs.setWeightUnit(WeightUnit.KG)
         }
@@ -126,7 +127,8 @@ class SettingsScreenTest {
         composeRule.onNodeWithText(string(R.string.settings_countdown_warnings)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_vibration_enabled)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_treadmill_mode)).assertExists()
-        composeRule.onNodeWithText(string(R.string.settings_skip_warmup_cooldown)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_skip_warmup)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_skip_cooldown)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_keep_screen_on)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_weight)).assertExists()
     }
@@ -144,22 +146,21 @@ class SettingsScreenTest {
     }
 
     @Test
-    fun skip_warmup_cooldown_toggle_shows_its_disclaimer_and_persists() {
+    fun skip_warmup_and_cooldown_toggles_persist_independently() {
         setContent()
-        composeRule.onNodeWithTag("toggle_skip_warmup_cooldown").assertIsOff()
+        composeRule.onNodeWithTag("toggle_skip_warmup").assertIsOff()
+        composeRule.onNodeWithTag("toggle_skip_cooldown").assertIsOff()
         composeRule.onNodeWithText(string(R.string.settings_skip_warmup_cooldown_caption)).assertExists()
 
-        composeRule.onNodeWithTag("toggle_skip_warmup_cooldown").performScrollTo().performClick()
+        composeRule.onNodeWithTag("toggle_skip_warmup").performScrollTo().performClick()
 
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("toggle_skip_warmup_cooldown").assertIsOn()
+            composeRule.onNodeWithTag("toggle_skip_warmup").assertIsOn()
         }
-        composeRule.waitUntil {
-            runBlocking {
-                val app = ApplicationProvider.getApplicationContext<Application>()
-                UserPreferences(app).skipWarmupCooldown.first()
-            }
-        }
+        composeRule.onNodeWithTag("toggle_skip_cooldown").assertIsOff()
+        val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+        composeRule.waitUntil(10_000) { runBlocking { prefs.skipWarmup.first() } }
+        assertEquals(false, runBlocking { prefs.skipCooldown.first() })
     }
 
     @Test

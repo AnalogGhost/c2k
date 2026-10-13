@@ -58,6 +58,8 @@
     <string name="workout_pause">Duraklat</string>
     <string name="workout_resume">Devam Et</string>
     <string name="workout_stop">Durdur</string>
+    <string name="workout_skip_warmup">Isınmayı atla</string>
+    <string name="workout_skip_cooldown">Soğumayı atla</string>
     <string name="workout_elapsed">Geçen süre: %1$s</string>
     <string name="workout_interval_progress">Aralık: %1$d / %2$d</string>
     <string name="workout_next_interval">Sıradaki: %1$s %2$s</string>
@@ -235,7 +237,8 @@
     <string name="language_tr">Türkçe</string>
     <string name="settings_tts_enabled">Sesli yönlendirmeler</string>
     <string name="settings_treadmill_mode">Koşu bandı modu (GPS\'i kapatır)</string>
-    <string name="settings_skip_warmup_cooldown">Isınmayı ve soğumayı atla</string>
+    <string name="settings_skip_warmup">Isınmayı atla</string>
+    <string name="settings_skip_cooldown">Soğumayı atla</string>
     <string name="settings_skip_warmup_cooldown_caption">Kademeli ısınma sakatlanma riskini azaltır — koşunuza gidip gelirken zaten yürüyorsanız bunu atlayabilirsiniz.</string>
     <string name="settings_gps_enabled">GPS takibi</string>
     <string name="settings_countdown_warnings">Geri sayım uyarıları</string>

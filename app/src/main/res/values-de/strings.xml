@@ -57,6 +57,8 @@
     <string name="workout_pause">Pause</string>
     <string name="workout_resume">Fortsetzen</string>
     <string name="workout_stop">Beenden</string>
+    <string name="workout_skip_warmup">Aufwärmen überspringen</string>
+    <string name="workout_skip_cooldown">Abkühlen überspringen</string>
     <string name="workout_elapsed">Verstrichen: %1$s</string>
     <string name="workout_interval_progress">Intervall %1$d von %2$d</string>
     <string name="workout_next_interval">Nächstes: %1$s %2$s</string>
@@ -230,7 +232,8 @@
     <string name="language_tr">Türkisch (Türkçe)</string>
     <string name="settings_tts_enabled">Sprachansagen</string>
     <string name="settings_treadmill_mode">Laufband-Modus (deaktiviert GPS)</string>
-    <string name="settings_skip_warmup_cooldown">Aufwärmen und Abkühlen überspringen</string>
+    <string name="settings_skip_warmup">Aufwärmen überspringen</string>
+    <string name="settings_skip_cooldown">Abkühlen überspringen</string>
     <string name="settings_skip_warmup_cooldown_caption">Langsames Aufwärmen senkt das Verletzungsrisiko – überspringen, wenn du schon zu Fuß zu deiner Laufstrecke gehst.</string>
     <string name="settings_gps_enabled">GPS-Tracking</string>
     <string name="settings_countdown_warnings">Countdown-Warnungen</string>

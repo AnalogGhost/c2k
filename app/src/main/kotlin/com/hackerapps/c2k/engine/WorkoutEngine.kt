@@ -52,6 +52,8 @@ class WorkoutEngine(
     private val warnedCountdowns = mutableSetOf<Int>()
     private var midpointAnnounced = false
     private var lastPeriodicCueElapsed = -1
+    // Set from the service thread, consumed by the tick loop (see skipWarmupOrCooldown).
+    @Volatile private var skipRequested = false
 
     fun start(sessionId: Long) {
         this.sessionId = sessionId
@@ -59,6 +61,7 @@ class WorkoutEngine(
         sessionStartMs = clock()
         intervalStartMs = sessionStartMs
         isPaused = false
+        skipRequested = false
         warnedCountdowns.clear()
         midpointAnnounced = false
         lastPeriodicCueElapsed = -1
@@ -84,6 +87,16 @@ class WorkoutEngine(
         _state.value = snapshot
     }
 
+    /**
+     * Ends the current warm-up or cool-down early; ignored while paused and during any other
+     * interval. Only raises a flag, which the tick loop applies: all interval state stays on that
+     * one thread, so a request landing just as an interval changes naturally can't cut the
+     * following interval short.
+     */
+    fun skipWarmupOrCooldown() {
+        if (!isPaused) skipRequested = true
+    }
+
     fun stop() {
         tickJob?.cancel()
         // Intentionally does NOT emit WorkoutState.Idle — callers handle their own cleanup
@@ -97,6 +110,16 @@ class WorkoutEngine(
 
             val now = clock()
             val sessionElapsed = ((now - sessionStartMs) / 1000).toInt()
+
+            if (skipRequested) {
+                skipRequested = false
+                val skippable = intervals[intervalIndex]
+                if (skippable.type == IntervalType.WARMUP || skippable.type == IntervalType.COOLDOWN) {
+                    // Backdate the interval start so the normal end-of-interval path below runs:
+                    // announcement and warning reset, or completion for a final cool-down.
+                    intervalStartMs = now - skippable.durationSeconds * 1000L
+                }
+            }
             val intervalElapsed = ((now - intervalStartMs) / 1000).toInt()
 
             val currentInterval = intervals[intervalIndex]
