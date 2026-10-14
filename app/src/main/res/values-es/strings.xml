@@ -236,7 +236,13 @@
     <string name="language_pt_br">Portugués (Português)</string>
     <string name="language_ru">Ruso (Русский)</string>
     <string name="language_tr">Turco (Türkçe)</string>
-    <string name="settings_tts_enabled">Indicaciones por voz</string>
+    <string name="settings_tts_enabled">Avisos sonoros</string>
+    <string name="settings_cue_style">Tipo de aviso</string>
+    <string name="settings_cue_style_voice">Voz</string>
+    <string name="settings_cue_style_tones">Tonos</string>
+    <string name="settings_cue_style_tones_caption">Sonidos en lugar de voz: ascendente para correr, descendente para caminar y tics para los avisos de cuenta atrás.</string>
+    <string name="settings_tone_volume">Volumen de los tonos</string>
+    <string name="settings_test_tones">Probar tonos</string>
     <string name="settings_treadmill_mode">Modo cinta de correr (desactiva GPS)</string>
     <string name="settings_skip_warmup">Omitir calentamiento</string>
     <string name="settings_skip_cooldown">Omitir enfriamiento</string>

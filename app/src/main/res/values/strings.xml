@@ -235,7 +235,13 @@
     <string name="language_pt_br">Português (Brasil)</string>
     <string name="language_ru">Русский</string>
     <string name="language_tr">Türkçe</string>
-    <string name="settings_tts_enabled">Voice announcements</string>
+    <string name="settings_tts_enabled">Audio cues</string>
+    <string name="settings_cue_style">Cue type</string>
+    <string name="settings_cue_style_voice">Voice</string>
+    <string name="settings_cue_style_tones">Tones</string>
+    <string name="settings_cue_style_tones_caption">Chimes instead of speech: rising for a run, falling for a walk, ticks for countdown warnings.</string>
+    <string name="settings_tone_volume">Tone volume</string>
+    <string name="settings_test_tones">Test tones</string>
     <string name="settings_treadmill_mode">Treadmill mode (disables GPS)</string>
     <string name="settings_skip_warmup">Skip warm-up</string>
     <string name="settings_skip_cooldown">Skip cool-down</string>

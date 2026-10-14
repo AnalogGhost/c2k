@@ -236,7 +236,13 @@
     <string name="language_pt_br">Portugais (Português)</string>
     <string name="language_ru">Russe (Русский)</string>
     <string name="language_tr">Turc (Türkçe)</string>
-    <string name="settings_tts_enabled">Annonces vocales</string>
+    <string name="settings_tts_enabled">Signaux sonores</string>
+    <string name="settings_cue_style">Type de signal</string>
+    <string name="settings_cue_style_voice">Voix</string>
+    <string name="settings_cue_style_tones">Tonalités</string>
+    <string name="settings_cue_style_tones_caption">Des sons au lieu de la voix\u00a0: montant pour courir, descendant pour marcher, bips courts pour les avertissements du compte à rebours.</string>
+    <string name="settings_tone_volume">Volume des tonalités</string>
+    <string name="settings_test_tones">Tester les tonalités</string>
     <string name="settings_treadmill_mode">Mode tapis de course (désactive le GPS)</string>
     <string name="settings_skip_warmup">Ignorer l\'échauffement</string>
     <string name="settings_skip_cooldown">Ignorer la récupération</string>

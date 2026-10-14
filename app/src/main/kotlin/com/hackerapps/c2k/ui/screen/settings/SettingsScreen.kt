@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.TtsDiagnosticResult
@@ -89,6 +90,7 @@ fun SettingsScreen(
     val vibrationStrength    by vm.vibrationStrength.collectAsStateWithLifecycle()
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
     val ttsVolume            by vm.ttsVolume.collectAsStateWithLifecycle()
+    val cueStyle             by vm.cueStyle.collectAsStateWithLifecycle()
     val ttsAvailableOnDevice by vm.ttsAvailableOnDevice.collectAsStateWithLifecycle()
     val voiceTestState       by vm.voiceTestState.collectAsStateWithLifecycle()
     val weightKg             by vm.weightKg.collectAsStateWithLifecycle()
@@ -139,9 +141,14 @@ fun SettingsScreen(
                 testTag = "toggle_tts_enabled",
                 onCheckedChange = vm::setTtsEnabled
             )
+            // Tones mode drops the cues that only make sense as words, so their settings hide.
+            val tones = cueStyle == CueStyle.TONES
+            if (ttsEnabled) {
+                CueStyleSetting(style = cueStyle, onStyleChange = vm::setCueStyle)
+            }
 
             // TTS unavailable warning
-            if (ttsEnabled && ttsAvailableOnDevice == false) {
+            if (ttsEnabled && !tones && ttsAvailableOnDevice == false) {
                 Text(
                     stringResource(R.string.tts_unavailable),
                     style = MaterialTheme.typography.bodySmall,
@@ -183,35 +190,37 @@ fun SettingsScreen(
                     )
                 }
             }
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_mid_interval_cues),
-                checked = midIntervalCues,
-                enabled = ttsEnabled,
-                testTag = "toggle_mid_interval_cues",
-                onCheckedChange = vm::setMidIntervalCues
-            )
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_periodic_time_cues),
-                checked = periodicTimeCues,
-                enabled = ttsEnabled,
-                testTag = "toggle_periodic_time_cues",
-                onCheckedChange = vm::setPeriodicTimeCues
-            )
-            if (ttsEnabled && periodicTimeCues) {
-                SecondsSlider(
-                    label = stringResource(R.string.settings_periodic_time_cue_interval),
-                    seconds = periodicTimeCueInterval,
-                    range = 15f..120f,
-                    testTag = "slider_periodic_time_cue_interval",
-                    onValueChange = vm::setPeriodicTimeCueInterval
+            if (!tones) {
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_mid_interval_cues),
+                    checked = midIntervalCues,
+                    enabled = ttsEnabled,
+                    testTag = "toggle_mid_interval_cues",
+                    onCheckedChange = vm::setMidIntervalCues
                 )
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_periodic_time_cues),
+                    checked = periodicTimeCues,
+                    enabled = ttsEnabled,
+                    testTag = "toggle_periodic_time_cues",
+                    onCheckedChange = vm::setPeriodicTimeCues
+                )
+                if (ttsEnabled && periodicTimeCues) {
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_periodic_time_cue_interval),
+                        seconds = periodicTimeCueInterval,
+                        range = 15f..120f,
+                        testTag = "slider_periodic_time_cue_interval",
+                        onValueChange = vm::setPeriodicTimeCueInterval
+                    )
+                }
             }
             HorizontalDivider()
 
-            // Voice speed slider (only shown when TTS enabled)
-            if (ttsEnabled) {
+            // Voice speed slider (only shown when spoken announcements are on)
+            if (ttsEnabled && !tones) {
                 ListItem(
                     headlineContent = {
                         Column {
@@ -253,6 +262,8 @@ fun SettingsScreen(
                     }
                 )
                 HorizontalDivider()
+            }
+            if (ttsEnabled) {
                 ListItem(
                     headlineContent = {
                         Column {
@@ -261,7 +272,11 @@ fun SettingsScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(stringResource(R.string.settings_tts_volume))
+                                Text(
+                                    stringResource(
+                                        if (tones) R.string.settings_tone_volume else R.string.settings_tts_volume
+                                    )
+                                )
                                 Text(
                                     "%.0f%%".format(ttsVolume * 100),
                                     style = MaterialTheme.typography.bodyMedium,
@@ -293,11 +308,22 @@ fun SettingsScreen(
                         }
                     }
                 )
-                VoiceTestControl(
-                    state = voiceTestState,
-                    onTestVoice = vm::testVoice,
-                    onOpenTtsSettings = { openTtsSettings(context) }
-                )
+                if (tones) {
+                    OutlinedButton(
+                        onClick = vm::testTones,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .testTag("button_test_tones")
+                    ) {
+                        Text(stringResource(R.string.settings_test_tones))
+                    }
+                } else {
+                    VoiceTestControl(
+                        state = voiceTestState,
+                        onTestVoice = vm::testVoice,
+                        onOpenTtsSettings = { openTtsSettings(context) }
+                    )
+                }
                 HorizontalDivider()
             }
 
@@ -425,6 +451,51 @@ private fun <T> SettingsDropdownPicker(
         }
     }
 }
+
+@Composable
+private fun CueStyleSetting(
+    style: CueStyle,
+    onStyleChange: (CueStyle) -> Unit
+) {
+    var showMenu by remember { mutableStateOf(false) }
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.settings_cue_style)) },
+        supportingContent = if (style == CueStyle.TONES) {
+            { Text(stringResource(R.string.settings_cue_style_tones_caption)) }
+        } else null,
+        trailingContent = {
+            Box {
+                TextButton(
+                    onClick = { showMenu = true },
+                    modifier = Modifier.testTag("button_cue_style")
+                ) {
+                    Text(stringResource(style.labelRes))
+                }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    CueStyle.entries.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(stringResource(option.labelRes)) },
+                            onClick = {
+                                showMenu = false
+                                onStyleChange(option)
+                            },
+                            modifier = Modifier.testTag("cue_style_${option.name.lowercase()}")
+                        )
+                    }
+                }
+            }
+        }
+    )
+}
+
+private val CueStyle.labelRes: Int
+    get() = when (this) {
+        CueStyle.VOICE -> R.string.settings_cue_style_voice
+        CueStyle.TONES -> R.string.settings_cue_style_tones
+    }
 
 @Composable
 private fun VibrationStrengthSetting(

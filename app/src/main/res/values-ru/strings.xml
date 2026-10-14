@@ -240,7 +240,13 @@
     <string name="language_pt_br">Португальский (Português)</string>
     <string name="language_ru">Русский</string>
     <string name="language_tr">Турецкий (Türkçe)</string>
-    <string name="settings_tts_enabled">Голосовые уведомления</string>
+    <string name="settings_tts_enabled">Звуковые подсказки</string>
+    <string name="settings_cue_style">Тип подсказок</string>
+    <string name="settings_cue_style_voice">Голос</string>
+    <string name="settings_cue_style_tones">Сигналы</string>
+    <string name="settings_cue_style_tones_caption">Сигналы вместо речи: восходящий — бег, нисходящий — ходьба, короткие щелчки — предупреждения обратного отсчёта.</string>
+    <string name="settings_tone_volume">Громкость сигналов</string>
+    <string name="settings_test_tones">Проверить сигналы</string>
     <string name="settings_treadmill_mode">Режим беговой дорожки (отключает GPS)</string>
     <string name="settings_skip_warmup">Пропустить разминку</string>
     <string name="settings_skip_cooldown">Пропустить заминку</string>

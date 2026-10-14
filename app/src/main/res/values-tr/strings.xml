@@ -237,7 +237,13 @@
     <string name="language_pt_br">Brezilya Portekizcesi (Português)</string>
     <string name="language_ru">Rusça (Русский)</string>
     <string name="language_tr">Türkçe</string>
-    <string name="settings_tts_enabled">Sesli yönlendirmeler</string>
+    <string name="settings_tts_enabled">İşitsel uyarılar</string>
+    <string name="settings_cue_style">Uyarı türü</string>
+    <string name="settings_cue_style_voice">Konuşma</string>
+    <string name="settings_cue_style_tones">Tonlar</string>
+    <string name="settings_cue_style_tones_caption">Konuşma yerine tonlar: koşu için yükselen, yürüyüş için alçalan, geri sayım uyarıları için kısa bip sesleri.</string>
+    <string name="settings_tone_volume">Ton düzeyi</string>
+    <string name="settings_test_tones">Tonları test et</string>
     <string name="settings_treadmill_mode">Koşu bandı modu (GPS\'i kapatır)</string>
     <string name="settings_skip_warmup">Isınmayı atla</string>
     <string name="settings_skip_cooldown">Soğumayı atla</string>

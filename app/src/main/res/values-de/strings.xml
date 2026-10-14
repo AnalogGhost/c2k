@@ -232,7 +232,13 @@
     <string name="language_pt_br">Portugiesisch (Português)</string>
     <string name="language_ru">Russisch (Русский)</string>
     <string name="language_tr">Türkisch (Türkçe)</string>
-    <string name="settings_tts_enabled">Sprachansagen</string>
+    <string name="settings_tts_enabled">Audiohinweise</string>
+    <string name="settings_cue_style">Hinweisart</string>
+    <string name="settings_cue_style_voice">Stimme</string>
+    <string name="settings_cue_style_tones">Töne</string>
+    <string name="settings_cue_style_tones_caption">Klänge statt Sprache: aufsteigend fürs Laufen, absteigend fürs Gehen, Ticken für Countdown-Warnungen.</string>
+    <string name="settings_tone_volume">Tonlautstärke</string>
+    <string name="settings_test_tones">Töne testen</string>
     <string name="settings_treadmill_mode">Laufband-Modus (deaktiviert GPS)</string>
     <string name="settings_skip_warmup">Aufwärmen überspringen</string>
     <string name="settings_skip_cooldown">Abkühlen überspringen</string>

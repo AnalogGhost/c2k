@@ -26,6 +26,7 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
@@ -102,6 +103,7 @@ class SettingsScreenTest {
             prefs.setVibrationStrength(VibrationStrength.MEDIUM)
             prefs.setTtsSpeechRate(1.0f)
             prefs.setTtsVolume(1.0f)
+            prefs.setCueStyle(CueStyle.VOICE)
             prefs.setMidIntervalCues(true)
             prefs.setTreadmillMode(false)
             prefs.setSkipWarmup(false)
@@ -198,6 +200,42 @@ class SettingsScreenTest {
         }
         composeRule.onNodeWithText(string(R.string.settings_tts_volume)).assertDoesNotExist()
         composeRule.onNodeWithTag("button_test_voice").assertDoesNotExist()
+    }
+
+    @Test
+    fun choosing_tones_hides_voice_only_settings_and_persists() {
+        setContent()
+        composeRule.onNodeWithText(string(R.string.settings_cue_style_tones_caption)).assertDoesNotExist()
+
+        composeRule.onNodeWithTag("button_cue_style").performClick()
+        composeRule.onNodeWithTag("cue_style_tones").performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.settings_cue_style_tones_caption)).assertExists()
+        }
+        // Word-only cues and voice controls go; countdown warnings and volume stay.
+        composeRule.onNodeWithTag("toggle_mid_interval_cues").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_periodic_time_cues").assertDoesNotExist()
+        composeRule.onNodeWithTag("slider_tts_speed").assertDoesNotExist()
+        composeRule.onNodeWithTag("button_test_voice").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_countdown_warnings").assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_tone_volume)).assertExists()
+        composeRule.onNodeWithTag("button_test_tones").assertExists()
+
+        val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+        composeRule.waitUntil(10_000) { runBlocking { prefs.cueStyle.first() } == CueStyle.TONES }
+    }
+
+    @Test
+    fun cue_type_is_hidden_when_audio_cues_are_off() {
+        setContent()
+        composeRule.onNodeWithTag("button_cue_style").assertExists()
+
+        composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("button_cue_style").assertDoesNotExist()
+        }
     }
 
     @Test

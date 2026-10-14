@@ -8,13 +8,19 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.hackerapps.c2k.data.model.IntervalType
+import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
+import com.hackerapps.c2k.engine.tone.Chime
+import com.hackerapps.c2k.engine.tone.TonePlayer
 import com.hackerapps.c2k.engine.tts.TtsManager
 import com.hackerapps.c2k.service.VibrationPatterns
 import com.hackerapps.c2k.service.VibrationPlayer
@@ -84,6 +90,9 @@ class SettingsViewModel @JvmOverloads constructor(
     val vibrationStrength = prefs.vibrationStrength
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VibrationStrength.MEDIUM)
 
+    val cueStyle = prefs.cueStyle
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CueStyle.VOICE)
+
     val ttsSpeechRate = prefs.ttsSpeechRate
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 1.0f)
 
@@ -131,10 +140,32 @@ class SettingsViewModel @JvmOverloads constructor(
         )
     }
 
+    private var toneTest: Job? = null
+
+    // Plays the run chime, then the walk chime: the pair a runner most needs to tell apart.
+    fun testTones() {
+        stopVoiceTest()
+        val player = TonePlayer(getApplication(), ttsVolume.value)
+        toneTest = viewModelScope.launch {
+            try {
+                player.play(Chime.RUN)
+                player.speaking.first { !it }
+                delay(TONE_TEST_PAUSE_MS)
+                player.play(Chime.WALK)
+                player.speaking.first { !it }
+            } finally {
+                player.shutdown()
+            }
+        }
+    }
+
+    // Stops any voice or tone test still playing.
     fun stopVoiceTest() {
         voiceTestGeneration++
         diagnosticTts?.shutdown()
         diagnosticTts = null
+        toneTest?.cancel()
+        toneTest = null
     }
 
     fun setTtsEnabled(v: Boolean)        { viewModelScope.launch { prefs.setTtsEnabled(v) } }
@@ -158,6 +189,7 @@ class SettingsViewModel @JvmOverloads constructor(
     }
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
     fun setTtsVolume(v: Float)           { viewModelScope.launch { prefs.setTtsVolume(v) } }
+    fun setCueStyle(v: CueStyle)         { viewModelScope.launch { prefs.setCueStyle(v) } }
     fun setMidIntervalCues(v: Boolean)   { viewModelScope.launch { prefs.setMidIntervalCues(v) } }
     fun setPeriodicTimeCues(v: Boolean)  { viewModelScope.launch { prefs.setPeriodicTimeCues(v) } }
     fun setPeriodicTimeCueInterval(v: Int) { viewModelScope.launch { prefs.setPeriodicTimeCueInterval(v) } }
@@ -190,6 +222,10 @@ class SettingsViewModel @JvmOverloads constructor(
             getApplication(),
             VibrationPatterns.forInterval(IntervalType.RUN, strength)
         )
+    }
+
+    private companion object {
+        const val TONE_TEST_PAUSE_MS = 400L
     }
 
     override fun onCleared() {
