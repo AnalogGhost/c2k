@@ -2,6 +2,7 @@ package com.hackerapps.c2k.ui.screen.home
 
 import android.app.Application
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -10,6 +11,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.C2KApp
@@ -99,7 +101,11 @@ class HomeScreenTest {
         var selected: String? = null
         setContent(onSelectProgram = { selected = it })
 
-        composeRule.onNodeWithText(string(R.string.program_c25k)).performClick()
+        // Invoke the card's click action directly instead of tapping its on-screen position: the
+        // streak and continue items load asynchronously above the program list, and when they
+        // arrive between locating the card and the tap, the tap lands on the neighbouring card.
+        composeRule.onNodeWithText(string(R.string.program_c25k))
+            .performSemanticsAction(SemanticsActions.OnClick)
 
         composeRule.runOnIdle {
             assertEquals("C25K", selected)
