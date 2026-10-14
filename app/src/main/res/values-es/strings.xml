@@ -292,7 +292,7 @@
     <string name="battery_opt_dismiss">Omitir</string>
 
     <!-- TTS unavailable warning -->
-    <string name="tts_unavailable">El Texto-a-habla non está disponible en el dispositivo. Las indicaciones por voz están desactivados.</string>
+    <string name="tts_unavailable">La síntesis de voz no está disponible en este dispositivo. Las indicaciones por voz están desactivadas.</string>
 
     <!-- TTS announcements -->
     <string name="tts_interval_warmup">Comienza el calentamiento caminando</string>
