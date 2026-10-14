@@ -14,9 +14,10 @@ Free, open-source running trainer for Android. No Google services. No tracking. 
 - One Hour Runner — 13-week progression to 60 minutes continuous running
 - 5K Improver — 8-week speed and stamina program for runners who can already complete 5K
 - Audible voice prompts with mid-run encouragement (Android built-in TTS — no internet needed)
+- Tones mode — chimes instead of speech for interval changes and countdowns, for users who prefer not to hear a voice
 - Customizable countdown warning thresholds
 - Voice volume and speed controls
-- Music ducking during voice announcements
+- Music ducking during voice announcements and chimes
 - Background timer with lock-screen notification and pause/stop controls
 - Optional GPS tracking (distance & pace) — works without it too
 - Progress tracking across sessions
@@ -158,7 +159,8 @@ app/src/main/kotlin/com/hackerapps/c2k/
 ├── engine/
 │   ├── WorkoutEngine.kt   # Coroutine tick loop, state machine
 │   ├── WorkoutState.kt    # Sealed class: Idle / Active / Paused / Completed
-│   └── tts/               # TextToSpeech wrapper, audio focus, announcements
+│   ├── tts/               # TextToSpeech wrapper, audio focus, announcements
+│   └── tone/              # Chime synthesis and playback for Tones mode
 ├── service/
 │   └── WorkoutService.kt  # ForegroundService, wake lock, notification
 ├── location/              # GPS abstraction (graceful fallback if unavailable)
@@ -167,7 +169,7 @@ app/src/main/kotlin/com/hackerapps/c2k/
     ├── screen/program/      # Week/day picker with completion badges
     ├── screen/workout/      # Live timer, interval ring, distance/pace
     ├── screen/history/      # Past sessions list with CSV/GPX export
-    ├── screen/settings/     # Voice, GPS, vibration, display preferences
+    ├── screen/settings/     # Voice/tones, GPS, vibration, display preferences
     ├── screen/guide/        # FAQ and glossary
     └── screen/contributors/ # Contributors credits
 ```
