@@ -297,6 +297,29 @@ class WorkoutServiceNotificationTest {
         )
     }
 
+    @Test
+    fun a_failed_setup_stops_the_service_instead_of_hanging() {
+        WorkoutService.testSessionRepositoryOverride = FailingStartSessionRepository(db)
+        startWorkout()
+
+        // The session row is written during setup, before the engine exists. Without teardown on
+        // that failure, the "Starting…" notification stayed up and the service kept running.
+        assertTrue(
+            "Expected the ongoing notification to be removed after setup failed",
+            waitUntil(timeoutMs = 12_000) { ongoingNotificationId !in activeNotificationIds() }
+        )
+        assertTrue(
+            "Expected the service to stop after setup failed",
+            waitUntil(timeoutMs = 6_000) { !workoutServiceIsAlive() && !WorkoutService.isRunning.value }
+        )
+    }
+
+    private class FailingStartSessionRepository(db: AppDatabase) : SessionRepository(db) {
+        override suspend fun startSession(programId: String, week: Int, day: Int): Long {
+            throw IllegalStateException("Simulated DB failure while setting up the workout")
+        }
+    }
+
     private class ThrowingSessionRepository(db: AppDatabase) : SessionRepository(db) {
         override suspend fun finishSession(
             sessionId: Long,

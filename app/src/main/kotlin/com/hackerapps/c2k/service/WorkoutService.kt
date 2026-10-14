@@ -16,6 +16,7 @@ import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -257,7 +258,7 @@ class WorkoutService : Service() {
         val app = application as C2KApp
         val sessionRepository = testSessionRepositoryOverride ?: app.sessionRepository
 
-        sessionJob = serviceScope.launch {
+        val job = serviceScope.launch {
             val ttsEnabled        = prefs.ttsEnabled.first()
             val gpsEnabled        = prefs.gpsEnabled.first()
             val treadmillMode     = prefs.treadmillMode.first()
@@ -394,6 +395,19 @@ class WorkoutService : Service() {
                         is WorkoutState.Idle -> { /* initial state — no action needed */ }
                     }
                 }
+            }
+        }
+        sessionJob = job
+        // If setup fails (say a DB write throws before the engine starts), the exception handler
+        // only logs it, which would leave the "Starting…" notification up and the service stuck
+        // as running, so a later start would return early. Tear down as Stop would. Skipped when
+        // a newer session has replaced this one, so a late failure can't stop that session.
+        job.invokeOnCompletion { cause ->
+            if (cause != null && cause !is CancellationException && sessionJob === job) {
+                Log.e(TAG, "Workout session failed (logged above); stopping the service")
+                cleanup()
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
             }
         }
     }
