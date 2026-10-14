@@ -182,7 +182,7 @@ fun ProgramSelectScreen(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        stringResource(R.string.program_progress, state.completedDays.size, totalDays),
+                        pluralStringResource(R.plurals.program_progress, state.completedDays.size, state.completedDays.size, totalDays),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )

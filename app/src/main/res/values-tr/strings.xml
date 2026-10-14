@@ -12,7 +12,6 @@
     <string name="home_title">C2K</string>
     <string name="home_choose_program">Bir program seçin</string>
     <string name="home_recent_workouts">Son antrenmanlar</string>
-    <string name="home_no_workouts">Henüz antrenman yok. Başlamak için bir program seçin!</string>
     <string name="home_workout_active">Antrenman sürüyor — dönmek için dokunun</string>
     <string name="home_continue_workout">Devam et: %1$s · %2$d. Hafta, %3$d. Gün</string>
     <plurals name="home_streak">
@@ -20,14 +19,14 @@
         <item quantity="other">%1$d haftalık seri 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d hafta</string>
-    <string name="home_program_prerequisite">%1$s</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">%1$d. Hafta</string>
     <string name="program_day_label">%1$d. Gün</string>
-    <string name="program_completed_badge">Bitti</string>
-    <string name="program_start_workout">Antrenmanı Başlat</string>
-    <string name="program_progress">%1$d / %2$d gün tamamlandı</string>
+    <plurals name="program_progress">
+        <item quantity="one">%1$d / %2$d gün tamamlandı</item>
+        <item quantity="other">%1$d / %2$d gün tamamlandı</item>
+    </plurals>
     <string name="program_next_workout">Devam et: %1$d. Hafta, %2$d. Gün</string>
     <string name="program_preview_title">%1$d. Hafta, %2$d. Gün</string>
     <string name="program_preview_start">Başlat</string>
@@ -70,7 +69,6 @@
     <string name="workout_treadmill_effort_warmup">Hafif yürüyüş hızı</string>
     <string name="workout_treadmill_effort_cooldown">Hafif yürüyüş hızı</string>
     <string name="workout_acquiring_gps">GPS aranıyor…</string>
-    <string name="workout_gps_unavailable">GPS kullanılamıyor</string>
     <string name="workout_complete_title">Antrenman Tamamlandı!</string>
     <string name="workout_complete_message">Tebrikler! Harika iş çıkardın.</string>
     <string name="workout_complete_time">Süre: %1$s</string>
@@ -89,7 +87,6 @@
     <!-- U+00A0 (non-breaking space, encoded as &#160;) keeps each number with its
          label; only the ", " between clauses is a valid wrap point. -->
     <string name="history_week_day">%1$d.&#160;Hafta, %2$d.&#160;Gün</string>
-    <string name="history_duration">%1$s</string>
     <string name="history_export">CSV Dışa Aktar</string>
     <string name="history_export_chooser">Antrenman geçmişini dışa aktar</string>
     <string name="history_export_gpx">GPX rotasını dışa aktar</string>
@@ -128,9 +125,6 @@
     </plurals>
 
     <!-- Permissions -->
-    <string name="permission_location_rationale">C2K, GPS kullanarak mesafenizi ve temponuzu takip edebilir. Bu isteğe bağlıdır — antrenman zamanlayıcısı GPS olmadan da çalışır.</string>
-    <string name="permission_location_deny">GPS\'i Atla</string>
-    <string name="permission_location_allow">GPS\'e İzin Ver</string>
 
     <!-- Navigation content descriptions -->
     <string name="nav_back">Geri</string>

@@ -12,7 +12,6 @@
     <string name="home_title">C2K</string>
     <string name="home_choose_program">Choisir un programme</string>
     <string name="home_recent_workouts">Séances récentes</string>
-    <string name="home_no_workouts">Aucune séance pour l\'instant. Lancez un programme pour commencer !</string>
     <string name="home_workout_active">Séance en cours — touchez pour y retourner</string>
     <string name="home_continue_workout">Continuer : %1$s · Semaine %2$d, Jour %3$d</string>
     <plurals name="home_streak">
@@ -21,14 +20,15 @@
         <item quantity="many">%1$d semaines d\'affilée 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d semaines</string>
-    <string name="home_program_prerequisite">%1$s</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">Semaine %1$d</string>
     <string name="program_day_label">Jour %1$d</string>
-    <string name="program_completed_badge">Terminé</string>
-    <string name="program_start_workout">Démarrer la séance</string>
-    <string name="program_progress">%1$d jours sur %2$d complétés</string>
+    <plurals name="program_progress">
+        <item quantity="one">%1$d jour sur %2$d complété</item>
+        <item quantity="many">%1$d jours sur %2$d complétés</item>
+        <item quantity="other">%1$d jours sur %2$d complétés</item>
+    </plurals>
     <string name="program_next_workout">Continuer : Semaine %1$d, Jour %2$d</string>
     <string name="program_preview_title">Semaine %1$d, Jour %2$d</string>
     <string name="program_preview_start">Commencer</string>
@@ -71,7 +71,6 @@
     <string name="workout_treadmill_effort_warmup">Marche tranquille</string>
     <string name="workout_treadmill_effort_cooldown">Marche tranquille</string>
     <string name="workout_acquiring_gps">Recherche du GPS…</string>
-    <string name="workout_gps_unavailable">GPS indisponible</string>
     <string name="workout_complete_title">Séance terminée !</string>
     <string name="workout_complete_message">Bravo ! Continuez comme ça.</string>
     <string name="workout_complete_time">Temps : %1$s</string>
@@ -88,7 +87,6 @@
     <string name="history_title">Historique</string>
     <string name="history_empty">Aucune séance terminée pour l\'instant.</string>
     <string name="history_week_day">Semaine %1$d, Jour %2$d</string>
-    <string name="history_duration">%1$s</string>
     <string name="history_export">Exporter en CSV</string>
     <string name="history_export_chooser">Exporter l\'historique des séances</string>
     <string name="history_export_gpx">Exporter le tracé GPX</string>
@@ -130,9 +128,6 @@
     </plurals>
 
     <!-- Permissions -->
-    <string name="permission_location_rationale">C2K peut suivre votre distance et votre allure via le GPS. C\'est optionnel — le minuteur fonctionne aussi sans.</string>
-    <string name="permission_location_deny">Ignorer le GPS</string>
-    <string name="permission_location_allow">Autoriser le GPS</string>
 
     <!-- Navigation content descriptions -->
     <string name="nav_back">Retour</string>
