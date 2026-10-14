@@ -13,6 +13,21 @@ import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.engine.tts.TtsAnnouncement
 import com.hackerapps.c2k.engine.tts.TtsInterface
 
+/**
+ * The countdown warnings that fire before each interval ends, in seconds remaining, sorted
+ * descending and deduped so the larger threshold fires first. With the second warning off, the
+ * first warning is the only (and therefore last) one.
+ */
+internal fun countdownWarningThresholds(
+    warningSeconds1: Int,
+    warningSeconds2: Int,
+    warning2Enabled: Boolean
+): List<Int> =
+    listOfNotNull(warningSeconds1, warningSeconds2.takeIf { warning2Enabled })
+        .filter { it > 0 }
+        .distinct()
+        .sortedDescending()
+
 class WorkoutEngine(
     private val day: WorkoutDay,
     private val tts: TtsInterface,
@@ -27,14 +42,10 @@ class WorkoutEngine(
     private val scope: CoroutineScope,
     private val clock: () -> Long = { SystemClock.elapsedRealtime() }
 ) {
-    // Sorted descending, deduped: fires the larger threshold first, and the smallest one carries
-    // the next-interval look-ahead announcement since it's the last warning before the interval ends.
-    // With the second warning off, the first warning is the only (and therefore last) one.
+    // The smallest threshold carries the next-interval look-ahead announcement since it's the last
+    // warning before the interval ends.
     private val warningThresholds =
-        listOfNotNull(countdownWarningSeconds1, countdownWarningSeconds2.takeIf { countdownWarning2Enabled })
-            .filter { it > 0 }
-            .distinct()
-            .sortedDescending()
+        countdownWarningThresholds(countdownWarningSeconds1, countdownWarningSeconds2, countdownWarning2Enabled)
     private val _state = MutableStateFlow<WorkoutState>(WorkoutState.Idle)
     val state: StateFlow<WorkoutState> = _state.asStateFlow()
 
