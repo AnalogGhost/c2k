@@ -1,6 +1,7 @@
 package com.hackerapps.c2k.service
 
 import android.Manifest
+import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
@@ -15,7 +16,10 @@ import com.hackerapps.c2k.data.model.Interval
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutDay
+import com.hackerapps.c2k.data.prefs.CueStyle
+import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.repository.SessionRepository
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -61,6 +65,12 @@ class WorkoutServiceNotificationTest {
             ?.notification
             ?.extras
             ?.getCharSequence(Notification.EXTRA_TEXT)
+
+    @Suppress("DEPRECATION") // Still returns the caller's own services, which is all this needs.
+    private fun workoutServiceIsAlive(): Boolean =
+        (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+            .getRunningServices(Int.MAX_VALUE)
+            .any { it.service.className == WorkoutService::class.java.name }
 
     private fun waitUntil(timeoutMs: Long = 5_000, pollMs: Long = 100, condition: () -> Boolean): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMs
@@ -118,6 +128,7 @@ class WorkoutServiceNotificationTest {
         Thread.sleep(1_000)
         WorkoutService.testWorkoutDayOverride = null
         WorkoutService.testSessionRepositoryOverride = null
+        runBlocking { UserPreferences(context).setCueStyle(CueStyle.VOICE) }
         db.close()
     }
 
@@ -179,6 +190,29 @@ class WorkoutServiceNotificationTest {
         assertTrue(
             "Expected a dismissible completion notification to replace it",
             waitUntil(timeoutMs = 2_000) { completionNotificationId in activeNotificationIds() }
+        )
+    }
+
+    @Test
+    fun a_workout_in_tones_mode_completes_and_tears_down() {
+        runBlocking { UserPreferences(context).setCueStyle(CueStyle.TONES) }
+        WorkoutService.testWorkoutDayOverride = fastWorkoutDay
+        startWorkout()
+
+        assertTrue(
+            "Expected the ongoing workout notification to be posted after starting",
+            waitUntil { ongoingNotificationId in activeNotificationIds() }
+        )
+        assertTrue(
+            "Expected the workout to complete with chimes in place of the voice",
+            waitUntil(timeoutMs = 12_000) { completionNotificationId in activeNotificationIds() }
+        )
+        // Teardown waits on the completion chime's speaking signal; a signal that never clears
+        // would keep the service alive for COMPLETION_SPEECH_TIMEOUT_MS (8 s) rather than the
+        // chime's ~1 s. (isRunning can't show this: it is cleared before that wait.)
+        assertTrue(
+            "Expected the service to stop once the completion chime has played",
+            waitUntil(timeoutMs = 6_000) { !workoutServiceIsAlive() }
         )
     }
 

@@ -19,7 +19,7 @@ class TtsManager(
     context: Context,
     private val speechRate: Float = 1.0f,
     private val volume: Float = 1.0f
-) : TtsInterface, DiagnosticTts, TextToSpeech.OnInitListener {
+) : CuePlayer, DiagnosticTts, TextToSpeech.OnInitListener {
 
     companion object {
         val isAvailableOnDevice = MutableStateFlow<Boolean?>(null)
@@ -65,7 +65,7 @@ class TtsManager(
     // True while any announcement is queued or being spoken; drops to false once the queue drains.
     // Lets the caller (e.g. the service on workout completion) wait for a final cue like
     // "Workout complete" to finish before shutting TTS down, instead of cutting it off.
-    val speaking: StateFlow<Boolean> = _speaking.asStateFlow()
+    override val speaking: StateFlow<Boolean> = _speaking.asStateFlow()
 
     override var isAvailable: Boolean = false
         private set

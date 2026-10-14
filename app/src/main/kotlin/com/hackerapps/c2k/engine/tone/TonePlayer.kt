@@ -11,7 +11,7 @@ import android.os.Looper
 import android.util.Log
 import com.hackerapps.c2k.engine.tts.TtsAnnouncement
 import com.hackerapps.c2k.engine.tts.TtsAudioPolicy
-import com.hackerapps.c2k.engine.tts.TtsInterface
+import com.hackerapps.c2k.engine.tts.CuePlayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,7 +24,7 @@ class TonePlayer(
     context: Context,
     private val volume: Float = 1.0f,
     private val countdownThresholds: List<Int> = emptyList()
-) : TtsInterface {
+) : CuePlayer {
 
     companion object {
         private const val TAG = "TonePlayer"
@@ -58,9 +58,8 @@ class TonePlayer(
     private var shutDown = false
 
     private val _speaking = MutableStateFlow(false)
-    // True while a chime is playing, like TtsManager.speaking, so the service can let the
-    // completion chime finish before shutting down.
-    val speaking: StateFlow<Boolean> = _speaking.asStateFlow()
+    // True while a chime is playing, so the service can let the completion chime finish.
+    override val speaking: StateFlow<Boolean> = _speaking.asStateFlow()
 
     override val isAvailable: Boolean
         get() = synchronized(lock) { !shutDown }
@@ -92,7 +91,12 @@ class TonePlayer(
             releaseLocked()
             return
         }
-        if (newTrack.state != AudioTrack.STATE_INITIALIZED || newTrack.write(pcm, 0, pcm.size) != pcm.size) {
+        // A static track reports STATE_NO_STATIC_DATA until its samples are written, and only
+        // then STATE_INITIALIZED.
+        if (newTrack.state == AudioTrack.STATE_UNINITIALIZED ||
+            newTrack.write(pcm, 0, pcm.size) != pcm.size ||
+            newTrack.state != AudioTrack.STATE_INITIALIZED
+        ) {
             Log.w(TAG, "Audio track for $chime failed to initialize")
             newTrack.release()
             releaseLocked()

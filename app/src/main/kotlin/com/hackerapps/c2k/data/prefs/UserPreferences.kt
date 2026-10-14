@@ -27,6 +27,7 @@ class UserPreferences(private val context: Context) {
         val VIBRATION_STRENGTH       = stringPreferencesKey("vibration_strength")
         val TTS_SPEECH_RATE          = floatPreferencesKey("tts_speech_rate")
         val TTS_VOLUME               = floatPreferencesKey("tts_volume")
+        val CUE_STYLE                = stringPreferencesKey("cue_style")
         val MID_INTERVAL_CUES        = booleanPreferencesKey("mid_interval_cues")
         val TREADMILL_MODE           = booleanPreferencesKey("treadmill_mode")
         val COUNTDOWN_WARNING_1      = intPreferencesKey("countdown_warning_1")
@@ -122,6 +123,12 @@ class UserPreferences(private val context: Context) {
     suspend fun setTtsVolume(volume: Float) =
         context.dataStore.edit { it[TTS_VOLUME] = volume }
 
+    val cueStyle: Flow<CueStyle> = context.dataStore.data
+        .map { preferences -> CueStyle.fromStored(preferences[CUE_STYLE]) }
+
+    suspend fun setCueStyle(style: CueStyle) =
+        context.dataStore.edit { it[CUE_STYLE] = style.name }
+
     val midIntervalCues: Flow<Boolean> = context.dataStore.data
         .map { it[MID_INTERVAL_CUES] ?: true }
 
@@ -178,6 +185,17 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setSkipCooldown(enabled: Boolean) =
         context.dataStore.edit { it[SKIP_COOLDOWN] = enabled }
+}
+
+/** How workout cues sound: spoken announcements, or chimes in their place (issue #42). */
+enum class CueStyle {
+    VOICE,
+    TONES;
+
+    companion object {
+        fun fromStored(value: String?): CueStyle =
+            entries.firstOrNull { it.name == value } ?: VOICE
+    }
 }
 
 enum class VibrationStrength {

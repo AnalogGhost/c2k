@@ -35,10 +35,14 @@ import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutDay
+import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.repository.SessionRepository
 import com.hackerapps.c2k.engine.WorkoutEngine
 import com.hackerapps.c2k.engine.WorkoutState
+import com.hackerapps.c2k.engine.countdownWarningThresholds
+import com.hackerapps.c2k.engine.tone.TonePlayer
+import com.hackerapps.c2k.engine.tts.CuePlayer
 import com.hackerapps.c2k.engine.tts.TtsManager
 import com.hackerapps.c2k.location.GpsLocationProvider
 import com.hackerapps.c2k.location.LocationProvider
@@ -152,7 +156,7 @@ class WorkoutService : Service() {
         }
     )
 
-    private lateinit var ttsManager: TtsManager
+    private lateinit var cuePlayer: CuePlayer
     private lateinit var engine: WorkoutEngine
     // Initialised to NoOp so binder calls before the setup coroutine finishes are safe.
     private var locationProvider: LocationProvider = NoOpLocationProvider()
@@ -163,7 +167,7 @@ class WorkoutService : Service() {
     // engine.stop() only cancels the tick loop, not this — without also cancelling this on manual
     // stop, the collector keeps running and, if a new workout starts before it winds down, it
     // observes the reassigned engine field (a shared var) and double-processes its completion
-    // using this session's stale captured sessionRepository/ttsManager.
+    // using this session's stale captured sessionRepository/cuePlayer.
     private var sessionJob: Job? = null
 
     // Exposed via binder — safe to collect immediately; populated once setup coroutine runs.
@@ -268,6 +272,7 @@ class WorkoutService : Service() {
             val vibrationStrength = prefs.vibrationStrength.first()
             val speechRate        = prefs.ttsSpeechRate.first()
             val ttsVolume         = prefs.ttsVolume.first()
+            val cueStyle          = prefs.cueStyle.first()
             val skipWarmup        = prefs.skipWarmup.first()
             val skipCooldown      = prefs.skipCooldown.first()
             val effectiveWorkoutDay = workoutDay.skipping(warmup = skipWarmup, cooldown = skipCooldown)
@@ -277,7 +282,14 @@ class WorkoutService : Service() {
             ) == PackageManager.PERMISSION_GRANTED
 
             withContext(Dispatchers.Main) {
-                ttsManager = TtsManager(this@WorkoutService, speechRate, ttsVolume)
+                cuePlayer = when (cueStyle) {
+                    CueStyle.VOICE -> TtsManager(this@WorkoutService, speechRate, ttsVolume)
+                    CueStyle.TONES -> TonePlayer(
+                        this@WorkoutService,
+                        ttsVolume,
+                        countdownWarningThresholds(countdownWarning1, countdownWarning2, countdownWarning2Enabled)
+                    )
+                }
             }
 
             locationProvider = if (!treadmillMode && gpsEnabled && hasLocationPermission)
@@ -291,7 +303,7 @@ class WorkoutService : Service() {
 
             engine = WorkoutEngine(
                 day = effectiveWorkoutDay,
-                tts = ttsManager,
+                tts = cuePlayer,
                 ttsEnabled = ttsEnabled,
                 countdownWarnings = countdownWarnings,
                 countdownWarningSeconds1 = countdownWarning1,
@@ -366,13 +378,13 @@ class WorkoutService : Service() {
                                 // happens in cleanup().
                                 isRunning.value = false
                                 currentWorkout.value = null
-                                // Let the final "Workout complete" announcement finish speaking
-                                // before tearing down: cleanup() calls ttsManager.shutdown() ->
-                                // tts.stop(), which otherwise cuts the cue off. Bounded so a
-                                // stuck/again TTS engine can't keep the service alive indefinitely.
-                                if (::ttsManager.isInitialized) {
+                                // Let the final "Workout complete" announcement (or chime) finish
+                                // before tearing down: cleanup() calls cuePlayer.shutdown(), which
+                                // otherwise cuts the cue off. Bounded so a stuck TTS engine can't
+                                // keep the service alive indefinitely.
+                                if (::cuePlayer.isInitialized) {
                                     withTimeoutOrNull(COMPLETION_SPEECH_TIMEOUT_MS) {
-                                        ttsManager.speaking.first { !it }
+                                        cuePlayer.speaking.first { !it }
                                     }
                                 }
                                 cleanup()
@@ -392,7 +404,7 @@ class WorkoutService : Service() {
         if (!::engine.isInitialized) {
             // Same reasoning as the sessionJob?.cancel() below: without this, a Stop tapped during
             // handleStart()'s async setup (before engine is assigned) leaves that coroutine
-            // running — it goes on to create the DB session row and assign engine/ttsManager
+            // running — it goes on to create the DB session row and assign engine/cuePlayer
             // after the service was supposed to have stopped.
             sessionJob?.cancel()
             cleanup()
@@ -418,7 +430,7 @@ class WorkoutService : Service() {
         // method returns: without it, the collector keeps running and, if a new workout starts
         // before it winds down, it observes the reassigned engine field (a shared var) and
         // double-processes that new workout's completion using this session's stale
-        // sessionRepository/ttsManager.
+        // sessionRepository/cuePlayer.
         engine.stop()
         sessionJob?.cancel()
         cleanup()
@@ -445,7 +457,7 @@ class WorkoutService : Service() {
         if (cleanedUp) return
         cleanedUp = true
         locationProvider.stop()
-        if (::ttsManager.isInitialized) ttsManager.shutdown()
+        if (::cuePlayer.isInitialized) cuePlayer.shutdown()
         if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()
         isRunning.value = false
         currentWorkout.value = null
