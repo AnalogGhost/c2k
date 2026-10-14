@@ -225,6 +225,8 @@
     <string name="contributor_language_selection">Ручной выбор языка и передача языковых настроек</string>
     <string name="contributor_fix_tts_ducking">Исправление: голосовые уведомления теперь приглушают фоновое воспроизведения музыки вместо установки её на паузу</string>
     <string name="contributor_fix_completion_counter">Исправление: счётчик завершения больше не зависает, и объявление о завершении больше не обрывается при блокировке экрана</string>
+    <string name="contributor_second_warning_toggle">Возможность отключить второе предупреждение обратного отсчёта</string>
+    <string name="contributor_skip_warmup_cooldown_split">Отдельные настройки пропуска разминки и заминки, а также кнопка пропуска во время тренировки</string>
 
     <!-- Settings -->
     <string name="settings_title">Настройки</string>

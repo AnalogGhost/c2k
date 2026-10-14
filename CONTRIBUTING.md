@@ -29,3 +29,4 @@ See the [README](README.md) for build requirements and instructions.
 | [ilyushenok](https://github.com/ilyushenok) | Russian (ru) translation |
 | [ahmetemrew](https://github.com/ahmetemrew) | Turkish (tr) translation |
 | [Unibilens](https://github.com/Unibilens) | Manual language selection and locale propagation |
+| [west1nat0r](https://github.com/west1nat0r) | Option to turn off the second countdown warning; separate skip warm-up and skip cool-down settings, and a skip button during the workout |

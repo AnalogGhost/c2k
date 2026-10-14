@@ -65,6 +65,14 @@ private val contributors = listOf(
         name = "Hamza Bilen",
         github = "Unibilens",
         contributionRes = listOf(R.string.contributor_language_selection)
+    ),
+    Contributor(
+        name = "west1nat0r",
+        github = "west1nat0r",
+        contributionRes = listOf(
+            R.string.contributor_second_warning_toggle,
+            R.string.contributor_skip_warmup_cooldown_split
+        )
     )
 )
 

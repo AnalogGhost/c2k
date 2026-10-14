@@ -221,6 +221,8 @@
     <string name="contributor_language_selection">Selección manual de idioma y propagación de la configuración regional</string>
     <string name="contributor_fix_tts_ducking">Corrección: los anuncios de voz ahora atenúan la música de fondo en lugar de pausarla</string>
     <string name="contributor_fix_completion_counter">Corrección: el contador de finalización ya no se congela y el anuncio de finalización ya no se corta cuando la pantalla se bloquea</string>
+    <string name="contributor_second_warning_toggle">Opción para desactivar el segundo aviso de cuenta atrás</string>
+    <string name="contributor_skip_warmup_cooldown_split">Ajustes separados para omitir el calentamiento y el enfriamiento, y un botón para omitirlos durante el entrenamiento</string>
 
     <!-- Settings -->
     <string name="settings_title">Configuración</string>
