@@ -1,0 +1,3 @@
+• "Isınmayı atla" ve "Soğumayı atla" artık ayrı ayarlar; birini atlayıp diğerini koruyabilirsiniz. Mevcut seçiminiz korunur.
+• Antrenman ekranında, devam eden ısınmayı veya soğumayı atlamak için yeni bir düğme.
+• İkinci geri sayım uyarısını kapatıp yalnızca ilkini bırakmak için yeni bir seçenek.

@@ -1,0 +1,3 @@
+• «Omitir calentamiento» y «Omitir enfriamiento» son ahora ajustes separados, así que puedes omitir uno y mantener el otro. Tu elección anterior se conserva.
+• Nuevo botón en la pantalla de entrenamiento para omitir un calentamiento o enfriamiento en curso.
+• Nueva opción para desactivar el segundo aviso de cuenta atrás y dejar solo el primero.

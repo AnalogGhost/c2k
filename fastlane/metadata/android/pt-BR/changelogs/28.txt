@@ -1,0 +1,3 @@
+• "Pular aquecimento" e "Pular desaquecimento" agora são opções separadas, então você pode pular um e manter o outro. Sua escolha anterior é mantida.
+• Novo botão na tela de treino para pular um aquecimento ou desaquecimento em andamento.
+• Nova opção para desativar o segundo aviso de contagem regressiva e manter apenas o primeiro.
