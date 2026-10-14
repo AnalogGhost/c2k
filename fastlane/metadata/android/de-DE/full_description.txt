@@ -17,6 +17,7 @@ Funktionen:
 • Trainings-Timer im Hintergrund — läuft weiter, auch wenn der Bildschirm aus ist
 • GPS-Tracking (optional) — zeichnet Distanz und Tempo auf; funktioniert auch ohne GPS
 • Laufbandmodus — für Läufe drinnen ohne GPS
+• Aufwärmen oder Abkühlen überspringen — in den Einstellungen oder mit einem Tipp während des Trainings
 • Trainingsverlauf — Sitzungsprotokoll mit Gesamtdistanz, -zeit, bestem Tempo, längstem Lauf und geschätztem Kalorienverbrauch
 • Fortschrittsverfolgung — merkt sich, welche Wochen und Tage du abgeschlossen hast, mit Zurücksetzen-Option
 • Integrierter Lauf-Ratgeber — FAQ zu Lauftempo, Ausrüstung und Fachbegriffen

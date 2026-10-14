@@ -17,6 +17,7 @@ Features:
 • Background workout timer — continues with screen off
 • GPS tracking (optional) — records distance and pace; works without GPS too
 • Treadmill mode — indoor runs without GPS
+• Skip the warm-up or cool-down — in Settings, or with one tap during a workout
 • Workout history — session log with total distance, time, best pace, longest run, and calorie estimates
 • Progress tracking — remembers which weeks and days you've completed, with the option to reset
 • In-app running guide — FAQ covering pacing, gear, and terminology

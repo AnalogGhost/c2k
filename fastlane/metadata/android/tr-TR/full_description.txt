@@ -17,6 +17,7 @@ Programlar:
 • Arka planda çalışan antrenman zamanlayıcısı — ekran kapalıyken çalışmaya devam eder
 • GPS takibi (isteğe bağlı) — mesafe ve tempoyu kaydeder; GPS olmadan da çalışır
 • Koşu bandı modu — GPS olmadan kapalı alan koşuları
+• Isınmayı veya soğumayı atlayın — Ayarlar'dan veya antrenman sırasında tek dokunuşla
 • Antrenman geçmişi — toplam mesafe, süre, en iyi tempo, en uzun koşu ve kalori tahminlerini içeren oturum günlüğü
 • İlerleme takibi — tamamladığınız haftaları ve günleri hatırlar, sıfırlama seçeneği sunar
 • Uygulama içi koşu rehberi — tempo, ekipman ve terimleri kapsayan SSS

@@ -17,6 +17,7 @@ Características:
 • Temporizador en segundo plano — funciona coa pantalla apagada
 • Rexistro con GPS (optativo) — grava a distancia e ritmo; funciona igualmente sen GPS
 • Modo cinta de andar — para adestrar en interiores sen GPS
+• Omite o quecemento ou o arrefecemento — en Axustes ou cun toque durante o adestramento
 • Historial de adestramentos — rexistro de sesións con distancia total, tempo, mellor ritmo, carreira máis longa e calorías estimadas
 • Seguimento do progreso — lembra os días e semanas que xa completaches, con opción de reiniciar
 • Guía de carreira integrada — preguntas frecuentes sobre ritmo, equipamento e terminoloxía

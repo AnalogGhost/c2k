@@ -17,6 +17,7 @@ Recursos:
 • Cronômetro de treino em segundo plano — continua com a tela desligada
 • Rastreamento por GPS (opcional) — registra distância e ritmo; também funciona sem GPS
 • Modo esteira — para treinos internos sem GPS
+• Pule o aquecimento ou o desaquecimento — nas Configurações ou com um toque durante o treino
 • Histórico de treinos — registro de sessões com distância total, tempo, melhor ritmo, corrida mais longa e calorias estimadas
 • Acompanhamento de progresso — lembra quais semanas e dias você já completou, com opção de redefinir
 • Guia de corrida integrado — perguntas frequentes sobre ritmo, equipamentos e terminologia

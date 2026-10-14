@@ -17,6 +17,7 @@ Características:
 • Temporizador en segundo plano — continúa funcionando con la pantalla apagada
 • Registro con GPS (opcional) — graba la distancia y ritmo; funciona igualmente sin GPS
 • Modo cinta de correr — para entrenar en interiores sin GPS
+• Omite el calentamiento o el enfriamiento — en Ajustes o con un toque durante el entrenamiento
 • Historial de entrenamientos — registro de sesiones con distancia total, tiempo, mejor ritmo, carrera más larga y calorías estimadas
 • Seguimiento de progreso — registra cuantos días y semanas has completado, con opción de reiniciar
 • Guía de carrera integrada — preguntas frecuentes sobre ritmo, equipo y terminología
