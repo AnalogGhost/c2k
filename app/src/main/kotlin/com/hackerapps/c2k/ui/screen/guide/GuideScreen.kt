@@ -161,6 +161,7 @@ private fun guideSections(): List<GuideSection> = listOf(
             GuideEntry(stringResource(R.string.guide_q_cooldown),            stringResource(R.string.guide_a_cooldown)),
             GuideEntry(stringResource(R.string.guide_q_pain_discomfort),     stringResource(R.string.guide_a_pain_discomfort)),
             GuideEntry(stringResource(R.string.guide_q_breathing),           stringResource(R.string.guide_a_breathing)),
+            GuideEntry(stringResource(R.string.guide_q_tones),               stringResource(R.string.guide_a_tones)),
             GuideEntry(stringResource(R.string.guide_q_cant_finish_interval),stringResource(R.string.guide_a_cant_finish_interval)),
         )
     ),
