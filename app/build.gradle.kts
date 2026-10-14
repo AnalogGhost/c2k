@@ -87,6 +87,13 @@ android {
         resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
     }
 
+    // The in-app language picker can choose any supported language, but Play installs only the
+    // device's languages from a split bundle, so a picked language could show up untranslated.
+    // Shipping every language in the base APK costs only a few hundred KB of strings.
+    bundle {
+        language { enableSplit = false }
+    }
+
 }
 
 // ART baseline profile generation (assets/dexopt/baseline.prof(m)) is not reproducible:
