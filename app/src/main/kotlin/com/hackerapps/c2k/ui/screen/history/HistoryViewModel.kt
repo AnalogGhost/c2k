@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.hackerapps.c2k.C2KApp
@@ -15,6 +16,7 @@ import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.engine.CalorieCalculator
 import com.hackerapps.c2k.engine.MonthlySummary
 import com.hackerapps.c2k.engine.MonthlySummaryCalculator
+import com.hackerapps.c2k.engine.StreakCalculator
 import com.hackerapps.c2k.engine.WeeklySummary
 import com.hackerapps.c2k.engine.WeeklySummaryCalculator
 import java.text.SimpleDateFormat
@@ -44,6 +46,9 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
 
     val stats: StateFlow<HistoryStats> = combine(sessions, weightKg) { list, kg -> computeStats(list, kg) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HistoryStats(0, 0, 0f, 0, null, null, null))
+
+    val streak: StateFlow<Int> = sessions.map { StreakCalculator.compute(it, System.currentTimeMillis()) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
 
     val weeklySummary: StateFlow<WeeklySummary> = combine(sessions, weightKg) { list, kg ->
         WeeklySummaryCalculator.compute(list, System.currentTimeMillis(), kg)
