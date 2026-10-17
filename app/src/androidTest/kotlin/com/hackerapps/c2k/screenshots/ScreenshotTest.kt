@@ -15,6 +15,7 @@ import androidx.test.rule.GrantPermissionRule
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
+import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.ui.MainActivity
@@ -31,6 +32,9 @@ import tools.fastlane.screengrab.locale.LocaleTestRule
 
 private const val PROGRAM_ID = "C25K"
 private const val MS_PER_DAY = 24 * 60 * 60 * 1000L
+
+// How long to let rendered frames reach the display before a capture.
+private const val SETTLE_MS = 750L
 
 private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 15_000, assertion: () -> Unit) {
     waitUntil(timeoutMillis) {
@@ -88,6 +92,15 @@ class ScreenshotTest {
 
     private fun string(resId: Int, vararg args: Any) = composeRule.activity.getString(resId, *args)
 
+    // The capture reads what is on the display, which can lag the Compose tree the waits above
+    // check: 05_history was caught still showing its empty state in about half the locales even
+    // though the loaded history was already composed. Let the next frames reach the screen first.
+    private fun capture(name: String) {
+        composeRule.waitForIdle()
+        Thread.sleep(SETTLE_MS)
+        Screengrab.screenshot(name)
+    }
+
     @Before
     fun setUp() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
@@ -99,6 +112,9 @@ class ScreenshotTest {
             // into the 07_settings store screenshot.
             prefs.setCountdownWarning1(10)
             prefs.setCountdownWarning2(5)
+            prefs.setCountdownWarning2Enabled(true)
+            prefs.setTtsEnabled(true)
+            prefs.setCueStyle(CueStyle.VOICE)
             // Otherwise WorkoutViewModel.checkBatteryOptimization() shows a real AlertDialog on
             // top of the workout screen the first time a workout starts, right where 04_workout
             // gets captured.
@@ -142,19 +158,19 @@ class ScreenshotTest {
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithText(string(R.string.program_c25k)).assertExists()
         }
-        Screengrab.screenshot("01_home")
+        capture("01_home")
 
         composeRule.onNodeWithText(string(R.string.program_c25k)).performClick()
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithTag("day_1_3").assertExists()
         }
-        Screengrab.screenshot("02_program")
+        capture("02_program")
 
         composeRule.onNodeWithTag("day_1_3").performClick()
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithText(string(R.string.program_preview_start)).assertExists()
         }
-        Screengrab.screenshot("03_preview")
+        capture("03_preview")
 
         composeRule.onNodeWithText(string(R.string.program_preview_start)).performClick()
         composeRule.waitUntilAssertion {
@@ -166,7 +182,7 @@ class ScreenshotTest {
         composeRule.waitUntilAssertion(timeoutMillis = 6_000) {
             composeRule.onNodeWithText(string(R.string.workout_elapsed, "0:00")).assertDoesNotExist()
         }
-        Screengrab.screenshot("04_workout")
+        capture("04_workout")
 
         composeRule.onNodeWithTag("workout_stop_button").performClick()
         composeRule.waitUntilAssertion {
@@ -177,6 +193,12 @@ class ScreenshotTest {
             composeRule.onNodeWithText(string(R.string.program_c25k)).assertExists()
         }
 
+        // Stopping the 04_workout run leaves an unfinished Week 1 Day 3 entry that would sit at
+        // the top of 05_history; drop it so History shows only the seeded workouts.
+        runBlocking {
+            repo().observeAllSessions().first().filter { !it.completed }.forEach { repo().deleteSession(it.id) }
+        }
+
         composeRule.onNodeWithContentDescription(string(R.string.history_title)).performClick()
         // Waiting for the title alone isn't enough: the stats card and session list load
         // asynchronously from Room after the title renders, so capturing right after the title
@@ -185,14 +207,14 @@ class ScreenshotTest {
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertExists()
         }
-        Screengrab.screenshot("05_history")
+        capture("05_history")
         composeRule.onNodeWithContentDescription(string(R.string.nav_back)).performClick()
 
         composeRule.onNodeWithContentDescription(string(R.string.guide_title)).performClick()
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithText(string(R.string.guide_section_before_start)).assertExists()
         }
-        Screengrab.screenshot("06_guide")
+        capture("06_guide")
         composeRule.onNodeWithContentDescription(string(R.string.nav_back)).performClick()
 
         composeRule.onNodeWithContentDescription(string(R.string.settings_title)).performClick()
@@ -205,6 +227,6 @@ class ScreenshotTest {
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithTag("toggle_treadmill_mode").assertIsOn()
         }
-        Screengrab.screenshot("07_settings")
+        capture("07_settings")
     }
 }
