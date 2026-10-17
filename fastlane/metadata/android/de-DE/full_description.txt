@@ -13,6 +13,7 @@ Funktionen:
 • Anpassbares Coaching — Sprachtempo/-lautstärke, Countdown-Warnzeiten und Zwischenansagen einstellbar
 • Sprachwiedergabe testen und erkannte Android-TTS-Probleme direkt beheben
 • Vibrationssignale als Alternative oder Ergänzung zur Sprachausgabe
+• Tonmodus — kurze Klänge statt Sprachausgabe bei Intervallwechseln und Countdowns
 • Vibrationsstärke und Sprache anpassen
 • Trainings-Timer im Hintergrund — läuft weiter, auch wenn der Bildschirm aus ist
 • GPS-Tracking (optional) — zeichnet Distanz und Tempo auf; funktioniert auch ohne GPS

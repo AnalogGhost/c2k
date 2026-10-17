@@ -13,6 +13,7 @@ Características:
 • Entrenamiento personalizable — ajusta la velocidad/volumen de voz, el momento de las cuentas atrás y los avisos intermedios
 • Prueba la voz y diagnostica problemas del sistema Android antes de entrenar
 • Avisos por vibración como alternativa o complemento a la voz
+• Modo Tonos — sonidos breves en lugar de voz para los cambios de intervalo y las cuentas atrás
 • Ajusta la intensidad de vibración y el idioma
 • Temporizador en segundo plano — continúa funcionando con la pantalla apagada
 • Registro con GPS (opcional) — graba la distancia y ritmo; funciona igualmente sin GPS

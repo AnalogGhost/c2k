@@ -13,6 +13,7 @@ Características:
 • Adestramento personalizable — axusta a velocidade/volume da voz, o momento dos avisos de conta atrás e os avisos intermedios
 • Proba a voz e diagnostica problemas da síntese de voz de Android
 • Avisos por vibración como alternativa ou complemento á voz
+• Modo Tons — sons breves en lugar de voz para os cambios de intervalo e as contas atrás
 • Axusta a intensidade da vibración e o idioma
 • Temporizador en segundo plano — funciona coa pantalla apagada
 • Rexistro con GPS (optativo) — grava a distancia e ritmo; funciona igualmente sen GPS

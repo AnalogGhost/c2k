@@ -13,6 +13,7 @@ Programlar:
 • Özelleştirilebilir yönlendirme — ses hızını/düzeyini, geri sayım uyarı zamanlamasını ve aralık ortası ipuçlarını ayarlayın
 • Antrenmandan önce sesi test edin ve Android konuşma sentezi sorunlarını tanılayın
 • Sese alternatif veya ek olarak titreşimli uyarılar
+• Tonlar modu — aralık değişimlerinde ve geri sayımlarda ses yerine kısa tonlar
 • Titreşim gücünü ve dili ayarlayın
 • Arka planda çalışan antrenman zamanlayıcısı — ekran kapalıyken çalışmaya devam eder
 • GPS takibi (isteğe bağlı) — mesafe ve tempoyu kaydeder; GPS olmadan da çalışır

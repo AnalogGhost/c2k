@@ -13,6 +13,7 @@ Features:
 • Customizable coaching — adjust voice speed/volume, countdown warning timing, and mid-interval cues
 • Test voice playback before a workout, with Android text-to-speech diagnostics
 • Vibration cues as an alternative or addition to voice
+• Tones mode — short chimes instead of a voice for interval changes and countdowns
 • Adjustable vibration strength and language selection
 • Background workout timer — continues with screen off
 • GPS tracking (optional) — records distance and pace; works without GPS too
