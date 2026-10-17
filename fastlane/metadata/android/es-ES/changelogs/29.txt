@@ -1,0 +1,5 @@
+• Nuevo modo Tonos: sonidos en lugar de voz para los cambios de intervalo, las cuentas atrás y el final del entrenamiento. Configuración → Tipo de aviso → Tonos.
+• Tu racha semanal ahora también aparece en el Historial.
+• Corregido: a veces un entrenamiento no empezaba justo después de instalar la aplicación.
+• Corregido: un idioma elegido en Configuración a veces aparecía sin traducir.
+• Correcciones de traducción.

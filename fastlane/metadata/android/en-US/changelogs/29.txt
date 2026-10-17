@@ -1,0 +1,5 @@
+• New Tones mode: chimes instead of a voice for interval changes, countdowns and the end of a workout. Settings → Cue type → Tones.
+• Your weekly streak now also shows on the History screen.
+• Fixed a workout sometimes failing to start right after installing the app.
+• Fixed a language picked in Settings sometimes showing untranslated.
+• Translation fixes.

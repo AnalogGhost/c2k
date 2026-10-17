@@ -1,0 +1,5 @@
+• Novo modo Tons: sons en lugar de voz para os cambios de intervalo, as contas atrás e o final do adestramento. Axustes → Tipo de aviso → Tons.
+• A túa xeira semanal agora tamén aparece no Historial.
+• Corrixido: ás veces un adestramento non comezaba xusto despois de instalar a aplicación.
+• Corrixido: un idioma escollido en Axustes ás veces aparecía sen traducir.
+• Correccións de tradución.
