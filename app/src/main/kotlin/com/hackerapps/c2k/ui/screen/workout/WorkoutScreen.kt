@@ -85,6 +85,7 @@ fun WorkoutScreen(
     val pace by vm.currentPaceMinPerKm.collectAsStateWithLifecycle()
     val keepScreenOn by vm.keepScreenOn.collectAsStateWithLifecycle()
     val treadmillMode by vm.treadmillMode.collectAsStateWithLifecycle()
+    val locationNeeded by vm.locationNeeded.collectAsStateWithLifecycle()
     val showBatteryPrompt by vm.showBatteryPrompt.collectAsStateWithLifecycle()
     val serviceRunning by WorkoutService.isRunning.collectAsStateWithLifecycle()
     val gpsActive by vm.gpsActive.collectAsStateWithLifecycle()
@@ -96,8 +97,10 @@ fun WorkoutScreen(
     // Needed every workout, GPS or not — WorkoutService always starts as a "health" foreground
     // service type (see WorkoutService.handleStart), which Android 14+ requires this for.
     var activityRecognitionPermissionDone by remember { mutableStateOf(false) }
-    // In treadmill mode skip the location permission request entirely
-    var permissionResolved by remember(treadmillMode) { mutableStateOf(treadmillMode) }
+    // Location is only asked for when the workout will use GPS: not with GPS tracking off or in
+    // treadmill mode.
+    var locationPermissionDone by remember { mutableStateOf(false) }
+    val permissionResolved = locationPermissionDone || locationNeeded == false
     var showStopDialog by remember { mutableStateOf(false) }
 
     val nameResId = remember(programId) { programNameRes(programId) }
@@ -107,8 +110,8 @@ fun WorkoutScreen(
         RequestNotificationPermission { notificationPermissionDone = true }
     } else if (!activityRecognitionPermissionDone) {
         RequestActivityRecognitionPermission { activityRecognitionPermissionDone = true }
-    } else if (!permissionResolved) {
-        RequestLocationPermission { permissionResolved = true }
+    } else if (locationNeeded == true && !locationPermissionDone) {
+        RequestLocationPermission { locationPermissionDone = true }
     }
 
     LaunchedEffect(activityRecognitionPermissionDone, permissionResolved) {

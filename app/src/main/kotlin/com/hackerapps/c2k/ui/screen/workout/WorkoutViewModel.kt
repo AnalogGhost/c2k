@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -62,6 +63,13 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
 
     val treadmillMode: StateFlow<Boolean> = prefs.treadmillMode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    // Whether this workout will use GPS, and so needs the location permission: the same rule
+    // WorkoutService uses to pick a location provider. Null until the settings have loaded, so
+    // the screen neither asks nor skips the permission on a default value.
+    val locationNeeded: StateFlow<Boolean?> = combine(prefs.gpsEnabled, prefs.treadmillMode) { gps, treadmill ->
+        gps && !treadmill
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val weightKg: StateFlow<Float?> = prefs.weightKg
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
