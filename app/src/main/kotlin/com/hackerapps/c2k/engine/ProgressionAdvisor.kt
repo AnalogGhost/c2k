@@ -29,8 +29,9 @@ object ProgressionAdvisor {
      * Suggests stepping back when the runner has stopped their next workout ([week], [day]) early
      * at least [EARLY_STOPS_TO_SUGGEST] times. Only stops since the last workout they finished in
      * this program count, so early stops from before a repeated week don't trigger it again once
-     * they're back, and only stops after [dismissedAtMillis], so "Not now" holds until they
-     * struggle again.
+     * they're back. After "Not now" ([dismissedAtMillis]) it takes that many new stops to suggest
+     * again, but the count shown is every stop since the last finished workout, so the card
+     * doesn't understate how often the runner has hit this wall.
      */
     fun suggest(
         plan: WorkoutPlan,
@@ -41,12 +42,13 @@ object ProgressionAdvisor {
     ): ProgressionSuggestion? {
         val inPlan = sessions.filter { it.programId == plan.programId }
         val lastFinished = inPlan.filter { it.completed }.maxOfOrNull { it.startedAt } ?: Long.MIN_VALUE
-        val since = maxOf(lastFinished, dismissedAtMillis ?: Long.MIN_VALUE)
-        val earlyStops = inPlan.count {
+        val stops = inPlan.filter {
             !it.completed && it.week == week && it.day == day &&
-                it.durationSeconds >= MIN_ATTEMPT_SECONDS && it.startedAt > since
+                it.durationSeconds >= MIN_ATTEMPT_SECONDS && it.startedAt > lastFinished
         }
-        if (earlyStops < EARLY_STOPS_TO_SUGGEST) return null
+        val sinceDismissed = stops.count { it.startedAt > (dismissedAtMillis ?: Long.MIN_VALUE) }
+        if (sinceDismissed < EARLY_STOPS_TO_SUGGEST) return null
+        val earlyStops = stops.size
         return when {
             week > 1 -> ProgressionSuggestion.RepeatWeek(week - 1, earlyStops)
             plan.programId == Programs.ID_C25K -> ProgressionSuggestion.TryPreC25K(earlyStops)

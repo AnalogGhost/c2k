@@ -90,10 +90,21 @@ class ProgressionAdvisorTest {
         val before = listOf(stoppedEarly(3, 2, startedAt = 10), stoppedEarly(3, 2, startedAt = 20))
         assertNull(ProgressionAdvisor.suggest(plan(), 3, 2, before, dismissedAtMillis = 25))
 
-        val after = before + stoppedEarly(3, 2, startedAt = 30) + stoppedEarly(3, 2, startedAt = 40)
+        val oneMore = before + stoppedEarly(3, 2, startedAt = 30)
+        assertNull(ProgressionAdvisor.suggest(plan(), 3, 2, oneMore, dismissedAtMillis = 25))
+    }
+
+    @Test
+    fun suggestion_after_dismissing_reports_every_early_stop_not_just_the_new_ones() {
+        val sessions = listOf(
+            stoppedEarly(3, 2, startedAt = 10),
+            stoppedEarly(3, 2, startedAt = 20),
+            stoppedEarly(3, 2, startedAt = 30),
+            stoppedEarly(3, 2, startedAt = 40)
+        )
         assertEquals(
-            ProgressionSuggestion.RepeatWeek(week = 2, earlyStops = 2),
-            ProgressionAdvisor.suggest(plan(), 3, 2, after, dismissedAtMillis = 25)
+            ProgressionSuggestion.RepeatWeek(week = 2, earlyStops = 4),
+            ProgressionAdvisor.suggest(plan(), 3, 2, sessions, dismissedAtMillis = 25)
         )
     }
 
