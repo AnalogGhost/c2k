@@ -19,14 +19,17 @@ import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,6 +48,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.WorkoutPlan
+import com.hackerapps.c2k.engine.ProgressionSuggestion
 import com.hackerapps.c2k.service.WorkoutService
 import com.hackerapps.c2k.ui.programDescRes
 import com.hackerapps.c2k.ui.programNameRes
@@ -149,6 +153,21 @@ fun HomeScreen(
                         next = next,
                         onClick = { showContinuePreview = true }
                     )
+                }
+                state.suggestion?.let { suggestion ->
+                    item {
+                        ProgressionSuggestionCard(
+                            suggestion = suggestion,
+                            onAccept = {
+                                when (suggestion) {
+                                    is ProgressionSuggestion.RepeatWeek ->
+                                        vm.repeatWeek(next.programId, suggestion.week)
+                                    is ProgressionSuggestion.TryPreC25K -> vm.tryPreC25K()
+                                }
+                            },
+                            onDismiss = vm::dismissSuggestion
+                        )
+                    }
                 }
             }
 
@@ -280,6 +299,64 @@ private fun ContinueWorkoutCard(next: NextWorkout, onClick: () -> Unit) {
                 stringResource(R.string.home_continue_workout, displayName, next.week, next.day),
                 style = MaterialTheme.typography.bodyLarge
             )
+        }
+    }
+}
+
+@Composable
+private fun ProgressionSuggestionCard(
+    suggestion: ProgressionSuggestion,
+    onAccept: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val (body, action) = when (suggestion) {
+        is ProgressionSuggestion.RepeatWeek -> pluralStringResource(
+            R.plurals.progression_body_repeat_week,
+            suggestion.earlyStops, suggestion.earlyStops, suggestion.week
+        ) to stringResource(R.string.progression_action_repeat_week, suggestion.week)
+        is ProgressionSuggestion.TryPreC25K -> pluralStringResource(
+            R.plurals.progression_body_pre_c25k,
+            suggestion.earlyStops, suggestion.earlyStops
+        ) to stringResource(R.string.progression_action_pre_c25k)
+    }
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag("progression_suggestion"),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer
+        )
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                stringResource(R.string.progression_title),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(body, style = MaterialTheme.typography.bodyMedium)
+            Spacer(Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
+            ) {
+                // The default text-button colour is the theme's primary, which is hard to read on
+                // the tertiary container; use the card's own content colour instead.
+                TextButton(
+                    onClick = onDismiss,
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                    ),
+                    modifier = Modifier.testTag("button_progression_dismiss")
+                ) {
+                    Text(stringResource(R.string.progression_action_dismiss))
+                }
+                FilledTonalButton(
+                    onClick = onAccept,
+                    modifier = Modifier.testTag("button_progression_accept")
+                ) {
+                    Text(action)
+                }
+            }
         }
     }
 }

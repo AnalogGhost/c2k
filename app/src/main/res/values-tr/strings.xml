@@ -14,6 +14,18 @@
     <string name="home_recent_workouts">Son antrenmanlar</string>
     <string name="home_workout_active">Antrenman sürüyor — dönmek için dokunun</string>
     <string name="home_continue_workout">Devam et: %1$s · %2$d. Hafta, %3$d. Gün</string>
+    <string name="progression_title">Bu antrenman zor mu geliyor?</string>
+    <plurals name="progression_body_repeat_week">
+        <item quantity="one">Bu antrenmanı %1$d kez erken bitirdiniz. %2$d. haftayı tekrarlamak hazırlanmanıza yardımcı olabilir.</item>
+        <item quantity="other">Bu antrenmanı %1$d kez erken bitirdiniz. %2$d. haftayı tekrarlamak hazırlanmanıza yardımcı olabilir.</item>
+    </plurals>
+    <plurals name="progression_body_pre_c25k">
+        <item quantity="one">Bu antrenmanı %1$d kez erken bitirdiniz. Pre-C25K 30 saniyelik koşularla başlar ve sizi yeniden Couch to 5K\'ya hazırlar.</item>
+        <item quantity="other">Bu antrenmanı %1$d kez erken bitirdiniz. Pre-C25K 30 saniyelik koşularla başlar ve sizi yeniden Couch to 5K\'ya hazırlar.</item>
+    </plurals>
+    <string name="progression_action_repeat_week">%1$d. haftayı tekrarla</string>
+    <string name="progression_action_pre_c25k">Pre-C25K\'yı dene</string>
+    <string name="progression_action_dismiss">Şimdi değil</string>
     <plurals name="home_streak">
         <item quantity="one">%1$d haftalık seri 🔥</item>
         <item quantity="other">%1$d haftalık seri 🔥</item>

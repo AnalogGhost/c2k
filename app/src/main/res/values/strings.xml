@@ -14,6 +14,18 @@
     <string name="home_recent_workouts">Recent workouts</string>
     <string name="home_workout_active">Workout in progress — tap to return</string>
     <string name="home_continue_workout">Continue: %1$s · Week %2$d, Day %3$d</string>
+    <string name="progression_title">Finding this one tough?</string>
+    <plurals name="progression_body_repeat_week">
+        <item quantity="one">You\'ve stopped this workout early %1$d time. Repeating week %2$d can help you build up to it.</item>
+        <item quantity="other">You\'ve stopped this workout early %1$d times. Repeating week %2$d can help you build up to it.</item>
+    </plurals>
+    <plurals name="progression_body_pre_c25k">
+        <item quantity="one">You\'ve stopped this workout early %1$d time. Pre-C25K starts with 30-second runs and leads back into Couch to 5K.</item>
+        <item quantity="other">You\'ve stopped this workout early %1$d times. Pre-C25K starts with 30-second runs and leads back into Couch to 5K.</item>
+    </plurals>
+    <string name="progression_action_repeat_week">Repeat week %1$d</string>
+    <string name="progression_action_pre_c25k">Try Pre-C25K</string>
+    <string name="progression_action_dismiss">Not now</string>
     <plurals name="home_streak">
         <item quantity="one">%1$d-week streak 🔥</item>
         <item quantity="other">%1$d-week streak 🔥</item>

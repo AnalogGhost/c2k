@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.delay
@@ -61,6 +62,9 @@ class UserPreferences(private val context: Context) {
         val SKIP_WARMUP_COOLDOWN     = booleanPreferencesKey("skip_warmup_cooldown")
         val SKIP_WARMUP              = booleanPreferencesKey("skip_warmup")
         val SKIP_COOLDOWN            = booleanPreferencesKey("skip_cooldown")
+        // "programId|week|sinceMillis", set when the runner accepts a suggestion to repeat a week.
+        val REPEATED_WEEK            = stringPreferencesKey("repeated_week")
+        val PROGRESSION_DISMISSED_AT = longPreferencesKey("progression_dismissed_at")
     }
 
     private val data: Flow<Preferences> = context.dataStore.data.recoverReadErrors()
@@ -205,7 +209,38 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setSkipCooldown(enabled: Boolean) =
         context.dataStore.edit { it[SKIP_COOLDOWN] = enabled }
+
+    val repeatedWeek: Flow<RepeatedWeek?> = data
+        .map { prefs ->
+            prefs[REPEATED_WEEK]?.split('|')?.takeIf { it.size == 3 }?.let { (program, week, since) ->
+                val w = week.toIntOrNull()
+                val s = since.toLongOrNull()
+                if (w != null && s != null) RepeatedWeek(program, w, s) else null
+            }
+        }
+
+    suspend fun setRepeatedWeek(repeated: RepeatedWeek) =
+        context.dataStore.edit {
+            it[REPEATED_WEEK] = "${repeated.programId}|${repeated.week}|${repeated.sinceMillis}"
+        }
+
+    val progressionDismissedAt: Flow<Long?> = data
+        .map { it[PROGRESSION_DISMISSED_AT] }
+
+    suspend fun setProgressionDismissedAt(millis: Long) =
+        context.dataStore.edit { it[PROGRESSION_DISMISSED_AT] = millis }
+
+    // Run when a program's progress is reset, so a repeated week doesn't outlive the history it
+    // was based on.
+    suspend fun clearProgression() =
+        context.dataStore.edit {
+            it.remove(REPEATED_WEEK)
+            it.remove(PROGRESSION_DISMISSED_AT)
+        }
 }
+
+/** A week the runner chose to repeat, and when, so only workouts run since then count toward it. */
+data class RepeatedWeek(val programId: String, val week: Int, val sinceMillis: Long)
 
 /** How workout cues sound: spoken announcements, or chimes in their place (issue #42). */
 enum class CueStyle {

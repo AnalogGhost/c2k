@@ -1,9 +1,11 @@
 package com.hackerapps.c2k
 
+import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.Interval
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.data.model.WorkoutPlan
+import com.hackerapps.c2k.data.prefs.RepeatedWeek
 import com.hackerapps.c2k.ui.screen.home.HomeViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -86,5 +88,36 @@ class HomeViewModelTest {
         val completed = setOf(1 to 1, 1 to 2, 1 to 3, 2 to 1, 2 to 2, 2 to 3)
         val next = HomeViewModel.computeNextWorkout(plan(2), completed)
         assertNull(next)
+    }
+
+    // --- repeating a week ---
+
+    private fun finished(week: Int, day: Int, startedAt: Long) = WorkoutSessionEntity(
+        programId = "test", week = week, day = day, startedAt = startedAt,
+        durationSeconds = 60, distanceMeters = 0f, completed = true
+    )
+
+    @Test
+    fun repeated_week_comes_before_the_day_the_runner_was_stuck_on() {
+        val earlier = (1..2).flatMap { w -> (1..3).map { d -> finished(w, d, startedAt = 10L * w + d) } }
+        val completed = earlier.map { it.week to it.day }.toSet()
+        val next = HomeViewModel.computeNextWorkout(
+            plan(3), completed, RepeatedWeek("test", week = 2, sinceMillis = 100), earlier
+        )
+        assertEquals(2, next?.week)
+        assertEquals(1, next?.day)
+    }
+
+    @Test
+    fun finishing_the_repeated_week_returns_to_the_usual_next_workout() {
+        val earlier = (1..2).flatMap { w -> (1..3).map { d -> finished(w, d, startedAt = 10L * w + d) } }
+        val redone = (1..3).map { d -> finished(2, d, startedAt = 100L + d) }
+        val sessions = earlier + redone
+        val completed = sessions.map { it.week to it.day }.toSet()
+        val next = HomeViewModel.computeNextWorkout(
+            plan(3), completed, RepeatedWeek("test", week = 2, sinceMillis = 100), sessions
+        )
+        assertEquals(3, next?.week)
+        assertEquals(1, next?.day)
     }
 }

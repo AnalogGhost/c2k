@@ -14,6 +14,18 @@
     <string name="home_recent_workouts">Treinos recentes</string>
     <string name="home_workout_active">Treino em andamento — toque para voltar</string>
     <string name="home_continue_workout">Continuar: %1$s · Semana %2$d, Dia %3$d</string>
+    <string name="progression_title">Este treino está difícil?</string>
+    <plurals name="progression_body_repeat_week">
+        <item quantity="one">Você parou este treino antes do fim %1$d vez. Repetir a semana %2$d pode ajudar você a se preparar.</item>
+        <item quantity="other">Você parou este treino antes do fim %1$d vezes. Repetir a semana %2$d pode ajudar você a se preparar.</item>
+    </plurals>
+    <plurals name="progression_body_pre_c25k">
+        <item quantity="one">Você parou este treino antes do fim %1$d vez. O Pre-C25K começa com corridas de 30 segundos e leva você de volta ao Couch to 5K.</item>
+        <item quantity="other">Você parou este treino antes do fim %1$d vezes. O Pre-C25K começa com corridas de 30 segundos e leva você de volta ao Couch to 5K.</item>
+    </plurals>
+    <string name="progression_action_repeat_week">Repetir semana %1$d</string>
+    <string name="progression_action_pre_c25k">Experimentar Pre-C25K</string>
+    <string name="progression_action_dismiss">Agora não</string>
     <plurals name="home_streak">
         <item quantity="one">Sequência de %1$d semana 🔥</item>
         <item quantity="other">Sequência de %1$d semanas 🔥</item>

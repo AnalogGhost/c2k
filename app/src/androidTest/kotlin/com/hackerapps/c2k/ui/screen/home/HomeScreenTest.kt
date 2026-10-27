@@ -6,6 +6,7 @@ import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -16,6 +17,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.UserPreferences
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -47,9 +49,13 @@ class HomeScreenTest {
     private fun repo() =
         (ApplicationProvider.getApplicationContext<Application>() as C2KApp).sessionRepository
 
+    private fun prefs() = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+
     private fun clearAllSessions() {
         runBlocking {
             repo().observeAllSessions().first().forEach { repo().deleteSession(it.id) }
+            // A repeated week or dismissal left by one test would change another's next workout.
+            prefs().clearProgression()
         }
     }
 
@@ -164,5 +170,68 @@ class HomeScreenTest {
         composeRule.runOnIdle {
             assertEquals(listOf(true, true, true, true), listOf(history, settings, guide, contributors))
         }
+    }
+
+    // Finishes C25K week 3 day 1, then stops week 3 day 2 early twice, so Continue points at
+    // week 3 day 2 and the runner qualifies for a suggestion to repeat week 2.
+    private fun struggleWithC25KWeek3Day2() = runBlocking {
+        prefs().setLastProgramId("C25K")
+        val done = repo().startSession("C25K", week = 3, day = 1)
+        repo().finishSession(done, durationSeconds = 1200, distanceMeters = 2000f, completed = true)
+        repeat(2) {
+            // startedAt has millisecond resolution; keep each attempt strictly after the last.
+            Thread.sleep(5)
+            val id = repo().startSession("C25K", week = 3, day = 2)
+            repo().finishSession(id, durationSeconds = 600, distanceMeters = 1000f, completed = false)
+        }
+    }
+
+    private fun continueText(week: Int, day: Int) =
+        string(R.string.home_continue_workout, string(R.string.program_c25k), week, day)
+
+    @Test
+    fun repeated_early_stops_suggest_repeating_the_previous_week() {
+        struggleWithC25KWeek3Day2()
+        setContent()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("progression_suggestion").assertIsDisplayed()
+        }
+        composeRule.onNodeWithText(
+            quantityString(R.plurals.progression_body_repeat_week, 2, 2, 2)
+        ).assertExists()
+        composeRule.onNodeWithText(continueText(3, 2)).assertExists()
+    }
+
+    @Test
+    fun accepting_the_suggestion_moves_continue_back_to_the_previous_week() {
+        struggleWithC25KWeek3Day2()
+        setContent()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("button_progression_accept").assertIsDisplayed()
+        }
+
+        composeRule.onNodeWithTag("button_progression_accept").performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(continueText(2, 1)).assertExists()
+        }
+        composeRule.onNodeWithTag("progression_suggestion").assertDoesNotExist()
+    }
+
+    @Test
+    fun dismissing_the_suggestion_hides_it_and_keeps_the_next_workout() {
+        struggleWithC25KWeek3Day2()
+        setContent()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("button_progression_dismiss").assertIsDisplayed()
+        }
+
+        composeRule.onNodeWithTag("button_progression_dismiss").performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("progression_suggestion").assertDoesNotExist()
+        }
+        composeRule.onNodeWithText(continueText(3, 2)).assertExists()
     }
 }

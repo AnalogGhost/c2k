@@ -14,6 +14,22 @@
     <string name="home_recent_workouts">Недавние тренировки</string>
     <string name="home_workout_active">Идёт тренировка — нажмите для возврата</string>
     <string name="home_continue_workout">Продолжить: %1$s · Неделя %2$d, День %3$d</string>
+    <string name="progression_title">Эта тренировка даётся тяжело?</string>
+    <plurals name="progression_body_repeat_week">
+        <item quantity="one">Вы прервали эту тренировку досрочно %1$d раз. Повторите неделю %2$d, чтобы подготовиться к ней.</item>
+        <item quantity="few">Вы прервали эту тренировку досрочно %1$d раза. Повторите неделю %2$d, чтобы подготовиться к ней.</item>
+        <item quantity="many">Вы прервали эту тренировку досрочно %1$d раз. Повторите неделю %2$d, чтобы подготовиться к ней.</item>
+        <item quantity="other">Вы прервали эту тренировку досрочно %1$d раза. Повторите неделю %2$d, чтобы подготовиться к ней.</item>
+    </plurals>
+    <plurals name="progression_body_pre_c25k">
+        <item quantity="one">Вы прервали эту тренировку досрочно %1$d раз. Pre-C25K начинается с 30-секундных пробежек и возвращает вас к Couch to 5K.</item>
+        <item quantity="few">Вы прервали эту тренировку досрочно %1$d раза. Pre-C25K начинается с 30-секундных пробежек и возвращает вас к Couch to 5K.</item>
+        <item quantity="many">Вы прервали эту тренировку досрочно %1$d раз. Pre-C25K начинается с 30-секундных пробежек и возвращает вас к Couch to 5K.</item>
+        <item quantity="other">Вы прервали эту тренировку досрочно %1$d раза. Pre-C25K начинается с 30-секундных пробежек и возвращает вас к Couch to 5K.</item>
+    </plurals>
+    <string name="progression_action_repeat_week">Повторить неделю %1$d</string>
+    <string name="progression_action_pre_c25k">Попробовать Pre-C25K</string>
+    <string name="progression_action_dismiss">Не сейчас</string>
     <plurals name="home_streak">
         <item quantity="one">Серия в %1$d неделю! 🔥</item>
         <item quantity="few">Серия в %1$d недели! 🔥</item>

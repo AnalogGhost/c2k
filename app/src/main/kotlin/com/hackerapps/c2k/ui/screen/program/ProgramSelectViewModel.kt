@@ -49,6 +49,9 @@ class ProgramSelectViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     fun resetProgress() {
-        viewModelScope.launch { repo.resetProgress(programId) }
+        viewModelScope.launch {
+            repo.resetProgress(programId)
+            prefs.clearProgression()
+        }
     }
 }
