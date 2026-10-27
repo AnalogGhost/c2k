@@ -18,7 +18,6 @@ import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
-import com.hackerapps.c2k.data.prefs.VibrationTarget
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tone.Chime
 import com.hackerapps.c2k.engine.tone.TonePlayer
@@ -91,8 +90,8 @@ class SettingsViewModel @JvmOverloads constructor(
     val vibrationStrength = prefs.vibrationStrength
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VibrationStrength.MEDIUM)
 
-    val vibrationTarget = prefs.vibrationTarget
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VibrationTarget.PHONE)
+    val smartwatchCues = prefs.smartwatchCues
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
     val cueStyle = prefs.cueStyle
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CueStyle.VOICE)
 
@@ -181,7 +180,7 @@ class SettingsViewModel @JvmOverloads constructor(
     fun setVibrationEnabled(v: Boolean)  {
         viewModelScope.launch {
             prefs.setVibrationEnabled(v)
-            if (v && vibrationTarget.value.phone) previewVibration(vibrationStrength.value)
+            if (v && !smartwatchCues.value) previewVibration(vibrationStrength.value)
         }
     }
     fun setVibrationStrength(v: VibrationStrength) {
@@ -190,7 +189,7 @@ class SettingsViewModel @JvmOverloads constructor(
             previewVibration(v)
         }
     }
-    fun setVibrationTarget(v: VibrationTarget) { viewModelScope.launch { prefs.setVibrationTarget(v) } }
+    fun setSmartwatchCues(v: Boolean)    { viewModelScope.launch { prefs.setSmartwatchCues(v) } }
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
     fun setTtsVolume(v: Float)           { viewModelScope.launch { prefs.setTtsVolume(v) } }
     fun setCueStyle(v: CueStyle)         { viewModelScope.launch { prefs.setCueStyle(v) } }

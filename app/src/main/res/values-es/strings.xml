@@ -259,11 +259,8 @@
     <string name="settings_vibration_strength_light">Suave</string>
     <string name="settings_vibration_strength_medium">Media</string>
     <string name="settings_vibration_strength_strong">Fuerte</string>
-    <string name="settings_vibration_target_phone">Teléfono</string>
-    <string name="settings_vibration_target_smartwatch">Smartwatch</string>
-    <string name="settings_vibration_target_both">Ambos</string>
-    <string name="settings_vibration_strength_caption">Solo teléfono</string>
-    <string name="settings_vibration_watch_caption">Envía una notificación a tu smartwatch en cada cambio de intervalo y al terminar el entrenamiento.</string>
+    <string name="settings_vibration_smartwatch">Avisar también al smartwatch</string>
+    <string name="settings_vibration_watch_caption">Envía una notificación en cada cambio de intervalo y al terminar el entrenamiento para que tu smartwatch vibre. El teléfono vibra una vez con ella en lugar de usar su propio patrón.</string>
     <string name="settings_tts_speed">Velocidad de la voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

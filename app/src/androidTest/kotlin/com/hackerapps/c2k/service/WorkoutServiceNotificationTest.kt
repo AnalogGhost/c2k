@@ -19,7 +19,6 @@ import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.repository.SessionRepository
-import com.hackerapps.c2k.data.prefs.VibrationTarget
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -104,17 +103,17 @@ class WorkoutServiceNotificationTest {
         context.startForegroundService(startIntent)
     }
 
-    private fun vibrateOn(target: VibrationTarget) = runBlocking {
+    private fun vibrateOn(smartwatch: Boolean) = runBlocking {
         UserPreferences(context).apply {
             setVibrationEnabled(true)
-            setVibrationTarget(target)
+            setSmartwatchCues(smartwatch)
         }
     }
 
     private fun resetVibration() = runBlocking {
         UserPreferences(context).apply {
             setVibrationEnabled(false)
-            setVibrationTarget(VibrationTarget.PHONE)
+            setSmartwatchCues(false)
         }
     }
 
@@ -266,7 +265,7 @@ class WorkoutServiceNotificationTest {
 
     @Test
     fun wearable_cue_is_posted_on_interval_change_and_removed_on_stop() {
-        vibrateOn(VibrationTarget.SMARTWATCH)
+        vibrateOn(smartwatch = true)
         WorkoutService.testWorkoutDayOverride = WorkoutDay(
             week = 1, day = 1,
             intervals = listOf(Interval(IntervalType.WALK, 2), Interval(IntervalType.RUN, 30))
@@ -286,10 +285,15 @@ class WorkoutServiceNotificationTest {
             context.getString(R.string.workout_interval_run),
             cue.notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
         )
+        val channel = notificationManager.getNotificationChannel("smartwatch_cues")
         assertTrue(
             "Notification bridges ignore channels below default importance",
-            notificationManager.getNotificationChannel("workout_cues").importance >=
-                NotificationManager.IMPORTANCE_DEFAULT
+            channel.importance >= NotificationManager.IMPORTANCE_DEFAULT
+        )
+        assertTrue(
+            "Wear OS applies the phone channel's settings on the watch, so a channel without " +
+                "vibration reaches the watch without buzzing it",
+            channel.shouldVibrate()
         )
 
         context.startService(Intent(context, WorkoutService::class.java).setAction(WorkoutService.ACTION_STOP))
@@ -303,7 +307,7 @@ class WorkoutServiceNotificationTest {
 
     @Test
     fun wearable_cues_replace_each_other_and_never_stack() {
-        vibrateOn(VibrationTarget.SMARTWATCH)
+        vibrateOn(smartwatch = true)
         WorkoutService.testWorkoutDayOverride = WorkoutDay(
             week = 1, day = 1,
             intervals = listOf(
@@ -332,7 +336,7 @@ class WorkoutServiceNotificationTest {
 
     @Test
     fun no_watch_notification_when_only_the_phone_vibrates() {
-        vibrateOn(VibrationTarget.PHONE)
+        vibrateOn(smartwatch = false)
         WorkoutService.testWorkoutDayOverride = WorkoutDay(
             week = 1, day = 1,
             intervals = listOf(Interval(IntervalType.WALK, 1), Interval(IntervalType.RUN, 30))
@@ -352,7 +356,7 @@ class WorkoutServiceNotificationTest {
 
     @Test
     fun watch_notification_is_posted_when_the_workout_completes() {
-        vibrateOn(VibrationTarget.SMARTWATCH)
+        vibrateOn(smartwatch = true)
         WorkoutService.testWorkoutDayOverride = fastWorkoutDay
         startWorkout()
 

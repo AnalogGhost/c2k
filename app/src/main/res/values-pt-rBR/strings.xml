@@ -260,11 +260,8 @@
     <string name="settings_vibration_strength_light">Fraca</string>
     <string name="settings_vibration_strength_medium">Média</string>
     <string name="settings_vibration_strength_strong">Forte</string>
-    <string name="settings_vibration_target_phone">Celular</string>
-    <string name="settings_vibration_target_smartwatch">Smartwatch</string>
-    <string name="settings_vibration_target_both">Ambos</string>
-    <string name="settings_vibration_strength_caption">Somente celular</string>
-    <string name="settings_vibration_watch_caption">Envia uma notificação ao seu smartwatch a cada troca de intervalo e ao fim do treino.</string>
+    <string name="settings_vibration_smartwatch">Avisar também o smartwatch</string>
+    <string name="settings_vibration_watch_caption">Envia uma notificação a cada troca de intervalo e ao fim do treino para o seu smartwatch vibrar. O celular vibra uma vez junto com ela, em vez de usar o próprio padrão.</string>
     <string name="settings_tts_speed">Velocidade da voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

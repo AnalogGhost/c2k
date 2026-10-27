@@ -29,7 +29,6 @@ import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
-import com.hackerapps.c2k.data.prefs.VibrationTarget
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.DiagnosticTts
 import com.hackerapps.c2k.engine.tts.TtsDiagnosticResult
@@ -102,7 +101,7 @@ class SettingsScreenTest {
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
             prefs.setVibrationStrength(VibrationStrength.MEDIUM)
-            prefs.setVibrationTarget(VibrationTarget.PHONE)
+            prefs.setSmartwatchCues(false)
             prefs.setTtsSpeechRate(1.0f)
             prefs.setTtsVolume(1.0f)
             prefs.setCueStyle(CueStyle.VOICE)
@@ -189,44 +188,38 @@ class SettingsScreenTest {
     }
 
     @Test
-    fun vibration_target_decides_whether_strength_and_watch_hint_are_shown() {
+    fun smartwatch_cues_replace_the_strength_setting_with_the_watch_hint() {
         setContent()
-        composeRule.onNodeWithTag("segment_vibration_phone").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_smartwatch_cues").assertDoesNotExist()
 
         composeRule.onNodeWithTag("toggle_vibration_enabled").performScrollTo().performClick()
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("segment_vibration_phone").assertExists()
+            composeRule.onNodeWithTag("toggle_smartwatch_cues").assertExists()
         }
         composeRule.onNodeWithTag("button_vibration_strength").assertExists()
         composeRule.onNodeWithText(string(R.string.settings_vibration_watch_caption)).assertDoesNotExist()
 
-        composeRule.onNodeWithTag("segment_vibration_smartwatch").performScrollTo().performClick()
+        composeRule.onNodeWithTag("toggle_smartwatch_cues").performScrollTo().performClick()
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithTag("button_vibration_strength").assertDoesNotExist()
-        }
-        composeRule.onNodeWithText(string(R.string.settings_vibration_watch_caption)).assertExists()
-
-        composeRule.onNodeWithTag("segment_vibration_both").performScrollTo().performClick()
-        composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("button_vibration_strength").assertExists()
         }
         composeRule.onNodeWithText(string(R.string.settings_vibration_watch_caption)).assertExists()
     }
 
     @Test
-    fun vibration_target_choice_is_persisted() {
+    fun smartwatch_cues_choice_is_persisted() {
         setContent()
         composeRule.onNodeWithTag("toggle_vibration_enabled").performScrollTo().performClick()
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("segment_vibration_smartwatch").assertExists()
+            composeRule.onNodeWithTag("toggle_smartwatch_cues").assertExists()
         }
 
-        composeRule.onNodeWithTag("segment_vibration_smartwatch").performScrollTo().performClick()
+        composeRule.onNodeWithTag("toggle_smartwatch_cues").performScrollTo().performClick()
 
         composeRule.waitUntil {
             runBlocking {
                 val app = ApplicationProvider.getApplicationContext<Application>()
-                UserPreferences(app).vibrationTarget.first() == VibrationTarget.SMARTWATCH
+                UserPreferences(app).smartwatchCues.first()
             }
         }
     }

@@ -257,11 +257,8 @@
     <string name="settings_vibration_strength_light">Suave</string>
     <string name="settings_vibration_strength_medium">Media</string>
     <string name="settings_vibration_strength_strong">Forte</string>
-    <string name="settings_vibration_target_phone">Móbil</string>
-    <string name="settings_vibration_target_smartwatch">Reloxo</string>
-    <string name="settings_vibration_target_both">Ambos</string>
-    <string name="settings_vibration_strength_caption">Só o móbil</string>
-    <string name="settings_vibration_watch_caption">Envía unha notificación ao teu reloxo intelixente en cada cambio de intervalo e ao rematar o adestramento.</string>
+    <string name="settings_vibration_smartwatch">Avisar tamén ao reloxo</string>
+    <string name="settings_vibration_watch_caption">Envía unha notificación en cada cambio de intervalo e ao rematar o adestramento para que vibre o teu reloxo intelixente. O móbil vibra unha vez con ela en vez de usar o seu propio padrón.</string>
     <string name="settings_tts_speed">Velocidade da voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

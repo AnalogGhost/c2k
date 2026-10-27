@@ -84,7 +84,7 @@ class WorkoutService : Service() {
         // Short-lived cues for smartwatch bridges (see postCue). Their own channel, because the
         // workout channel is IMPORTANCE_LOW and bridges such as Gadgetbridge skip those.
         private const val CUE_NOTIFICATION_ID = 3
-        private const val CUE_CHANNEL_ID   = "workout_cues"
+        private const val CUE_CHANNEL_ID   = "smartwatch_cues"
         // Long enough for a bridge to forward it, short enough that a missed cancel can't leave a
         // stale cue in the shade.
         private const val CUE_TIMEOUT_MS   = 10_000L
@@ -282,10 +282,12 @@ class WorkoutService : Service() {
             val periodicTimeCueInterval  = prefs.periodicTimeCueInterval.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
             val vibrationStrength = prefs.vibrationStrength.first()
-            val vibrationTarget   = prefs.vibrationTarget.first()
-            // The watch gets a notification at exactly the moments the phone would vibrate.
-            val vibratePhone      = vibrationEnabled && vibrationTarget.phone
-            val notifyWatch       = vibrationEnabled && vibrationTarget.watch
+            val smartwatchCues    = prefs.smartwatchCues.first()
+            // The watch gets a notification at exactly the moments the phone would vibrate. That
+            // notification buzzes the phone too (see createNotificationChannel), so it replaces
+            // the phone's own pattern rather than doubling it.
+            val notifyWatch       = vibrationEnabled && smartwatchCues
+            val vibratePhone      = vibrationEnabled && !smartwatchCues
             val speechRate        = prefs.ttsSpeechRate.first()
             val ttsVolume         = prefs.ttsVolume.first()
             val cueStyle          = prefs.cueStyle.first()
@@ -526,8 +528,9 @@ class WorkoutService : Service() {
         }
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.createNotificationChannel(channel)
-        // Default importance so smartwatch bridges forward it; silent on the phone because the
-        // spoken cues and vibration already cover that side.
+        // Default importance so smartwatch bridges forward it. It must vibrate: Wear OS applies the
+        // phone channel's settings on the watch, so a channel without vibration arrives there
+        // silently. The phone buzzes with it, which is why the service then skips its own pattern.
         nm.createNotificationChannel(
             NotificationChannel(
                 CUE_CHANNEL_ID,
@@ -536,7 +539,7 @@ class WorkoutService : Service() {
             ).apply {
                 description = getString(R.string.notification_cue_channel_desc)
                 setSound(null, null)
-                enableVibration(false)
+                enableVibration(true)
                 setShowBadge(false)
             }
         )

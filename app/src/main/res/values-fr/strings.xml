@@ -260,11 +260,8 @@
     <string name="settings_vibration_strength_light">Faible</string>
     <string name="settings_vibration_strength_medium">Moyenne</string>
     <string name="settings_vibration_strength_strong">Forte</string>
-    <string name="settings_vibration_target_phone">Téléphone</string>
-    <string name="settings_vibration_target_smartwatch">Montre</string>
-    <string name="settings_vibration_target_both">Les deux</string>
-    <string name="settings_vibration_strength_caption">Téléphone uniquement</string>
-    <string name="settings_vibration_watch_caption">Envoie une notification à votre montre connectée à chaque changement d\'intervalle et à la fin de la séance.</string>
+    <string name="settings_vibration_smartwatch">Notifier aussi la montre</string>
+    <string name="settings_vibration_watch_caption">Envoie une notification à chaque changement d\'intervalle et à la fin de la séance pour faire vibrer votre montre connectée. Le téléphone vibre une fois avec elle au lieu de son propre motif.</string>
     <string name="settings_tts_speed">Vitesse de la voix</string>
     <string name="settings_tts_speed_slow">Lente</string>
     <string name="settings_tts_speed_fast">Rapide</string>

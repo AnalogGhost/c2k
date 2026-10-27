@@ -43,7 +43,7 @@ class UserPreferences(private val context: Context) {
         val BATTERY_PROMPT_DISMISSED = booleanPreferencesKey("battery_prompt_dismissed")
         val VIBRATION_ENABLED        = booleanPreferencesKey("vibration_enabled")
         val VIBRATION_STRENGTH       = stringPreferencesKey("vibration_strength")
-        val VIBRATION_TARGET         = stringPreferencesKey("vibration_target")
+        val SMARTWATCH_CUES          = booleanPreferencesKey("smartwatch_cues")
         val TTS_SPEECH_RATE          = floatPreferencesKey("tts_speech_rate")
         val TTS_VOLUME               = floatPreferencesKey("tts_volume")
         val CUE_STYLE                = stringPreferencesKey("cue_style")
@@ -99,8 +99,9 @@ class UserPreferences(private val context: Context) {
     val vibrationStrength: Flow<VibrationStrength> = data
         .map { preferences -> VibrationStrength.fromStored(preferences[VIBRATION_STRENGTH]) }
 
-    val vibrationTarget: Flow<VibrationTarget> = context.dataStore.data
-        .map { preferences -> VibrationTarget.fromStored(preferences[VIBRATION_TARGET]) }
+    // Also post a notification at each vibration so a bridge (Gadgetbridge, Wear OS) can buzz a watch.
+    val smartwatchCues: Flow<Boolean> = data
+        .map { it[SMARTWATCH_CUES] ?: false }
 
     suspend fun setTtsEnabled(enabled: Boolean) =
         context.dataStore.edit { it[TTS_ENABLED] = enabled }
@@ -138,8 +139,8 @@ class UserPreferences(private val context: Context) {
     suspend fun setVibrationStrength(strength: VibrationStrength) =
         context.dataStore.edit { it[VIBRATION_STRENGTH] = strength.name }
 
-    suspend fun setVibrationTarget(target: VibrationTarget) =
-        context.dataStore.edit { it[VIBRATION_TARGET] = target.name }
+    suspend fun setSmartwatchCues(enabled: Boolean) =
+        context.dataStore.edit { it[SMARTWATCH_CUES] = enabled }
 
     suspend fun setTtsSpeechRate(rate: Float) =
         context.dataStore.edit { it[TTS_SPEECH_RATE] = rate }
@@ -233,21 +234,5 @@ enum class VibrationStrength {
     companion object {
         fun fromStored(value: String?): VibrationStrength =
             entries.firstOrNull { it.name == value } ?: MEDIUM
-    }
-}
-
-// Where "vibrate on interval change" goes. The watch is reached through a short notification that
-// a bridge (Gadgetbridge, Wear OS) forwards, so the watch vibrates by its own notification settings.
-enum class VibrationTarget {
-    PHONE,
-    SMARTWATCH,
-    BOTH;
-
-    val phone: Boolean get() = this != SMARTWATCH
-    val watch: Boolean get() = this != PHONE
-
-    companion object {
-        fun fromStored(value: String?): VibrationTarget =
-            entries.firstOrNull { it.name == value } ?: PHONE
     }
 }
