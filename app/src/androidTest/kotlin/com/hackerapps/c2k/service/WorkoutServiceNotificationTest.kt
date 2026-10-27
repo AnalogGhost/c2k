@@ -1,6 +1,7 @@
 package com.hackerapps.c2k.service
 
 import android.Manifest
+import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
@@ -15,8 +16,9 @@ import com.hackerapps.c2k.data.model.Interval
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutDay
-import com.hackerapps.c2k.data.repository.SessionRepository
+import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.data.repository.SessionRepository
 import com.hackerapps.c2k.data.prefs.VibrationTarget
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -67,6 +69,12 @@ class WorkoutServiceNotificationTest {
             ?.notification
             ?.extras
             ?.getCharSequence(Notification.EXTRA_TEXT)
+
+    @Suppress("DEPRECATION") // Still returns the caller's own services, which is all this needs.
+    private fun workoutServiceIsAlive(): Boolean =
+        (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+            .getRunningServices(Int.MAX_VALUE)
+            .any { it.service.className == WorkoutService::class.java.name }
 
     private fun waitUntil(timeoutMs: Long = 5_000, pollMs: Long = 100, condition: () -> Boolean): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMs
@@ -144,6 +152,7 @@ class WorkoutServiceNotificationTest {
         WorkoutService.testWorkoutDayOverride = null
         WorkoutService.testSessionRepositoryOverride = null
         resetVibration()
+        runBlocking { UserPreferences(context).setCueStyle(CueStyle.VOICE) }
         db.close()
     }
 
@@ -205,6 +214,29 @@ class WorkoutServiceNotificationTest {
         assertTrue(
             "Expected a dismissible completion notification to replace it",
             waitUntil(timeoutMs = 2_000) { completionNotificationId in activeNotificationIds() }
+        )
+    }
+
+    @Test
+    fun a_workout_in_tones_mode_completes_and_tears_down() {
+        runBlocking { UserPreferences(context).setCueStyle(CueStyle.TONES) }
+        WorkoutService.testWorkoutDayOverride = fastWorkoutDay
+        startWorkout()
+
+        assertTrue(
+            "Expected the ongoing workout notification to be posted after starting",
+            waitUntil { ongoingNotificationId in activeNotificationIds() }
+        )
+        assertTrue(
+            "Expected the workout to complete with chimes in place of the voice",
+            waitUntil(timeoutMs = 12_000) { completionNotificationId in activeNotificationIds() }
+        )
+        // Teardown waits on the completion chime's speaking signal; a signal that never clears
+        // would keep the service alive for COMPLETION_SPEECH_TIMEOUT_MS (8 s) rather than the
+        // chime's ~1 s. (isRunning can't show this: it is cleared before that wait.)
+        assertTrue(
+            "Expected the service to stop once the completion chime has played",
+            waitUntil(timeoutMs = 6_000) { !workoutServiceIsAlive() }
         )
     }
 
@@ -338,6 +370,31 @@ class WorkoutServiceNotificationTest {
     }
 
     @Test
+    fun skip_action_ends_the_final_cooldown_and_completes_the_workout() {
+        WorkoutService.testWorkoutDayOverride = WorkoutDay(
+            week = 1, day = 1,
+            intervals = listOf(Interval(IntervalType.RUN, 1), Interval(IntervalType.COOLDOWN, 300))
+        )
+        startWorkout()
+
+        val cooldownLabel = context.getString(R.string.workout_interval_cooldown)
+        assertTrue(
+            "Expected the workout to reach its cool-down, got: ${ongoingNotificationText()}",
+            waitUntil(timeoutMs = 10_000) { ongoingNotificationText()?.contains(cooldownLabel) == true }
+        )
+
+        context.startService(
+            Intent(context, WorkoutService::class.java).setAction(WorkoutService.ACTION_SKIP_WARMUP_COOLDOWN)
+        )
+
+        // The cool-down is 5 minutes; a completion notification within seconds means it was skipped.
+        assertTrue(
+            "Expected the workout to complete once the cool-down is skipped",
+            waitUntil(timeoutMs = 12_000) { completionNotificationId in activeNotificationIds() }
+        )
+    }
+
+    @Test
     fun completion_teardown_still_happens_when_finishSession_throws() {
         WorkoutService.testWorkoutDayOverride = fastWorkoutDay
         WorkoutService.testSessionRepositoryOverride = ThrowingSessionRepository(db)
@@ -367,6 +424,29 @@ class WorkoutServiceNotificationTest {
             "Expected cleanup() to have run, clearing the running flag",
             waitUntil { !WorkoutService.isRunning.value }
         )
+    }
+
+    @Test
+    fun a_failed_setup_stops_the_service_instead_of_hanging() {
+        WorkoutService.testSessionRepositoryOverride = FailingStartSessionRepository(db)
+        startWorkout()
+
+        // The session row is written during setup, before the engine exists. Without teardown on
+        // that failure, the "Starting…" notification stayed up and the service kept running.
+        assertTrue(
+            "Expected the ongoing notification to be removed after setup failed",
+            waitUntil(timeoutMs = 12_000) { ongoingNotificationId !in activeNotificationIds() }
+        )
+        assertTrue(
+            "Expected the service to stop after setup failed",
+            waitUntil(timeoutMs = 6_000) { !workoutServiceIsAlive() && !WorkoutService.isRunning.value }
+        )
+    }
+
+    private class FailingStartSessionRepository(db: AppDatabase) : SessionRepository(db) {
+        override suspend fun startSession(programId: String, week: Int, day: Int): Long {
+            throw IllegalStateException("Simulated DB failure while setting up the workout")
+        }
     }
 
     private class ThrowingSessionRepository(db: AppDatabase) : SessionRepository(db) {

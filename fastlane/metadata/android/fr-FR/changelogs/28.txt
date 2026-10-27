@@ -1,0 +1,3 @@
+• « Ignorer l'échauffement » et « Ignorer la récupération » sont désormais deux réglages distincts : vous pouvez ignorer l'un et garder l'autre. Votre choix actuel est conservé.
+• Nouveau bouton sur l'écran de séance pour ignorer un échauffement ou une récupération en cours.
+• Nouvelle option pour désactiver le second avertissement du compte à rebours et ne garder que le premier.

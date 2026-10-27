@@ -1,0 +1,5 @@
+• Novo modo Tons: sons em vez de voz nas trocas de intervalo, nas contagens regressivas e no fim do treino. Configurações → Tipo de aviso → Tons.
+• Sua sequência semanal agora também aparece no Histórico.
+• Corrigido: às vezes um treino não começava logo após instalar o app.
+• Corrigido: um idioma escolhido em Configurações às vezes aparecia sem tradução.
+• Correções de tradução.

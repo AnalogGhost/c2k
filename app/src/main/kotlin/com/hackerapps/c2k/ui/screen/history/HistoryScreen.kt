@@ -41,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -54,6 +55,7 @@ import com.hackerapps.c2k.engine.MonthlySummary
 import com.hackerapps.c2k.engine.PeriodTotals
 import com.hackerapps.c2k.engine.WeeklySummary
 import com.hackerapps.c2k.ui.programNameRes
+import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -67,6 +69,7 @@ fun HistoryScreen(
 ) {
     val sessions by vm.sessions.collectAsStateWithLifecycle()
     val stats by vm.stats.collectAsStateWithLifecycle()
+    val streak by vm.streak.collectAsStateWithLifecycle()
     val weeklySummary by vm.weeklySummary.collectAsStateWithLifecycle()
     val monthlySummary by vm.monthlySummary.collectAsStateWithLifecycle()
     val weightKg by vm.weightKg.collectAsStateWithLifecycle()
@@ -120,6 +123,17 @@ fun HistoryScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item { Spacer(Modifier.height(4.dp)) }
+
+                if (streak > 0) {
+                    item {
+                        Text(
+                            pluralStringResource(R.plurals.home_streak, streak, streak),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = RunOrange,
+                            modifier = Modifier.testTag("history_streak")
+                        )
+                    }
+                }
 
                 item {
                     WeeklySummaryCard(weeklySummary)

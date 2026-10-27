@@ -1,0 +1,3 @@
+• «Omitir quecemento» e «Omitir arrefecemento» son agora axustes separados, así que podes omitir un e manter o outro. A túa elección anterior consérvase.
+• Novo botón na pantalla de adestramento para omitir un quecemento ou arrefecemento en curso.
+• Nova opción para desactivar o segundo aviso de conta atrás e deixar só o primeiro.

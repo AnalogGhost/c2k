@@ -12,7 +12,6 @@
     <string name="home_title">C2K</string>
     <string name="home_choose_program">Programm wählen</string>
     <string name="home_recent_workouts">Letzte Trainingseinheiten</string>
-    <string name="home_no_workouts">Noch keine Trainingseinheiten. Starte ein Programm, um loszulegen!</string>
     <string name="home_workout_active">Training läuft – tippen, um zurückzukehren</string>
     <string name="home_continue_workout">Fortsetzen: %1$s · Woche %2$d, Tag %3$d</string>
     <plurals name="home_streak">
@@ -20,14 +19,14 @@
         <item quantity="other">%1$d Wochen in Folge 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d Wochen</string>
-    <string name="home_program_prerequisite">%1$s</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">Woche %1$d</string>
     <string name="program_day_label">Tag %1$d</string>
-    <string name="program_completed_badge">Erledigt</string>
-    <string name="program_start_workout">Training starten</string>
-    <string name="program_progress">%1$d von %2$d Tagen abgeschlossen</string>
+    <plurals name="program_progress">
+        <item quantity="one">%1$d von %2$d Tagen abgeschlossen</item>
+        <item quantity="other">%1$d von %2$d Tagen abgeschlossen</item>
+    </plurals>
     <string name="program_next_workout">Fortsetzen: Woche %1$d, Tag %2$d</string>
     <string name="program_preview_title">Woche %1$d, Tag %2$d</string>
     <string name="program_preview_start">Start</string>
@@ -57,6 +56,8 @@
     <string name="workout_pause">Pause</string>
     <string name="workout_resume">Fortsetzen</string>
     <string name="workout_stop">Beenden</string>
+    <string name="workout_skip_warmup">Aufwärmen überspringen</string>
+    <string name="workout_skip_cooldown">Abkühlen überspringen</string>
     <string name="workout_elapsed">Verstrichen: %1$s</string>
     <string name="workout_interval_progress">Intervall %1$d von %2$d</string>
     <string name="workout_next_interval">Nächstes: %1$s %2$s</string>
@@ -67,7 +68,6 @@
     <string name="workout_treadmill_effort_warmup">Lockeres Gehtempo</string>
     <string name="workout_treadmill_effort_cooldown">Lockeres Gehtempo</string>
     <string name="workout_acquiring_gps">GPS wird gesucht…</string>
-    <string name="workout_gps_unavailable">GPS nicht verfügbar</string>
     <string name="workout_complete_title">Training abgeschlossen!</string>
     <string name="workout_complete_message">Gut gemacht! Weiter so.</string>
     <string name="workout_complete_time">Zeit: %1$s</string>
@@ -84,7 +84,6 @@
     <string name="history_title">Verlauf</string>
     <string name="history_empty">Noch keine abgeschlossenen Trainingseinheiten.</string>
     <string name="history_week_day">Woche %1$d, Tag %2$d</string>
-    <string name="history_duration">%1$s</string>
     <string name="history_export">CSV exportieren</string>
     <string name="history_export_chooser">Trainingsverlauf exportieren</string>
     <string name="history_export_gpx">GPX-Route exportieren</string>
@@ -125,9 +124,6 @@
     </plurals>
 
     <!-- Permissions -->
-    <string name="permission_location_rationale">C2K kann deine Distanz und dein Tempo per GPS erfassen. Das ist optional – der Trainings-Timer funktioniert auch ohne.</string>
-    <string name="permission_location_deny">GPS überspringen</string>
-    <string name="permission_location_allow">GPS erlauben</string>
 
     <!-- Navigation content descriptions -->
     <string name="nav_back">Zurück</string>
@@ -177,6 +173,8 @@
     <string name="guide_a_pain_discomfort">Unbehagen ist normal und zu erwarten: brennende Lunge, müde Beine, Muskeln, die sich beschweren. So fühlt sich Training an, besonders am Anfang.\n\nSchmerz ist etwas anderes. Er ist stechend, auf einen bestimmten Punkt begrenzt (ein Knie, ein Schienbein, ein Fuß), oder er verstärkt sich beim Weiterlaufen. Schmerz ist das Signal deines Körpers, dass etwas nicht stimmt.\n\nUnbehagen sagt „Das ist hart.“ Schmerz sagt „Stopp.“ Wenn du während einer Einheit echten Schmerz spürst, stoppe und geh nach Hause. Hält er nach einem Ruhetag noch an, suche einen Physiotherapeuten oder Arzt auf, bevor du wieder läufst.</string>
     <string name="guide_q_breathing">Wie sollte ich atmen?</string>
     <string name="guide_a_breathing">Es gibt keine einzig richtige Technik – atme so, wie du am meisten Luft bekommst. Viele Läufer finden natürlich zu einem 2:2-Rhythmus: 2 Schritte einatmen, 2 Schritte ausatmen. Andere bevorzugen 3:2 oder atmen einfach nach Bedarf.\n\nDurch Nase und Mund gleichzeitig zu atmen ist völlig in Ordnung und bei Anstrengung sogar ratsam. Wenn du nach Luft schnappst, läufst du zu schnell – reduziere das Tempo, bis sich deine Atmung wieder gut anfühlt.</string>
+    <string name="guide_q_tones">Was bedeuten die Töne?</string>
+    <string name="guide_a_tones">Wenn du in den Einstellungen die Hinweisart „Töne“ wählst, ersetzen Klänge die Sprachansagen. Ein schneller Sprung nach oben heißt Laufen, zwei langsam fallende Töne heißen Gehen. Ein einzelner tiefer Ton beginnt das Aufwärmen, drei fallende Töne das Cool-down, und vier aufsteigende Töne bedeuten, dass du fertig bist. Countdown-Warnungen sind kurze Ticks: einer für die erste Warnung, zwei für die zweite. Tippe in den Einstellungen auf „Töne testen“, um Laufen und Gehen nacheinander zu hören.</string>
     <string name="guide_q_cant_finish_interval">Was, wenn ich ein Laufintervall nicht schaffe?</string>
     <string name="guide_a_cant_finish_interval">Geh. Gehen ist kein Versagen – die Gehpausen sind genau aus diesem Grund fest im Programm eingeplant.\n\nWenn du die Laufintervalle regelmäßig nicht schaffst, versuch, dein Lauftempo noch weiter zu drosseln. Viele sind überrascht, wie langsam „langsam“ am Anfang sein muss. Ein sehr langsamer Trab, den du durchhalten kannst, ist weit besser als ein schnelles Tempo, das dich zum Anhalten zwingt.</string>
 
@@ -217,6 +215,8 @@
     <string name="contributor_language_selection">Manuelle Sprachauswahl und Weitergabe der Spracheinstellungen</string>
     <string name="contributor_fix_tts_ducking">Fix: Sprachansagen dämpfen jetzt die Hintergrundmusik, statt sie zu pausieren</string>
     <string name="contributor_fix_completion_counter">Korrektur: Der Abschlusszähler bleibt nicht mehr hängen und die Abschlussansage wird nicht mehr abgeschnitten, wenn der Bildschirm gesperrt wird</string>
+    <string name="contributor_second_warning_toggle">Option zum Ausschalten der zweiten Countdown-Warnung</string>
+    <string name="contributor_skip_warmup_cooldown_split">Getrennte Einstellungen zum Überspringen von Aufwärmen und Abkühlen sowie eine Überspringen-Schaltfläche während des Trainings</string>
 
     <!-- Settings -->
     <string name="settings_title">Einstellungen</string>
@@ -230,9 +230,16 @@
     <string name="language_pt_br">Portugiesisch (Português)</string>
     <string name="language_ru">Russisch (Русский)</string>
     <string name="language_tr">Türkisch (Türkçe)</string>
-    <string name="settings_tts_enabled">Sprachansagen</string>
+    <string name="settings_tts_enabled">Audiohinweise</string>
+    <string name="settings_cue_style">Hinweisart</string>
+    <string name="settings_cue_style_voice">Stimme</string>
+    <string name="settings_cue_style_tones">Töne</string>
+    <string name="settings_cue_style_tones_caption">Klänge statt Sprache: aufsteigend fürs Laufen, absteigend fürs Gehen, Ticken für Countdown-Warnungen.</string>
+    <string name="settings_tone_volume">Tonlautstärke</string>
+    <string name="settings_test_tones">Töne testen</string>
     <string name="settings_treadmill_mode">Laufband-Modus (deaktiviert GPS)</string>
-    <string name="settings_skip_warmup_cooldown">Aufwärmen und Abkühlen überspringen</string>
+    <string name="settings_skip_warmup">Aufwärmen überspringen</string>
+    <string name="settings_skip_cooldown">Abkühlen überspringen</string>
     <string name="settings_skip_warmup_cooldown_caption">Langsames Aufwärmen senkt das Verletzungsrisiko – überspringen, wenn du schon zu Fuß zu deiner Laufstrecke gehst.</string>
     <string name="settings_gps_enabled">GPS-Tracking</string>
     <string name="settings_countdown_warnings">Countdown-Warnungen</string>

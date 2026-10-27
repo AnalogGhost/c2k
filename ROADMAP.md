@@ -24,6 +24,7 @@ Prioritised by impact vs. effort. Out-of-scope items are listed at the bottom wi
 - ~~**Weekly and monthly summary** — aggregate stats from existing history data (total distance, total time, sessions completed).~~ *(done: 4b8327e, 8d984e2)*
 - **Health Connect integration** — write completed workouts to Android Health Connect. Data stays on device; no third-party service involved. Open source friendly.
 - ~~**Personal bests and milestones** — track fastest pace, longest run, total distance badges. All local.~~ *(done: ae0f329; per-day best-time comparison on the workout-complete screen shipped earlier)*
+- ~~**Tones mode** — short chimes as an alternative to spoken cues, for runners who don't want TTS (issue #42). Bundled synthesis, no new permissions.~~ *(done: 928b46c, a00c65d, 2964a03; shipped in 1.2.22)*
 - **Adaptive progression** — detect when a user fails to complete intervals multiple times and surface a suggestion to repeat the day or try the pre-C25K plan.
 - **Announce pace or distance mid-interval** — periodic spoken updates during run intervals using GPS data already being collected.
 
@@ -37,7 +38,7 @@ Prioritised by impact vs. effort. Out-of-scope items are listed at the bottom wi
 - **Running cadence metronome** — an audio tick to help users hit a target step rate. Useful for injury prevention.
 - **Home screen widget** — quick-start widget showing current week/day and a start button.
 - **More translations** — German, French, Brazilian Portuguese, and Russian are already shipped (`values-de`, `values-fr`, `values-pt-rBR`, `values-ru`), alongside Spanish and Galician. Further languages are community-driven; contributions welcome.
-- **Streak and progress on history screen** — currently streak only shows on the home screen.
+- ~~**Streak and progress on history screen** — currently streak only shows on the home screen.~~ *(done: streak shown on History)*
 
 ---
 

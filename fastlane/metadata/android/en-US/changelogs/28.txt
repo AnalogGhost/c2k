@@ -1,0 +1,3 @@
+• "Skip warm-up" and "Skip cool-down" are now separate settings, so you can skip one and keep the other. Your existing choice carries over.
+• New button on the workout screen to skip a warm-up or cool-down while it is running.
+• New option to turn off the second countdown warning and keep only the first.

@@ -49,6 +49,7 @@ class WorkoutEngineTest {
         countdownWarnings: Boolean = false,
         countdownWarningSeconds1: Int = 10,
         countdownWarningSeconds2: Int = 5,
+        countdownWarning2Enabled: Boolean = true,
         periodicTimeCues: Boolean = false,
         periodicTimeCueIntervalSeconds: Int = 30
     ): WorkoutEngine =
@@ -59,6 +60,7 @@ class WorkoutEngineTest {
             countdownWarnings = countdownWarnings,
             countdownWarningSeconds1 = countdownWarningSeconds1,
             countdownWarningSeconds2 = countdownWarningSeconds2,
+            countdownWarning2Enabled = countdownWarning2Enabled,
             midIntervalCues = midIntervalCues,
             periodicTimeCues = periodicTimeCues,
             periodicTimeCueIntervalSeconds = periodicTimeCueIntervalSeconds,
@@ -345,6 +347,29 @@ class WorkoutEngineTest {
     }
 
     @Test
+    fun disabled_second_warning_keeps_first_warning_with_lookahead() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 15),
+            Interval(IntervalType.WALK, 10),
+            countdownWarnings = true,
+            countdownWarning2Enabled = false
+        )
+        engine.start(1L)
+        advanceTimeBy(5_300)  // 10s remaining
+        assertEquals(1, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 10
+        })
+        assertTrue("With only one warning left, it carries the next-interval look-ahead",
+            announcements.any { it is TtsAnnouncement.NextInterval })
+        advanceTimeBy(5_000)  // 5s remaining: the disabled second threshold must stay silent
+        assertEquals(0, announcements.count {
+            it is TtsAnnouncement.CountdownWarning && it.secondsRemaining == 5
+        })
+        assertEquals(1, announcements.count { it is TtsAnnouncement.CountdownWarning })
+        engine.stop()
+    }
+
+    @Test
     fun countdown_warnings_fire_at_custom_thresholds() = testScope.runTest {
         val engine = makeEngine(
             Interval(IntervalType.RUN, 20),
@@ -429,6 +454,83 @@ class WorkoutEngineTest {
         val s = engine.state.value as WorkoutState.Active
         // 10s interval, 3s elapsed → 7s remaining (integer seconds)
         assertEquals(7, s.secondsRemainingInInterval)
+        engine.stop()
+    }
+
+    @Test
+    fun skipping_warmup_starts_the_first_run_immediately() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.WARMUP, 300),
+            Interval(IntervalType.RUN, 60),
+            Interval(IntervalType.COOLDOWN, 300)
+        )
+        engine.start(1L)
+        advanceTimeBy(300)
+        engine.skipWarmupOrCooldown()
+        advanceTimeBy(500)
+
+        val s = engine.state.value as WorkoutState.Active
+        assertEquals(IntervalType.RUN, s.currentInterval.type)
+        assertTrue(announcements.any {
+            it is TtsAnnouncement.IntervalStart && it.interval.type == IntervalType.RUN
+        })
+        assertEquals("Session time keeps counting real time, not the skipped warm-up",
+            0, s.elapsedSessionSeconds)
+        engine.stop()
+    }
+
+    @Test
+    fun skip_is_ignored_outside_warmup_and_cooldown() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 60),
+            Interval(IntervalType.WALK, 60)
+        )
+        engine.start(1L)
+        advanceTimeBy(300)
+        engine.skipWarmupOrCooldown()
+        advanceTimeBy(1_000)
+
+        val s = engine.state.value as WorkoutState.Active
+        assertEquals(0, s.intervalIndex)
+        assertEquals(IntervalType.RUN, s.currentInterval.type)
+        engine.stop()
+    }
+
+    @Test
+    fun skipping_the_final_cooldown_completes_the_workout() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.RUN, 2),
+            Interval(IntervalType.COOLDOWN, 300)
+        )
+        engine.start(1L)
+        advanceTimeBy(2_500)  // RUN is over, cool-down has begun
+        assertEquals(
+            IntervalType.COOLDOWN,
+            (engine.state.value as WorkoutState.Active).currentInterval.type
+        )
+        engine.skipWarmupOrCooldown()
+        advanceTimeBy(500)
+
+        assertTrue(engine.state.value is WorkoutState.Completed)
+        assertTrue(announcements.any { it is TtsAnnouncement.WorkoutComplete })
+    }
+
+    @Test
+    fun skip_is_ignored_while_paused() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.WARMUP, 300),
+            Interval(IntervalType.RUN, 60)
+        )
+        engine.start(1L)
+        advanceTimeBy(500)
+        engine.pause()
+        engine.skipWarmupOrCooldown()
+        advanceTimeBy(1_000)
+        engine.resume()
+        advanceTimeBy(1_000)
+
+        val s = engine.state.value as WorkoutState.Active
+        assertEquals(IntervalType.WARMUP, s.currentInterval.type)
         engine.stop()
     }
 }

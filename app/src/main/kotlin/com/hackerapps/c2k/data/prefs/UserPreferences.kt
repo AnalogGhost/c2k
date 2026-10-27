@@ -5,14 +5,32 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.retry
+import java.io.IOException
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "c2k_prefs")
+
+private const val READ_RETRIES = 3L
+private const val READ_RETRY_DELAY_MS = 50L
+
+/**
+ * DataStore can fail a read with FileNotFoundException while a concurrent first write is creating
+ * the file. On a fresh install C2KApp's startup write raced the workout service's first read this
+ * way, killing the workout's setup. A retry sees the finished file; an I/O error that persists
+ * falls back to the defaults instead of crashing whoever collects the settings.
+ */
+internal fun Flow<Preferences>.recoverReadErrors(): Flow<Preferences> =
+    retry(READ_RETRIES) { e -> (e is IOException).also { if (it) delay(READ_RETRY_DELAY_MS) } }
+        .catch { e -> if (e is IOException) emit(emptyPreferences()) else throw e }
 
 class UserPreferences(private val context: Context) {
 
@@ -28,46 +46,57 @@ class UserPreferences(private val context: Context) {
         val VIBRATION_TARGET         = stringPreferencesKey("vibration_target")
         val TTS_SPEECH_RATE          = floatPreferencesKey("tts_speech_rate")
         val TTS_VOLUME               = floatPreferencesKey("tts_volume")
+        val CUE_STYLE                = stringPreferencesKey("cue_style")
         val MID_INTERVAL_CUES        = booleanPreferencesKey("mid_interval_cues")
         val TREADMILL_MODE           = booleanPreferencesKey("treadmill_mode")
         val COUNTDOWN_WARNING_1      = intPreferencesKey("countdown_warning_1")
         val COUNTDOWN_WARNING_2      = intPreferencesKey("countdown_warning_2")
+        val COUNTDOWN_WARNING_2_ENABLED = booleanPreferencesKey("countdown_warning_2_enabled")
         val PERIODIC_TIME_CUES         = booleanPreferencesKey("periodic_time_cues")
         val PERIODIC_TIME_CUE_INTERVAL = intPreferencesKey("periodic_time_cue_interval")
         val WEIGHT_KG                = floatPreferencesKey("weight_kg")
         val WEIGHT_UNIT              = stringPreferencesKey("weight_unit")
         val GPS_DISTANCES_RECOMPUTED = booleanPreferencesKey("gps_distances_recomputed")
+        // Written by 1.2.20 when there was a single switch; seeds both new flags until the user
+        // changes one of them.
         val SKIP_WARMUP_COOLDOWN     = booleanPreferencesKey("skip_warmup_cooldown")
+        val SKIP_WARMUP              = booleanPreferencesKey("skip_warmup")
+        val SKIP_COOLDOWN            = booleanPreferencesKey("skip_cooldown")
     }
 
-    val ttsEnabled: Flow<Boolean> = context.dataStore.data
+    private val data: Flow<Preferences> = context.dataStore.data.recoverReadErrors()
+
+    val ttsEnabled: Flow<Boolean> = data
         .map { it[TTS_ENABLED] ?: true }
 
-    val gpsEnabled: Flow<Boolean> = context.dataStore.data
+    val gpsEnabled: Flow<Boolean> = data
         .map { it[GPS_ENABLED] ?: true }
 
-    val countdownWarnings: Flow<Boolean> = context.dataStore.data
+    val countdownWarnings: Flow<Boolean> = data
         .map { it[COUNTDOWN_WARNINGS] ?: true }
 
-    val countdownWarning1: Flow<Int> = context.dataStore.data
+    val countdownWarning1: Flow<Int> = data
         .map { it[COUNTDOWN_WARNING_1] ?: 10 }
 
-    val countdownWarning2: Flow<Int> = context.dataStore.data
+    val countdownWarning2: Flow<Int> = data
         .map { it[COUNTDOWN_WARNING_2] ?: 5 }
 
-    val keepScreenOn: Flow<Boolean> = context.dataStore.data
+    val countdownWarning2Enabled: Flow<Boolean> = data
+        .map { it[COUNTDOWN_WARNING_2_ENABLED] ?: true }
+
+    val keepScreenOn: Flow<Boolean> = data
         .map { it[KEEP_SCREEN_ON] ?: true }
 
-    val lastProgramId: Flow<String?> = context.dataStore.data
+    val lastProgramId: Flow<String?> = data
         .map { it[LAST_PROGRAM_ID] }
 
-    val batteryPromptDismissed: Flow<Boolean> = context.dataStore.data
+    val batteryPromptDismissed: Flow<Boolean> = data
         .map { it[BATTERY_PROMPT_DISMISSED] ?: false }
 
-    val vibrationEnabled: Flow<Boolean> = context.dataStore.data
+    val vibrationEnabled: Flow<Boolean> = data
         .map { it[VIBRATION_ENABLED] ?: false }
 
-    val vibrationStrength: Flow<VibrationStrength> = context.dataStore.data
+    val vibrationStrength: Flow<VibrationStrength> = data
         .map { preferences -> VibrationStrength.fromStored(preferences[VIBRATION_STRENGTH]) }
 
     val vibrationTarget: Flow<VibrationTarget> = context.dataStore.data
@@ -88,6 +117,9 @@ class UserPreferences(private val context: Context) {
     suspend fun setCountdownWarning2(seconds: Int) =
         context.dataStore.edit { it[COUNTDOWN_WARNING_2] = seconds }
 
+    suspend fun setCountdownWarning2Enabled(enabled: Boolean) =
+        context.dataStore.edit { it[COUNTDOWN_WARNING_2_ENABLED] = enabled }
+
     suspend fun setKeepScreenOn(enabled: Boolean) =
         context.dataStore.edit { it[KEEP_SCREEN_ON] = enabled }
 
@@ -97,7 +129,7 @@ class UserPreferences(private val context: Context) {
     suspend fun setBatteryPromptDismissed() =
         context.dataStore.edit { it[BATTERY_PROMPT_DISMISSED] = true }
 
-    val ttsSpeechRate: Flow<Float> = context.dataStore.data
+    val ttsSpeechRate: Flow<Float> = data
         .map { it[TTS_SPEECH_RATE] ?: 1.0f }
 
     suspend fun setVibrationEnabled(enabled: Boolean) =
@@ -112,40 +144,46 @@ class UserPreferences(private val context: Context) {
     suspend fun setTtsSpeechRate(rate: Float) =
         context.dataStore.edit { it[TTS_SPEECH_RATE] = rate }
 
-    val ttsVolume: Flow<Float> = context.dataStore.data
+    val ttsVolume: Flow<Float> = data
         .map { it[TTS_VOLUME] ?: 1.0f }
 
     suspend fun setTtsVolume(volume: Float) =
         context.dataStore.edit { it[TTS_VOLUME] = volume }
 
-    val midIntervalCues: Flow<Boolean> = context.dataStore.data
+    val cueStyle: Flow<CueStyle> = data
+        .map { preferences -> CueStyle.fromStored(preferences[CUE_STYLE]) }
+
+    suspend fun setCueStyle(style: CueStyle) =
+        context.dataStore.edit { it[CUE_STYLE] = style.name }
+
+    val midIntervalCues: Flow<Boolean> = data
         .map { it[MID_INTERVAL_CUES] ?: true }
 
     suspend fun setMidIntervalCues(enabled: Boolean) =
         context.dataStore.edit { it[MID_INTERVAL_CUES] = enabled }
 
-    val periodicTimeCues: Flow<Boolean> = context.dataStore.data
+    val periodicTimeCues: Flow<Boolean> = data
         .map { it[PERIODIC_TIME_CUES] ?: false }
 
     suspend fun setPeriodicTimeCues(enabled: Boolean) =
         context.dataStore.edit { it[PERIODIC_TIME_CUES] = enabled }
 
-    val periodicTimeCueInterval: Flow<Int> = context.dataStore.data
+    val periodicTimeCueInterval: Flow<Int> = data
         .map { it[PERIODIC_TIME_CUE_INTERVAL] ?: 30 }
 
     suspend fun setPeriodicTimeCueInterval(seconds: Int) =
         context.dataStore.edit { it[PERIODIC_TIME_CUE_INTERVAL] = seconds }
 
-    val treadmillMode: Flow<Boolean> = context.dataStore.data
+    val treadmillMode: Flow<Boolean> = data
         .map { it[TREADMILL_MODE] ?: false }
 
     suspend fun setTreadmillMode(enabled: Boolean) =
         context.dataStore.edit { it[TREADMILL_MODE] = enabled }
 
-    val weightKg: Flow<Float?> = context.dataStore.data
+    val weightKg: Flow<Float?> = data
         .map { it[WEIGHT_KG] }
 
-    val weightUnit: Flow<WeightUnit> = context.dataStore.data
+    val weightUnit: Flow<WeightUnit> = data
         .map { WeightUnit.valueOf(it[WEIGHT_UNIT] ?: WeightUnit.KG.name) }
 
     suspend fun setWeightKg(kg: Float) =
@@ -157,17 +195,34 @@ class UserPreferences(private val context: Context) {
     suspend fun setWeightUnit(unit: WeightUnit) =
         context.dataStore.edit { it[WEIGHT_UNIT] = unit.name }
 
-    val gpsDistancesRecomputed: Flow<Boolean> = context.dataStore.data
+    val gpsDistancesRecomputed: Flow<Boolean> = data
         .map { it[GPS_DISTANCES_RECOMPUTED] ?: false }
 
     suspend fun setGpsDistancesRecomputed() =
         context.dataStore.edit { it[GPS_DISTANCES_RECOMPUTED] = true }
 
-    val skipWarmupCooldown: Flow<Boolean> = context.dataStore.data
-        .map { it[SKIP_WARMUP_COOLDOWN] ?: false }
+    val skipWarmup: Flow<Boolean> = data
+        .map { it[SKIP_WARMUP] ?: it[SKIP_WARMUP_COOLDOWN] ?: false }
 
-    suspend fun setSkipWarmupCooldown(enabled: Boolean) =
-        context.dataStore.edit { it[SKIP_WARMUP_COOLDOWN] = enabled }
+    val skipCooldown: Flow<Boolean> = data
+        .map { it[SKIP_COOLDOWN] ?: it[SKIP_WARMUP_COOLDOWN] ?: false }
+
+    suspend fun setSkipWarmup(enabled: Boolean) =
+        context.dataStore.edit { it[SKIP_WARMUP] = enabled }
+
+    suspend fun setSkipCooldown(enabled: Boolean) =
+        context.dataStore.edit { it[SKIP_COOLDOWN] = enabled }
+}
+
+/** How workout cues sound: spoken announcements, or chimes in their place (issue #42). */
+enum class CueStyle {
+    VOICE,
+    TONES;
+
+    companion object {
+        fun fromStored(value: String?): CueStyle =
+            entries.firstOrNull { it.name == value } ?: VOICE
+    }
 }
 
 enum class VibrationStrength {

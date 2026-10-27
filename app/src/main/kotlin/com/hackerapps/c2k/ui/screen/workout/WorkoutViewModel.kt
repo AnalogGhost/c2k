@@ -150,6 +150,13 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
         )
     }
 
+    fun skipWarmupOrCooldown() {
+        getApplication<Application>().startService(
+            Intent(getApplication(), WorkoutService::class.java)
+                .setAction(WorkoutService.ACTION_SKIP_WARMUP_COOLDOWN)
+        )
+    }
+
     fun stop() {
         getApplication<Application>().startService(
             Intent(getApplication(), WorkoutService::class.java).setAction(WorkoutService.ACTION_STOP)

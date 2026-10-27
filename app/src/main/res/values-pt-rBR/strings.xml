@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">C2K</string>
 
     <!-- Programs -->
@@ -12,7 +12,6 @@
     <string name="home_title">C2K</string>
     <string name="home_choose_program">Escolha um programa</string>
     <string name="home_recent_workouts">Treinos recentes</string>
-    <string name="home_no_workouts">Ainda não há treinos. Comece um programa para começar!</string>
     <string name="home_workout_active">Treino em andamento — toque para voltar</string>
     <string name="home_continue_workout">Continuar: %1$s · Semana %2$d, Dia %3$d</string>
     <plurals name="home_streak">
@@ -21,14 +20,15 @@
         <item quantity="many">Sequência de %1$d semanas 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d semanas</string>
-    <string name="home_program_prerequisite">%1$s</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">Semana %1$d</string>
     <string name="program_day_label">Dia %1$d</string>
-    <string name="program_completed_badge">Concluído</string>
-    <string name="program_start_workout">Iniciar treino</string>
-    <string name="program_progress">%1$d de %2$d dias concluídos</string>
+    <plurals name="program_progress">
+        <item quantity="one">%1$d de %2$d dias concluídos</item>
+        <item quantity="many">%1$d de %2$d dias concluídos</item>
+        <item quantity="other">%1$d de %2$d dias concluídos</item>
+    </plurals>
     <string name="program_next_workout">Continuar: Semana %1$d, Dia %2$d</string>
     <string name="program_preview_title">Semana %1$d, Dia %2$d</string>
     <string name="program_preview_start">Começar</string>
@@ -59,6 +59,8 @@
     <string name="workout_pause">Pausar</string>
     <string name="workout_resume">Retomar</string>
     <string name="workout_stop">Parar</string>
+    <string name="workout_skip_warmup">Pular aquecimento</string>
+    <string name="workout_skip_cooldown">Pular desaquecimento</string>
     <string name="workout_elapsed">Decorrido: %1$s</string>
     <string name="workout_interval_progress">Intervalo %1$d de %2$d</string>
     <string name="workout_next_interval">Próximo: %1$s %2$s</string>
@@ -69,7 +71,6 @@
     <string name="workout_treadmill_effort_warmup">Ritmo de caminhada leve</string>
     <string name="workout_treadmill_effort_cooldown">Ritmo de caminhada leve</string>
     <string name="workout_acquiring_gps">Adquirindo GPS…</string>
-    <string name="workout_gps_unavailable">GPS indisponível</string>
     <string name="workout_complete_title">Treino concluído!</string>
     <string name="workout_complete_message">Muito bem! Continue assim.</string>
     <string name="workout_complete_time">Tempo: %1$s</string>
@@ -86,7 +87,6 @@
     <string name="history_title">Histórico</string>
     <string name="history_empty">Ainda não há treinos concluídos.</string>
     <string name="history_week_day">Semana %1$d, Dia %2$d</string>
-    <string name="history_duration">%1$s</string>
     <string name="history_export">Exportar CSV</string>
     <string name="history_export_chooser">Exportar histórico de treinos</string>
     <string name="history_export_gpx">Exportar rota GPX</string>
@@ -95,7 +95,8 @@
     <string name="history_delete_message">Isso removerá permanentemente esta sessão do seu histórico.</string>
     <string name="history_delete_confirm">Excluir</string>
     <string name="history_delete_cancel">Cancelar</string>
-    <plurals name="history_stats_workouts">
+    <!-- The count is shown in its own text beside this label, so no %d is needed here. -->
+    <plurals name="history_stats_workouts" tools:ignore="ImpliedQuantity">
         <item quantity="one">treino</item>
         <item quantity="other">treinos</item>
         <item quantity="many">treinos</item>
@@ -129,9 +130,6 @@
     </plurals>
 
     <!-- Permissions -->
-    <string name="permission_location_rationale">O C2K pode rastrear sua distância e ritmo usando o GPS. Isso é opcional — o cronômetro do treino funciona sem ele.</string>
-    <string name="permission_location_deny">Pular GPS</string>
-    <string name="permission_location_allow">Permitir GPS</string>
 
     <!-- Navigation content descriptions -->
     <string name="nav_back">Voltar</string>
@@ -181,6 +179,8 @@
     <string name="guide_a_pain_discomfort">Desconforto é normal e esperado: pulmões ardendo, pernas cansadas, músculos que parecem estar reclamando. É assim que o exercício se sente, especialmente no início.\n\nA dor é diferente. Ela é aguda, localizada em um ponto específico (um joelho, uma canela, um pé), ou piora conforme você continua correndo. A dor é o sinal do seu corpo de que algo está errado.\n\nDesconforto diz "isso é difícil". Dor diz "pare". Se você sentir dor de verdade durante uma sessão, pare e caminhe até em casa. Se persistir depois de um dia de descanso, procure um fisioterapeuta ou médico antes de voltar a correr.</string>
     <string name="guide_q_breathing">Como devo respirar?</string>
     <string name="guide_a_breathing">Não existe uma única técnica correta — respire da forma que permita que você puxe mais ar. Muitos corredores adotam naturalmente um ritmo 2:2: inspirar em 2 passos, expirar em 2 passos. Outros preferem 3:2 ou simplesmente respiram conforme a necessidade.\n\nRespirar pelo nariz e pela boca ao mesmo tempo é perfeitamente normal e até recomendável em esforços mais intensos. Se você está ofegante, está correndo rápido demais — diminua o ritmo até que a respiração fique administrável.</string>
+    <string name="guide_q_tones">O que significam os tons?</string>
+    <string name="guide_a_tones">Se você escolher Tons como tipo de aviso nas configurações, sons substituem os avisos de voz. Um salto rápido para cima significa correr; duas notas lentas descendo significam caminhar. Uma única nota grave inicia o aquecimento, três notas descendentes iniciam o desaquecimento e quatro notas ascendentes indicam que você terminou. Os avisos de contagem regressiva são bipes curtos: um para o primeiro aviso, dois para o segundo. Toque em Testar tons nas configurações para ouvir correr e caminhar um após o outro.</string>
     <string name="guide_q_cant_finish_interval">E se eu não conseguir terminar um intervalo de corrida?</string>
     <string name="guide_a_cant_finish_interval">Caminhe. Não há fracasso em caminhar — as pausas de caminhada fazem parte do programa exatamente por esse motivo.\n\nSe você regularmente não consegue completar os intervalos de corrida, tente diminuir ainda mais o seu ritmo de corrida. Muita gente se surpreende com o quão devagar o "devagar" precisa ser no início. Um trote bem lento que você consiga sustentar é muito melhor do que uma corrida rápida que te obriga a parar.</string>
 
@@ -221,6 +221,8 @@
     <string name="contributor_language_selection">Seleção manual de idioma e propagação da localidade</string>
     <string name="contributor_fix_tts_ducking">Correção: os avisos de voz agora reduzem o volume da música de fundo em vez de pausá-la</string>
     <string name="contributor_fix_completion_counter">Correção: o contador de conclusão não trava mais e o anúncio de conclusão não é mais cortado quando a tela é bloqueada</string>
+    <string name="contributor_second_warning_toggle">Opção para desativar o segundo aviso de contagem regressiva</string>
+    <string name="contributor_skip_warmup_cooldown_split">Configurações separadas para pular o aquecimento e o desaquecimento, e um botão para pulá-los durante o treino</string>
 
     <!-- Settings -->
     <string name="settings_title">Configurações</string>
@@ -234,10 +236,17 @@
     <string name="language_pt_br">Português (Brasil)</string>
     <string name="language_ru">Russo (Русский)</string>
     <string name="language_tr">Turco (Türkçe)</string>
-    <string name="settings_tts_enabled">Avisos de voz</string>
+    <string name="settings_tts_enabled">Avisos sonoros</string>
+    <string name="settings_cue_style">Tipo de aviso</string>
+    <string name="settings_cue_style_voice">Voz</string>
+    <string name="settings_cue_style_tones">Tons</string>
+    <string name="settings_cue_style_tones_caption">Sons em vez de voz: ascendente para correr, descendente para caminhar e bipes para os avisos de contagem regressiva.</string>
+    <string name="settings_tone_volume">Volume dos tons</string>
+    <string name="settings_test_tones">Testar tons</string>
     <string name="settings_treadmill_mode">Modo esteira (desativa o GPS)</string>
-    <string name="settings_skip_warmup_cooldown">Pular aquecimento e desaquecimento</string>
-    <string name="settings_skip_warmup_cooldown_caption">Aquecer gradualmente reduz o risco de lesões — pule esta etapa se você já caminha até o local da corrida e de volta.</string>
+    <string name="settings_skip_warmup">Pular aquecimento</string>
+    <string name="settings_skip_cooldown">Pular desaquecimento</string>
+    <string name="settings_skip_warmup_cooldown_caption">Aquecer gradualmente reduz o risco de lesões — pule esta etapa se você já caminha até o local da corrida.</string>
     <string name="settings_gps_enabled">Rastreamento por GPS</string>
     <string name="settings_countdown_warnings">Avisos de contagem regressiva</string>
     <string name="settings_countdown_warning_1">Primeiro aviso</string>

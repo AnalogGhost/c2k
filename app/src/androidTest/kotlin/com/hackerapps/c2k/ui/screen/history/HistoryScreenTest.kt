@@ -3,9 +3,11 @@ package com.hackerapps.c2k.ui.screen.history
 import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -157,6 +159,35 @@ class HistoryScreenTest {
         }
         composeRule.onNodeWithText(string(R.string.history_month_last_month, "0.0", "0:00"), substring = true)
             .assertDoesNotExist()
+    }
+
+    @Test
+    fun streak_is_shown_once_a_workout_is_completed() {
+        runBlocking {
+            val id = repo().startSession(PROGRAM_ID, week = 1, day = 1)
+            repo().finishSession(id, durationSeconds = 600, distanceMeters = 1000f, completed = true)
+        }
+        setContent()
+
+        // The streak itself is computed by StreakCalculator, unit-tested directly.
+        val oneWeek = composeRule.activity.resources.getQuantityString(R.plurals.home_streak, 1, 1)
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("history_streak").assertTextEquals(oneWeek)
+        }
+    }
+
+    @Test
+    fun streak_is_hidden_without_a_completed_workout() {
+        runBlocking {
+            val id = repo().startSession(PROGRAM_ID, week = 1, day = 1)
+            repo().finishSession(id, durationSeconds = 600, distanceMeters = 1000f, completed = false)
+        }
+        setContent()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.history_stats_section_totals)).assertExists()
+        }
+        composeRule.onNodeWithTag("history_streak").assertDoesNotExist()
     }
 
     @Test

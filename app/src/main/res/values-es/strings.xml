@@ -12,7 +12,6 @@
     <string name="home_title">C2K</string>
     <string name="home_choose_program">Elige un programa</string>
     <string name="home_recent_workouts">Entrenamientos recientes</string>
-    <string name="home_no_workouts">No hai entrenamientos. Inicia un programa primero!</string>
     <string name="home_workout_active">Entrenamiento en marcha — toca para volver</string>
     <string name="home_continue_workout">Continuar: %1$s · Semana %2$d, Día %3$d</string>
     <plurals name="home_streak">
@@ -21,14 +20,15 @@
         <item quantity="many">Racha de %1$d semanas 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d semanas</string>
-    <string name="home_program_prerequisite">%1$s</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">Semana %1$d</string>
     <string name="program_day_label">Día %1$d</string>
-    <string name="program_completed_badge">Hecho</string>
-    <string name="program_start_workout">Iniciar entrenamiento</string>
-    <string name="program_progress">%1$d de %2$d días completados</string>
+    <plurals name="program_progress">
+        <item quantity="one">%1$d de %2$d días completados</item>
+        <item quantity="many">%1$d de %2$d días completados</item>
+        <item quantity="other">%1$d de %2$d días completados</item>
+    </plurals>
     <string name="program_next_workout">Continuar: Semana %1$d, Día %2$d</string>
     <string name="program_preview_title">Semana %1$d, Día %2$d</string>
     <string name="program_preview_start">Comenzar</string>
@@ -59,6 +59,8 @@
     <string name="workout_pause">Pausa</string>
     <string name="workout_resume">Retomar</string>
     <string name="workout_stop">Detener</string>
+    <string name="workout_skip_warmup">Omitir calentamiento</string>
+    <string name="workout_skip_cooldown">Omitir enfriamiento</string>
     <string name="workout_elapsed">Transcurrido: %1$s</string>
     <string name="workout_interval_progress">Intervalo %1$d de %2$d</string>
     <string name="workout_next_interval">Siguiente: %1$s %2$s</string>
@@ -69,7 +71,6 @@
     <string name="workout_treadmill_effort_warmup">Ritmo de caminata suave</string>
     <string name="workout_treadmill_effort_cooldown">Ritmo de caminata suave</string>
     <string name="workout_acquiring_gps">Buscando GPS…</string>
-    <string name="workout_gps_unavailable">GPS no disponible</string>
     <string name="workout_complete_title">!Entrenamiento completado!</string>
     <string name="workout_complete_message">!Buen trabajo! Sigue así.</string>
     <string name="workout_complete_time">Tiempo: %1$s</string>
@@ -86,7 +87,6 @@
     <string name="history_title">Historial</string>
     <string name="history_empty">No has completado entrenamientos todavía.</string>
     <string name="history_week_day">Semana %1$d, Día %2$d</string>
-    <string name="history_duration">%1$s</string>
     <string name="history_export">Exportar CSV</string>
     <string name="history_export_chooser">Exportar historial de entrenamientos</string>
     <string name="history_export_gpx">Exportar ruta GPX</string>
@@ -129,9 +129,6 @@
     </plurals>
 
     <!-- Permissions -->
-    <string name="permission_location_rationale">C2K puede registrar la distancia y ritmo utilizando el GPS. Esto es opcional — el temporizador también funcionará sin él.</string>
-    <string name="permission_location_deny">Omitir GPS</string>
-    <string name="permission_location_allow">Utilizar GPS</string>
     
     <!-- Navigation content descriptions -->
     <string name="nav_back">Volver</string>
@@ -181,6 +178,8 @@
     <string name="guide_a_pain_discomfort">La incomodidad es normal y esperable: los pulmones te queman, piernas cansadas, músculos pidiendo piedad. Así se siente hacer ejercicio, sobre todo al principio.\n\nEl dolor es diferente. Es agudo, localizado en un punto concreto (rodilla, pié, espalda), o empeora al seguir corriendo. El dolor es un aviso de tu cuerpo de que algo no va bien.\n\nLa incomodidad te dice "esto es duro". El dolor te dice "para". Si sientes un dolor real durante un entrenamiento, detente y vuelva a casa. Si es persistente tras un día de descanso, ve a una consulta de fisioterapia o médica antes de volver a correr.</string>
     <string name="guide_q_breathing">¿Cómo debería respirar?</string>
     <string name="guide_a_breathing">Non hay una única forma correcta — respira de modo que coges todo el aire posible. Muchas personas corredoras adoptan de un modo natural un ritmo 2:2, que significa: inhalar durante 2 pasos; exhalar durante 2 pasos. Otras prefieren un patrón 3:2 o simplemente respira según lo necesites.\n\nLa respiración simultánea por la nariz y la boca es perfectamente normal e incluso aconsejable cuando aumenta el esfuerzo. Si te falta el aliento es que corres demasiado rápido — ve más despacio hasta que recobres la respiración.</string>
+    <string name="guide_q_tones">¿Qué significan los tonos?</string>
+    <string name="guide_a_tones">Si eliges Tonos como tipo de aviso en Ajustes, los sonidos sustituyen a las indicaciones por voz. Un salto rápido hacia arriba significa correr; dos notas lentas que bajan significan caminar. Una sola nota grave inicia el calentamiento, tres notas descendentes inician el enfriamiento y cuatro notas ascendentes indican que has terminado. Los avisos de cuenta atrás son tics cortos: uno para el primer aviso y dos para el segundo. Toca Probar tonos en Ajustes para oír correr y caminar uno tras otro.</string>
     <string name="guide_q_cant_finish_interval">¿Qué ocurre si no puedo completar un intervalo de carrera?</string>
     <string name="guide_a_cant_finish_interval">Camina. Caminar no es un fallo o demérito — los segmentos caminando son parte del entrenamiento precisamente por esa razón.\n\nSi no puedes completar con regularidad los intervalos de carrera, intenta bajar más todavía el ritmo de carrera. Muchas personas se sorprenden lo lento que es al principio correr "lento". Un trote muy suave que puedas sostener es mucho mejor y deseable que un ritmo más alto pero que te fuerza a parar.</string>
 
@@ -221,6 +220,8 @@
     <string name="contributor_language_selection">Selección manual de idioma y propagación de la configuración regional</string>
     <string name="contributor_fix_tts_ducking">Corrección: los anuncios de voz ahora atenúan la música de fondo en lugar de pausarla</string>
     <string name="contributor_fix_completion_counter">Corrección: el contador de finalización ya no se congela y el anuncio de finalización ya no se corta cuando la pantalla se bloquea</string>
+    <string name="contributor_second_warning_toggle">Opción para desactivar el segundo aviso de cuenta atrás</string>
+    <string name="contributor_skip_warmup_cooldown_split">Ajustes separados para omitir el calentamiento y el enfriamiento, y un botón para omitirlos durante el entrenamiento</string>
 
     <!-- Settings -->
     <string name="settings_title">Configuración</string>
@@ -234,10 +235,17 @@
     <string name="language_pt_br">Portugués (Português)</string>
     <string name="language_ru">Ruso (Русский)</string>
     <string name="language_tr">Turco (Türkçe)</string>
-    <string name="settings_tts_enabled">Indicaciones por voz</string>
+    <string name="settings_tts_enabled">Avisos sonoros</string>
+    <string name="settings_cue_style">Tipo de aviso</string>
+    <string name="settings_cue_style_voice">Voz</string>
+    <string name="settings_cue_style_tones">Tonos</string>
+    <string name="settings_cue_style_tones_caption">Sonidos en lugar de voz: ascendente para correr, descendente para caminar y tics para los avisos de cuenta atrás.</string>
+    <string name="settings_tone_volume">Volumen de los tonos</string>
+    <string name="settings_test_tones">Probar tonos</string>
     <string name="settings_treadmill_mode">Modo cinta de correr (desactiva GPS)</string>
-    <string name="settings_skip_warmup_cooldown">Omitir calentamiento y enfriamiento</string>
-    <string name="settings_skip_warmup_cooldown_caption">Calentar gradualmente reduce el riesgo de lesiones; omítelo si ya caminas para ir y volver de tu carrera.</string>
+    <string name="settings_skip_warmup">Omitir calentamiento</string>
+    <string name="settings_skip_cooldown">Omitir enfriamiento</string>
+    <string name="settings_skip_warmup_cooldown_caption">Calentar gradualmente reduce el riesgo de lesiones; omítelo si ya caminas para ir a tu carrera.</string>
     <string name="settings_gps_enabled">Seguimiento con GPS</string>
     <string name="settings_countdown_warnings">Avisos de cuenta atrás</string>
     <string name="settings_countdown_warning_1">Primer aviso</string>
@@ -286,7 +294,7 @@
     <string name="battery_opt_dismiss">Omitir</string>
 
     <!-- TTS unavailable warning -->
-    <string name="tts_unavailable">El Texto-a-habla non está disponible en el dispositivo. Las indicaciones por voz están desactivados.</string>
+    <string name="tts_unavailable">La síntesis de voz no está disponible en este dispositivo. Las indicaciones por voz están desactivadas.</string>
 
     <!-- TTS announcements -->
     <string name="tts_interval_warmup">Comienza el calentamiento caminando</string>

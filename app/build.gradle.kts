@@ -21,8 +21,8 @@ android {
         applicationId = "com.hackerapps.c2k"
         minSdk = 26
         targetSdk = 36
-        versionCode = 27
-        versionName = "1.2.20"
+        versionCode = 29
+        versionName = "1.2.22"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
@@ -85,6 +85,13 @@ android {
 
     packaging {
         resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
+    }
+
+    // The in-app language picker can choose any supported language, but Play installs only the
+    // device's languages from a split bundle, so a picked language could show up untranslated.
+    // Shipping every language in the base APK costs only a few hundred KB of strings.
+    bundle {
+        language { enableSplit = false }
     }
 
 }

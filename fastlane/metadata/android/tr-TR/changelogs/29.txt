@@ -1,0 +1,5 @@
+• Yeni Tonlar modu: aralık değişimlerinde, geri sayımlarda ve antrenman sonunda ses yerine tonlar. Ayarlar → Uyarı türü → Tonlar.
+• Haftalık seriniz artık Geçmiş ekranında da görünüyor.
+• Düzeltildi: Bir antrenman, uygulama yüklendikten hemen sonra bazen başlamıyordu.
+• Düzeltildi: Ayarlar'da seçilen bir dil bazen çevrilmeden görünüyordu.
+• Çeviri düzeltmeleri.

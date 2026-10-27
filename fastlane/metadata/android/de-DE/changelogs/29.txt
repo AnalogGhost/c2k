@@ -1,0 +1,5 @@
+• Neuer Tonmodus: Klänge statt Sprachausgabe bei Intervallwechseln, Countdowns und am Ende des Trainings. Einstellungen → Hinweisart → Töne.
+• Deine Wochen in Folge werden jetzt auch im Verlauf angezeigt.
+• Behoben: Ein Training startete direkt nach der Installation manchmal nicht.
+• Behoben: Eine in den Einstellungen gewählte Sprache wurde manchmal unübersetzt angezeigt.
+• Korrekturen an Übersetzungen.

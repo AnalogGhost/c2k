@@ -13,10 +13,12 @@ Fonctionnalités :
 • Coaching personnalisable — réglez la vitesse/le volume de la voix, le moment des comptes à rebours et les annonces à mi-intervalle
 • Testez la voix et diagnostiquez les problèmes de synthèse vocale Android
 • Signaux vibrants en complément ou en remplacement de la voix
+• Mode Tonalités — de courts sons à la place de la voix pour les changements d'intervalle et les comptes à rebours
 • Réglez l'intensité des vibrations et la langue
 • Minuteur d'entraînement en arrière-plan — continue même écran éteint
 • Suivi GPS (optionnel) — enregistre la distance et l'allure ; fonctionne aussi sans GPS
 • Mode tapis de course — pour courir en intérieur sans GPS
+• Ignorez l'échauffement ou la récupération — dans les Réglages ou d'un simple appui pendant la séance
 • Historique d'entraînement — journal des séances avec distance totale, temps, meilleure allure, course la plus longue et calories estimées
 • Suivi de la progression — se souvient des semaines et jours que vous avez complétés, avec option de réinitialisation
 • Guide de course intégré — FAQ sur l'allure, l'équipement et le vocabulaire

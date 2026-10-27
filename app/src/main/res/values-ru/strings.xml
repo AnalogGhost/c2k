@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">C2K</string>
 
     <!-- Programs -->
@@ -12,7 +12,6 @@
     <string name="home_title">C2K</string>
     <string name="home_choose_program">Выберите программу</string>
     <string name="home_recent_workouts">Недавние тренировки</string>
-    <string name="home_no_workouts">Пока нет тренировок. Выберите программу, чтобы начать!</string>
     <string name="home_workout_active">Идёт тренировка — нажмите для возврата</string>
     <string name="home_continue_workout">Продолжить: %1$s · Неделя %2$d, День %3$d</string>
     <plurals name="home_streak">
@@ -22,14 +21,16 @@
         <item quantity="other">Серия в %1$d недели! 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d нед.</string>
-    <string name="home_program_prerequisite">%1$s</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">Неделя %1$d</string>
     <string name="program_day_label">День %1$d</string>
-    <string name="program_completed_badge">Готово</string>
-    <string name="program_start_workout">Начать Тренировку</string>
-    <string name="program_progress">%1$d из %2$d дн. завершено</string>
+    <plurals name="program_progress">
+        <item quantity="one">%1$d из %2$d дн. завершено</item>
+        <item quantity="few">%1$d из %2$d дн. завершено</item>
+        <item quantity="many">%1$d из %2$d дн. завершено</item>
+        <item quantity="other">%1$d из %2$d дн. завершено</item>
+    </plurals>
     <string name="program_next_workout">Продолжить: Неделя %1$d, День %2$d</string>
     <string name="program_preview_title">Неделя %1$d, День %2$d</string>
     <string name="program_preview_start">Начать</string>
@@ -61,6 +62,8 @@
     <string name="workout_pause">Пауза</string>
     <string name="workout_resume">Продолжить</string>
     <string name="workout_stop">Стоп</string>
+    <string name="workout_skip_warmup">Пропустить разминку</string>
+    <string name="workout_skip_cooldown">Пропустить заминку</string>
     <string name="workout_elapsed">Прошло: %1$s</string>
     <string name="workout_interval_progress">Интервал %1$d из %2$d</string>
     <string name="workout_next_interval">Далее: %1$s %2$s</string>
@@ -71,7 +74,6 @@
     <string name="workout_treadmill_effort_warmup">Лёгкий темп ходьбы</string>
     <string name="workout_treadmill_effort_cooldown">Лёгкий темп ходьбы</string>
     <string name="workout_acquiring_gps">Подключение к GPS…</string>
-    <string name="workout_gps_unavailable">GPS недоступен</string>
     <string name="workout_complete_title">Тренировка завершена!</string>
     <string name="workout_complete_message">Отличная работа! Так держать.</string>
     <string name="workout_complete_time">Время: %1$s</string>
@@ -88,7 +90,6 @@
     <string name="history_title">История</string>
     <string name="history_empty">Пока нет завершённых тренировок.</string>
     <string name="history_week_day">Неделя %1$d, День %2$d</string>
-    <string name="history_duration">%1$s</string>
     <string name="history_export">Экспорт CSV</string>
     <string name="history_export_chooser">Экспорт истории тренировок</string>
     <string name="history_export_gpx">Экспорт GPX-маршрута</string>
@@ -97,7 +98,8 @@
     <string name="history_delete_message">Безвозвратно удалит эту сессию из вашей истории.</string>
     <string name="history_delete_confirm">Удалить</string>
     <string name="history_delete_cancel">Отмена</string>
-    <plurals name="history_stats_workouts">
+    <!-- The count is shown in its own text beside this label, so no %d is needed here. -->
+    <plurals name="history_stats_workouts" tools:ignore="ImpliedQuantity">
         <item quantity="one">тренировка</item>
         <item quantity="few">тренировки</item>
         <item quantity="many">тренировок</item>
@@ -133,9 +135,6 @@
     </plurals>
 
     <!-- Permissions -->
-    <string name="permission_location_rationale">C2K может отслеживать вашу дистанцию и темп с помощью GPS. Это опционально — таймер тренировки работает без этого.</string>
-    <string name="permission_location_deny">Пропустить GPS</string>
-    <string name="permission_location_allow">Разрешить GPS</string>
 
     <!-- Navigation content descriptions -->
     <string name="nav_back">Назад</string>
@@ -185,6 +184,8 @@
     <string name="guide_a_pain_discomfort">Дискомфорт это нормально и ожидаемо: «горящие» лёгкие, уставшие ноги, «сопротивляющиеся» мускулы. Это именно то, как ощущаются упражнения, особенно поначалу.\n\nБоль же это другое. Она острая, локализованная в конкретной точке (колено, голень, нога), или же ухудшается по мере продолжения бега. Боль — это сигнал вашего организма, что что-то идёт не так.\n\nДискомфорт означает «это тяжело». Боль означает «стоп». Если вы ощущаете настоящую боль во время сессии, остановитесь и идите домой. Если она сохраняется после целого дня отдыха, обратитесь к физиотерапевту или врачу перед тем, как начать бегать снова.</string>
     <string name="guide_q_breathing">Как мне следует дышать?</string>
     <string name="guide_a_breathing">Нет единственной правильной техники — дышите так, чтобы забирать как можно больше воздуха. Многие бегуны естественным образом приходят к ритму 2-на-2: вдох на 2 шага, выдох на 2 шага. Другие предпочитают 3-на-2 или дышат по мере необходимости.\n\nДыхание одновременно через нос и рот является абсолютно нормальным и, более того, рекомендуется во время тяжелых нагрузок. Если вы чувствуете, что задыхаетесь, то вы бежите слишком быстро — замедляйтесь до тех пор, пока дыхание не станет контролируемым.</string>
+    <string name="guide_q_tones">Что означают сигналы?</string>
+    <string name="guide_a_tones">Если в настройках выбрать тип подсказок «Сигналы», вместо голосовых уведомлений звучат сигналы. Быстрый скачок вверх означает бег, два медленно понижающихся звука — ходьбу. Одна низкая нота начинает разминку, три нисходящие — заминку, а четыре восходящие означают, что тренировка окончена. Предупреждения обратного отсчёта — короткие щелчки: один для первого предупреждения, два для второго. Нажмите «Проверить сигналы» в настройках, чтобы услышать бег и ходьбу друг за другом.</string>
     <string name="guide_q_cant_finish_interval">Почему я не могу завершить интервалы бега?</string>
     <string name="guide_a_cant_finish_interval">Ходите. Нет ничего страшного в ходьбе — передышки с ходьбой встроены в программу именно по этой причине.\n\nЕсли вы постоянно не можете завершать интервалы бега, попробуйте снизить ваш темп бега ещё сильнее. Многие люди удивляются, насколько медленным должен быть «медленный» темп поначалу. Очень медленный бег, который вы можете поддерживать, значительно лучше, чем быстрый бег, из-за которого вы вынуждены приостанавливаться.</string>
 
@@ -225,6 +226,8 @@
     <string name="contributor_language_selection">Ручной выбор языка и передача языковых настроек</string>
     <string name="contributor_fix_tts_ducking">Исправление: голосовые уведомления теперь приглушают фоновое воспроизведения музыки вместо установки её на паузу</string>
     <string name="contributor_fix_completion_counter">Исправление: счётчик завершения больше не зависает, и объявление о завершении больше не обрывается при блокировке экрана</string>
+    <string name="contributor_second_warning_toggle">Возможность отключить второе предупреждение обратного отсчёта</string>
+    <string name="contributor_skip_warmup_cooldown_split">Отдельные настройки пропуска разминки и заминки, а также кнопка пропуска во время тренировки</string>
 
     <!-- Settings -->
     <string name="settings_title">Настройки</string>
@@ -238,10 +241,17 @@
     <string name="language_pt_br">Португальский (Português)</string>
     <string name="language_ru">Русский</string>
     <string name="language_tr">Турецкий (Türkçe)</string>
-    <string name="settings_tts_enabled">Голосовые уведомления</string>
+    <string name="settings_tts_enabled">Звуковые подсказки</string>
+    <string name="settings_cue_style">Тип подсказок</string>
+    <string name="settings_cue_style_voice">Голос</string>
+    <string name="settings_cue_style_tones">Сигналы</string>
+    <string name="settings_cue_style_tones_caption">Сигналы вместо речи: восходящий — бег, нисходящий — ходьба, короткие щелчки — предупреждения обратного отсчёта.</string>
+    <string name="settings_tone_volume">Громкость сигналов</string>
+    <string name="settings_test_tones">Проверить сигналы</string>
     <string name="settings_treadmill_mode">Режим беговой дорожки (отключает GPS)</string>
-    <string name="settings_skip_warmup_cooldown">Пропустить разминку и заминку</string>
-    <string name="settings_skip_warmup_cooldown_caption">Постепенная разминка снижает риск травм — пропустите её, если вы уже идёте пешком до места пробежки и обратно.</string>
+    <string name="settings_skip_warmup">Пропустить разминку</string>
+    <string name="settings_skip_cooldown">Пропустить заминку</string>
+    <string name="settings_skip_warmup_cooldown_caption">Постепенная разминка снижает риск травм — пропустите её, если вы уже идёте пешком до места пробежки.</string>
     <string name="settings_gps_enabled">GPS-отслеживание</string>
     <string name="settings_countdown_warnings">Предупреждающий обратный отсчёт</string>
     <string name="settings_countdown_warning_1">Первое предупреждение</string>

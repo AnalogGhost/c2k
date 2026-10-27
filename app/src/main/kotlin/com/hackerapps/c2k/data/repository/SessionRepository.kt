@@ -15,7 +15,7 @@ open class SessionRepository(private val db: AppDatabase) {
     fun observeAllSessions(): Flow<List<WorkoutSessionEntity>> =
         db.sessionDao().observeAll()
 
-    suspend fun startSession(
+    open suspend fun startSession(
         programId: String, week: Int, day: Int
     ): Long {
         val entity = WorkoutSessionEntity(

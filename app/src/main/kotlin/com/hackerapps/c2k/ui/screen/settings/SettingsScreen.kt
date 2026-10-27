@@ -54,6 +54,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -62,6 +63,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.VibrationTarget
 import com.hackerapps.c2k.data.prefs.WeightUnit
@@ -80,17 +82,20 @@ fun SettingsScreen(
     val countdownWarnings    by vm.countdownWarnings.collectAsStateWithLifecycle()
     val countdownWarning1    by vm.countdownWarning1.collectAsStateWithLifecycle()
     val countdownWarning2    by vm.countdownWarning2.collectAsStateWithLifecycle()
+    val countdownWarning2Enabled by vm.countdownWarning2Enabled.collectAsStateWithLifecycle()
     val midIntervalCues      by vm.midIntervalCues.collectAsStateWithLifecycle()
     val periodicTimeCues     by vm.periodicTimeCues.collectAsStateWithLifecycle()
     val periodicTimeCueInterval by vm.periodicTimeCueInterval.collectAsStateWithLifecycle()
     val treadmillMode        by vm.treadmillMode.collectAsStateWithLifecycle()
-    val skipWarmupCooldown   by vm.skipWarmupCooldown.collectAsStateWithLifecycle()
+    val skipWarmup           by vm.skipWarmup.collectAsStateWithLifecycle()
+    val skipCooldown         by vm.skipCooldown.collectAsStateWithLifecycle()
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
     val vibrationStrength    by vm.vibrationStrength.collectAsStateWithLifecycle()
     val vibrationTarget      by vm.vibrationTarget.collectAsStateWithLifecycle()
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
     val ttsVolume            by vm.ttsVolume.collectAsStateWithLifecycle()
+    val cueStyle             by vm.cueStyle.collectAsStateWithLifecycle()
     val ttsAvailableOnDevice by vm.ttsAvailableOnDevice.collectAsStateWithLifecycle()
     val voiceTestState       by vm.voiceTestState.collectAsStateWithLifecycle()
     val weightKg             by vm.weightKg.collectAsStateWithLifecycle()
@@ -141,9 +146,14 @@ fun SettingsScreen(
                 testTag = "toggle_tts_enabled",
                 onCheckedChange = vm::setTtsEnabled
             )
+            // Tones mode drops the cues that only make sense as words, so their settings hide.
+            val tones = cueStyle == CueStyle.TONES
+            if (ttsEnabled) {
+                CueStyleSetting(style = cueStyle, onStyleChange = vm::setCueStyle)
+            }
 
             // TTS unavailable warning
-            if (ttsEnabled && ttsAvailableOnDevice == false) {
+            if (ttsEnabled && !tones && ttsAvailableOnDevice == false) {
                 Text(
                     stringResource(R.string.tts_unavailable),
                     style = MaterialTheme.typography.bodySmall,
@@ -168,43 +178,54 @@ fun SettingsScreen(
                     testTag = "slider_countdown_warning_1",
                     onValueChange = vm::setCountdownWarning1
                 )
-                SecondsSlider(
+                SettingsToggle(
                     label = stringResource(R.string.settings_countdown_warning_2),
-                    seconds = countdownWarning2,
-                    range = 3f..30f,
-                    testTag = "slider_countdown_warning_2",
-                    onValueChange = vm::setCountdownWarning2
+                    checked = countdownWarning2Enabled,
+                    testTag = "toggle_countdown_warning_2",
+                    onCheckedChange = vm::setCountdownWarning2Enabled
                 )
+                if (countdownWarning2Enabled) {
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_countdown_warning_2),
+                        showLabel = false, // the toggle above already carries the "Second warning" label
+                        seconds = countdownWarning2,
+                        range = 3f..30f,
+                        testTag = "slider_countdown_warning_2",
+                        onValueChange = vm::setCountdownWarning2
+                    )
+                }
             }
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_mid_interval_cues),
-                checked = midIntervalCues,
-                enabled = ttsEnabled,
-                testTag = "toggle_mid_interval_cues",
-                onCheckedChange = vm::setMidIntervalCues
-            )
-            HorizontalDivider()
-            SettingsToggle(
-                label = stringResource(R.string.settings_periodic_time_cues),
-                checked = periodicTimeCues,
-                enabled = ttsEnabled,
-                testTag = "toggle_periodic_time_cues",
-                onCheckedChange = vm::setPeriodicTimeCues
-            )
-            if (ttsEnabled && periodicTimeCues) {
-                SecondsSlider(
-                    label = stringResource(R.string.settings_periodic_time_cue_interval),
-                    seconds = periodicTimeCueInterval,
-                    range = 15f..120f,
-                    testTag = "slider_periodic_time_cue_interval",
-                    onValueChange = vm::setPeriodicTimeCueInterval
+            if (!tones) {
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_mid_interval_cues),
+                    checked = midIntervalCues,
+                    enabled = ttsEnabled,
+                    testTag = "toggle_mid_interval_cues",
+                    onCheckedChange = vm::setMidIntervalCues
                 )
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_periodic_time_cues),
+                    checked = periodicTimeCues,
+                    enabled = ttsEnabled,
+                    testTag = "toggle_periodic_time_cues",
+                    onCheckedChange = vm::setPeriodicTimeCues
+                )
+                if (ttsEnabled && periodicTimeCues) {
+                    SecondsSlider(
+                        label = stringResource(R.string.settings_periodic_time_cue_interval),
+                        seconds = periodicTimeCueInterval,
+                        range = 15f..120f,
+                        testTag = "slider_periodic_time_cue_interval",
+                        onValueChange = vm::setPeriodicTimeCueInterval
+                    )
+                }
             }
             HorizontalDivider()
 
-            // Voice speed slider (only shown when TTS enabled)
-            if (ttsEnabled) {
+            // Voice speed slider (only shown when spoken announcements are on)
+            if (ttsEnabled && !tones) {
                 ListItem(
                     headlineContent = {
                         Column {
@@ -246,6 +267,8 @@ fun SettingsScreen(
                     }
                 )
                 HorizontalDivider()
+            }
+            if (ttsEnabled) {
                 ListItem(
                     headlineContent = {
                         Column {
@@ -254,7 +277,11 @@ fun SettingsScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(stringResource(R.string.settings_tts_volume))
+                                Text(
+                                    stringResource(
+                                        if (tones) R.string.settings_tone_volume else R.string.settings_tts_volume
+                                    )
+                                )
                                 Text(
                                     "%.0f%%".format(ttsVolume * 100),
                                     style = MaterialTheme.typography.bodyMedium,
@@ -286,11 +313,22 @@ fun SettingsScreen(
                         }
                     }
                 )
-                VoiceTestControl(
-                    state = voiceTestState,
-                    onTestVoice = vm::testVoice,
-                    onOpenTtsSettings = { openTtsSettings(context) }
-                )
+                if (tones) {
+                    OutlinedButton(
+                        onClick = vm::testTones,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .testTag("button_test_tones")
+                    ) {
+                        Text(stringResource(R.string.settings_test_tones))
+                    }
+                } else {
+                    VoiceTestControl(
+                        state = voiceTestState,
+                        onTestVoice = vm::testVoice,
+                        onOpenTtsSettings = { openTtsSettings(context) }
+                    )
+                }
                 HorizontalDivider()
             }
 
@@ -329,11 +367,17 @@ fun SettingsScreen(
             )
             HorizontalDivider()
             SettingsToggle(
-                label = stringResource(R.string.settings_skip_warmup_cooldown),
-                checked = skipWarmupCooldown,
+                label = stringResource(R.string.settings_skip_warmup),
+                checked = skipWarmup,
                 subtitle = stringResource(R.string.settings_skip_warmup_cooldown_caption),
-                testTag = "toggle_skip_warmup_cooldown",
-                onCheckedChange = vm::setSkipWarmupCooldown
+                testTag = "toggle_skip_warmup",
+                onCheckedChange = vm::setSkipWarmup
+            )
+            SettingsToggle(
+                label = stringResource(R.string.settings_skip_cooldown),
+                checked = skipCooldown,
+                testTag = "toggle_skip_cooldown",
+                onCheckedChange = vm::setSkipCooldown
             )
             HorizontalDivider()
             SettingsToggle(
@@ -454,6 +498,51 @@ private fun VibrationTargetSetting(
         }
     }
 }
+
+@Composable
+private fun CueStyleSetting(
+    style: CueStyle,
+    onStyleChange: (CueStyle) -> Unit
+) {
+    var showMenu by remember { mutableStateOf(false) }
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.settings_cue_style)) },
+        supportingContent = if (style == CueStyle.TONES) {
+            { Text(stringResource(R.string.settings_cue_style_tones_caption)) }
+        } else null,
+        trailingContent = {
+            Box {
+                TextButton(
+                    onClick = { showMenu = true },
+                    modifier = Modifier.testTag("button_cue_style")
+                ) {
+                    Text(stringResource(style.labelRes))
+                }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    CueStyle.entries.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(stringResource(option.labelRes)) },
+                            onClick = {
+                                showMenu = false
+                                onStyleChange(option)
+                            },
+                            modifier = Modifier.testTag("cue_style_${option.name.lowercase()}")
+                        )
+                    }
+                }
+            }
+        }
+    )
+}
+
+private val CueStyle.labelRes: Int
+    get() = when (this) {
+        CueStyle.VOICE -> R.string.settings_cue_style_voice
+        CueStyle.TONES -> R.string.settings_cue_style_tones
+    }
 
 @Composable
 private fun VibrationStrengthSetting(
@@ -677,6 +766,7 @@ private fun SecondsSlider(
     seconds: Int,
     range: ClosedFloatingPointRange<Float>,
     testTag: String,
+    showLabel: Boolean = true,
     onValueChange: (Int) -> Unit
 ) {
     ListItem(
@@ -687,7 +777,7 @@ private fun SecondsSlider(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(label)
+                    Text(if (showLabel) label else "")
                     Text(
                         "%d s".format(seconds),
                         style = MaterialTheme.typography.bodyMedium,
@@ -699,7 +789,11 @@ private fun SecondsSlider(
                     onValueChange = { onValueChange(it.roundToInt()) },
                     valueRange = range,
                     steps = (range.endInclusive - range.start).toInt() - 1,
-                    modifier = Modifier.testTag(testTag)
+                    // The visible label is a separate node (or hidden), so name the slider itself
+                    // for screen readers.
+                    modifier = Modifier
+                        .testTag(testTag)
+                        .semantics { contentDescription = label }
                 )
             }
         }

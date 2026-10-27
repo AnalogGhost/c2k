@@ -12,7 +12,6 @@
     <string name="home_title">C2K</string>
     <string name="home_choose_program">Bir program seçin</string>
     <string name="home_recent_workouts">Son antrenmanlar</string>
-    <string name="home_no_workouts">Henüz antrenman yok. Başlamak için bir program seçin!</string>
     <string name="home_workout_active">Antrenman sürüyor — dönmek için dokunun</string>
     <string name="home_continue_workout">Devam et: %1$s · %2$d. Hafta, %3$d. Gün</string>
     <plurals name="home_streak">
@@ -20,14 +19,14 @@
         <item quantity="other">%1$d haftalık seri 🔥</item>
     </plurals>
     <string name="home_program_weeks">%1$d hafta</string>
-    <string name="home_program_prerequisite">%1$s</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">%1$d. Hafta</string>
     <string name="program_day_label">%1$d. Gün</string>
-    <string name="program_completed_badge">Bitti</string>
-    <string name="program_start_workout">Antrenmanı Başlat</string>
-    <string name="program_progress">%1$d / %2$d gün tamamlandı</string>
+    <plurals name="program_progress">
+        <item quantity="one">%1$d / %2$d gün tamamlandı</item>
+        <item quantity="other">%1$d / %2$d gün tamamlandı</item>
+    </plurals>
     <string name="program_next_workout">Devam et: %1$d. Hafta, %2$d. Gün</string>
     <string name="program_preview_title">%1$d. Hafta, %2$d. Gün</string>
     <string name="program_preview_start">Başlat</string>
@@ -58,6 +57,8 @@
     <string name="workout_pause">Duraklat</string>
     <string name="workout_resume">Devam Et</string>
     <string name="workout_stop">Durdur</string>
+    <string name="workout_skip_warmup">Isınmayı atla</string>
+    <string name="workout_skip_cooldown">Soğumayı atla</string>
     <string name="workout_elapsed">Geçen süre: %1$s</string>
     <string name="workout_interval_progress">Aralık: %1$d / %2$d</string>
     <string name="workout_next_interval">Sıradaki: %1$s %2$s</string>
@@ -68,7 +69,6 @@
     <string name="workout_treadmill_effort_warmup">Hafif yürüyüş hızı</string>
     <string name="workout_treadmill_effort_cooldown">Hafif yürüyüş hızı</string>
     <string name="workout_acquiring_gps">GPS aranıyor…</string>
-    <string name="workout_gps_unavailable">GPS kullanılamıyor</string>
     <string name="workout_complete_title">Antrenman Tamamlandı!</string>
     <string name="workout_complete_message">Tebrikler! Harika iş çıkardın.</string>
     <string name="workout_complete_time">Süre: %1$s</string>
@@ -87,7 +87,6 @@
     <!-- U+00A0 (non-breaking space, encoded as &#160;) keeps each number with its
          label; only the ", " between clauses is a valid wrap point. -->
     <string name="history_week_day">%1$d.&#160;Hafta, %2$d.&#160;Gün</string>
-    <string name="history_duration">%1$s</string>
     <string name="history_export">CSV Dışa Aktar</string>
     <string name="history_export_chooser">Antrenman geçmişini dışa aktar</string>
     <string name="history_export_gpx">GPX rotasını dışa aktar</string>
@@ -128,9 +127,6 @@
     </plurals>
 
     <!-- Permissions -->
-    <string name="permission_location_rationale">C2K, GPS kullanarak mesafenizi ve temponuzu takip edebilir. Bu isteğe bağlıdır — antrenman zamanlayıcısı GPS olmadan da çalışır.</string>
-    <string name="permission_location_deny">GPS\'i Atla</string>
-    <string name="permission_location_allow">GPS\'e İzin Ver</string>
 
     <!-- Navigation content descriptions -->
     <string name="nav_back">Geri</string>
@@ -180,6 +176,8 @@
     <string name="guide_a_pain_discomfort">Rahatsızlık hissi normaldir ve beklenir: yanan akciğerler, yorgun bacaklar, sızlayan kaslar. Egzersiz yapmak özellikle başlarda böyle hissettirir.\n\nAğrı ise farklıdır. Keskindir, belirli bir noktada odaklanır (diz, kaval kemiği, ayak) veya koştukça kötüleşir. Ağrı, vücudunuzun bir şeylerin ters gittiğini belirten sinyalidir.\n\nRahatsızlık hissi \"bu zor\" der. Ağrı ise \"dur\" der. Bir seans sırasında gerçek bir ağrı hissederseniz durun ve eve yürüyün. Bir gün dinlendikten sonra da devam ederse, tekrar koşmadan önce bir fizyoterapiste veya doktora görünün.</string>
     <string name="guide_q_breathing">Nasıl nefes almalıyım?</string>
     <string name="guide_a_breathing">Tek bir doğru teknik yoktur — en çok havayı almanızı sağlayan şekilde nefes alın. Birçok koşucu doğal olarak 2:2 ritmine alışır: 2 adımda nefes al, 2 adımda nefes ver. Diğerleri 3:2 tercih eder veya ihtiyaca göre nefes alır.\n\nHem burundan hem ağızdan nefes almak tamamen normaldir ve yüksek tempoda çalışırken tavsiye edilir. Nefes nefese kalıyorsanız çok hızlı koşuyorsunuz demektir — nefesiniz kontrol edilebilir hissettirene kadar yavaşlayın.</string>
+    <string name="guide_q_tones">Tonlar ne anlama geliyor?</string>
+    <string name="guide_a_tones">Ayarlarda uyarı türü olarak Tonlar\'ı seçerseniz, sesli yönlendirmelerin yerini tonlar alır. Hızlı bir yükseliş koşu, yavaşça alçalan iki nota yürüyüş demektir. Tek bir pes nota ısınmayı, alçalan üç nota soğumayı başlatır; yükselen dört nota ise bitirdiğiniz anlamına gelir. Geri sayım uyarıları kısa bip sesleridir: ilk uyarı için bir, ikinci uyarı için iki. Koşu ve yürüyüşü art arda duymak için Ayarlar\'daki Tonları test et düğmesine dokunun.</string>
     <string name="guide_q_cant_finish_interval">Bir koşu aralığını tamamlayamazsam ne olur?</string>
     <string name="guide_a_cant_finish_interval">Yürüyün. Yürümekte bir başarısızlık yoktur — yürüme molaları programa tam da bu nedenle dahil edilmiştir.\n\nKoşu aralıklarını düzenli olarak tamamlayamıyorsanız, koşu temponuzu daha da yavaşlatmayı deneyin. Birçok insan \"yavaş\" temposunun başlangıçta ne kadar yavaş olması gerektiğine şaşırır. Sürdürebileceğiniz çok yavaş bir hafif tempo koşu, sizi durmaya zorlayan hızlı bir koşudan çok daha iyidir.</string>
 
@@ -222,6 +220,8 @@
     <string name="contributor_language_selection">Manuel dil seçimi ve yerel ayarların aktarımı</string>
     <string name="contributor_fix_tts_ducking">Düzeltme: TTS seslendirmeleri artık arka plan müziğini duraklatmak yerine sesini kısıyor</string>
     <string name="contributor_fix_completion_counter">Düzeltme: Tamamlama sayacı artık ekran kilitlendiğinde donmuyor ve tamamlama anonsu kesilmiyor</string>
+    <string name="contributor_second_warning_toggle">İkinci geri sayım uyarısını kapatma seçeneği</string>
+    <string name="contributor_skip_warmup_cooldown_split">Isınmayı ve soğumayı atlamak için ayrı ayarlar ve antrenman sırasında atlama düğmesi</string>
 
     <!-- Settings -->
     <string name="settings_title">Ayarlar</string>
@@ -235,10 +235,17 @@
     <string name="language_pt_br">Brezilya Portekizcesi (Português)</string>
     <string name="language_ru">Rusça (Русский)</string>
     <string name="language_tr">Türkçe</string>
-    <string name="settings_tts_enabled">Sesli yönlendirmeler</string>
+    <string name="settings_tts_enabled">İşitsel uyarılar</string>
+    <string name="settings_cue_style">Uyarı türü</string>
+    <string name="settings_cue_style_voice">Konuşma</string>
+    <string name="settings_cue_style_tones">Tonlar</string>
+    <string name="settings_cue_style_tones_caption">Konuşma yerine tonlar: koşu için yükselen, yürüyüş için alçalan, geri sayım uyarıları için kısa bip sesleri.</string>
+    <string name="settings_tone_volume">Ton düzeyi</string>
+    <string name="settings_test_tones">Tonları test et</string>
     <string name="settings_treadmill_mode">Koşu bandı modu (GPS\'i kapatır)</string>
-    <string name="settings_skip_warmup_cooldown">Isınmayı ve soğumayı atla</string>
-    <string name="settings_skip_warmup_cooldown_caption">Kademeli ısınma sakatlanma riskini azaltır — koşunuza gidip gelirken zaten yürüyorsanız bunu atlayabilirsiniz.</string>
+    <string name="settings_skip_warmup">Isınmayı atla</string>
+    <string name="settings_skip_cooldown">Soğumayı atla</string>
+    <string name="settings_skip_warmup_cooldown_caption">Kademeli ısınma sakatlanma riskini azaltır — koşunuza giderken zaten yürüyorsanız bunu atlayabilirsiniz.</string>
     <string name="settings_gps_enabled">GPS takibi</string>
     <string name="settings_countdown_warnings">Geri sayım uyarıları</string>
     <string name="settings_countdown_warning_1">Birinci uyarı</string>

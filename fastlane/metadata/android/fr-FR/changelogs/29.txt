@@ -1,0 +1,5 @@
+• Nouveau mode Tonalités : des sons à la place de la voix pour les changements d'intervalle, les comptes à rebours et la fin de la séance. Paramètres → Type de signal → Tonalités.
+• Vos semaines d'affilée s'affichent désormais aussi dans l'Historique.
+• Correction : une séance ne démarrait parfois pas juste après l'installation de l'application.
+• Correction : une langue choisie dans les Paramètres s'affichait parfois sans traduction.
+• Corrections de traduction.

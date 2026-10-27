@@ -2,6 +2,7 @@ package com.hackerapps.c2k.ui.screen.settings
 
 import android.app.Application
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
@@ -25,6 +26,7 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.VibrationTarget
@@ -96,15 +98,18 @@ class SettingsScreenTest {
             prefs.setCountdownWarnings(true)
             prefs.setCountdownWarning1(10)
             prefs.setCountdownWarning2(5)
+            prefs.setCountdownWarning2Enabled(true)
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
             prefs.setVibrationStrength(VibrationStrength.MEDIUM)
             prefs.setVibrationTarget(VibrationTarget.PHONE)
             prefs.setTtsSpeechRate(1.0f)
             prefs.setTtsVolume(1.0f)
+            prefs.setCueStyle(CueStyle.VOICE)
             prefs.setMidIntervalCues(true)
             prefs.setTreadmillMode(false)
-            prefs.setSkipWarmupCooldown(false)
+            prefs.setSkipWarmup(false)
+            prefs.setSkipCooldown(false)
             prefs.setWeightKg(70f)
             prefs.setWeightUnit(WeightUnit.KG)
         }
@@ -127,7 +132,8 @@ class SettingsScreenTest {
         composeRule.onNodeWithText(string(R.string.settings_countdown_warnings)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_vibration_enabled)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_treadmill_mode)).assertExists()
-        composeRule.onNodeWithText(string(R.string.settings_skip_warmup_cooldown)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_skip_warmup)).assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_skip_cooldown)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_keep_screen_on)).assertExists()
         composeRule.onNodeWithText(string(R.string.settings_weight)).assertExists()
     }
@@ -145,22 +151,21 @@ class SettingsScreenTest {
     }
 
     @Test
-    fun skip_warmup_cooldown_toggle_shows_its_disclaimer_and_persists() {
+    fun skip_warmup_and_cooldown_toggles_persist_independently() {
         setContent()
-        composeRule.onNodeWithTag("toggle_skip_warmup_cooldown").assertIsOff()
+        composeRule.onNodeWithTag("toggle_skip_warmup").assertIsOff()
+        composeRule.onNodeWithTag("toggle_skip_cooldown").assertIsOff()
         composeRule.onNodeWithText(string(R.string.settings_skip_warmup_cooldown_caption)).assertExists()
 
-        composeRule.onNodeWithTag("toggle_skip_warmup_cooldown").performScrollTo().performClick()
+        composeRule.onNodeWithTag("toggle_skip_warmup").performScrollTo().performClick()
 
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("toggle_skip_warmup_cooldown").assertIsOn()
+            composeRule.onNodeWithTag("toggle_skip_warmup").assertIsOn()
         }
-        composeRule.waitUntil {
-            runBlocking {
-                val app = ApplicationProvider.getApplicationContext<Application>()
-                UserPreferences(app).skipWarmupCooldown.first()
-            }
-        }
+        composeRule.onNodeWithTag("toggle_skip_cooldown").assertIsOff()
+        val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+        composeRule.waitUntil(10_000) { runBlocking { prefs.skipWarmup.first() } }
+        assertEquals(false, runBlocking { prefs.skipCooldown.first() })
     }
 
     @Test
@@ -240,6 +245,42 @@ class SettingsScreenTest {
         }
         composeRule.onNodeWithText(string(R.string.settings_tts_volume)).assertDoesNotExist()
         composeRule.onNodeWithTag("button_test_voice").assertDoesNotExist()
+    }
+
+    @Test
+    fun choosing_tones_hides_voice_only_settings_and_persists() {
+        setContent()
+        composeRule.onNodeWithText(string(R.string.settings_cue_style_tones_caption)).assertDoesNotExist()
+
+        composeRule.onNodeWithTag("button_cue_style").performClick()
+        composeRule.onNodeWithTag("cue_style_tones").performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.settings_cue_style_tones_caption)).assertExists()
+        }
+        // Word-only cues and voice controls go; countdown warnings and volume stay.
+        composeRule.onNodeWithTag("toggle_mid_interval_cues").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_periodic_time_cues").assertDoesNotExist()
+        composeRule.onNodeWithTag("slider_tts_speed").assertDoesNotExist()
+        composeRule.onNodeWithTag("button_test_voice").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_countdown_warnings").assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_tone_volume)).assertExists()
+        composeRule.onNodeWithTag("button_test_tones").assertExists()
+
+        val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+        composeRule.waitUntil(10_000) { runBlocking { prefs.cueStyle.first() } == CueStyle.TONES }
+    }
+
+    @Test
+    fun cue_type_is_hidden_when_audio_cues_are_off() {
+        setContent()
+        composeRule.onNodeWithTag("button_cue_style").assertExists()
+
+        composeRule.onNodeWithTag("toggle_tts_enabled").performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("button_cue_style").assertDoesNotExist()
+        }
     }
 
     @Test
@@ -359,7 +400,10 @@ class SettingsScreenTest {
     fun countdown_warning_sliders_shown_with_default_values() {
         setContent()
         composeRule.onNodeWithText(string(R.string.settings_countdown_warning_1)).assertExists()
-        composeRule.onNodeWithText(string(R.string.settings_countdown_warning_2)).assertExists()
+        // The second slider has no visible label of its own (the toggle above carries it), so look
+        // it up by tag; it must still be named for screen readers.
+        composeRule.onNodeWithTag("slider_countdown_warning_2")
+            .assertContentDescriptionEquals(string(R.string.settings_countdown_warning_2))
         composeRule.onNodeWithText("10 s").assertExists()
         composeRule.onNodeWithText("5 s").assertExists()
     }
@@ -388,6 +432,23 @@ class SettingsScreenTest {
             composeRule.onNodeWithTag("slider_countdown_warning_1").assertDoesNotExist()
         }
         composeRule.onNodeWithTag("slider_countdown_warning_2").assertDoesNotExist()
+    }
+
+    @Test
+    fun disabling_second_warning_hides_its_slider_and_persists() {
+        setContent()
+        composeRule.onNodeWithTag("slider_countdown_warning_2").assertExists()
+
+        composeRule.onNodeWithTag("toggle_countdown_warning_2").performScrollTo().performClick()
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("slider_countdown_warning_2").assertDoesNotExist()
+        }
+        composeRule.onNodeWithTag("slider_countdown_warning_1").assertExists()
+        val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+        composeRule.waitUntil(10_000) {
+            !runBlocking { prefs.countdownWarning2Enabled.first() }
+        }
     }
 
     @Test

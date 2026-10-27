@@ -17,6 +17,7 @@ import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,10 +38,14 @@ import com.hackerapps.c2k.data.model.Interval
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.model.WorkoutDay
+import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.repository.SessionRepository
 import com.hackerapps.c2k.engine.WorkoutEngine
 import com.hackerapps.c2k.engine.WorkoutState
+import com.hackerapps.c2k.engine.countdownWarningThresholds
+import com.hackerapps.c2k.engine.tone.TonePlayer
+import com.hackerapps.c2k.engine.tts.CuePlayer
 import com.hackerapps.c2k.engine.tts.TtsManager
 import com.hackerapps.c2k.location.GpsLocationProvider
 import com.hackerapps.c2k.location.LocationProvider
@@ -63,6 +68,7 @@ class WorkoutService : Service() {
         const val ACTION_PAUSE  = "com.hackerapps.c2k.action.PAUSE"
         const val ACTION_RESUME = "com.hackerapps.c2k.action.RESUME"
         const val ACTION_STOP   = "com.hackerapps.c2k.action.STOP"
+        const val ACTION_SKIP_WARMUP_COOLDOWN = "com.hackerapps.c2k.action.SKIP_WARMUP_COOLDOWN"
 
         const val EXTRA_PROGRAM_ID    = "program_id"
         const val EXTRA_WEEK          = "week"
@@ -160,7 +166,7 @@ class WorkoutService : Service() {
         }
     )
 
-    private lateinit var ttsManager: TtsManager
+    private lateinit var cuePlayer: CuePlayer
     private lateinit var engine: WorkoutEngine
     // Initialised to NoOp so binder calls before the setup coroutine finishes are safe.
     private var locationProvider: LocationProvider = NoOpLocationProvider()
@@ -173,7 +179,7 @@ class WorkoutService : Service() {
     // engine.stop() only cancels the tick loop, not this — without also cancelling this on manual
     // stop, the collector keeps running and, if a new workout starts before it winds down, it
     // observes the reassigned engine field (a shared var) and double-processes its completion
-    // using this session's stale captured sessionRepository/ttsManager.
+    // using this session's stale captured sessionRepository/cuePlayer.
     private var sessionJob: Job? = null
 
     // Exposed via binder — safe to collect immediately; populated once setup coroutine runs.
@@ -213,6 +219,7 @@ class WorkoutService : Service() {
             // — silently inflating the recorded distance for any run with a real-world pause.
             ACTION_PAUSE  -> if (::engine.isInitialized) { engine.pause(); locationProvider.pause() }
             ACTION_RESUME -> if (::engine.isInitialized) { engine.resume(); locationProvider.resume() }
+            ACTION_SKIP_WARMUP_COOLDOWN -> if (::engine.isInitialized) engine.skipWarmupOrCooldown()
             ACTION_STOP   -> handleStop()
         }
         return START_NOT_STICKY
@@ -262,13 +269,14 @@ class WorkoutService : Service() {
         val app = application as C2KApp
         val sessionRepository = testSessionRepositoryOverride ?: app.sessionRepository
 
-        sessionJob = serviceScope.launch {
+        val job = serviceScope.launch {
             val ttsEnabled        = prefs.ttsEnabled.first()
             val gpsEnabled        = prefs.gpsEnabled.first()
             val treadmillMode     = prefs.treadmillMode.first()
             val countdownWarnings = prefs.countdownWarnings.first()
             val countdownWarning1 = prefs.countdownWarning1.first()
             val countdownWarning2 = prefs.countdownWarning2.first()
+            val countdownWarning2Enabled = prefs.countdownWarning2Enabled.first()
             val midIntervalCues   = prefs.midIntervalCues.first()
             val periodicTimeCues         = prefs.periodicTimeCues.first()
             val periodicTimeCueInterval  = prefs.periodicTimeCueInterval.first()
@@ -280,16 +288,24 @@ class WorkoutService : Service() {
             val notifyWatch       = vibrationEnabled && vibrationTarget.watch
             val speechRate        = prefs.ttsSpeechRate.first()
             val ttsVolume         = prefs.ttsVolume.first()
-            val skipWarmupCooldown = prefs.skipWarmupCooldown.first()
-            val effectiveWorkoutDay =
-                if (skipWarmupCooldown) workoutDay.withoutWarmupCooldown() else workoutDay
+            val cueStyle          = prefs.cueStyle.first()
+            val skipWarmup        = prefs.skipWarmup.first()
+            val skipCooldown      = prefs.skipCooldown.first()
+            val effectiveWorkoutDay = workoutDay.skipping(warmup = skipWarmup, cooldown = skipCooldown)
 
             val hasLocationPermission = ContextCompat.checkSelfPermission(
                 this@WorkoutService, android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
 
             withContext(Dispatchers.Main) {
-                ttsManager = TtsManager(this@WorkoutService, speechRate, ttsVolume)
+                cuePlayer = when (cueStyle) {
+                    CueStyle.VOICE -> TtsManager(this@WorkoutService, speechRate, ttsVolume)
+                    CueStyle.TONES -> TonePlayer(
+                        this@WorkoutService,
+                        ttsVolume,
+                        countdownWarningThresholds(countdownWarning1, countdownWarning2, countdownWarning2Enabled)
+                    )
+                }
             }
 
             locationProvider = if (!treadmillMode && gpsEnabled && hasLocationPermission)
@@ -303,11 +319,12 @@ class WorkoutService : Service() {
 
             engine = WorkoutEngine(
                 day = effectiveWorkoutDay,
-                tts = ttsManager,
+                tts = cuePlayer,
                 ttsEnabled = ttsEnabled,
                 countdownWarnings = countdownWarnings,
                 countdownWarningSeconds1 = countdownWarning1,
                 countdownWarningSeconds2 = countdownWarning2,
+                countdownWarning2Enabled = countdownWarning2Enabled,
                 midIntervalCues = midIntervalCues,
                 periodicTimeCues = periodicTimeCues,
                 periodicTimeCueIntervalSeconds = periodicTimeCueInterval,
@@ -378,13 +395,13 @@ class WorkoutService : Service() {
                                 // happens in cleanup().
                                 isRunning.value = false
                                 currentWorkout.value = null
-                                // Let the final "Workout complete" announcement finish speaking
-                                // before tearing down: cleanup() calls ttsManager.shutdown() ->
-                                // tts.stop(), which otherwise cuts the cue off. Bounded so a
-                                // stuck/again TTS engine can't keep the service alive indefinitely.
-                                if (::ttsManager.isInitialized) {
+                                // Let the final "Workout complete" announcement (or chime) finish
+                                // before tearing down: cleanup() calls cuePlayer.shutdown(), which
+                                // otherwise cuts the cue off. Bounded so a stuck TTS engine can't
+                                // keep the service alive indefinitely.
+                                if (::cuePlayer.isInitialized) {
                                     withTimeoutOrNull(COMPLETION_SPEECH_TIMEOUT_MS) {
-                                        ttsManager.speaking.first { !it }
+                                        cuePlayer.speaking.first { !it }
                                     }
                                 }
                                 cleanup()
@@ -399,6 +416,19 @@ class WorkoutService : Service() {
                 }
             }
         }
+        sessionJob = job
+        // If setup fails (say a DB write throws before the engine starts), the exception handler
+        // only logs it, which would leave the "Starting…" notification up and the service stuck
+        // as running, so a later start would return early. Tear down as Stop would. Skipped when
+        // a newer session has replaced this one, so a late failure can't stop that session.
+        job.invokeOnCompletion { cause ->
+            if (cause != null && cause !is CancellationException && sessionJob === job) {
+                Log.e(TAG, "Workout session failed (logged above); stopping the service")
+                cleanup()
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            }
+        }
     }
 
     private fun handleStop() {
@@ -407,7 +437,7 @@ class WorkoutService : Service() {
         if (!::engine.isInitialized) {
             // Same reasoning as the sessionJob?.cancel() below: without this, a Stop tapped during
             // handleStart()'s async setup (before engine is assigned) leaves that coroutine
-            // running — it goes on to create the DB session row and assign engine/ttsManager
+            // running — it goes on to create the DB session row and assign engine/cuePlayer
             // after the service was supposed to have stopped.
             sessionJob?.cancel()
             cleanup()
@@ -433,7 +463,7 @@ class WorkoutService : Service() {
         // method returns: without it, the collector keeps running and, if a new workout starts
         // before it winds down, it observes the reassigned engine field (a shared var) and
         // double-processes that new workout's completion using this session's stale
-        // sessionRepository/ttsManager.
+        // sessionRepository/cuePlayer.
         engine.stop()
         sessionJob?.cancel()
         cleanup()
@@ -460,7 +490,7 @@ class WorkoutService : Service() {
         if (cleanedUp) return
         cleanedUp = true
         locationProvider.stop()
-        if (::ttsManager.isInitialized) ttsManager.shutdown()
+        if (::cuePlayer.isInitialized) cuePlayer.shutdown()
         cueTag?.let { (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(it, CUE_NOTIFICATION_ID) }
         cueTag = null
         if (::wakeLock.isInitialized && wakeLock.isHeld) wakeLock.release()

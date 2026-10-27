@@ -1,0 +1,3 @@
+• „Aufwärmen überspringen" und „Abkühlen überspringen" sind jetzt getrennte Einstellungen – du kannst eines überspringen und das andere behalten. Deine bisherige Auswahl bleibt erhalten.
+• Neue Schaltfläche im Training, um ein laufendes Aufwärmen oder Abkühlen zu überspringen.
+• Neue Option, um die zweite Countdown-Warnung auszuschalten und nur die erste zu behalten.
