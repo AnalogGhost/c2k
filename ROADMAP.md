@@ -25,7 +25,7 @@ Prioritised by impact vs. effort. Out-of-scope items are listed at the bottom wi
 - **Health Connect integration** — write completed workouts to Android Health Connect. Data stays on device; no third-party service involved. Open source friendly.
 - ~~**Personal bests and milestones** — track fastest pace, longest run, total distance badges. All local.~~ *(done: ae0f329; per-day best-time comparison on the workout-complete screen shipped earlier)*
 - ~~**Tones mode** — short chimes as an alternative to spoken cues, for runners who don't want TTS (issue #42). Bundled synthesis, no new permissions.~~ *(done: 928b46c, a00c65d, 2964a03; shipped in 1.2.22)*
-- **Adaptive progression** — detect when a user fails to complete intervals multiple times and surface a suggestion to repeat the day or try the pre-C25K plan.
+- ~~**Adaptive progression** — detect when a user fails to complete intervals multiple times and surface a suggestion to repeat the day or try the pre-C25K plan.~~ *(done: ff0ec2f; suggests repeating the previous week, or Pre-C25K from C25K Week 1, after two early stops)*
 - **Announce pace or distance mid-interval** — periodic spoken updates during run intervals using GPS data already being collected.
 
 ---
