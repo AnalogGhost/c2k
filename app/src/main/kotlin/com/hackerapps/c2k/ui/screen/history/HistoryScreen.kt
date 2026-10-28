@@ -55,8 +55,9 @@ import com.hackerapps.c2k.engine.MonthlySummary
 import com.hackerapps.c2k.engine.PeriodTotals
 import com.hackerapps.c2k.engine.WeeklySummary
 import com.hackerapps.c2k.ui.programNameRes
+import com.hackerapps.c2k.ui.theme.GreenText
+import com.hackerapps.c2k.ui.theme.RunOrangeText
 import com.hackerapps.c2k.ui.theme.RunOrange
-import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -129,7 +130,7 @@ fun HistoryScreen(
                         Text(
                             pluralStringResource(R.plurals.home_streak, streak, streak),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = RunOrange,
+                            color = RunOrangeText,
                             modifier = Modifier.testTag("history_streak")
                         )
                     }
@@ -416,7 +417,7 @@ private fun SessionCard(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                     if (session.completed) {
-                        Icon(Icons.Default.CheckCircle, contentDescription = null, tint = WarmCoolGreen)
+                        Icon(Icons.Default.CheckCircle, contentDescription = null, tint = GreenText)
                         Spacer(Modifier.width(8.dp))
                     }
                     // weight(1f) here (not just on the enclosing Row above) matters when this

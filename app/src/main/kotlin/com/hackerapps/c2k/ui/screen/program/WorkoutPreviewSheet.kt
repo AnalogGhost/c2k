@@ -24,9 +24,7 @@ import com.hackerapps.c2k.R
 import com.hackerapps.c2k.data.model.Interval
 import com.hackerapps.c2k.data.model.IntervalType
 import com.hackerapps.c2k.data.model.WorkoutDay
-import com.hackerapps.c2k.ui.theme.RunOrange
-import com.hackerapps.c2k.ui.theme.WalkBlue
-import com.hackerapps.c2k.ui.theme.WarmCoolGreen
+import com.hackerapps.c2k.ui.theme.intervalTextColor
 
 private data class IntervalGroup(
     val type: IntervalType,
@@ -104,12 +102,7 @@ fun WorkoutPreviewSheet(
 
 @Composable
 private fun IntervalGroupRow(group: IntervalGroup) {
-    val color = when (group.type) {
-        IntervalType.RUN      -> RunOrange
-        IntervalType.WALK     -> WalkBlue
-        IntervalType.WARMUP,
-        IntervalType.COOLDOWN -> WarmCoolGreen
-    }
+    val color = intervalTextColor(group.type)
     val label = when (group.type) {
         IntervalType.RUN      -> stringResource(R.string.workout_interval_run)
         IntervalType.WALK     -> stringResource(R.string.workout_interval_walk)

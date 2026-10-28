@@ -66,6 +66,8 @@ import com.hackerapps.c2k.ui.component.RequestLocationPermission
 import com.hackerapps.c2k.ui.component.RequestNotificationPermission
 import com.hackerapps.c2k.ui.programNameRes
 import com.hackerapps.c2k.ui.screen.workout.components.IntervalRing
+import com.hackerapps.c2k.ui.theme.GreenText
+import com.hackerapps.c2k.ui.theme.intervalTextColor
 import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WalkBlue
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
@@ -256,7 +258,7 @@ private fun ActiveWorkoutContent(
             size = ringSize
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
+                Text(label, style = MaterialTheme.typography.titleLarge, color = intervalTextColor(state.currentInterval.type))
                 Spacer(Modifier.height(4.dp))
                 Text(
                     formatTime(state.secondsRemainingInInterval),
@@ -272,11 +274,10 @@ private fun ActiveWorkoutContent(
             // Next interval hint
             state.nextInterval?.let { next ->
                 val nextLabel = intervalLabel(next.type)
-                val nextColor = intervalColor(next.type)
                 Text(
                     stringResource(R.string.workout_next_interval, nextLabel, formatTime(next.durationSeconds)),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = nextColor.copy(alpha = 0.75f)
+                    color = intervalTextColor(next.type)
                 )
             }
 
@@ -409,7 +410,7 @@ private fun PausedWorkoutContent(
             size = ringSize
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(label, style = MaterialTheme.typography.titleLarge, color = ringColor)
+                Text(label, style = MaterialTheme.typography.titleLarge, color = intervalTextColor(state.currentInterval.type))
                 Spacer(Modifier.height(4.dp))
                 Text(
                     formatTime(state.secondsRemainingInInterval),
@@ -485,7 +486,7 @@ private fun CompletedContent(
         Text(
             stringResource(R.string.workout_complete_title),
             style = MaterialTheme.typography.headlineLarge,
-            color = WarmCoolGreen,
+            color = GreenText,
             textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(8.dp))
@@ -533,7 +534,7 @@ private fun CompletedContent(
                 Text(
                     stringResource(R.string.workout_new_best),
                     style = MaterialTheme.typography.titleMedium,
-                    color = WarmCoolGreen
+                    color = GreenText
                 )
             }
             Text(

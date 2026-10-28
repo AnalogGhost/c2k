@@ -2,6 +2,7 @@ package com.hackerapps.c2k.screenshots
 
 import android.Manifest
 import android.app.Application
+import android.os.Build
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -69,18 +70,18 @@ class ScreenshotTest {
         val localeTestRule = LocaleTestRule()
     }
 
-    // All three pre-granted so every RequestXPermission composable short-circuits to an
-    // immediate no-dialog grant. Location is included even though the demo workout runs in
-    // treadmill mode (which is supposed to skip RequestLocationPermission entirely) because
-    // WorkoutScreen's `permissionResolved` initial value is keyed off a DataStore-backed
-    // StateFlow set in @Before — that write can still be propagating when WorkoutScreen first
-    // composes, especially since automated clicks happen far faster than a human would, so it
-    // can transiently read treadmillMode=false and fire a real system dialog otherwise.
+    // Pre-granted so every RequestXPermission composable short-circuits to an immediate
+    // no-dialog grant. The demo workout runs in treadmill mode, which skips the location request,
+    // but granting it keeps a system dialog out of the shot regardless. POST_NOTIFICATIONS only
+    // exists from Android 13; granting it on an older device fails the whole test, and the
+    // older-Android capture is how the fallback colour scheme gets checked.
     @get:Rule(order = 0)
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-        Manifest.permission.POST_NOTIFICATIONS,
-        Manifest.permission.ACTIVITY_RECOGNITION,
-        Manifest.permission.ACCESS_FINE_LOCATION
+        *listOfNotNull(
+            Manifest.permission.POST_NOTIFICATIONS.takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU },
+            Manifest.permission.ACTIVITY_RECOGNITION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ).toTypedArray()
     )
 
     @get:Rule(order = 1)

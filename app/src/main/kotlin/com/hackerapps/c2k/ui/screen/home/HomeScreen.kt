@@ -54,6 +54,8 @@ import com.hackerapps.c2k.ui.programDescRes
 import com.hackerapps.c2k.ui.programNameRes
 import com.hackerapps.c2k.ui.programPrereqRes
 import com.hackerapps.c2k.ui.screen.program.WorkoutPreviewSheet
+import com.hackerapps.c2k.ui.theme.GreenText
+import com.hackerapps.c2k.ui.theme.RunOrangeText
 import com.hackerapps.c2k.ui.theme.RunOrange
 import com.hackerapps.c2k.ui.theme.WarmCoolGreen
 import java.text.SimpleDateFormat
@@ -127,7 +129,7 @@ fun HomeScreen(
                     Text(
                         pluralStringResource(R.plurals.home_streak, state.streak, state.streak),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = RunOrange
+                        color = RunOrangeText
                     )
                     Spacer(Modifier.height(4.dp))
                 }
@@ -268,11 +270,11 @@ private fun ActiveWorkoutBanner(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Icon(Icons.Default.FitnessCenter, contentDescription = null, tint = WarmCoolGreen)
+            Icon(Icons.Default.FitnessCenter, contentDescription = null, tint = GreenText)
             Text(
                 stringResource(R.string.home_workout_active),
                 style = MaterialTheme.typography.bodyLarge,
-                color = WarmCoolGreen
+                color = GreenText
             )
         }
     }

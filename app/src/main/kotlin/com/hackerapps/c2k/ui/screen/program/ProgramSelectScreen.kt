@@ -57,7 +57,7 @@ import com.hackerapps.c2k.data.model.CoachingTips
 import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.ui.programDescRes
 import com.hackerapps.c2k.ui.programNameRes
-import com.hackerapps.c2k.ui.theme.WarmCoolGreen
+import com.hackerapps.c2k.ui.theme.GreenText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -240,7 +240,7 @@ fun ProgramSelectScreen(
                                         Icons.Default.CheckCircle,
                                         contentDescription = null,
                                         modifier = Modifier.size(18.dp),
-                                        tint = WarmCoolGreen
+                                        tint = GreenText
                                     )
                                 }
                             }
@@ -307,10 +307,10 @@ private fun DayButton(
                     Icons.Default.CheckCircle,
                     contentDescription = null,
                     modifier = Modifier.size(14.dp),
-                    tint = WarmCoolGreen
+                    tint = GreenText
                 )
                 Spacer(Modifier.width(4.dp))
-                Text(stringResource(R.string.program_day_label, day), color = WarmCoolGreen)
+                Text(stringResource(R.string.program_day_label, day), color = GreenText)
             }
         }
     } else {
