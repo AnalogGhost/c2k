@@ -24,6 +24,11 @@ class TtsManager(
     companion object {
         val isAvailableOnDevice = MutableStateFlow<Boolean?>(null)
         private const val TAG = "TtsManager"
+
+        // Silence played before each announcement group. Ducking another player, or switching the
+        // output away from a hardware path such as FM radio, can swallow the first few hundred
+        // milliseconds, which is often the number in "2 minutes remaining" (issue #50).
+        private const val LEAD_IN_MS = 400L
     }
 
     private val context: Context = context.applicationContext.localized()
@@ -147,9 +152,10 @@ class TtsManager(
             _speaking.value = true
             requestAudioFocusIfNeeded()
         }
+        playLeadIn()
         val speakResult = tts.speak(
             request.text,
-            TextToSpeech.QUEUE_FLUSH,
+            TextToSpeech.QUEUE_ADD,
             speechParams(),
             utteranceId
         )
@@ -164,7 +170,6 @@ class TtsManager(
             return
         }
         val text = buildText(announcement)
-        val mode = if (queueAdd) TextToSpeech.QUEUE_ADD else TextToSpeech.QUEUE_FLUSH
         val params = speechParams()
         val utteranceId = "c2k_${System.nanoTime()}"
 
@@ -177,10 +182,18 @@ class TtsManager(
 
         // speak() is called outside the lock; the id is already registered so an early
         // onDone/onStop callback from the TTS binder thread still balances correctly.
-        val speakResult = tts.speak(text, mode, params, utteranceId)
+        // A new group flushes the queue with the lead-in, so the speech itself is always added.
+        if (!queueAdd) playLeadIn()
+        val speakResult = tts.speak(text, TextToSpeech.QUEUE_ADD, params, utteranceId)
         if (speakResult == TextToSpeech.ERROR) {
             finishUtterance(utteranceId)
         }
+    }
+
+    // Flushes the queue and starts the group with silence while focus takes effect. The silence is
+    // not tracked in pending: focus is held until the speech queued after it finishes.
+    private fun playLeadIn() {
+        tts.playSilentUtterance(LEAD_IN_MS, TextToSpeech.QUEUE_FLUSH, "c2k_lead_in_${System.nanoTime()}")
     }
 
     private fun speechParams(): Bundle? = if (volume < 1.0f) Bundle().apply {
