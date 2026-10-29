@@ -126,6 +126,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Antrenman</string>
     <string name="notification_channel_desc">Aktif antrenman zamanlayıcısı</string>
+    <string name="notification_cue_channel_name">Aralık bildirimleri</string>
+    <string name="notification_cue_channel_desc">Aralık değişimlerinde ve antrenman sonunda akıllı saate iletilmek üzere kısa bildirimler</string>
     <string name="notification_action_pause">Duraklat</string>
     <string name="notification_action_resume">Devam Et</string>
     <string name="notification_action_stop">Durdur</string>
@@ -269,6 +271,8 @@
     <string name="settings_vibration_strength_light">Hafif</string>
     <string name="settings_vibration_strength_medium">Orta</string>
     <string name="settings_vibration_strength_strong">Güçlü</string>
+    <string name="settings_vibration_smartwatch">Akıllı saate de bildir</string>
+    <string name="settings_vibration_watch_caption">Akıllı saatinizin titremesi için her aralık değişiminde ve antrenman bittiğinde bir bildirim gönderir. Telefon kendi titreşim düzeni yerine bu bildirimle bir kez titrer.</string>
     <string name="settings_tts_speed">Ses hızı</string>
     <string name="settings_tts_speed_slow">Yavaş</string>
     <string name="settings_tts_speed_fast">Hızlı</string>

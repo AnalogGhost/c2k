@@ -101,6 +101,7 @@ class SettingsScreenTest {
             prefs.setKeepScreenOn(true)
             prefs.setVibrationEnabled(false)
             prefs.setVibrationStrength(VibrationStrength.MEDIUM)
+            prefs.setSmartwatchCues(false)
             prefs.setTtsSpeechRate(1.0f)
             prefs.setTtsVolume(1.0f)
             prefs.setCueStyle(CueStyle.VOICE)
@@ -182,6 +183,43 @@ class SettingsScreenTest {
             runBlocking {
                 val app = ApplicationProvider.getApplicationContext<Application>()
                 UserPreferences(app).vibrationStrength.first() == VibrationStrength.STRONG
+            }
+        }
+    }
+
+    @Test
+    fun smartwatch_cues_replace_the_strength_setting_with_the_watch_hint() {
+        setContent()
+        composeRule.onNodeWithTag("toggle_smartwatch_cues").assertDoesNotExist()
+
+        composeRule.onNodeWithTag("toggle_vibration_enabled").performScrollTo().performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("toggle_smartwatch_cues").assertExists()
+        }
+        composeRule.onNodeWithTag("button_vibration_strength").assertExists()
+        composeRule.onNodeWithText(string(R.string.settings_vibration_watch_caption)).assertDoesNotExist()
+
+        composeRule.onNodeWithTag("toggle_smartwatch_cues").performScrollTo().performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("button_vibration_strength").assertDoesNotExist()
+        }
+        composeRule.onNodeWithText(string(R.string.settings_vibration_watch_caption)).assertExists()
+    }
+
+    @Test
+    fun smartwatch_cues_choice_is_persisted() {
+        setContent()
+        composeRule.onNodeWithTag("toggle_vibration_enabled").performScrollTo().performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("toggle_smartwatch_cues").assertExists()
+        }
+
+        composeRule.onNodeWithTag("toggle_smartwatch_cues").performScrollTo().performClick()
+
+        composeRule.waitUntil {
+            runBlocking {
+                val app = ApplicationProvider.getApplicationContext<Application>()
+                UserPreferences(app).smartwatchCues.first()
             }
         }
     }

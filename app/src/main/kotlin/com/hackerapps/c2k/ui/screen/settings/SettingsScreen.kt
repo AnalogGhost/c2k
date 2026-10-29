@@ -88,6 +88,7 @@ fun SettingsScreen(
     val keepScreenOn         by vm.keepScreenOn.collectAsStateWithLifecycle()
     val vibrationEnabled     by vm.vibrationEnabled.collectAsStateWithLifecycle()
     val vibrationStrength    by vm.vibrationStrength.collectAsStateWithLifecycle()
+    val smartwatchCues       by vm.smartwatchCues.collectAsStateWithLifecycle()
     val ttsSpeechRate        by vm.ttsSpeechRate.collectAsStateWithLifecycle()
     val ttsVolume            by vm.ttsVolume.collectAsStateWithLifecycle()
     val cueStyle             by vm.cueStyle.collectAsStateWithLifecycle()
@@ -334,9 +335,20 @@ fun SettingsScreen(
                 onCheckedChange = vm::setVibrationEnabled
             )
             if (vibrationEnabled) {
-                VibrationStrengthSetting(
-                    strength = vibrationStrength,
-                    onStrengthChange = vm::setVibrationStrength
+                // With watch cues on, the phone buzzes with the notification instead of playing
+                // its own pattern, so the strength setting has nothing to apply to.
+                if (!smartwatchCues) {
+                    VibrationStrengthSetting(
+                        strength = vibrationStrength,
+                        onStrengthChange = vm::setVibrationStrength
+                    )
+                }
+                SettingsToggle(
+                    label = stringResource(R.string.settings_vibration_smartwatch),
+                    checked = smartwatchCues,
+                    subtitle = if (smartwatchCues) stringResource(R.string.settings_vibration_watch_caption) else null,
+                    testTag = "toggle_smartwatch_cues",
+                    onCheckedChange = vm::setSmartwatchCues
                 )
             }
             HorizontalDivider()

@@ -128,6 +128,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Treino</string>
     <string name="notification_channel_desc">Cronômetro do treino ativo</string>
+    <string name="notification_cue_channel_name">Avisos de treino</string>
+    <string name="notification_cue_channel_desc">Avisos curtos nas trocas de intervalo e ao fim do treino, para encaminhar a um smartwatch</string>
     <string name="notification_action_pause">Pausar</string>
     <string name="notification_action_resume">Retomar</string>
     <string name="notification_action_stop">Parar</string>
@@ -270,6 +272,8 @@
     <string name="settings_vibration_strength_light">Fraca</string>
     <string name="settings_vibration_strength_medium">Média</string>
     <string name="settings_vibration_strength_strong">Forte</string>
+    <string name="settings_vibration_smartwatch">Avisar também o smartwatch</string>
+    <string name="settings_vibration_watch_caption">Envia uma notificação a cada troca de intervalo e ao fim do treino para o seu smartwatch vibrar. O celular vibra uma vez junto com ela, em vez de usar o próprio padrão.</string>
     <string name="settings_tts_speed">Velocidade da voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

@@ -90,6 +90,8 @@ class SettingsViewModel @JvmOverloads constructor(
     val vibrationStrength = prefs.vibrationStrength
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VibrationStrength.MEDIUM)
 
+    val smartwatchCues = prefs.smartwatchCues
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
     val cueStyle = prefs.cueStyle
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CueStyle.VOICE)
 
@@ -178,7 +180,7 @@ class SettingsViewModel @JvmOverloads constructor(
     fun setVibrationEnabled(v: Boolean)  {
         viewModelScope.launch {
             prefs.setVibrationEnabled(v)
-            if (v) previewVibration(vibrationStrength.value)
+            if (v && !smartwatchCues.value) previewVibration(vibrationStrength.value)
         }
     }
     fun setVibrationStrength(v: VibrationStrength) {
@@ -187,6 +189,7 @@ class SettingsViewModel @JvmOverloads constructor(
             previewVibration(v)
         }
     }
+    fun setSmartwatchCues(v: Boolean)    { viewModelScope.launch { prefs.setSmartwatchCues(v) } }
     fun setTtsSpeechRate(v: Float)       { viewModelScope.launch { prefs.setTtsSpeechRate(v) } }
     fun setTtsVolume(v: Float)           { viewModelScope.launch { prefs.setTtsVolume(v) } }
     fun setCueStyle(v: CueStyle)         { viewModelScope.launch { prefs.setCueStyle(v) } }

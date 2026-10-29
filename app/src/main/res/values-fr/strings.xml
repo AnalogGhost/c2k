@@ -128,6 +128,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Entraînement</string>
     <string name="notification_channel_desc">Minuteur de la séance en cours</string>
+    <string name="notification_cue_channel_name">Alertes d\'entraînement</string>
+    <string name="notification_cue_channel_desc">Alertes brèves lors des changements d\'intervalle et à la fin de la séance, à transmettre à une montre connectée</string>
     <string name="notification_action_pause">Pause</string>
     <string name="notification_action_resume">Reprendre</string>
     <string name="notification_action_stop">Arrêter</string>
@@ -270,6 +272,8 @@
     <string name="settings_vibration_strength_light">Faible</string>
     <string name="settings_vibration_strength_medium">Moyenne</string>
     <string name="settings_vibration_strength_strong">Forte</string>
+    <string name="settings_vibration_smartwatch">Notifier aussi la montre</string>
+    <string name="settings_vibration_watch_caption">Envoie une notification à chaque changement d\'intervalle et à la fin de la séance pour faire vibrer votre montre connectée. Le téléphone vibre une fois avec elle au lieu de son propre motif.</string>
     <string name="settings_tts_speed">Vitesse de la voix</string>
     <string name="settings_tts_speed_slow">Lente</string>
     <string name="settings_tts_speed_fast">Rapide</string>

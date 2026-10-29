@@ -126,6 +126,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Adestramento</string>
     <string name="notification_channel_desc">Temporizador do adestramento activo</string>
+    <string name="notification_cue_channel_name">Avisos de adestramento</string>
+    <string name="notification_cue_channel_desc">Avisos curtos nos cambios de intervalo e ao rematar o adestramento, para reenviar a un reloxo intelixente</string>
     <string name="notification_action_pause">Pausar</string>
     <string name="notification_action_resume">Retomar</string>
     <string name="notification_action_stop">Deter</string>
@@ -267,6 +269,8 @@
     <string name="settings_vibration_strength_light">Suave</string>
     <string name="settings_vibration_strength_medium">Media</string>
     <string name="settings_vibration_strength_strong">Forte</string>
+    <string name="settings_vibration_smartwatch">Avisar tamén ao reloxo</string>
+    <string name="settings_vibration_watch_caption">Envía unha notificación en cada cambio de intervalo e ao rematar o adestramento para que vibre o teu reloxo intelixente. O móbil vibra unha vez con ela en vez de usar o seu propio padrón.</string>
     <string name="settings_tts_speed">Velocidade da voz</string>
     <string name="settings_tts_speed_slow">Lenta</string>
     <string name="settings_tts_speed_fast">Rápida</string>

@@ -21,6 +21,7 @@ import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.repository.SessionRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -49,6 +50,8 @@ class WorkoutServiceNotificationTest {
     // Mirrors WorkoutService's private COMPLETION_NOTIFICATION_ID — kept in sync manually since
     // that constant isn't exposed outside the service.
     private val completionNotificationId = 2
+    // Mirrors WorkoutService's private CUE_NOTIFICATION_ID, same as above.
+    private val cueNotificationId = 3
 
     // A workout that completes in ~1 second of real elapsed time instead of the 20+ minutes a
     // real program takes, so tests can observe a genuine Completed transition without a long wait.
@@ -100,12 +103,31 @@ class WorkoutServiceNotificationTest {
         context.startForegroundService(startIntent)
     }
 
+    private fun vibrateOn(smartwatch: Boolean) = runBlocking {
+        UserPreferences(context).apply {
+            setVibrationEnabled(true)
+            setSmartwatchCues(smartwatch)
+        }
+    }
+
+    private fun resetVibration() = runBlocking {
+        UserPreferences(context).apply {
+            setVibrationEnabled(false)
+            setSmartwatchCues(false)
+        }
+    }
+
     @Before
     fun resetServiceState() {
         serviceWasStarted = false
         WorkoutService.testWorkoutDayOverride = null
         WorkoutService.testSessionRepositoryOverride = null
+        resetVibration()
         notificationManager.cancel(completionNotificationId)
+        // A watch notification from an earlier test can outlive it (it times out after 10 s).
+        notificationManager.activeNotifications
+            .filter { it.id == cueNotificationId }
+            .forEach { notificationManager.cancel(it.tag, it.id) }
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
     }
 
@@ -128,6 +150,7 @@ class WorkoutServiceNotificationTest {
         Thread.sleep(1_000)
         WorkoutService.testWorkoutDayOverride = null
         WorkoutService.testSessionRepositoryOverride = null
+        resetVibration()
         runBlocking { UserPreferences(context).setCueStyle(CueStyle.VOICE) }
         db.close()
     }
@@ -237,6 +260,116 @@ class WorkoutServiceNotificationTest {
             "Expected the ongoing notification to report both RUN intervals as remaining " +
                 "before either has started, got: ${ongoingNotificationText()}",
             waitUntil { ongoingNotificationText()?.contains(expectedRunsLeft) == true }
+        )
+    }
+
+    @Test
+    fun wearable_cue_is_posted_on_interval_change_and_removed_on_stop() {
+        vibrateOn(smartwatch = true)
+        WorkoutService.testWorkoutDayOverride = WorkoutDay(
+            week = 1, day = 1,
+            intervals = listOf(Interval(IntervalType.WALK, 2), Interval(IntervalType.RUN, 30))
+        )
+        startWorkout()
+
+        assertTrue(
+            "Expected a cue notification when the RUN interval starts",
+            waitUntil(timeoutMs = 10_000) { cueNotificationId in activeNotificationIds() }
+        )
+        val cue = notificationManager.activeNotifications.first { it.id == cueNotificationId }
+        assertEquals(
+            "A cue must not be ongoing, or notification bridges ignore it",
+            0, cue.notification.flags and Notification.FLAG_ONGOING_EVENT
+        )
+        assertEquals(
+            context.getString(R.string.workout_interval_run),
+            cue.notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
+        )
+        val channel = notificationManager.getNotificationChannel("smartwatch_cues")
+        assertTrue(
+            "Notification bridges ignore channels below default importance",
+            channel.importance >= NotificationManager.IMPORTANCE_DEFAULT
+        )
+        assertTrue(
+            "Wear OS applies the phone channel's settings on the watch, so a channel without " +
+                "vibration reaches the watch without buzzing it",
+            channel.shouldVibrate()
+        )
+
+        context.startService(Intent(context, WorkoutService::class.java).setAction(WorkoutService.ACTION_STOP))
+
+        // The cue's own timeout is 10s, so being gone after at most 3s means stopping removed it.
+        assertTrue(
+            "Expected the cue to be removed when the workout stops",
+            waitUntil(timeoutMs = 3_000) { cueNotificationId !in activeNotificationIds() }
+        )
+    }
+
+    @Test
+    fun wearable_cues_replace_each_other_and_never_stack() {
+        vibrateOn(smartwatch = true)
+        WorkoutService.testWorkoutDayOverride = WorkoutDay(
+            week = 1, day = 1,
+            intervals = listOf(
+                Interval(IntervalType.WALK, 1),
+                Interval(IntervalType.RUN, 2),
+                Interval(IntervalType.WALK, 2),
+                Interval(IntervalType.RUN, 30)
+            )
+        )
+        startWorkout()
+
+        // Sample the shade while three interval changes (at ~1s, ~3s and ~5s of the workout) post a cue each.
+        val seenTags = mutableSetOf<String?>()
+        var mostAtOnce = 0
+        val deadline = System.currentTimeMillis() + 10_000
+        while (System.currentTimeMillis() < deadline) {
+            val cues = notificationManager.activeNotifications.filter { it.id == cueNotificationId }
+            mostAtOnce = maxOf(mostAtOnce, cues.size)
+            cues.forEach { seenTags.add(it.tag) }
+            Thread.sleep(50)
+        }
+
+        assertTrue("Expected one cue per interval change, saw ${seenTags.size}", seenTags.size >= 3)
+        assertEquals("Each cue must replace the previous one, never pile up", 1, mostAtOnce)
+    }
+
+    @Test
+    fun no_watch_notification_when_only_the_phone_vibrates() {
+        vibrateOn(smartwatch = false)
+        WorkoutService.testWorkoutDayOverride = WorkoutDay(
+            week = 1, day = 1,
+            intervals = listOf(Interval(IntervalType.WALK, 1), Interval(IntervalType.RUN, 30))
+        )
+        startWorkout()
+
+        val runLabel = context.getString(R.string.workout_interval_run)
+        assertTrue(
+            "Expected the workout to reach the RUN interval",
+            waitUntil(timeoutMs = 10_000) { ongoingNotificationText()?.contains(runLabel) == true }
+        )
+        assertFalse(
+            "The interval change only vibrates the phone, so no watch notification is expected",
+            waitUntil(timeoutMs = 2_000) { cueNotificationId in activeNotificationIds() }
+        )
+    }
+
+    @Test
+    fun watch_notification_is_posted_when_the_workout_completes() {
+        vibrateOn(smartwatch = true)
+        WorkoutService.testWorkoutDayOverride = fastWorkoutDay
+        startWorkout()
+
+        // fastWorkoutDay has a single interval, so the only watch notification is the completion one.
+        val completeTitle = context.getString(R.string.workout_complete_title)
+        assertTrue(
+            "Expected a watch notification when the workout completes, as the phone vibrates then too",
+            waitUntil(timeoutMs = 12_000) {
+                notificationManager.activeNotifications.any {
+                    it.id == cueNotificationId &&
+                        it.notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() == completeTitle
+                }
+            }
         )
     }
 

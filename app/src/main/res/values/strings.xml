@@ -126,6 +126,8 @@
     <!-- Notification -->
     <string name="notification_channel_name">Workout</string>
     <string name="notification_channel_desc">Active workout timer</string>
+    <string name="notification_cue_channel_name">Interval notifications</string>
+    <string name="notification_cue_channel_desc">Short alerts on interval changes and when the workout ends, for forwarding to a smartwatch</string>
     <string name="notification_action_pause">Pause</string>
     <string name="notification_action_resume">Resume</string>
     <string name="notification_action_stop">Stop</string>
@@ -267,6 +269,8 @@
     <string name="settings_vibration_strength_light">Light</string>
     <string name="settings_vibration_strength_medium">Medium</string>
     <string name="settings_vibration_strength_strong">Strong</string>
+    <string name="settings_vibration_smartwatch">Also notify smartwatch</string>
+    <string name="settings_vibration_watch_caption">Sends a notification at each interval change and when the workout ends, for your watch to vibrate. The phone buzzes once with it instead of its own pattern.</string>
     <string name="settings_tts_speed">Voice speed</string>
     <string name="settings_tts_speed_slow">Slow</string>
     <string name="settings_tts_speed_fast">Fast</string>

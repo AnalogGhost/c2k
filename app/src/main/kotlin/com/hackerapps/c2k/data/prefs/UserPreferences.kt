@@ -44,6 +44,7 @@ class UserPreferences(private val context: Context) {
         val BATTERY_PROMPT_DISMISSED = booleanPreferencesKey("battery_prompt_dismissed")
         val VIBRATION_ENABLED        = booleanPreferencesKey("vibration_enabled")
         val VIBRATION_STRENGTH       = stringPreferencesKey("vibration_strength")
+        val SMARTWATCH_CUES          = booleanPreferencesKey("smartwatch_cues")
         val TTS_SPEECH_RATE          = floatPreferencesKey("tts_speech_rate")
         val TTS_VOLUME               = floatPreferencesKey("tts_volume")
         val CUE_STYLE                = stringPreferencesKey("cue_style")
@@ -102,6 +103,10 @@ class UserPreferences(private val context: Context) {
     val vibrationStrength: Flow<VibrationStrength> = data
         .map { preferences -> VibrationStrength.fromStored(preferences[VIBRATION_STRENGTH]) }
 
+    // Also post a notification at each vibration so a bridge (Gadgetbridge, Wear OS) can buzz a watch.
+    val smartwatchCues: Flow<Boolean> = data
+        .map { it[SMARTWATCH_CUES] ?: false }
+
     suspend fun setTtsEnabled(enabled: Boolean) =
         context.dataStore.edit { it[TTS_ENABLED] = enabled }
 
@@ -137,6 +142,9 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setVibrationStrength(strength: VibrationStrength) =
         context.dataStore.edit { it[VIBRATION_STRENGTH] = strength.name }
+
+    suspend fun setSmartwatchCues(enabled: Boolean) =
+        context.dataStore.edit { it[SMARTWATCH_CUES] = enabled }
 
     suspend fun setTtsSpeechRate(rate: Float) =
         context.dataStore.edit { it[TTS_SPEECH_RATE] = rate }
