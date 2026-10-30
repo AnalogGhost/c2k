@@ -1,0 +1,5 @@
+• Los cambios de intervalo también pueden hacer vibrar tu smartwatch. Configuración → Avisar también al smartwatch.
+• Si dejas el mismo entrenamiento a medias dos veces, C2K te propone repetir la semana anterior.
+• La ubicación solo se pide en los entrenamientos que usan GPS.
+• Corregido: el inicio de los avisos de voz se cortaba mientras sonaba otro audio, como la radio FM.
+• Los colores de correr, caminar y día completado se leen mejor.

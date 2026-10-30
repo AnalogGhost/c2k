@@ -1,0 +1,5 @@
+• Intervallwechsel können jetzt auch deine Smartwatch vibrieren lassen. Einstellungen → Auch Smartwatch benachrichtigen.
+• Brichst du dasselbe Training zweimal früh ab, schlägt C2K vor, die Woche davor zu wiederholen.
+• Der Standort wird nur noch für Trainings mit GPS abgefragt.
+• Behoben: Der Anfang von Sprachhinweisen wurde abgeschnitten, während anderer Ton wie UKW-Radio lief.
+• Die Farben für Laufen, Gehen und erledigte Tage sind besser lesbar.

@@ -1,0 +1,5 @@
+• Aralık değişimleri artık akıllı saatinizi de titretebilir. Ayarlar → Akıllı saate de bildir.
+• Aynı antrenmanı iki kez erken bırakırsanız C2K bir önceki haftayı tekrarlamayı önerir.
+• Konum izni yalnızca GPS kullanan antrenmanlarda istenir.
+• Düzeltildi: FM radyo gibi başka bir ses çalarken sesli uyarıların başı kesiliyordu.
+• Koşu, yürüyüş ve tamamlanan gün renkleri daha kolay okunuyor.

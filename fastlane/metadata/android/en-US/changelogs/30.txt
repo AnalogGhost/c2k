@@ -1,0 +1,5 @@
+• Interval changes can also buzz your smartwatch. Settings → Also notify smartwatch.
+• Stop the same workout early twice and C2K suggests repeating the week before.
+• Location is only requested for workouts that use GPS.
+• Fixed the start of voice cues being cut off while other audio, such as FM radio, was playing.
+• Run, walk and completed-day colors are easier to read.

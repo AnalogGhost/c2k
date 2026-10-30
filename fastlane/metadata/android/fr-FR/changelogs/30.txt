@@ -1,0 +1,5 @@
+• Les changements d'intervalle peuvent aussi faire vibrer votre montre. Paramètres → Notifier aussi la montre.
+• Si vous arrêtez deux fois la même séance avant la fin, C2K propose de refaire la semaine précédente.
+• La position n'est demandée que pour les séances qui utilisent le GPS.
+• Correction : le début des annonces vocales était coupé pendant la lecture d'un autre son, comme la radio FM.
+• Les couleurs de course, de marche et des jours terminés sont plus lisibles.

@@ -1,0 +1,5 @@
+• Os cambios de intervalo tamén poden facer vibrar o teu reloxo. Axustes → Avisar tamén ao reloxo.
+• Se deixas o mesmo adestramento a medias dúas veces, C2K propón repetir a semana anterior.
+• A localización só se pide nos adestramentos que usan GPS.
+• Corrixido: o comezo dos avisos de voz cortábase mentres soaba outro audio, como a radio FM.
+• As cores de correr, camiñar e día completado lense mellor.
