@@ -235,6 +235,7 @@
     <string name="contributor_fix_completion_counter">Correção: o contador de conclusão não trava mais e o anúncio de conclusão não é mais cortado quando a tela é bloqueada</string>
     <string name="contributor_second_warning_toggle">Opção para desativar o segundo aviso de contagem regressiva</string>
     <string name="contributor_skip_warmup_cooldown_split">Configurações separadas para pular o aquecimento e o desaquecimento, e um botão para pulá-los durante o treino</string>
+    <string name="contributor_smartwatch_notifications">Notificações no smartwatch e na pulseira fitness a cada troca de intervalo</string>
 
     <!-- Settings -->
     <string name="settings_title">Configurações</string>

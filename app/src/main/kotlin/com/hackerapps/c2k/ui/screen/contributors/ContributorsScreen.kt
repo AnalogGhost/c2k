@@ -71,7 +71,8 @@ private val contributors = listOf(
         github = "west1nat0r",
         contributionRes = listOf(
             R.string.contributor_second_warning_toggle,
-            R.string.contributor_skip_warmup_cooldown_split
+            R.string.contributor_skip_warmup_cooldown_split,
+            R.string.contributor_smartwatch_notifications
         )
     )
 )

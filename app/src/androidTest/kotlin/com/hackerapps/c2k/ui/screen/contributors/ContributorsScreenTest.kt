@@ -48,9 +48,10 @@ class ContributorsScreenTest {
         composeRule.onNodeWithText(string(R.string.contributor_translation_ru)).assertExists()
         composeRule.onNodeWithText(string(R.string.contributor_language_selection)).assertExists()
         composeRule.onNode(hasScrollToNodeAction())
-            .performScrollToNode(hasText(string(R.string.contributor_skip_warmup_cooldown_split)))
+            .performScrollToNode(hasText(string(R.string.contributor_smartwatch_notifications)))
         composeRule.onNodeWithText(string(R.string.contributor_second_warning_toggle)).assertExists()
         composeRule.onNodeWithText(string(R.string.contributor_skip_warmup_cooldown_split)).assertExists()
+        composeRule.onNodeWithText(string(R.string.contributor_smartwatch_notifications)).assertExists()
     }
 
     @Test

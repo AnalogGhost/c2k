@@ -232,6 +232,7 @@
     <string name="contributor_fix_completion_counter">Corrección: o contador de finalización xa non se conxela e o anuncio de finalización xa non se corta cando a pantalla se bloquea</string>
     <string name="contributor_second_warning_toggle">Opción para desactivar o segundo aviso de conta atrás</string>
     <string name="contributor_skip_warmup_cooldown_split">Axustes separados para omitir o quecemento e o arrefecemento, e un botón para omitilos durante o adestramento</string>
+    <string name="contributor_smartwatch_notifications">Notificacións no reloxo intelixente ou na pulseira de actividade en cada cambio de intervalo</string>
 
     <!-- Settings -->
     <string name="settings_title">Axustes</string>

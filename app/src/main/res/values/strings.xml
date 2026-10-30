@@ -232,6 +232,7 @@
     <string name="contributor_fix_completion_counter">Fix: completion counter no longer freezes and the completion announcement no longer gets cut off when the screen locks</string>
     <string name="contributor_second_warning_toggle">Option to turn off the second countdown warning</string>
     <string name="contributor_skip_warmup_cooldown_split">Separate skip warm-up and skip cool-down settings, and a skip button during the workout</string>
+    <string name="contributor_smartwatch_notifications">Smartwatch and fitness band notifications for interval changes</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>

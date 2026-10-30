@@ -244,6 +244,7 @@
     <string name="contributor_fix_completion_counter">Исправление: счётчик завершения больше не зависает, и объявление о завершении больше не обрывается при блокировке экрана</string>
     <string name="contributor_second_warning_toggle">Возможность отключить второе предупреждение обратного отсчёта</string>
     <string name="contributor_skip_warmup_cooldown_split">Отдельные настройки пропуска разминки и заминки, а также кнопка пропуска во время тренировки</string>
+    <string name="contributor_smartwatch_notifications">Уведомления на смарт-часы и фитнес-браслет при смене интервала</string>
 
     <!-- Settings -->
     <string name="settings_title">Настройки</string>

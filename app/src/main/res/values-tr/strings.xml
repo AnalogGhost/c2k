@@ -234,6 +234,7 @@
     <string name="contributor_fix_completion_counter">Düzeltme: Tamamlama sayacı artık ekran kilitlendiğinde donmuyor ve tamamlama anonsu kesilmiyor</string>
     <string name="contributor_second_warning_toggle">İkinci geri sayım uyarısını kapatma seçeneği</string>
     <string name="contributor_skip_warmup_cooldown_split">Isınmayı ve soğumayı atlamak için ayrı ayarlar ve antrenman sırasında atlama düğmesi</string>
+    <string name="contributor_smartwatch_notifications">Aralık değişimlerinde akıllı saat ve fitness bilekliği bildirimleri</string>
 
     <!-- Settings -->
     <string name="settings_title">Ayarlar</string>

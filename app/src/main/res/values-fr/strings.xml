@@ -235,6 +235,7 @@
     <string name="contributor_fix_completion_counter">Correction : le compteur de fin ne se fige plus et l\'annonce de fin n\'est plus coupée lorsque l\'écran se verrouille</string>
     <string name="contributor_second_warning_toggle">Option pour désactiver le second avertissement du compte à rebours</string>
     <string name="contributor_skip_warmup_cooldown_split">Réglages séparés pour ignorer l\'échauffement et la récupération, et un bouton pour les ignorer pendant la séance</string>
+    <string name="contributor_smartwatch_notifications">Notifications sur montre connectée et bracelet d\'activité à chaque changement d\'intervalle</string>
 
     <!-- Settings -->
     <string name="settings_title">Paramètres</string>

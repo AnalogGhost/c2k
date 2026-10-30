@@ -229,6 +229,7 @@
     <string name="contributor_fix_completion_counter">Korrektur: Der Abschlusszähler bleibt nicht mehr hängen und die Abschlussansage wird nicht mehr abgeschnitten, wenn der Bildschirm gesperrt wird</string>
     <string name="contributor_second_warning_toggle">Option zum Ausschalten der zweiten Countdown-Warnung</string>
     <string name="contributor_skip_warmup_cooldown_split">Getrennte Einstellungen zum Überspringen von Aufwärmen und Abkühlen sowie eine Überspringen-Schaltfläche während des Trainings</string>
+    <string name="contributor_smartwatch_notifications">Smartwatch- und Fitnessband-Benachrichtigungen bei Intervallwechseln</string>
 
     <!-- Settings -->
     <string name="settings_title">Einstellungen</string>
