@@ -300,13 +300,16 @@ private fun StatsCard(stats: HistoryStats) {
                     }
                     stats.fastestPaceSecPerKm?.let { pace ->
                         StatItem(
-                            value = "%d:%02d".format((pace / 60).toInt(), (pace % 60).toInt()),
+                            value = stringResource(
+                                R.string.workout_pace,
+                                "%d:%02d".format((pace / 60).toInt(), (pace % 60).toInt())
+                            ),
                             label = stringResource(R.string.history_stats_pace)
                         )
                     }
                     stats.longestRunMeters?.let { meters ->
                         StatItem(
-                            value = "%.2f".format(meters / 1000f),
+                            value = "%.2f %s".format(meters / 1000f, stringResource(R.string.history_stats_km)),
                             label = stringResource(R.string.history_stats_longest)
                         )
                     }
