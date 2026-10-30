@@ -167,10 +167,10 @@
     <string name="program_prereq_for_5k_runners">Para quienes ya han completado un 5K</string>
 
     <!-- Guide -->
-    <string name="guide_title">Guide</string>
+    <string name="guide_title">Guía</string>
     <string name="guide_section_before_start">Antes de comenzar</string>
     <string name="guide_section_during_workout">Durante un entrenamiento</string>
-    <string name="guide_section_between_workouts">Entre entranamientos</string>
+    <string name="guide_section_between_workouts">Entre entrenamientos</string>
     <string name="guide_section_glossary">Glosario</string>
 
     <string name="guide_q_conversational_pace">¿Qué es el ritmo conversacional?</string>
