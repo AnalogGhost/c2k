@@ -1,4 +1,4 @@
-• As trocas de intervalo também podem vibrar seu smartwatch. Configurações → Avisar também o smartwatch.
+• As trocas de intervalo também podem vibrar seu smartwatch. Configurações → Avisar também o smartwatch. Agradecimentos a west1nat0r.
 • Se você interromper o mesmo treino cedo duas vezes, o C2K sugere repetir a semana anterior.
 • A localização só é pedida nos treinos que usam GPS.
 • Corrigido: o início dos avisos de voz era cortado enquanto outro áudio tocava, como o rádio FM.
