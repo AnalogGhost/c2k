@@ -1,0 +1,86 @@
+{
+  "_comment": "Play Store slide copy. Headline lines are separated by |, and {braces} mark the accent. Non-English copy was drafted without a native-speaker review.",
+  "slides": [
+    {"name": "01_run_walk", "main": "04_workout", "back": "03_preview"},
+    {"name": "02_private", "main": "06_guide", "back": "01_home"},
+    {"name": "03_plans", "main": "01_home", "back": "02_program"},
+    {"name": "04_step_back", "main": "08_progression", "back": "02_program"},
+    {"name": "05_music", "main": "07_settings", "back": "04_workout"},
+    {"name": "06_watch", "main": "watch:phone", "watch": "watch:watch"},
+    {"name": "07_progress", "main": "05_history", "back": "01_home"}
+  ],
+  "copy": {
+    "en-US": [
+      ["{Run.}|Walk.|Repeat.", "Couch to 5K coaching that tells you when to switch."],
+      ["No account.|{No trackers.}", "No internet permission. Your runs never leave your phone."],
+      ["A plan|for every|{stage.}", "Six programs, from 30-second runs to a full hour."],
+      ["Tough week?|{Step back.}", "Stop the same workout early twice and C2K suggests the week before."],
+      ["Cues over|your {music.}", "Voice, chimes or vibration. Your music dips, then returns."],
+      ["Your watch|{buzzes too.}", "Alerts arrive as notifications. No watch app needed."],
+      ["See how|far you've|{come.}", "Streaks, weekly totals and personal bests."]
+    ],
+    "de-DE": [
+      ["{Laufen.}|Gehen.|Wiederholen.", "Vom Sofa zu 5 km, mit Ansagen für jeden Wechsel."],
+      ["Kein Konto.|{Keine Tracker.}", "Keine Internetberechtigung. Deine Läufe bleiben auf deinem Handy."],
+      ["Ein Plan|für jede|{Stufe.}", "Sechs Programme, von 30-Sekunden-Läufen bis zu einer vollen Stunde."],
+      ["Zu hart?|{Woche wiederholen.}", "Brichst du dasselbe Training zweimal ab, schlägt C2K die Woche davor vor."],
+      ["Ansagen über|deiner {Musik.}", "Stimme, Signaltöne oder Vibration. Die Musik wird leiser und kommt zurück."],
+      ["Auch deine|Uhr {vibriert.}", "Hinweise kommen als Benachrichtigung. Keine Uhr-App nötig."],
+      ["Dein Fortschritt|auf einen {Blick.}", "Serien, Wochensummen und Bestleistungen."]
+    ],
+    "es-ES": [
+      ["{Corre.}|Camina.|Repite.", "Del sofá a los 5K, con avisos que te dicen cuándo cambiar."],
+      ["Sin cuenta.|{Sin rastreadores.}", "Sin permiso de internet. Tus carreras nunca salen de tu móvil."],
+      ["Un plan|para cada|{etapa.}", "Seis programas, de carreras de 30 segundos a una hora completa."],
+      ["¿Semana dura?|{Da un paso atrás.}", "Si dejas el mismo entrenamiento a medias dos veces, C2K te sugiere la semana anterior."],
+      ["Avisos sobre|tu {música.}", "Voz, tonos o vibración. Tu música baja y luego vuelve."],
+      ["Tu reloj|{también vibra.}", "Los avisos llegan como notificaciones. Sin app para el reloj."],
+      ["Mira cuánto|has {avanzado.}", "Rachas, totales semanales y mejores marcas."]
+    ],
+    "fr-FR": [
+      ["{Courez.}|Marchez.|Recommencez.", "Du canapé au 5 km, avec des signaux qui vous disent quand changer."],
+      ["Sans compte.|{Sans traqueurs.}", "Aucune permission Internet. Vos sorties restent sur votre téléphone."],
+      ["Un plan|pour chaque|{étape.}", "Six programmes, de 30 secondes de course à une heure complète."],
+      ["Semaine dure ?|{Un pas en arrière.}", "Arrêtez deux fois la même séance avant la fin et C2K propose la semaine précédente."],
+      ["Des signaux|sur votre {musique.}", "Voix, tonalités ou vibration. Votre musique baisse, puis revient."],
+      ["Votre montre|{vibre aussi.}", "Les alertes arrivent en notifications. Aucune app de montre requise."],
+      ["Voyez le|chemin {parcouru.}", "Séries, totaux hebdomadaires et records personnels."]
+    ],
+    "gl-ES": [
+      ["{Corre.}|Camiña.|Repite.", "Do sofá aos 5K, con avisos que che din cando cambiar."],
+      ["Sen conta.|{Sen rastrexadores.}", "Sen permiso de internet. As túas carreiras nunca saen do teu móbil."],
+      ["Un plan|para cada|{etapa.}", "Seis programas, de carreiras de 30 segundos a unha hora completa."],
+      ["Semana dura?|{Dá un paso atrás.}", "Se deixas o mesmo adestramento a medias dúas veces, C2K suxire a semana anterior."],
+      ["Avisos sobre|a túa {música.}", "Voz, tons ou vibración. A túa música baixa e despois volve."],
+      ["O teu reloxo|{tamén vibra.}", "Os avisos chegan como notificacións. Sen app para o reloxo."],
+      ["Mira canto|{avanzaches.}", "Xeiras, totais semanais e mellores marcas."]
+    ],
+    "pt-BR": [
+      ["{Corra.}|Caminhe.|Repita.", "Do sofá aos 5K, com avisos que dizem quando trocar."],
+      ["Sem conta.|{Sem rastreadores.}", "Sem permissão de internet. Suas corridas nunca saem do seu celular."],
+      ["Um plano|para cada|{fase.}", "Seis programas, de corridas de 30 segundos a uma hora inteira."],
+      ["Semana difícil?|{Dê um passo atrás.}", "Interrompa o mesmo treino cedo duas vezes e o C2K sugere a semana anterior."],
+      ["Avisos sobre|sua {música.}", "Voz, tons ou vibração. Sua música abaixa e depois volta."],
+      ["Seu relógio|{vibra também.}", "Os alertas chegam como notificações. Sem app no relógio."],
+      ["Veja até onde|você {chegou.}", "Sequências, totais semanais e recordes pessoais."]
+    ],
+    "ru-RU": [
+      ["{Бег.}|Шаг.|Повтор.", "От дивана до 5 км: подсказки скажут, когда сменить темп."],
+      ["Без аккаунта.|{Без трекеров.}", "Нет доступа в интернет. Ваши пробежки остаются на телефоне."],
+      ["План|для каждого|{этапа.}", "Шесть программ: от 30-секундных пробежек до целого часа."],
+      ["Тяжёлая неделя?|{Шаг назад.}", "Дважды прервёте одну и ту же тренировку — C2K предложит предыдущую неделю."],
+      ["Подсказки|поверх {музыки.}", "Голос, сигналы или вибрация. Музыка стихает, а потом возвращается."],
+      ["Часы тоже|{вибрируют.}", "Оповещения приходят как уведомления. Приложение для часов не нужно."],
+      ["Ваш прогресс|{как на ладони.}", "Серии, недельные итоги и личные рекорды."]
+    ],
+    "tr-TR": [
+      ["{Koş.}|Yürü.|Tekrarla.", "Kanepeden 5K'ya, ne zaman geçeceğini söyleyen uyarılarla."],
+      ["Hesap yok.|{İzleyici yok.}", "İnternet izni yok. Koşuların telefonundan hiç çıkmaz."],
+      ["Her seviye|için bir|{plan.}", "30 saniyelik koşulardan tam bir saate, altı program."],
+      ["Zor bir hafta mı?|{Bir adım geri.}", "Aynı antrenmanı iki kez erken bırakırsan C2K bir önceki haftayı önerir."],
+      ["Uyarılar|müziğin {üstünde.}", "Ses, ton veya titreşim. Müzik kısılır, sonra geri gelir."],
+      ["Saatin de|{titreşir.}", "Uyarılar bildirim olarak gelir. Saat uygulaması gerekmez."],
+      ["Ne kadar|ilerlediğini|{gör.}", "Seriler, haftalık toplamlar ve kişisel rekorlar."]
+    ]
+  }
+}

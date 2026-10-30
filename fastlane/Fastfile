@@ -7,7 +7,7 @@ platform :android do
   lane :screenshots do
     gradle(task: "assembleFossDebug assembleFossDebugAndroidTest")
     capture_android_screenshots
-    gradle(task: ":tools:screenshot-composer:run")
+    sh("python3", "../tools/store-screenshots/build.py")
   end
 
   desc "Build the Play release AAB and upload it plus store listing metadata to Google Play"
@@ -49,7 +49,7 @@ platform :android do
   desc "Upload only store screenshots/images to Google Play — no build, no AAB, no listing"
   desc "text, no changelogs. For refreshed screenshots between releases."
   desc "Reads from fastlane/metadata/android-play, the framed/captioned marketing set generated"
-  desc "by `./gradlew :tools:screenshot-composer:run` — NOT fastlane/metadata/android, which"
+  desc "by `python3 tools/store-screenshots/build.py` — NOT fastlane/metadata/android, which"
   desc "stays plain/raw for F-Droid."
   desc "Defaults to a dry run; pass validate_only:false to publish."
   lane :images do |options|

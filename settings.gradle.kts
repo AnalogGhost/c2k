@@ -22,4 +22,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "C2K"
 include(":app")
-include(":tools:screenshot-composer")

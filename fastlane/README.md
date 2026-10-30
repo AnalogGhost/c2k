@@ -63,7 +63,7 @@ text, no changelogs. For refreshed screenshots between releases.
 
 Reads from fastlane/metadata/android-play, the framed/captioned marketing set generated
 
-by `./gradlew :tools:screenshot-composer:run` — NOT fastlane/metadata/android, which
+by `python3 tools/store-screenshots/build.py` — NOT fastlane/metadata/android, which
 
 stays plain/raw for F-Droid.
 

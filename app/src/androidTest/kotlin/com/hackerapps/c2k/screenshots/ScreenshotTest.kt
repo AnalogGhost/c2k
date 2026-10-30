@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
@@ -32,7 +33,11 @@ import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.locale.LocaleTestRule
 
 private const val PROGRAM_ID = "C25K"
-private const val MS_PER_DAY = 24 * 60 * 60 * 1000L
+private const val MS_PER_HOUR = 60 * 60 * 1000L
+private const val MS_PER_DAY = 24 * MS_PER_HOUR
+
+// How far into the first run interval the workout shot is taken, so the ring is visibly moving.
+private const val WORKOUT_SHOT_DELAY_MS = 40_000L
 
 // How long to let rendered frames reach the display before a capture.
 private const val SETTLE_MS = 750L
@@ -56,7 +61,7 @@ private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 15_000, ass
 
 /**
  * Drives the real app through MainActivity to capture the store-listing screenshots
- * (01_home .. 07_settings) via fastlane screengrab, across every locale in Screengrabfile.
+ * (01_home .. 08_progression) via fastlane screengrab, across every locale in Screengrabfile.
  *
  * Not a correctness test — screen-by-screen behavior is already covered elsewhere in this
  * androidTest source set. This just needs the app to look right along one realistic path.
@@ -125,33 +130,59 @@ class ScreenshotTest {
             // 05_history's calorie figures would be non-deterministic across runs.
             prefs.setWeightKg(70f)
             prefs.setWeightUnit(WeightUnit.KG)
+            prefs.setSmartwatchCues(false)
+            // The workout shot should open on a run interval rather than the five-minute warm-up.
+            prefs.setSkipWarmup(true)
+            prefs.setSkipCooldown(false)
+            prefs.clearProgression()
             seedHistory()
         }
     }
 
-    // A 2-week streak plus recent-workout history, leaving Week 1 Day 3 uncompleted so
-    // there's a natural "Start" (not "Redo") flow for the workout preview/active screenshots
-    // AND so the continue button coherently points at Week 1 Day 3 (it follows the latest
-    // completed day, so completing anything later would make it skip past Day 3 on-screen).
-    // Sessions sit exactly 14/7 days back: same weekday, two consecutive streak weeks (kept
-    // alive by the current week's grace period) regardless of which day of the week the
-    // capture runs on — a day-based spread would flip the count at week boundaries.
+    // Week 1 done, leaving Week 2 Day 1 as the natural next "Start" (not "Redo") for the
+    // preview and workout screenshots, which the continue button also points at.
+    // Sessions sit exactly 14 and 7 days back plus a few hours ago: same weekday, so three
+    // consecutive streak weeks regardless of which day of the week the capture runs on (a
+    // day-based spread would flip the count at week boundaries), and the latest one keeps
+    // 05_history's "This week" card from reading zero.
     // distanceMeters is non-zero (unlike the treadmill mode used live in this test) so
     // 05_history's km/pace and calorie figures have something real to display.
     private suspend fun seedHistory() {
         val now = System.currentTimeMillis()
-        fun completedSession(week: Int, day: Int, daysAgo: Long) = WorkoutSessionEntity(
+        fun completedSession(week: Int, day: Int, startedAt: Long) = WorkoutSessionEntity(
             programId = PROGRAM_ID,
             week = week,
             day = day,
-            startedAt = now - daysAgo * MS_PER_DAY,
-            completedAt = now - daysAgo * MS_PER_DAY + 25 * 60 * 1000,
+            startedAt = startedAt,
+            completedAt = startedAt + 25 * 60 * 1000,
             durationSeconds = 25 * 60,
             distanceMeters = 3000f,
             completed = true
         )
-        sessionDao().insert(completedSession(week = 1, day = 1, daysAgo = 14))
-        sessionDao().insert(completedSession(week = 1, day = 2, daysAgo = 7))
+        sessionDao().insert(completedSession(week = 1, day = 1, startedAt = now - 14 * MS_PER_DAY))
+        sessionDao().insert(completedSession(week = 1, day = 2, startedAt = now - 7 * MS_PER_DAY))
+        sessionDao().insert(completedSession(week = 1, day = 3, startedAt = now - 5 * MS_PER_HOUR))
+    }
+
+    // Two attempts at the next workout that ended early, which is what makes Home offer
+    // "Repeat week 1" for 08_progression. Both run past ProgressionAdvisor.MIN_ATTEMPT_SECONDS
+    // and start after the last finished workout.
+    private suspend fun seedEarlyStops() {
+        val now = System.currentTimeMillis()
+        listOf(2L, 1L).forEach { hoursAgo ->
+            sessionDao().insert(
+                WorkoutSessionEntity(
+                    programId = PROGRAM_ID,
+                    week = 2,
+                    day = 1,
+                    startedAt = now - hoursAgo * MS_PER_HOUR,
+                    completedAt = now - hoursAgo * MS_PER_HOUR + 6 * 60 * 1000,
+                    durationSeconds = 6 * 60,
+                    distanceMeters = 0f,
+                    completed = false
+                )
+            )
+        }
     }
 
     @Test
@@ -163,11 +194,11 @@ class ScreenshotTest {
 
         composeRule.onNodeWithText(string(R.string.program_c25k)).performClick()
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithTag("day_1_3").assertExists()
+            composeRule.onNodeWithTag("day_2_1").assertExists()
         }
         capture("02_program")
 
-        composeRule.onNodeWithTag("day_1_3").performClick()
+        composeRule.onNodeWithTag("day_2_1").performScrollTo().performClick()
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithText(string(R.string.program_preview_start)).assertExists()
         }
@@ -183,6 +214,7 @@ class ScreenshotTest {
         composeRule.waitUntilAssertion(timeoutMillis = 6_000) {
             composeRule.onNodeWithText(string(R.string.workout_elapsed, "0:00")).assertDoesNotExist()
         }
+        Thread.sleep(WORKOUT_SHOT_DELAY_MS)
         capture("04_workout")
 
         composeRule.onNodeWithTag("workout_stop_button").performClick()
@@ -194,7 +226,7 @@ class ScreenshotTest {
             composeRule.onNodeWithText(string(R.string.program_c25k)).assertExists()
         }
 
-        // Stopping the 04_workout run leaves an unfinished Week 1 Day 3 entry that would sit at
+        // Stopping the 04_workout run leaves an unfinished Week 2 Day 1 entry that would sit at
         // the top of 05_history; drop it so History shows only the seeded workouts.
         runBlocking {
             repo().observeAllSessions().first().filter { !it.completed }.forEach { repo().deleteSession(it.id) }
@@ -229,5 +261,12 @@ class ScreenshotTest {
             composeRule.onNodeWithTag("toggle_treadmill_mode").assertIsOn()
         }
         capture("07_settings")
+        composeRule.onNodeWithContentDescription(string(R.string.nav_back)).performClick()
+
+        runBlocking { seedEarlyStops() }
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("progression_suggestion").assertExists()
+        }
+        capture("08_progression")
     }
 }
