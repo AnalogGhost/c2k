@@ -3,8 +3,8 @@ Prepárate con C2K, unha aplicación para Android libre e de código aberto que 
 Programas:
 • Pre-C25K — inicio suave de 3 semanas para principiantes absolutos
 • Do sofá ao 5K (C25K) — programa de 9 semanas, 3 adestramentos por semana
-• Ponte ao 10K (B210K) — ponte de 6 semanas para quen completou o C25K
 • Do sofá ao 10K (C210K) — programa de 14 semanas, continuación do C25K
+• Ponte ao 10K (B210K) — ponte de 6 semanas para quen completou o C25K
 • One Hour Runner — progresión de 13 semanas de 30 a 60 minutos de carreira continua
 • 5K Improver — programa de 8 semanas de velocidade e resistencia para quen xa pode completar 5K
 
@@ -13,24 +13,28 @@ Características:
 • Adestramento personalizable — axusta a velocidade/volume da voz, o momento dos avisos de conta atrás e os avisos intermedios
 • Proba a voz e diagnostica problemas da síntese de voz de Android
 • Avisos por vibración como alternativa ou complemento á voz
+• Avisos no reloxo intelixente e na pulseira de actividade — os cambios de intervalo chegan como notificacións, así que un reloxo Wear OS ou unha pulseira con Gadgetbridge tamén vibran. Sen app para o reloxo.
 • Modo Tons — sons breves en lugar de voz para os cambios de intervalo e as contas atrás
 • Axusta a intensidade da vibración e o idioma
 • Temporizador en segundo plano — funciona coa pantalla apagada
 • Rexistro con GPS (optativo) — grava a distancia e ritmo; funciona igualmente sen GPS
 • Modo cinta de andar — para adestrar en interiores sen GPS
 • Omite o quecemento ou o arrefecemento — en Axustes ou cun toque durante o adestramento
-• Historial de adestramentos — rexistro de sesións con distancia total, tempo, mellor ritmo, carreira máis longa e calorías estimadas
+• Historial de adestramentos — xeira semanal, rexistro de sesións, totais, mellor ritmo, carreira máis longa e calorías estimadas
 • Seguimento do progreso — lembra os días e semanas que xa completaches, con opción de reiniciar
+• Un paso atrás cando custa — se deixas o mesmo adestramento a medias dúas veces, C2K suxire repetir a semana anterior
 • Guía de carreira integrada — preguntas frecuentes sobre ritmo, equipamento e terminoloxía
 • Dispoñible en 8 idiomas — inglés, alemán, español, francés, galego, portugués (Brasil), ruso, turco
 • Funciona sen conexión á rede — non precisa acceso a internet
 • Non precisa servizos propietarios — compatible con GrapheneOS e dispositivos centrados na privacidade
 
 Permisos:
-• FOREGROUND_SERVICE — mantén o temporizador cando a pantalla está apagada
-• WAKE_LOCK — evita que a CPU durma durante os adestramentos
-• ACCESS_FINE_LOCATION — GPS optativo para seguimento da distancia/ritmo (podes omitir isto)
-• POST_NOTIFICATIONS — notificacións do adestramento con controis para pausa/deter
+• FOREGROUND_SERVICE (saúde, localización) — mantén o temporizador do adestramento coa pantalla apagada
+• ACTIVITY_RECOGNITION — Android esíxeo para un temporizador deportivo en segundo plano; C2K non le datos de sensores e o adestramento comeza igual se o rexeitas
+• ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION — GPS optativo para distancia e ritmo, só se pide en adestramentos con GPS
+• POST_NOTIFICATIONS — notificación do adestramento con pausa e detención, e avisos no reloxo
+• REQUEST_IGNORE_BATTERY_OPTIMIZATIONS — ofrece excluír C2K do aforro de batería para que non corte un adestramento a medias
+• WAKE_LOCK — evita que a CPU se deteña durante un adestramento
 • VIBRATE — avisos por vibración optativos durante o adestramento
 
 C2K é software libre publicado con licenza GNU General Public License v3.

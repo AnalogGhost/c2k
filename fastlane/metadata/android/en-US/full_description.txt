@@ -3,8 +3,8 @@ C2K is an offline running trainer that guides you from the couch to running 5K, 
 Programs:
 • Pre-C25K — 3-week gentle starter for absolute beginners
 • Couch to 5K (C25K) — 9-week program, 3 runs per week
-• Bridge to 10K (B210K) — 6-week bridge for C25K graduates
 • Couch to 10K (C210K) — 14-week program, continues from C25K
+• Bridge to 10K (B210K) — 6-week bridge for C25K graduates
 • One Hour Runner — 13-week progression from 30 to 60 minutes continuous running
 • 5K Improver — 8-week speed and stamina program for runners who can already complete 5K
 
@@ -13,24 +13,28 @@ Features:
 • Customizable coaching — adjust voice speed/volume, countdown warning timing, and mid-interval cues
 • Test voice playback before a workout, with Android text-to-speech diagnostics
 • Vibration cues as an alternative or addition to voice
+• Smartwatch and fitness band alerts — interval changes arrive as notifications, so a paired Wear OS watch or Gadgetbridge band buzzes too. No watch app needed.
 • Tones mode — short chimes instead of a voice for interval changes and countdowns
 • Adjustable vibration strength and language selection
 • Background workout timer — continues with screen off
 • GPS tracking (optional) — records distance and pace; works without GPS too
 • Treadmill mode — indoor runs without GPS
 • Skip the warm-up or cool-down — in Settings, or with one tap during a workout
-• Workout history — session log with total distance, time, best pace, longest run, and calorie estimates
+• Workout history — weekly streak, session log, totals, best pace, longest run and calorie estimates
 • Progress tracking — remembers which weeks and days you've completed, with the option to reset
+• Step back when it's tough — stop the same workout early twice and C2K suggests repeating the week before
 • In-app running guide — FAQ covering pacing, gear, and terminology
 • Available in 8 languages — English, German, Spanish, French, Galician, Portuguese (Brazil), Russian, Turkish
 • Works offline — no internet permission required
 • No proprietary services required — compatible with GrapheneOS and privacy-focused devices
 
 Permissions:
-• FOREGROUND_SERVICE — keeps the workout timer running with screen off
+• FOREGROUND_SERVICE (health, location) — keeps the workout timer running with the screen off
+• ACTIVITY_RECOGNITION — Android requires it for a fitness timer that runs in the background; C2K reads no sensor data, and workouts still start if you decline
+• ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION — optional GPS distance and pace, only asked for workouts that use GPS
+• POST_NOTIFICATIONS — the workout notification with pause and stop, and smartwatch alerts
+• REQUEST_IGNORE_BATTERY_OPTIMIZATIONS — offers to exempt C2K from battery saving so it can't end a workout mid-run
 • WAKE_LOCK — prevents the CPU sleeping mid-workout
-• ACCESS_FINE_LOCATION — optional GPS for distance/pace tracking (you can skip this)
-• POST_NOTIFICATIONS — workout notification with pause/stop controls
 • VIBRATE — optional vibration cues during workouts
 
 C2K is free software released under the GNU General Public License v3.

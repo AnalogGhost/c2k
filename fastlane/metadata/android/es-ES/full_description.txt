@@ -3,8 +3,8 @@ C2K es una app de entrenamiento para Android, libre y de código abierto, que te
 Programas:
 • Pre-C25K — inicio suave de 3 semanas para principiantes absolutos
 • Del sofá a 5K (C25K) — programa de 9 semanas, 3 sesiones por semana
-• Puente a 10K (B210K) — puente de 6 semanas para quienes completaron C25K
 • Del sofá a 10K (C210K) — programa de 14 semanas, continúa desde C25K
+• Puente a 10K (B210K) — puente de 6 semanas para quienes completaron C25K
 • One Hour Runner — progresión de 13 semanas de 30 a 60 minutos de carrera continua
 • 5K Improver — programa de 8 semanas de velocidad y resistencia para corredores que ya pueden completar 5K
 
@@ -13,24 +13,28 @@ Características:
 • Entrenamiento personalizable — ajusta la velocidad/volumen de voz, el momento de las cuentas atrás y los avisos intermedios
 • Prueba la voz y diagnostica problemas del sistema Android antes de entrenar
 • Avisos por vibración como alternativa o complemento a la voz
+• Avisos en el reloj inteligente y la pulsera de actividad — los cambios de intervalo llegan como notificaciones, así que un reloj Wear OS o una pulsera con Gadgetbridge también vibran. Sin app para el reloj.
 • Modo Tonos — sonidos breves en lugar de voz para los cambios de intervalo y las cuentas atrás
 • Ajusta la intensidad de vibración y el idioma
 • Temporizador en segundo plano — continúa funcionando con la pantalla apagada
 • Registro con GPS (opcional) — graba la distancia y ritmo; funciona igualmente sin GPS
 • Modo cinta de correr — para entrenar en interiores sin GPS
 • Omite el calentamiento o el enfriamiento — en Ajustes o con un toque durante el entrenamiento
-• Historial de entrenamientos — registro de sesiones con distancia total, tiempo, mejor ritmo, carrera más larga y calorías estimadas
+• Historial de entrenamientos — racha semanal, registro de sesiones, totales, mejor ritmo, carrera más larga y calorías estimadas
 • Seguimiento de progreso — registra cuantos días y semanas has completado, con opción de reiniciar
+• Un paso atrás cuando cuesta — si dejas el mismo entrenamiento a medias dos veces, C2K te sugiere repetir la semana anterior
 • Guía de carrera integrada — preguntas frecuentes sobre ritmo, equipo y terminología
 • Disponible en 8 idiomas — inglés, alemán, español, francés, gallego, portugués (Brasil), ruso, turco
 • Funciona sin datos — no necesita permiso de acceso a internet
 • No requiere servicios propietarios — compatible con GrapheneOS y dispositivos centrados en la privacidad
 
 Permisos:
-• FOREGROUND_SERVICE — mantiene el temporizador del entrenamiento con la pantalla apagada
+• FOREGROUND_SERVICE (salud, ubicación) — mantiene el temporizador del entrenamiento con la pantalla apagada
+• ACTIVITY_RECOGNITION — Android lo exige para un temporizador deportivo en segundo plano; C2K no lee datos de sensores y el entrenamiento empieza igual si lo rechazas
+• ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION — GPS opcional para distancia y ritmo, solo se pide en entrenamientos con GPS
+• POST_NOTIFICATIONS — notificación del entrenamiento con pausa y detención, y avisos en el reloj
+• REQUEST_IGNORE_BATTERY_OPTIMIZATIONS — ofrece excluir C2K del ahorro de batería para que no corte un entrenamiento a medias
 • WAKE_LOCK — evita que la CPU se detenga durante un entrenamiento
-• ACCESS_FINE_LOCATION — GPS opcional para grabar la distancia/ritmo del entrenamiento (puedes omitir esto)
-• POST_NOTIFICATIONS — notificaciones de entrenamiento con controles de pausa/detención
 • VIBRATE — avisos por vibración opcionales durante el entrenamiento
 
 C2K es software libre publicado con licencia GNU General Public License v3.

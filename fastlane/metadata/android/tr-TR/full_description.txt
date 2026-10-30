@@ -3,8 +3,8 @@ C2K, koltuğunuzdan 5K, 10K ve ötesine koşmanıza rehberlik eden ücretsiz ve 
 Programlar:
 • 5K Ön Hazırlık — Tam yeni başlayanlar için 3 haftalık hafif başlangıç
 • Koltuğundan 5K'ya (C25K) — 9 haftalık program, haftada 3 koşu
-• 10K'ya Köprü (B210K) — C25K mezunları için 6 haftalık köprü programı
 • Koltuğundan 10K'ya (C210K) — C25K'nın devamı niteliğinde 14 haftalık program
+• 10K'ya Köprü (B210K) — C25K mezunları için 6 haftalık köprü programı
 • 1 Saat Koşucusu — 30 dakikadan 60 dakikaya kesintisiz koşu için 13 haftalık ilerleme programı
 • 5K Geliştirici — Halihazırda 5K koşabilenler için 8 haftalık hız ve dayanıklılık programı
 
@@ -13,23 +13,28 @@ Programlar:
 • Özelleştirilebilir yönlendirme — ses hızını/düzeyini, geri sayım uyarı zamanlamasını ve aralık ortası ipuçlarını ayarlayın
 • Antrenmandan önce sesi test edin ve Android konuşma sentezi sorunlarını tanılayın
 • Sese alternatif veya ek olarak titreşimli uyarılar
+• Akıllı saat ve fitness bilekliği uyarıları — aralık değişimleri bildirim olarak gelir, böylece eşlenmiş bir Wear OS saat ya da Gadgetbridge'e bağlı bir bileklik de titreşir. Saat uygulaması gerekmez.
 • Tonlar modu — aralık değişimlerinde ve geri sayımlarda ses yerine kısa tonlar
 • Titreşim gücünü ve dili ayarlayın
 • Arka planda çalışan antrenman zamanlayıcısı — ekran kapalıyken çalışmaya devam eder
 • GPS takibi (isteğe bağlı) — mesafe ve tempoyu kaydeder; GPS olmadan da çalışır
 • Koşu bandı modu — GPS olmadan kapalı alan koşuları
 • Isınmayı veya soğumayı atlayın — Ayarlar'dan veya antrenman sırasında tek dokunuşla
-• Antrenman geçmişi — toplam mesafe, süre, en iyi tempo, en uzun koşu ve kalori tahminlerini içeren oturum günlüğü
+• Antrenman geçmişi — haftalık seri, oturum günlüğü, toplamlar, en iyi tempo, en uzun koşu ve kalori tahminleri
 • İlerleme takibi — tamamladığınız haftaları ve günleri hatırlar, sıfırlama seçeneği sunar
+• Zorlandığınızda bir adım geri — aynı antrenmanı iki kez erken bırakırsanız C2K bir önceki haftayı tekrarlamayı önerir
 • Uygulama içi koşu rehberi — tempo, ekipman ve terimleri kapsayan SSS
+• 8 dilde kullanılabilir — İngilizce, Almanca, İspanyolca, Fransızca, Galiçyaca, Portekizce (Brezilya), Rusça, Türkçe
 • Çevrimdışı çalışır — internet izni gerektirmez
 • Tescilli servisler gerektirmez — GrapheneOS ve gizlilik odaklı cihazlarla uyumlu
 
 İzinler:
-• FOREGROUND_SERVICE — ekran kapalıyken antrenman zamanlayıcısının çalışmasını sağlar
-• WAKE_LOCK — antrenman sırasında işlemcinin uykuya geçmesini önler
-• ACCESS_FINE_LOCATION — mesafe/tempo takibi için isteğe bağlı GPS (bunu atlayabilirsiniz)
-• POST_NOTIFICATIONS — duraklatma/durdurma kontrolleri içeren antrenman bildirimi
-• VIBRATE — antrenmanlar sırasında isteğe bağlı titreşimli uyarılar
+• FOREGROUND_SERVICE (sağlık, konum) — ekran kapalıyken antrenman zamanlayıcısını çalışır tutar
+• ACTIVITY_RECOGNITION — Android, arka planda çalışan bir fitness zamanlayıcısı için bunu ister; C2K hiçbir sensör verisini okumaz ve reddetseniz de antrenman başlar
+• ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION — mesafe ve tempo için isteğe bağlı GPS, yalnızca GPS kullanan antrenmanlarda istenir
+• POST_NOTIFICATIONS — duraklatma ve durdurma düğmeli antrenman bildirimi ve akıllı saat uyarıları
+• REQUEST_IGNORE_BATTERY_OPTIMIZATIONS — pil tasarrufunun antrenmanı yarıda kesmemesi için C2K'yı muaf tutmayı önerir
+• WAKE_LOCK — antrenman sırasında işlemcinin uyku moduna geçmesini önler
+• VIBRATE — antrenman sırasında isteğe bağlı titreşimli uyarılar
 
 C2K, GNU Genel Kamu Lisansı v3 altında yayınlanan özgür bir yazılımdır.
