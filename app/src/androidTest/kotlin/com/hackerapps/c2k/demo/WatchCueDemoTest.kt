@@ -3,6 +3,7 @@ package com.hackerapps.c2k.demo
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
@@ -13,6 +14,7 @@ import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.service.WorkoutService
 import kotlinx.coroutines.runBlocking
+import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,6 +36,8 @@ class WatchCueDemoTest {
 
     @Test
     fun showWalkCue() {
+        // It changes settings and records a workout, so it stays off the phones CI tests on.
+        assumeTrue(context.packageManager.hasSystemFeature(PackageManager.FEATURE_WATCH))
         runBlocking {
             UserPreferences(context).apply {
                 setTtsEnabled(false)

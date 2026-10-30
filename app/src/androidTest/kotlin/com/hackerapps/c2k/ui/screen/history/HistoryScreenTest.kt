@@ -250,9 +250,9 @@ class HistoryScreenTest {
             composeRule.onNodeWithText(string(R.string.history_stats_section_bests)).assertExists()
         }
         composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertExists()
-        composeRule.onNodeWithText("4:26").assertExists()
+        composeRule.onNodeWithText(string(R.string.workout_pace, "4:26")).assertExists()
         composeRule.onNodeWithText(string(R.string.history_stats_longest)).assertExists()
-        composeRule.onNodeWithText("4.50").assertExists()
+        composeRule.onNodeWithText("4.50 ${string(R.string.history_stats_km)}").assertExists()
     }
 
     @Test
