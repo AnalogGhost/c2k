@@ -8,7 +8,10 @@ import android.location.LocationManager
 import android.os.Looper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class GpsLocationProvider(private val context: Context) : LocationProvider {
 
@@ -18,8 +21,9 @@ class GpsLocationProvider(private val context: Context) : LocationProvider {
     private val _updates = MutableSharedFlow<LocationUpdate>(replay = 0, extraBufferCapacity = 64)
     override val updates: Flow<LocationUpdate> = _updates.asSharedFlow()
 
-    override val isAvailable: Boolean
-        get() = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    private val _availability =
+        MutableStateFlow(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+    override val availability: StateFlow<Boolean> = _availability.asStateFlow()
 
     private var _hasValidFix = false
     override val hasValidFix: Boolean get() = _hasValidFix
@@ -63,14 +67,21 @@ class GpsLocationProvider(private val context: Context) : LocationProvider {
         override fun onStatusChanged(provider: String?, status: Int, extras: android.os.Bundle?) {
         }
 
-        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderEnabled(provider: String) {
+            _availability.value = true
+        }
 
-        override fun onProviderDisabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {
+            _availability.value = false
+        }
     }
 
     @SuppressLint("MissingPermission")
     override fun start() {
-        if (!isAvailable) return
+        // Registered even while Location is off: the request stays in place and fixes start
+        // arriving as soon as the runner switches Location on. Returning early here, as this used
+        // to, left a workout started with Location off recording 0 km for good.
+        _availability.value = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
             2000L,

@@ -338,6 +338,8 @@ class WorkoutService : Service() {
                 NoOpLocationProvider()
 
             _gpsActive.value = locationProvider.isAvailable
+            // Follow Location being switched on or off during the workout.
+            launch { locationProvider.availability.collect { _gpsActive.value = it } }
             val splitTracker = if (
                 distanceCuesActive(ttsEnabled, cueStyle, distanceCues, gpsTracking = locationProvider !is NoOpLocationProvider)
             ) SplitCueTracker(distanceCueSplitMeters) else null

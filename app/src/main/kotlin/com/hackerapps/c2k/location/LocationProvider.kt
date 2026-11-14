@@ -1,10 +1,13 @@
 package com.hackerapps.c2k.location
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface LocationProvider {
     val updates: Flow<LocationUpdate>
-    val isAvailable: Boolean
+    /** Whether the location source is switched on right now; follows the user toggling it. */
+    val availability: StateFlow<Boolean>
+    val isAvailable: Boolean get() = availability.value
     val totalDistanceMeters: Float
     val hasValidFix: Boolean
     fun start()
