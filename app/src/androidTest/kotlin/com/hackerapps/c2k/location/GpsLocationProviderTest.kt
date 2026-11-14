@@ -83,6 +83,8 @@ class GpsLocationProviderTest {
     @Test
     fun switching_location_on_after_the_start_still_tracks_the_run() {
         locationManager.setTestProviderEnabled(gps, false)
+        // The switch applies asynchronously; start only once the platform reports GPS off.
+        assertTrue("GPS should report off", waitUntil { !locationManager.isProviderEnabled(gps) })
         val gpsProvider = GpsLocationProvider(context).also { provider = it }
         gpsProvider.start()
         assertFalse("Location is off at the start", gpsProvider.availability.value)
@@ -104,6 +106,7 @@ class GpsLocationProviderTest {
     @Test
     fun switching_location_off_mid_run_is_reported() {
         locationManager.setTestProviderEnabled(gps, true)
+        assertTrue("GPS should report on", waitUntil { locationManager.isProviderEnabled(gps) })
         val gpsProvider = GpsLocationProvider(context).also { provider = it }
         gpsProvider.start()
         assertTrue(gpsProvider.availability.value)
