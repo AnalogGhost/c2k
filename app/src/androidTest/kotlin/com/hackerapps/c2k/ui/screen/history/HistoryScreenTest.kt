@@ -1,5 +1,10 @@
 package com.hackerapps.c2k.ui.screen.history
 
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.getOrNull
 import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertCountEquals
@@ -38,10 +43,10 @@ private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 10_000, ass
     }
 }
 
-// Covers rendering only: empty state, aggregate stats, and session list content. The
-// swipe-to-dismiss delete flow (SwipeToDismissBox in HistoryScreen) needs gesture simulation
-// that's fiddly to get reliable in Compose UI tests — deliberately left for a follow-up rather
-// than a guessed-at performTouchInput { swipeLeft() } that might be flaky or just wrong.
+// Covers rendering (empty state, aggregate stats, session list content) and deleting through the
+// session's accessibility action, which opens the same confirmation as a swipe. The swipe gesture
+// itself isn't simulated: performTouchInput { swipeLeft() } on SwipeToDismissBox is fiddly to make
+// reliable, and the action exercises everything after it.
 @RunWith(AndroidJUnit4::class)
 class HistoryScreenTest {
 
@@ -108,6 +113,51 @@ class HistoryScreenTest {
 
         composeRule.waitUntilAssertion {
             composeRule.onNodeWithText(string(R.string.history_week_day, 2, 3), substring = true).assertExists()
+        }
+    }
+
+    @Test
+    fun a_session_can_be_deleted_without_swiping_through_its_accessibility_action() {
+        runBlocking {
+            val id = repo().startSession(PROGRAM_ID, week = 2, day = 3)
+            repo().finishSession(id, durationSeconds = 600, distanceMeters = 1000f, completed = true)
+        }
+        setContent()
+        val label = string(R.string.history_week_day, 2, 3)
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(label, substring = true).assertExists()
+        }
+
+        // What TalkBack's actions menu offers: the "Delete" action on the session.
+        val session = composeRule.onNode(
+            SemanticsMatcher("has a Delete action") { node ->
+                node.config.getOrNull(SemanticsActions.CustomActions)
+                    ?.any { it.label == string(R.string.history_delete_confirm) } == true
+            }
+        )
+        val delete = session.fetchSemanticsNode().config[SemanticsActions.CustomActions]
+            .single { it.label == string(R.string.history_delete_confirm) }
+        composeRule.runOnUiThread { delete.action() }
+
+        // The same confirmation as a swipe, then gone.
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(string(R.string.history_delete_title)).assertExists()
+        }
+        composeRule.onNodeWithText(string(R.string.history_delete_confirm)).performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithText(label, substring = true).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun a_completed_session_is_announced_as_completed() {
+        runBlocking {
+            val id = repo().startSession(PROGRAM_ID, week = 2, day = 3)
+            repo().finishSession(id, durationSeconds = 600, distanceMeters = 1000f, completed = true)
+        }
+        setContent()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithContentDescription(string(R.string.cd_completed)).assertExists()
         }
     }
 

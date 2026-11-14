@@ -1,5 +1,6 @@
 package com.hackerapps.c2k.ui.screen.program
 
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.ComposeTestRule
@@ -122,6 +123,23 @@ class ProgramSelectScreenTest {
         setContent()
         // No overflow / reset action should be reachable when there's no progress to reset.
         composeRule.onNodeWithText(string(R.string.program_reset_title)).assertDoesNotExist()
+    }
+
+    @Test
+    fun the_overflow_button_and_completed_days_are_labelled_for_screen_readers() {
+        runBlocking {
+            val id = repo().startSession(PROGRAM_ID, week = 1, day = 1)
+            repo().finishSession(id, durationSeconds = 600, distanceMeters = 1000f, completed = true)
+        }
+        setContent()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithContentDescription(string(R.string.cd_more_options)).assertExists()
+        }
+        assertTrue(
+            "A completed day should say so",
+            composeRule.onAllNodesWithContentDescription(string(R.string.cd_completed))
+                .fetchSemanticsNodes().isNotEmpty()
+        )
     }
 
     @Test

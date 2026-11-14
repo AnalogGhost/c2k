@@ -147,6 +147,8 @@
     <string name="nav_back">Zurück</string>
     <string name="cd_collapse">Einklappen</string>
     <string name="cd_expand">Ausklappen</string>
+    <string name="cd_more_options">Weitere Optionen</string>
+    <string name="cd_completed">Abgeschlossen</string>
 
     <!-- Workout screen title -->
     <string name="cd_interval_remaining">%1$s: %2$s verbleibend</string>

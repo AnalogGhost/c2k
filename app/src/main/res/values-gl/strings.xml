@@ -150,6 +150,8 @@
     <string name="nav_back">Volver</string>
     <string name="cd_collapse">Pregar</string>
     <string name="cd_expand">Despregar</string>
+    <string name="cd_more_options">Máis opcións</string>
+    <string name="cd_completed">Completado</string>
 
     <!-- Workout screen title -->
     <string name="cd_interval_remaining">%1$s: %2$s restantes</string>

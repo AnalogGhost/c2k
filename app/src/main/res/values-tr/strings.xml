@@ -150,6 +150,8 @@
     <string name="nav_back">Geri</string>
     <string name="cd_collapse">Daralt</string>
     <string name="cd_expand">Genişlet</string>
+    <string name="cd_more_options">Diğer seçenekler</string>
+    <string name="cd_completed">Tamamlandı</string>
 
     <!-- Workout screen title -->
     <string name="cd_interval_remaining">%1$s: %2$s kaldı</string>

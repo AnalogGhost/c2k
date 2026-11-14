@@ -138,7 +138,7 @@ fun ProgramSelectScreen(
                             onClick = { showOverflow = true },
                             modifier = Modifier.testTag("program_overflow_button")
                         ) {
-                            Icon(Icons.Default.MoreVert, contentDescription = null)
+                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.cd_more_options))
                         }
                         DropdownMenu(
                             expanded = showOverflow,
@@ -238,7 +238,7 @@ fun ProgramSelectScreen(
                                 if (weekDone) {
                                     Icon(
                                         Icons.Default.CheckCircle,
-                                        contentDescription = null,
+                                        contentDescription = stringResource(R.string.cd_completed),
                                         modifier = Modifier.size(18.dp),
                                         tint = GreenText
                                     )
@@ -305,7 +305,7 @@ private fun DayButton(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Default.CheckCircle,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.cd_completed),
                     modifier = Modifier.size(14.dp),
                     tint = GreenText
                 )

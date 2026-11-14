@@ -1,5 +1,8 @@
 package com.hackerapps.c2k.ui.screen.history
 
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -375,9 +378,15 @@ private fun SwipeToDeleteSession(
         )
     }
 
+    val deleteLabel = stringResource(R.string.history_delete_confirm)
     SwipeToDismissBox(
         state = dismissState,
         enableDismissFromStartToEnd = false,
+        // Swiping is the visual way to delete; screen-reader users get the same through the
+        // accessibility actions menu, which opens the same confirmation.
+        modifier = Modifier.semantics {
+            customActions = listOf(CustomAccessibilityAction(deleteLabel) { showConfirm = true; true })
+        },
         backgroundContent = {
             Box(
                 modifier = Modifier
@@ -420,7 +429,7 @@ private fun SessionCard(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                     if (session.completed) {
-                        Icon(Icons.Default.CheckCircle, contentDescription = null, tint = GreenText)
+                        Icon(Icons.Default.CheckCircle, contentDescription = stringResource(R.string.cd_completed), tint = GreenText)
                         Spacer(Modifier.width(8.dp))
                     }
                     // weight(1f) here (not just on the enclosing Row above) matters when this

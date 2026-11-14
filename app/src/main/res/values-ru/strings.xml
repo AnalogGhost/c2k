@@ -162,6 +162,8 @@
     <string name="nav_back">Назад</string>
     <string name="cd_collapse">Свернуть</string>
     <string name="cd_expand">Развернуть</string>
+    <string name="cd_more_options">Другие параметры</string>
+    <string name="cd_completed">Выполнено</string>
 
     <!-- Workout screen title -->
     <string name="cd_interval_remaining">%1$s: %2$s осталось</string>
