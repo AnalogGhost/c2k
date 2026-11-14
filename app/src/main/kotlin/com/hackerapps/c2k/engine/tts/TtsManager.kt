@@ -9,6 +9,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import com.hackerapps.c2k.utils.localized
+import com.hackerapps.c2k.utils.withLocale
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,7 +32,9 @@ class TtsManager(
 
     private val context: Context = context.applicationContext.localized()
     private val tts = TextToSpeech(this.context, this)
-    private val cueText = CueText(this.context)
+    // Rebuilt in English if the voice falls back to English (see onInit); read from the engine's
+    // thread, written on the main thread before `ready`.
+    @Volatile private var cueText = CueText(this.context)
     private var ready = false
     private var initializationFailure: TtsDiagnosticResult? = null
     private var pendingAnnouncement: TtsAnnouncement? = null
@@ -76,17 +79,20 @@ class TtsManager(
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            val languageAvailable = selectTtsLanguage(
-                context.resources.configuration.locales[0],
-                tts::setLanguage
-            )
-            if (!languageAvailable) {
+            val appLocale = context.resources.configuration.locales[0]
+            val voiceLocale = selectTtsLanguage(appLocale, tts::setLanguage)
+            if (voiceLocale == null) {
                 initializationFailure = TtsDiagnosticResult.VoiceUnavailable
                 isAvailableOnDevice.value = false
                 pendingDiagnostic?.onResult?.invoke(TtsDiagnosticResult.VoiceUnavailable)
                 pendingDiagnostic = null
                 Log.w(TAG, "Neither the device locale nor English is available for text-to-speech")
                 return
+            }
+            if (voiceLocale != appLocale) {
+                // No voice for the app's language, so an English voice speaks: give it English
+                // words, not the app language read with English pronunciation.
+                cueText = CueText(context.withLocale(voiceLocale))
             }
             tts.setSpeechRate(speechRate)
             tts.setAudioAttributes(ttsAudioAttributes)

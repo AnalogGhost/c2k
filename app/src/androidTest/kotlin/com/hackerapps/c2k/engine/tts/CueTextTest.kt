@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.hackerapps.c2k.utils.withLocale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
@@ -34,6 +35,21 @@ class CueTextTest {
         assertEquals("1 kilometre. Pace 6 minutes per kilometre", text.of(TtsAnnouncement.DistanceSplit(1000, 360)))
         assertEquals("500 metres", text.of(TtsAnnouncement.DistanceSplit(500, null)))
         assertEquals("2 kilometres", text.of(TtsAnnouncement.DistanceSplit(2000, null)))
+    }
+
+    @Test
+    fun an_english_fallback_voice_gets_english_words() {
+        // The app in Galician on a device with no Galician voice: TtsManager rebuilds the cue
+        // text from the app-language context in the voice's language.
+        val galician = cueText("gl")
+        val base: Context = ApplicationProvider.getApplicationContext()
+        val config = Configuration(base.resources.configuration).apply { setLocale(Locale.forLanguageTag("gl")) }
+        val english = CueText(base.createConfigurationContext(config).withLocale(Locale.ENGLISH))
+
+        val split = TtsAnnouncement.DistanceSplit(2000, null)
+        assertEquals("2 quilómetros", galician.of(split))
+        assertEquals("2 kilometres", english.of(split))
+        assertEquals("Workout complete. Great job!", english.of(TtsAnnouncement.WorkoutComplete))
     }
 
     @Test

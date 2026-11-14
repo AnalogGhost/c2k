@@ -32,12 +32,17 @@ internal object TtsAudioPolicy {
 internal fun isTtsLanguageAvailable(result: Int): Boolean =
     result >= TextToSpeech.LANG_AVAILABLE
 
+/**
+ * Sets the speech engine to the app's language, or English when the device has no voice for it.
+ * Returns the language the voice actually speaks, or null when neither is available.
+ */
 internal fun selectTtsLanguage(
-    deviceLocale: Locale,
+    appLocale: Locale,
     setLanguage: (Locale) -> Int
-): Boolean {
-    if (isTtsLanguageAvailable(setLanguage(deviceLocale))) return true
-    return isTtsLanguageAvailable(setLanguage(Locale.ENGLISH))
+): Locale? = when {
+    isTtsLanguageAvailable(setLanguage(appLocale)) -> appLocale
+    isTtsLanguageAvailable(setLanguage(Locale.ENGLISH)) -> Locale.ENGLISH
+    else -> null
 }
 
 internal fun diagnosticResultForError(errorCode: Int): TtsDiagnosticResult = when (errorCode) {

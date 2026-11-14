@@ -5,6 +5,7 @@ import android.media.AudioManager
 import android.speech.tts.TextToSpeech
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.Locale
@@ -23,26 +24,27 @@ class TtsDiagnosticsTest {
     @Test
     fun language_selection_uses_device_locale_when_available() {
         val requested = mutableListOf<Locale>()
-        val available = selectTtsLanguage(Locale.GERMANY) {
+        val voice = selectTtsLanguage(Locale.GERMANY) {
             requested += it
             TextToSpeech.LANG_COUNTRY_AVAILABLE
         }
 
-        assertTrue(available)
+        assertEquals(Locale.GERMANY, voice)
         assertEquals(listOf(Locale.GERMANY), requested)
     }
 
     @Test
     fun language_selection_falls_back_to_english_and_reports_when_both_fail() {
         val requested = mutableListOf<Locale>()
-        val available = selectTtsLanguage(Locale.GERMANY) {
+        val voice = selectTtsLanguage(Locale.GERMANY) {
             requested += it
             if (it == Locale.ENGLISH) TextToSpeech.LANG_AVAILABLE else TextToSpeech.LANG_MISSING_DATA
         }
-        assertTrue(available)
+        // The caller builds the cue text in this language, so an English voice gets English words.
+        assertEquals(Locale.ENGLISH, voice)
         assertEquals(listOf(Locale.GERMANY, Locale.ENGLISH), requested)
 
-        assertFalse(selectTtsLanguage(Locale.GERMANY) { TextToSpeech.LANG_NOT_SUPPORTED })
+        assertNull(selectTtsLanguage(Locale.GERMANY) { TextToSpeech.LANG_NOT_SUPPORTED })
     }
 
     @Test
