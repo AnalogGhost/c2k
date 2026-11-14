@@ -177,4 +177,33 @@ class HistoryViewModelTest {
         val gpx = HistoryViewModel.generateGpx(session(), points)
         assertTrue(gpx.contains("<ele>123.4</ele>"))
     }
+
+    @Test
+    fun gpx_times_are_utc_regardless_of_device_zone() {
+        val original = java.util.TimeZone.getDefault()
+        try {
+            java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone("Europe/Berlin"))
+            val points = listOf(
+                RoutePointEntity(sessionId = 1, latitude = 40.0, longitude = -3.0, altitudeMeters = null, speedMps = null, recordedAt = 0L)
+            )
+            val gpx = HistoryViewModel.generateGpx(session(), points)
+            assertTrue(gpx, gpx.contains("<time>1970-01-01T00:00:00Z</time>"))
+        } finally {
+            java.util.TimeZone.setDefault(original)
+        }
+    }
+
+    @Test
+    fun gpx_coordinates_near_zero_are_plain_decimals() {
+        val points = listOf(
+            RoutePointEntity(sessionId = 1, latitude = 0.0001, longitude = -0.00005, altitudeMeters = 0.0002, speedMps = null, recordedAt = 0L)
+        )
+        val gpx = HistoryViewModel.generateGpx(session(), points)
+        assertFalse(gpx, Regex("""\d[eE][+-]?\d""").containsMatchIn(gpx))
+        val (lat, lon) = Regex("""lat="([^"]+)" lon="([^"]+)"""").find(gpx)!!.destructured
+        assertEquals(0.0001, lat.toDouble(), 1e-12)
+        assertEquals(-0.00005, lon.toDouble(), 1e-12)
+        val ele = Regex("<ele>([^<]+)</ele>").find(gpx)!!.groupValues[1]
+        assertEquals(0.0002, ele.toDouble(), 1e-12)
+    }
 }

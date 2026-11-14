@@ -19,9 +19,11 @@ import com.hackerapps.c2k.engine.MonthlySummaryCalculator
 import com.hackerapps.c2k.engine.StreakCalculator
 import com.hackerapps.c2k.engine.WeeklySummary
 import com.hackerapps.c2k.engine.WeeklySummaryCalculator
+import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 data class HistoryStats(
     val totalSessions: Int,
@@ -94,7 +96,12 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
         }
 
         internal fun generateGpx(session: WorkoutSessionEntity, points: List<RoutePointEntity>): String {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+            // The literal 'Z' declares UTC, so the formatter must actually be in UTC: left on the
+            // device zone, every timestamp was local time mislabelled as UTC, and importers
+            // placed the run hours off.
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).apply {
+                timeZone = TimeZone.getTimeZone("UTC")
+            }
             val name = "C2K W${session.week}D${session.day} ${dateFormat.format(Date(session.startedAt))}"
             val sb = StringBuilder()
             sb.appendLine("""<?xml version="1.0" encoding="UTF-8"?>""")
@@ -102,8 +109,8 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
             sb.appendLine("""  <trk><name>$name</name><trkseg>""")
             for (pt in points) {
                 val time = dateFormat.format(Date(pt.recordedAt))
-                val ele = if (pt.altitudeMeters != null) "\n      <ele>${pt.altitudeMeters}</ele>" else ""
-                sb.appendLine("""    <trkpt lat="${pt.latitude}" lon="${pt.longitude}">$ele
+                val ele = if (pt.altitudeMeters != null) "\n      <ele>${gpxDecimal(pt.altitudeMeters)}</ele>" else ""
+                sb.appendLine("""    <trkpt lat="${gpxDecimal(pt.latitude)}" lon="${gpxDecimal(pt.longitude)}">$ele
       <time>$time</time>
     </trkpt>""")
             }
@@ -111,5 +118,9 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
             sb.appendLine("""</gpx>""")
             return sb.toString()
         }
+
+        // GPX coordinates are xsd:decimal, which has no exponent; Double.toString switches to
+        // "1.0E-4" below 1e-3, i.e. within ~100 m of the equator or the prime meridian.
+        private fun gpxDecimal(value: Double): String = BigDecimal.valueOf(value).toPlainString()
     }
 }
