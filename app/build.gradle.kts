@@ -113,6 +113,9 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
+// MigrationTest builds each past database version from its exported schema JSON.
+android.sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
+
 dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
@@ -141,6 +144,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.uiautomator)
     androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.room.testing)
     androidTestImplementation(libs.compose.ui.test.junit4)
     androidTestImplementation(libs.screengrab)
     debugImplementation(libs.compose.ui.test.manifest)

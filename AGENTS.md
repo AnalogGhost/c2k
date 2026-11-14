@@ -19,6 +19,7 @@ Use JDK 21 and an Android SDK with API 36 and current build tools. Keep machine 
 - Keep workout timing and state transitions in the engine rather than UI components.
 - Add unit tests for business logic and instrumentation tests for Room, services, permissions, or Compose behavior that depends on Android.
 - Run the narrowest relevant tests during development, then `./gradlew test` and the applicable assemble task before committing.
+- Room schema changes need a version bump, a step in `AppDatabase.MIGRATIONS`, and the exported schema JSON committed; `DatabaseMigrationRulesTest` and `MigrationTest` enforce this. There is no destructive fallback.
 - Preserve offline operation. Do not add network dependencies or permissions without explicit approval.
 
 ## Releases
