@@ -90,6 +90,12 @@
     <string name="workout_paused_label">PAUSADO</string>
     <string name="workout_reconnecting">Reconectando…</string>
     <string name="workout_starting">Iniciando…</string>
+    <string name="workout_start_failed_title">No se pudo iniciar el entrenamiento</string>
+    <string name="workout_start_failed_activity_permission">Android necesita el permiso «Actividad física» para que el entrenamiento siga con la pantalla apagada. Permítelo en los ajustes de la app y vuelve a intentarlo.</string>
+    <string name="workout_start_failed_generic">Android no permitió iniciar el entrenamiento. Vuelve a intentarlo en un momento.</string>
+    <string name="workout_start_failed_open_settings">Abrir ajustes de la app</string>
+    <string name="workout_start_failed_retry">Reintentar</string>
+    <string name="workout_start_failed_back">Volver</string>
     <string name="workout_new_best">!Nueva marca personal!</string>
     <string name="workout_previous_best">Marca anterior: %1$s</string>
     <string name="workout_calories_burned">%1$d kcal quemadas (estimado)</string>

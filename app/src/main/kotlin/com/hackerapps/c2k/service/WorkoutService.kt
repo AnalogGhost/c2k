@@ -101,6 +101,12 @@ class WorkoutService : Service() {
         private const val TAG = "WorkoutService"
 
         val isRunning = MutableStateFlow(false)
+        /**
+         * True when Android refused to run the last requested workout in the foreground (on
+         * Android 14+, usually because Physical activity was denied and GPS isn't in use), so
+         * the workout screen can explain instead of waiting forever. Cleared by the next start.
+         */
+        val startRejected = MutableStateFlow(false)
         val currentWorkout = MutableStateFlow<WorkoutInfo?>(null)
 
         // Test-only seams. Left null in production, where handleStart() falls back to resolving
@@ -257,7 +263,8 @@ class WorkoutService : Service() {
             // The previous workout has already left the foreground, and this START came through
             // startForegroundService(), so the service must go foreground again now or the OS
             // kills the app. The workout itself starts once the old one is torn down.
-            if (startForegroundFor(intent)) pendingStart = intent else stopSelf()
+            if (startForegroundFor(intent)) pendingStart = intent
+            else { startRejected.value = true; stopSelf() }
             return
         }
         // Already foreground with a live session: the OS doesn't need another startForeground().
@@ -280,10 +287,12 @@ class WorkoutService : Service() {
         currentWorkout.value = WorkoutInfo(programId, week, day)
         acquireWakeLock()
         if (!startForegroundFor(intent)) {
+            startRejected.value = true
             cleanup()
             stopSelf()
             return
         }
+        startRejected.value = false
 
         val workoutDay = testWorkoutDayOverride ?: Programs.byId(programId).weeks[week - 1][day - 1]
         val app = application as C2KApp

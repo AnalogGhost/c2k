@@ -120,6 +120,20 @@ class WorkoutViewModelStartTest {
         assertEquals(0, sessionCount())
     }
 
+    @Test
+    fun retrying_after_a_refused_start_clears_the_refusal_and_starts_the_workout() {
+        val vm = newViewModel(SavedStateHandle())
+        // As left by a start Android refused (see WorkoutServiceStartRejectedTest).
+        WorkoutService.startRejected.value = true
+        assertTrue(vm.startFailed.value)
+
+        onMain { vm.retryStart(Programs.ID_C25K, 1, 1) }
+        assertFalse("The old refusal must not show while retrying", vm.startFailed.value)
+        assertTrue("Retry should start the workout", waitUntil(10_000) { vm.workoutState.value is WorkoutState.Completed })
+        assertFalse(vm.startFailed.value)
+        assertEquals(1, sessionCount())
+    }
+
     // ── Helpers ─────────────────────────────────────────────────────────────────
 
     private fun newViewModel(handle: SavedStateHandle): WorkoutViewModel = onMain {

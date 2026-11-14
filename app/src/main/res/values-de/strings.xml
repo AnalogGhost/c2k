@@ -87,6 +87,12 @@
     <string name="workout_paused_label">PAUSIERT</string>
     <string name="workout_reconnecting">Verbindung wird wiederhergestellt…</string>
     <string name="workout_starting">Wird gestartet…</string>
+    <string name="workout_start_failed_title">Training konnte nicht gestartet werden</string>
+    <string name="workout_start_failed_activity_permission">Android braucht die Berechtigung „Körperliche Aktivität“, damit das Training bei ausgeschaltetem Bildschirm weiterläuft. Erlaube sie in den App-Einstellungen und versuche es dann erneut.</string>
+    <string name="workout_start_failed_generic">Android hat den Start des Trainings nicht erlaubt. Versuche es gleich noch einmal.</string>
+    <string name="workout_start_failed_open_settings">App-Einstellungen öffnen</string>
+    <string name="workout_start_failed_retry">Erneut versuchen</string>
+    <string name="workout_start_failed_back">Zurück</string>
     <string name="workout_new_best">Neue persönliche Bestleistung!</string>
     <string name="workout_previous_best">Bisherige Bestleistung: %1$s</string>
     <string name="workout_calories_burned">%1$d kcal verbrannt (geschätzt)</string>

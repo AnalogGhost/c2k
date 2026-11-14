@@ -88,6 +88,12 @@
     <string name="workout_paused_label">DURAKLATILDI</string>
     <string name="workout_reconnecting">Yeniden bağlanıyor…</string>
     <string name="workout_starting">Başlatılıyor…</string>
+    <string name="workout_start_failed_title">Antrenman başlatılamadı</string>
+    <string name="workout_start_failed_activity_permission">Android, ekran kapalıyken antrenmanın sürmesi için \"Fiziksel aktivite\" iznine ihtiyaç duyuyor. Uygulama ayarlarından izin verin ve tekrar deneyin.</string>
+    <string name="workout_start_failed_generic">Android antrenmanın başlamasına izin vermedi. Biraz sonra tekrar deneyin.</string>
+    <string name="workout_start_failed_open_settings">Uygulama ayarlarını aç</string>
+    <string name="workout_start_failed_retry">Tekrar dene</string>
+    <string name="workout_start_failed_back">Geri</string>
     <string name="workout_new_best">Yeni kişisel rekor!</string>
     <string name="workout_previous_best">Önceki rekor: %1$s</string>
     <string name="workout_calories_burned">%1$d kcal yakıldı (tahmini)</string>

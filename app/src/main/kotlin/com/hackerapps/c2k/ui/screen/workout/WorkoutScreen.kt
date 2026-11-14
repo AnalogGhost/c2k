@@ -1,5 +1,9 @@
 package com.hackerapps.c2k.ui.screen.workout
 
+import androidx.core.content.ContextCompat
+import android.os.Build
+import android.content.pm.PackageManager
+import android.Manifest
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -90,6 +94,7 @@ fun WorkoutScreen(
     val treadmillMode by vm.treadmillMode.collectAsStateWithLifecycle()
     val locationNeeded by vm.locationNeeded.collectAsStateWithLifecycle()
     val showBatteryPrompt by vm.showBatteryPrompt.collectAsStateWithLifecycle()
+    val startFailed by vm.startFailed.collectAsStateWithLifecycle()
     val serviceRunning by WorkoutService.isRunning.collectAsStateWithLifecycle()
     val gpsActive by vm.gpsActive.collectAsStateWithLifecycle()
     val hasGpsLock by vm.hasGpsLock.collectAsStateWithLifecycle()
@@ -225,8 +230,70 @@ fun WorkoutScreen(
                     weightKg = weightKg,
                     onDone = onFinished
                 )
-                else -> Text(if (serviceRunning) stringResource(R.string.workout_reconnecting) else stringResource(R.string.workout_starting))
+                else -> if (startFailed) {
+                    StartFailedContent(
+                        // Rechecked on every recomposition, including after returning from the
+                        // app's settings.
+                        activityPermissionMissing = Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE &&
+                            ContextCompat.checkSelfPermission(context, Manifest.permission.ACTIVITY_RECOGNITION) !=
+                            PackageManager.PERMISSION_GRANTED,
+                        onOpenAppSettings = {
+                            context.startActivity(
+                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                    .setData(Uri.fromParts("package", context.packageName, null))
+                            )
+                        },
+                        onRetry = { vm.retryStart(programId, week, day) },
+                        onBack = onFinished
+                    )
+                } else {
+                    Text(if (serviceRunning) stringResource(R.string.workout_reconnecting) else stringResource(R.string.workout_starting))
+                }
             }
+        }
+    }
+}
+
+/**
+ * Shown when Android refused to start the workout. On Android 14+ that's almost always the
+ * Physical activity permission (needed for the workout's foreground service unless GPS is in
+ * use), so say so when it's missing, and offer the way to grant it.
+ */
+@Composable
+internal fun StartFailedContent(
+    activityPermissionMissing: Boolean,
+    onOpenAppSettings: () -> Unit,
+    onRetry: () -> Unit,
+    onBack: () -> Unit
+) {
+    Column(
+        modifier = Modifier.testTag("start_failed"),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            stringResource(R.string.workout_start_failed_title),
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            stringResource(
+                if (activityPermissionMissing) R.string.workout_start_failed_activity_permission
+                else R.string.workout_start_failed_generic
+            ),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center
+        )
+        if (activityPermissionMissing) {
+            Button(onClick = onOpenAppSettings, modifier = Modifier.testTag("button_open_app_settings")) {
+                Text(stringResource(R.string.workout_start_failed_open_settings))
+            }
+        }
+        OutlinedButton(onClick = onRetry, modifier = Modifier.testTag("button_retry_start")) {
+            Text(stringResource(R.string.workout_start_failed_retry))
+        }
+        TextButton(onClick = onBack) {
+            Text(stringResource(R.string.workout_start_failed_back))
         }
     }
 }

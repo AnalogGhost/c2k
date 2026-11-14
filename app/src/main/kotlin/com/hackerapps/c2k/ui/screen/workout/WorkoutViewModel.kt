@@ -101,6 +101,9 @@ class WorkoutViewModel(
     val weightKg: StateFlow<Float?> = prefs.weightKg
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
+    /** Android refused to start the workout; the screen explains instead of "Starting…". */
+    val startFailed: StateFlow<Boolean> = WorkoutService.startRejected.asStateFlow()
+
     private val _showBatteryPrompt = MutableStateFlow(false)
     val showBatteryPrompt: StateFlow<Boolean> = _showBatteryPrompt.asStateFlow()
 
@@ -181,7 +184,12 @@ class WorkoutViewModel(
         return decision
     }
 
+    /** Tries again after Android refused the start, say once the runner has granted the permission. */
+    fun retryStart(programId: String, week: Int, day: Int) = launchWorkout(programId, week, day)
+
     private fun launchWorkout(programId: String, week: Int, day: Int) {
+        // A refusal from an earlier attempt mustn't show while this one is starting.
+        WorkoutService.startRejected.value = false
         currentProgramId = programId
         currentWeek = week
         currentDay = day

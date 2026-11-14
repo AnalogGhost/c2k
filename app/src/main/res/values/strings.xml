@@ -88,6 +88,12 @@
     <string name="workout_paused_label">PAUSED</string>
     <string name="workout_reconnecting">Reconnecting…</string>
     <string name="workout_starting">Starting…</string>
+    <string name="workout_start_failed_title">Couldn\'t start the workout</string>
+    <string name="workout_start_failed_activity_permission">Android needs the Physical activity permission to keep the workout running while the screen is off. Allow it in the app\'s settings, then try again.</string>
+    <string name="workout_start_failed_generic">Android didn\'t allow the workout to start. Try again in a moment.</string>
+    <string name="workout_start_failed_open_settings">Open app settings</string>
+    <string name="workout_start_failed_retry">Try again</string>
+    <string name="workout_start_failed_back">Back</string>
     <string name="workout_new_best">New personal best!</string>
     <string name="workout_previous_best">Previous best: %1$s</string>
     <string name="workout_calories_burned">%1$d kcal burned (estimate)</string>

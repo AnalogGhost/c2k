@@ -97,6 +97,12 @@
     <string name="workout_paused_label">НА ПАУЗЕ</string>
     <string name="workout_reconnecting">Переподключение…</string>
     <string name="workout_starting">Начинаем…</string>
+    <string name="workout_start_failed_title">Не удалось начать тренировку</string>
+    <string name="workout_start_failed_activity_permission">Android нужно разрешение «Физическая активность», чтобы тренировка продолжалась при выключенном экране. Разрешите его в настройках приложения и попробуйте снова.</string>
+    <string name="workout_start_failed_generic">Android не разрешил начать тренировку. Попробуйте ещё раз через минуту.</string>
+    <string name="workout_start_failed_open_settings">Открыть настройки приложения</string>
+    <string name="workout_start_failed_retry">Попробовать снова</string>
+    <string name="workout_start_failed_back">Назад</string>
     <string name="workout_new_best">Новый личный рекорд!</string>
     <string name="workout_previous_best">Прошлый рекорд: %1$s</string>
     <string name="workout_calories_burned">%1$d ккал сожжено (оценка)</string>

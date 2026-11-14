@@ -88,6 +88,12 @@
     <string name="workout_paused_label">DETIDO</string>
     <string name="workout_reconnecting">Reconectando…</string>
     <string name="workout_starting">Comezando…</string>
+    <string name="workout_start_failed_title">Non se puido iniciar o adestramento</string>
+    <string name="workout_start_failed_activity_permission">Android precisa o permiso «Actividade física» para que o adestramento continúe coa pantalla apagada. Permíteo na configuración da aplicación e téntao de novo.</string>
+    <string name="workout_start_failed_generic">Android non permitiu iniciar o adestramento. Téntao de novo nun momento.</string>
+    <string name="workout_start_failed_open_settings">Abrir a configuración da app</string>
+    <string name="workout_start_failed_retry">Tentar de novo</string>
+    <string name="workout_start_failed_back">Volver</string>
     <string name="workout_new_best">Nova marca persoal!</string>
     <string name="workout_previous_best">Marca anterior: %1$s</string>
     <string name="workout_calories_burned">%1$d kcal queimadas (estimado)</string>

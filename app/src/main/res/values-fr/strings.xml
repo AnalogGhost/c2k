@@ -90,6 +90,12 @@
     <string name="workout_paused_label">EN PAUSE</string>
     <string name="workout_reconnecting">Reconnexion…</string>
     <string name="workout_starting">Démarrage…</string>
+    <string name="workout_start_failed_title">Impossible de démarrer la séance</string>
+    <string name="workout_start_failed_activity_permission">Android a besoin de l\'autorisation « Activité physique » pour que la séance continue écran éteint. Autorisez-la dans les paramètres de l\'application, puis réessayez.</string>
+    <string name="workout_start_failed_generic">Android n\'a pas permis de démarrer la séance. Réessayez dans un instant.</string>
+    <string name="workout_start_failed_open_settings">Ouvrir les paramètres de l\'appli</string>
+    <string name="workout_start_failed_retry">Réessayer</string>
+    <string name="workout_start_failed_back">Retour</string>
     <string name="workout_new_best">Nouveau record personnel !</string>
     <string name="workout_previous_best">Record précédent : %1$s</string>
     <string name="workout_calories_burned">%1$d kcal brûlées (estimation)</string>
