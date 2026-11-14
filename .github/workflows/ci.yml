@@ -20,6 +20,11 @@ jobs:
       - name: Run unit tests
         run: ./gradlew testFossDebugUnitTest --console=plain
 
+      # The release lane's checks (changelogs, git state, tag cleanup, signing arguments).
+      # Also fails a version bump that lands without a changelog in every listing locale.
+      - name: Test release checks
+        run: ruby fastlane/test/release_checks_test.rb
+
       - name: Upload test report
         if: failure()
         uses: actions/upload-artifact@v6

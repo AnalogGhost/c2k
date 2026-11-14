@@ -83,6 +83,18 @@ Requires version_code (the release this changelog belongs to).
 
 Defaults to a dry run; pass validate_only:false to publish.
 
+### android release_check
+
+```sh
+[bundle exec] fastlane android release_check
+```
+
+Check, without changing or publishing anything, that the current version can be released:
+
+a changelog in every listing locale within Play's 500 characters, HEAD on main and pushed,
+
+and the version's tag not yet used. The release lane runs the same checks first.
+
 ### android release
 
 ```sh

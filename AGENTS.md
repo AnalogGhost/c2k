@@ -24,4 +24,4 @@ Use JDK 21 and an Android SDK with API 36 and current build tools. Keep machine 
 
 ## Releases
 
-Version changes require matching Fastlane changelogs. Release lanes create tags and external releases, so run them only when the user explicitly requests a release. Do not commit keystores, credentials, APKs, AABs, or generated build output.
+Version changes require matching Fastlane changelogs. Release lanes create tags and external releases, so run them only when the user explicitly requests a release. `bundle exec fastlane release_check` is read-only and safe to run any time: it reports missing or over-long changelogs, an unpushed `main`, and an already-used tag, the same checks `release` runs before tagging. Do not commit keystores, credentials, APKs, AABs, or generated build output.

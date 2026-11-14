@@ -1,4 +1,30 @@
+require "open3"
+require "shellwords"
+require_relative "release_checks"
+
 default_platform(:android)
+
+# Runs git in the project as ReleaseChecks expects: an argument list in, [stdout, success] out.
+def git_runner(project_dir)
+  lambda do |args|
+    out, status = Open3.capture2("git", "-C", project_dir, *args)
+    [out, status.success?]
+  end
+end
+
+# Runs every pre-release check and returns [version_name, version_code], or stops the lane with
+# all the problems at once. Nothing here changes the repository or publishes anything.
+def release_preflight(project_dir)
+  version_name, version_code = ReleaseChecks.version_info(File.read(File.join(project_dir, "app/build.gradle.kts")))
+  UI.user_error!("Couldn't find versionName/versionCode in app/build.gradle.kts") unless version_name && version_code
+
+  errors = ReleaseChecks.changelog_errors(File.join(project_dir, "fastlane/metadata/android"), version_code) +
+           ReleaseChecks.git_errors("v#{version_name}", git: git_runner(project_dir))
+  unless errors.empty?
+    UI.user_error!("Not ready to release v#{version_name} (versionCode #{version_code}):\n  - " + errors.join("\n  - "))
+  end
+  [version_name, version_code]
+end
 
 platform :android do
   desc "Build the debug APK + test APK, capture raw store-listing screenshots in every locale"
@@ -85,6 +111,15 @@ platform :android do
     )
   end
 
+  desc "Check, without changing or publishing anything, that the current version can be released:"
+  desc "a changelog in every listing locale within Play's 500 characters, HEAD on main and pushed,"
+  desc "and the version's tag not yet used. The release lane runs the same checks first."
+  lane :release_check do
+    project_dir = File.expand_path("..", __dir__)
+    version_name, version_code = release_preflight(project_dir)
+    UI.success("Ready to release v#{version_name} (versionCode #{version_code})")
+  end
+
   desc "Tag, reproducibly build, sign, and publish a GitHub release for F-Droid."
   desc "Run this only after the version bump + changelog commit is already made and pushed-"
   desc "worthy — see project release checklist. Pauses for confirmation before anything public"
@@ -94,60 +129,58 @@ platform :android do
     project_dir = File.expand_path("..", __dir__)
 
     ensure_git_status_clean
-
-    gradle_kts = File.read(File.join(project_dir, "app/build.gradle.kts"))
-    version_name = gradle_kts[/versionName\s*=\s*"([^"]+)"/, 1]
-    version_code = gradle_kts[/versionCode\s*=\s*(\d+)/, 1]
-    UI.user_error!("Couldn't find versionName/versionCode in app/build.gradle.kts") unless version_name && version_code
+    version_name, version_code = release_preflight(project_dir)
     tag = "v#{version_name}"
 
     UI.header("Releasing #{tag} (versionCode #{version_code})")
 
-    add_git_tag(tag: tag)
+    sha256 = release_apk = nil
+    ReleaseChecks.with_local_tag(tag, git: git_runner(project_dir)) do
+      UI.message("Running reproducible docker build (this takes a few minutes)...")
+      sh("bash '#{project_dir}/docker-build.sh'")
 
-    UI.message("Running reproducible docker build (this takes a few minutes)...")
-    sh("bash '#{project_dir}/docker-build.sh'")
+      UI.message("Signing...")
+      local_props = ReleaseChecks.parse_properties(File.read(File.join(project_dir, "local.properties")))
+      store_pass = local_props["storePassword"]
+      key_pass = local_props["keyPassword"]
+      UI.user_error!("Missing storePassword/keyPassword in local.properties") if store_pass.to_s.empty? || key_pass.to_s.empty?
+      key_alias = local_props["keyAlias"].to_s.empty? ? "c2k" : local_props["keyAlias"]
 
-    UI.message("Signing...")
-    local_props = File.read(File.join(project_dir, "local.properties"))
-    store_pass = local_props[/storePassword=(.+)/, 1]
-    key_pass = local_props[/keyPassword=(.+)/, 1]
-    UI.user_error!("Missing storePassword/keyPassword in local.properties") unless store_pass && key_pass
+      keystore = local_props["storeFile"]
+      keystore = File.join(project_dir, "release/c2k-release.jks") unless keystore && File.exist?(keystore)
+      UI.user_error!("Signing keystore not found at #{keystore}") unless File.exist?(keystore)
 
-    keystore = local_props[/storeFile=(.+)/, 1]&.strip
-    keystore = File.join(project_dir, "release/c2k-release.jks") unless keystore && File.exist?(keystore)
-    UI.user_error!("Signing keystore not found at #{keystore}") unless File.exist?(keystore)
+      unsigned_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk")
+      signed_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-foss-release-signed.apk")
+      release_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-release.apk")
 
-    unsigned_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk")
-    signed_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-foss-release-signed.apk")
-    release_apk = File.join(project_dir, "app/build/outputs/apk/foss/release/app-release.apk")
+      android_sdk = ENV["ANDROID_SDK_ROOT"] || ENV["ANDROID_HOME"] || File.join(ENV["HOME"], "Android/Sdk")
+      apksigner = Dir[File.join(android_sdk, "build-tools", "*", "apksigner")]
+        .max_by { |path| Gem::Version.new(File.basename(File.dirname(path))) }
+      UI.user_error!("Couldn't find apksigner under #{android_sdk}/build-tools") unless apksigner
 
-    require "shellwords"
-    android_sdk = ENV["ANDROID_SDK_ROOT"] || ENV["ANDROID_HOME"] || File.join(ENV["HOME"], "Android/Sdk")
-    apksigner = Dir[File.join(android_sdk, "build-tools", "*", "apksigner")]
-      .max_by { |path| Gem::Version.new(File.basename(File.dirname(path))) }
-    UI.user_error!("Couldn't find apksigner under #{android_sdk}/build-tools") unless apksigner
+      # No shell, and the passwords reach apksigner through its environment (env:NAME) rather
+      # than its arguments, which any local process can read from /proc while it runs.
+      env, argv = ReleaseChecks.apksigner_invocation(
+        apksigner: apksigner, keystore: keystore, key_alias: key_alias,
+        store_pass: store_pass, key_pass: key_pass, out: signed_apk, input: unsigned_apk
+      )
+      signed = system(env, *argv)
+      UI.user_error!("apksigner failed to sign #{unsigned_apk}") unless signed
+      sh("cp '#{signed_apk}' '#{release_apk}'")
 
-    # Passwords can contain shell metacharacters — escape everything interpolated.
-    sh(
-      "#{apksigner.shellescape} sign " \
-      "--ks #{keystore.shellescape} --ks-key-alias c2k " \
-      "--ks-pass pass:#{store_pass.shellescape} --key-pass pass:#{key_pass.shellescape} " \
-      "--out #{signed_apk.shellescape} #{unsigned_apk.shellescape}",
-      log: false
-    )
-    sh("cp '#{signed_apk}' '#{release_apk}'")
+      sha256 = sh("sha256sum '#{release_apk}' | cut -d' ' -f1").strip
 
-    sha256 = sh("sha256sum '#{release_apk}' | cut -d' ' -f1").strip
+      UI.important("Built and signed #{tag}. SHA-256: #{sha256}")
+      UI.important("Local tag created but NOT pushed yet — nothing public has happened. Answering no removes it.")
+      UI.user_error!("Aborted, nothing pushed.") unless UI.confirm("Push #{tag} to origin and create the GitHub release now?")
 
-    UI.important("Built and signed #{tag}. SHA-256: #{sha256}")
-    UI.important("Local tag created but NOT pushed yet — nothing public has happened.")
-    UI.user_error!("Aborted — tag left local, nothing pushed.") unless UI.confirm("Push #{tag} to origin and create the GitHub release now?")
+      sh("git push origin #{tag.shellescape}")
+      true  # pushed: keep the tag. Any failure above removes it again (see with_local_tag).
+    end
 
-    sh("git push origin #{tag.shellescape}")
-
-    changelog_path = File.join(project_dir, "fastlane/metadata/android/en-US/changelogs/#{version_code}.txt")
-    notes = File.exist?(changelog_path) ? File.read(changelog_path) : ""
+    # Present: release_preflight refused to start without it.
+    notes = File.read(File.join(project_dir, "fastlane/metadata/android/en-US/changelogs/#{version_code}.txt"))
     body = "## What's new\n\n#{notes}\n## SHA-256\n\n`#{sha256}`\n"
 
     sh("gh release create #{tag.shellescape} #{release_apk.shellescape} --title #{tag.shellescape} --notes #{body.shellescape}")
