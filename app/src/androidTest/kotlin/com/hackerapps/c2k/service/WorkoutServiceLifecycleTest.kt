@@ -170,6 +170,32 @@ class WorkoutServiceLifecycleTest {
         )
     }
 
+    @Test
+    fun a_running_workout_saves_its_progress_periodically_and_when_paused() {
+        val binder = bind()
+        WorkoutService.testWorkoutDayOverride = longDay
+
+        startWorkout()
+        assertTrue(waitUntil(5_000) { sessions().isNotEmpty() })
+        assertEquals("Nothing saved yet at the start", 0, sessions().single().durationSeconds)
+
+        // If the app were closed now, this is what the next launch would recover.
+        val interval = WorkoutService.CHECKPOINT_INTERVAL_SECONDS
+        assertTrue(
+            "Expected a checkpoint after $interval s of running",
+            waitUntil((interval + 10) * 1_000L) { sessions().single().durationSeconds >= interval }
+        )
+        assertEquals(null, sessions().single().completedAt)
+
+        sendAction(WorkoutService.ACTION_PAUSE)
+        assertTrue(waitUntil(5_000) { binder.getWorkoutState().value is WorkoutState.Paused })
+        val pausedAt = (binder.getWorkoutState().value as WorkoutState.Paused).snapshot.elapsedSessionSeconds
+        assertTrue(
+            "Expected pausing to save the paused time ($pausedAt s)",
+            waitUntil(5_000) { sessions().single().durationSeconds == pausedAt }
+        )
+    }
+
     // ── Helpers ─────────────────────────────────────────────────────────────────
 
     private val fastDay = WorkoutDay(week = 1, day = 1, intervals = listOf(Interval(IntervalType.RUN, 1)))

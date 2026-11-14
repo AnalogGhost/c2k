@@ -36,6 +36,17 @@ interface WorkoutSessionDao {
     """)
     suspend fun getBestByDay(programId: String, week: Int, day: Int): WorkoutSessionEntity?
 
+    /** Saves a running workout's progress; never touches one that has already ended. */
+    @Query(
+        "UPDATE workout_sessions SET durationSeconds = :durationSeconds, distanceMeters = :distanceMeters " +
+            "WHERE id = :id AND completedAt IS NULL"
+    )
+    suspend fun checkpoint(id: Long, durationSeconds: Int, distanceMeters: Float)
+
+    /** Workouts that never ended (the app was closed during them), started before [beforeMillis]. */
+    @Query("SELECT * FROM workout_sessions WHERE completedAt IS NULL AND startedAt < :beforeMillis")
+    suspend fun getUnended(beforeMillis: Long): List<WorkoutSessionEntity>
+
     @Insert
     suspend fun insert(session: WorkoutSessionEntity): Long
 

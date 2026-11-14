@@ -94,6 +94,10 @@ class WorkoutService : Service() {
         private const val WAKELOCK_TIMEOUT = 90 * 60 * 1000L
         // Upper bound on how long completion waits for the final spoken cue before tearing down.
         private const val COMPLETION_SPEECH_TIMEOUT_MS = 8_000L
+        // How often a running workout's time and distance are saved, so a run the app is closed
+        // during (by Android or a crash) keeps nearly all of it.
+        @VisibleForTesting
+        internal const val CHECKPOINT_INTERVAL_SECONDS = 15
         private const val TAG = "WorkoutService"
 
         val isRunning = MutableStateFlow(false)
@@ -371,6 +375,16 @@ class WorkoutService : Service() {
             }
 
             var lastIntervalIndex = -1
+            var lastCheckpointSeconds = 0
+            // Saves progress to the session row in the background; a failed write is logged by
+            // the scope's handler and the next checkpoint tries again.
+            fun checkpoint(snapshot: WorkoutState.Active) {
+                lastCheckpointSeconds = snapshot.elapsedSessionSeconds
+                val distance = locationProvider.totalDistanceMeters
+                launch {
+                    sessionRepository.checkpointSession(snapshot.sessionId, snapshot.elapsedSessionSeconds, distance)
+                }
+            }
             launch {
                 engine.state.collect { state ->
                     workoutStateFlow.value = state
@@ -390,8 +404,15 @@ class WorkoutService : Service() {
                             }
                             lastIntervalIndex = state.intervalIndex
                             updateNotification(state)
+                            if (state.elapsedSessionSeconds - lastCheckpointSeconds >= CHECKPOINT_INTERVAL_SECONDS) {
+                                checkpoint(state)
+                            }
                         }
-                        is WorkoutState.Paused -> updateNotificationPaused()
+                        is WorkoutState.Paused -> {
+                            updateNotificationPaused()
+                            // A paused run is the likeliest to be closed by Android: save it now.
+                            checkpoint(state.snapshot)
+                        }
                         is WorkoutState.Completed -> {
                             // Mark finishing on the main thread, where START and STOP are handled,
                             // so neither can interleave with the end of the session below.

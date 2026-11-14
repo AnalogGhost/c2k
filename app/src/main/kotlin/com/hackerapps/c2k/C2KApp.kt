@@ -19,6 +19,11 @@ class C2KApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // A workout runs in this process, so at process start none can be running: any workout
+        // that never ended was cut off by Android or a crash. Keep what it recorded. The cutoff
+        // keeps a workout started in the next moments out of it.
+        val launchedAt = System.currentTimeMillis()
+        appScope.launch { sessionRepository.recoverInterruptedSessions(beforeMillis = launchedAt) }
         // One-time cleanup of distances inflated by faulty GPS data recorded before the
         // implied-speed filter existed (issue #30). Flag is set only after a full pass, so
         // an interrupted run simply retries on next launch.

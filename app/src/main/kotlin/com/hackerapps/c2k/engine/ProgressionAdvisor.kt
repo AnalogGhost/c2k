@@ -43,7 +43,8 @@ object ProgressionAdvisor {
         val inPlan = sessions.filter { it.programId == plan.programId }
         val lastFinished = inPlan.filter { it.completed }.maxOfOrNull { it.startedAt } ?: Long.MIN_VALUE
         val stops = inPlan.filter {
-            !it.completed && it.week == week && it.day == day &&
+            // completedAt == null: the app was closed mid-run, not the runner stopping early.
+            !it.completed && it.completedAt != null && it.week == week && it.day == day &&
                 it.durationSeconds >= MIN_ATTEMPT_SECONDS && it.startedAt > lastFinished
         }
         val sinceDismissed = stops.count { it.startedAt > (dismissedAtMillis ?: Long.MIN_VALUE) }

@@ -28,9 +28,12 @@ class ProgressionAdvisorTest {
         startedAt: Long,
         completed: Boolean,
         durationSeconds: Int = 600,
-        programId: String = "test"
+        programId: String = "test",
+        // Every workout the runner ends, finished or stopped, records when; only one the app
+        // was closed during has none.
+        completedAt: Long? = startedAt + durationSeconds * 1000L
     ) = WorkoutSessionEntity(
-        programId = programId, week = week, day = day, startedAt = startedAt,
+        programId = programId, week = week, day = day, startedAt = startedAt, completedAt = completedAt,
         durationSeconds = durationSeconds, distanceMeters = 0f, completed = completed
     )
 
@@ -52,6 +55,14 @@ class ProgressionAdvisorTest {
             ProgressionSuggestion.RepeatWeek(week = 2, earlyStops = 2),
             ProgressionAdvisor.suggest(plan(), 3, 2, sessions, dismissedAtMillis = null)
         )
+    }
+
+    @Test
+    fun runs_the_app_was_closed_during_are_not_early_stops() {
+        // Recovered after Android closed the app: real time on the clock, but the runner didn't stop.
+        val interrupted = session(3, 2, startedAt = 10, completed = false, completedAt = null)
+        val sessions = listOf(interrupted, stoppedEarly(3, 2, startedAt = 20))
+        assertNull(ProgressionAdvisor.suggest(plan(), 3, 2, sessions, dismissedAtMillis = null))
     }
 
     @Test

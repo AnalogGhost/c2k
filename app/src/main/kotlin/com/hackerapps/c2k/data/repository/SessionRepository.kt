@@ -47,6 +47,37 @@ open class SessionRepository(private val db: AppDatabase) {
         )
     }
 
+    /** Saves a running workout's progress so far, so it survives the app being closed. */
+    open suspend fun checkpointSession(sessionId: Long, durationSeconds: Int, distanceMeters: Float) =
+        db.sessionDao().checkpoint(sessionId, durationSeconds, distanceMeters)
+
+    /**
+     * Recovers workouts the app was closed during (by Android or a crash), started before
+     * [beforeMillis] so a workout starting right now is never touched. Each keeps its last saved
+     * time, with the distance rebuilt from its recorded route, which runs right up to the moment
+     * the app closed; its completedAt stays null, marking it as not ended by the runner. One with
+     * nothing to keep (closed within its first seconds) is deleted. Safe to run on every launch.
+     * Returns how many workouts were recovered.
+     */
+    suspend fun recoverInterruptedSessions(beforeMillis: Long): Int {
+        var recovered = 0
+        for (session in db.sessionDao().getUnended(beforeMillis)) {
+            val points = db.routePointDao().getRoute(session.id)
+            if (session.durationSeconds == 0 && points.isEmpty()) {
+                db.sessionDao().deleteById(session.id)
+                continue
+            }
+            recovered++
+            if (points.size >= 2) {
+                val routed = DistanceCalculator.filteredDistanceMeters(points)
+                if (routed > session.distanceMeters) {
+                    db.sessionDao().update(session.copy(distanceMeters = routed))
+                }
+            }
+        }
+        return recovered
+    }
+
     suspend fun addRoutePoint(point: RoutePointEntity) =
         db.routePointDao().insert(point)
 
