@@ -266,6 +266,11 @@
     <string name="settings_mid_interval_cues">Motivación a mitad de carrera</string>
     <string name="settings_periodic_time_cues">Recordatorio periódico de tiempo</string>
     <string name="settings_periodic_time_cue_interval">Intervalo del recordatorio</string>
+    <string name="settings_distance_cues">Avisos de distancia y ritmo</string>
+    <string name="settings_distance_cues_subtitle">Se anuncian en cada tramo mientras el GPS registra la carrera</string>
+    <string name="settings_distance_cue_split">Avisar cada</string>
+    <string name="settings_distance_split_500m">500 m</string>
+    <string name="settings_distance_split_1km">1 km</string>
     <string name="settings_keep_screen_on">Pantalla encendida durante el entrenamiento</string>
     <string name="settings_vibration_enabled">Vibrar al cambiar de intervalo</string>
     <string name="settings_vibration_strength">Intensidad de vibración</string>
@@ -332,6 +337,18 @@
     <string name="tts_last_run">Última carrera, finalizando fuerte!</string>
     <string name="tts_duration_min_sec">%1$s y %2$s</string>
     <string name="tts_time_remaining">%1$s restante</string>
+    <plurals name="tts_distance_km">
+        <item quantity="one">%d kilómetro</item>
+        <item quantity="many">%d kilómetros</item>
+        <item quantity="other">%d kilómetros</item>
+    </plurals>
+    <plurals name="tts_distance_m">
+        <item quantity="one">%d metro</item>
+        <item quantity="many">%d metros</item>
+        <item quantity="other">%d metros</item>
+    </plurals>
+    <string name="tts_distance_km_m">%1$s y %2$s</string>
+    <string name="tts_distance_split_pace">%1$s. Ritmo de %2$s por kilómetro</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d minuto</item>
         <item quantity="other">%d minutos</item>

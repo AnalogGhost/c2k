@@ -106,6 +106,8 @@ class SettingsScreenTest {
             prefs.setTtsVolume(1.0f)
             prefs.setCueStyle(CueStyle.VOICE)
             prefs.setMidIntervalCues(true)
+            prefs.setDistanceCues(false)
+            prefs.setDistanceCueSplitMeters(1000)
             prefs.setTreadmillMode(false)
             prefs.setSkipWarmup(false)
             prefs.setSkipCooldown(false)
@@ -254,6 +256,7 @@ class SettingsScreenTest {
         // Word-only cues and voice controls go; countdown warnings and volume stay.
         composeRule.onNodeWithTag("toggle_mid_interval_cues").assertDoesNotExist()
         composeRule.onNodeWithTag("toggle_periodic_time_cues").assertDoesNotExist()
+        composeRule.onNodeWithTag("toggle_distance_cues").assertDoesNotExist()
         composeRule.onNodeWithTag("slider_tts_speed").assertDoesNotExist()
         composeRule.onNodeWithTag("button_test_voice").assertDoesNotExist()
         composeRule.onNodeWithTag("toggle_countdown_warnings").assertExists()
@@ -262,6 +265,30 @@ class SettingsScreenTest {
 
         val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
         composeRule.waitUntil(10_000) { runBlocking { prefs.cueStyle.first() } == CueStyle.TONES }
+    }
+
+    @Test
+    fun distance_and_pace_updates_can_be_turned_on_with_a_half_kilometre_split() {
+        setContent()
+        val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+        composeRule.onNodeWithTag("segment_distance_split_500").assertDoesNotExist()
+
+        composeRule.onNodeWithTag("toggle_distance_cues").performScrollTo().performClick()
+        composeRule.waitUntil(10_000) { runBlocking { prefs.distanceCues.first() } }
+
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("segment_distance_split_1000").assertExists()
+        }
+        composeRule.onNodeWithTag("segment_distance_split_500").performScrollTo().performClick()
+        composeRule.waitUntil(10_000) { runBlocking { prefs.distanceCueSplitMeters.first() } == 500 }
+    }
+
+    @Test
+    fun a_weight_typed_with_a_comma_is_saved() {
+        setContent()
+        val prefs = UserPreferences(ApplicationProvider.getApplicationContext<Application>())
+        composeRule.onNodeWithTag("field_weight").performScrollTo().performTextReplacement("72,5")
+        composeRule.waitUntil(10_000) { runBlocking { prefs.weightKg.first() } == 72.5f }
     }
 
     @Test

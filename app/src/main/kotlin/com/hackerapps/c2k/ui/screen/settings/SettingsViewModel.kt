@@ -110,6 +110,12 @@ class SettingsViewModel @JvmOverloads constructor(
     val periodicTimeCueInterval = prefs.periodicTimeCueInterval
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 30)
 
+    val distanceCues = prefs.distanceCues
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    val distanceCueSplitMeters = prefs.distanceCueSplitMeters
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 1000)
+
     val ttsAvailableOnDevice = TtsManager.isAvailableOnDevice
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TtsManager.isAvailableOnDevice.value)
 
@@ -196,6 +202,8 @@ class SettingsViewModel @JvmOverloads constructor(
     fun setMidIntervalCues(v: Boolean)   { viewModelScope.launch { prefs.setMidIntervalCues(v) } }
     fun setPeriodicTimeCues(v: Boolean)  { viewModelScope.launch { prefs.setPeriodicTimeCues(v) } }
     fun setPeriodicTimeCueInterval(v: Int) { viewModelScope.launch { prefs.setPeriodicTimeCueInterval(v) } }
+    fun setDistanceCues(v: Boolean) { viewModelScope.launch { prefs.setDistanceCues(v) } }
+    fun setDistanceCueSplitMeters(v: Int) { viewModelScope.launch { prefs.setDistanceCueSplitMeters(v) } }
 
     val treadmillMode = prefs.treadmillMode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)

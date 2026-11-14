@@ -8,6 +8,8 @@ sealed class TtsAnnouncement {
     data class NextInterval(val interval: Interval)     : TtsAnnouncement()
     data class IntervalMidpoint(val phraseIndex: Int)   : TtsAnnouncement()
     data class PeriodicTimeRemaining(val secondsRemaining: Int) : TtsAnnouncement()
+    /** Distance covered so far, and the average pace over the last split (null when unreliable). */
+    data class DistanceSplit(val meters: Int, val paceSecondsPerKm: Int?) : TtsAnnouncement()
     object WorkoutComplete  : TtsAnnouncement()
     object Halfway          : TtsAnnouncement()
     object LastRunInterval  : TtsAnnouncement()

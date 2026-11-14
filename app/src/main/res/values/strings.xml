@@ -264,6 +264,11 @@
     <string name="settings_mid_interval_cues">Mid-run encouragement</string>
     <string name="settings_periodic_time_cues">Periodic time reminder</string>
     <string name="settings_periodic_time_cue_interval">Reminder cadence</string>
+    <string name="settings_distance_cues">Distance and pace updates</string>
+    <string name="settings_distance_cues_subtitle">Spoken at each split while GPS tracks the run</string>
+    <string name="settings_distance_cue_split">Announce every</string>
+    <string name="settings_distance_split_500m">500 m</string>
+    <string name="settings_distance_split_1km">1 km</string>
     <string name="settings_keep_screen_on">Keep screen on during workout</string>
     <string name="settings_vibration_enabled">Vibrate on interval change</string>
     <string name="settings_vibration_strength">Vibration strength</string>
@@ -329,6 +334,16 @@
     <string name="tts_last_run">Last run, finish strong!</string>
     <string name="tts_duration_min_sec">%1$s and %2$s</string>
     <string name="tts_time_remaining">%1$s remaining</string>
+    <plurals name="tts_distance_km">
+        <item quantity="one">%d kilometre</item>
+        <item quantity="other">%d kilometres</item>
+    </plurals>
+    <plurals name="tts_distance_m">
+        <item quantity="one">%d metre</item>
+        <item quantity="other">%d metres</item>
+    </plurals>
+    <string name="tts_distance_km_m">%1$s %2$s</string>
+    <string name="tts_distance_split_pace">%1$s. Pace %2$s per kilometre</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>

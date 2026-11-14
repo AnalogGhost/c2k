@@ -276,6 +276,11 @@
     <string name="settings_mid_interval_cues">Подбадривания посреди пробежки</string>
     <string name="settings_periodic_time_cues">Периодическое напоминание о времени</string>
     <string name="settings_periodic_time_cue_interval">Интервал напоминания</string>
+    <string name="settings_distance_cues">Объявления дистанции и темпа</string>
+    <string name="settings_distance_cues_subtitle">Звучат на каждом отрезке, пока GPS записывает пробежку</string>
+    <string name="settings_distance_cue_split">Объявлять каждые</string>
+    <string name="settings_distance_split_500m">500 м</string>
+    <string name="settings_distance_split_1km">1 км</string>
     <string name="settings_keep_screen_on">Оставлять экран включённым во время тренировки</string>
     <string name="settings_vibration_enabled">Вибрировать при смене интервала</string>
     <string name="settings_vibration_strength">Интенсивность вибрации</string>
@@ -343,6 +348,20 @@
     <string name="tts_last_run">Последняя пробежка, финишируйте на высокой ноте!</string>
     <string name="tts_duration_min_sec">%1$s и %2$s</string>
     <string name="tts_time_remaining">Осталось %1$s</string>
+    <plurals name="tts_distance_km">
+        <item quantity="one">%d километр</item>
+        <item quantity="few">%d километра</item>
+        <item quantity="many">%d километров</item>
+        <item quantity="other">%d километра</item>
+    </plurals>
+    <plurals name="tts_distance_m">
+        <item quantity="one">%d метр</item>
+        <item quantity="few">%d метра</item>
+        <item quantity="many">%d метров</item>
+        <item quantity="other">%d метра</item>
+    </plurals>
+    <string name="tts_distance_km_m">%1$s %2$s</string>
+    <string name="tts_distance_split_pace">%1$s. Темп %2$s на километр</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d минута</item>
         <item quantity="few">%d минуты</item>

@@ -266,6 +266,11 @@
     <string name="settings_mid_interval_cues">Aralık ortası motivasyonu</string>
     <string name="settings_periodic_time_cues">Periyodik süre hatırlatıcısı</string>
     <string name="settings_periodic_time_cue_interval">Hatırlatma sıklığı</string>
+    <string name="settings_distance_cues">Mesafe ve tempo bildirimleri</string>
+    <string name="settings_distance_cues_subtitle">GPS koşuyu kaydederken her bölümde sesli olarak bildirilir</string>
+    <string name="settings_distance_cue_split">Bildirim sıklığı</string>
+    <string name="settings_distance_split_500m">500 m</string>
+    <string name="settings_distance_split_1km">1 km</string>
     <string name="settings_keep_screen_on">Antrenman sırasında ekranı açık tut</string>
     <string name="settings_vibration_enabled">Aralık değişiminde titreşim</string>
     <string name="settings_vibration_strength">Titreşim gücü</string>
@@ -331,6 +336,16 @@
     <string name="tts_last_run">Son koşu, güçlü bitir!</string>
     <string name="tts_duration_min_sec">%1$s %2$s</string>
     <string name="tts_time_remaining">%1$s kaldı</string>
+    <plurals name="tts_distance_km">
+        <item quantity="one">%d kilometre</item>
+        <item quantity="other">%d kilometre</item>
+    </plurals>
+    <plurals name="tts_distance_m">
+        <item quantity="one">%d metre</item>
+        <item quantity="other">%d metre</item>
+    </plurals>
+    <string name="tts_distance_km_m">%1$s %2$s</string>
+    <string name="tts_distance_split_pace">%1$s. Kilometre başına tempo %2$s</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d dakika</item>
         <item quantity="other">%d dakika</item>

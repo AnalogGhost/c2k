@@ -42,6 +42,7 @@ import com.hackerapps.c2k.data.model.WorkoutDay
 import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.repository.SessionRepository
+import com.hackerapps.c2k.engine.SplitCueTracker
 import com.hackerapps.c2k.engine.WorkoutEngine
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.engine.countdownWarningThresholds
@@ -134,6 +135,19 @@ class WorkoutService : Service() {
             if (hasLocation && !treadmill) type = type or android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
             return type
         }
+
+        /**
+         * Whether to speak distance and pace at each split: only with spoken cues (a chime can't
+         * carry a number) and only while GPS actually tracks the run (not treadmill mode, GPS off,
+         * or location denied).
+         */
+        @VisibleForTesting
+        internal fun distanceCuesActive(
+            ttsEnabled: Boolean,
+            cueStyle: CueStyle,
+            distanceCues: Boolean,
+            gpsTracking: Boolean
+        ): Boolean = ttsEnabled && cueStyle == CueStyle.VOICE && distanceCues && gpsTracking
 
         // Pure given a Context, so it can be built and asserted on directly in tests without a
         // running service instance. Unlike the in-progress notification, this one is dismissible:
@@ -282,6 +296,8 @@ class WorkoutService : Service() {
             val midIntervalCues   = prefs.midIntervalCues.first()
             val periodicTimeCues         = prefs.periodicTimeCues.first()
             val periodicTimeCueInterval  = prefs.periodicTimeCueInterval.first()
+            val distanceCues             = prefs.distanceCues.first()
+            val distanceCueSplitMeters   = prefs.distanceCueSplitMeters.first()
             val vibrationEnabled  = prefs.vibrationEnabled.first()
             val vibrationStrength = prefs.vibrationStrength.first()
             val smartwatchCues    = prefs.smartwatchCues.first()
@@ -318,6 +334,9 @@ class WorkoutService : Service() {
                 NoOpLocationProvider()
 
             _gpsActive.value = locationProvider.isAvailable
+            val splitTracker = if (
+                distanceCuesActive(ttsEnabled, cueStyle, distanceCues, gpsTracking = locationProvider !is NoOpLocationProvider)
+            ) SplitCueTracker(distanceCueSplitMeters) else null
 
             val sessionId = sessionRepository.startSession(programId, week, day)
 
@@ -344,6 +363,9 @@ class WorkoutService : Service() {
                     val s = engine.state.value
                     if (s is WorkoutState.Active) {
                         sessionRepository.addRoutePoint(update.toEntity(s.sessionId))
+                        // Queued behind any interval cue rather than cutting it off.
+                        splitTracker?.onProgress(locationProvider.totalDistanceMeters, s.elapsedSessionSeconds)
+                            ?.let { cuePlayer.announce(it, queueAdd = true) }
                     }
                 }
             }

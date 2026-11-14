@@ -1,5 +1,9 @@
 package com.hackerapps.c2k.ui.screen.settings
 
+import com.hackerapps.c2k.data.prefs.DISTANCE_CUE_SPLITS
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SegmentedButton
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -81,6 +85,8 @@ fun SettingsScreen(
     val midIntervalCues      by vm.midIntervalCues.collectAsStateWithLifecycle()
     val periodicTimeCues     by vm.periodicTimeCues.collectAsStateWithLifecycle()
     val periodicTimeCueInterval by vm.periodicTimeCueInterval.collectAsStateWithLifecycle()
+    val distanceCues by vm.distanceCues.collectAsStateWithLifecycle()
+    val distanceCueSplitMeters by vm.distanceCueSplitMeters.collectAsStateWithLifecycle()
     val treadmillMode        by vm.treadmillMode.collectAsStateWithLifecycle()
     val skipWarmup           by vm.skipWarmup.collectAsStateWithLifecycle()
     val skipCooldown         by vm.skipCooldown.collectAsStateWithLifecycle()
@@ -214,6 +220,21 @@ fun SettingsScreen(
                         range = 15f..120f,
                         testTag = "slider_periodic_time_cue_interval",
                         onValueChange = vm::setPeriodicTimeCueInterval
+                    )
+                }
+                HorizontalDivider()
+                SettingsToggle(
+                    label = stringResource(R.string.settings_distance_cues),
+                    subtitle = stringResource(R.string.settings_distance_cues_subtitle),
+                    checked = distanceCues,
+                    enabled = ttsEnabled,
+                    testTag = "toggle_distance_cues",
+                    onCheckedChange = vm::setDistanceCues
+                )
+                if (ttsEnabled && distanceCues) {
+                    DistanceSplitChoice(
+                        splitMeters = distanceCueSplitMeters,
+                        onSplitChange = vm::setDistanceCueSplitMeters
                     )
                 }
             }
@@ -746,6 +767,33 @@ private fun SecondsSlider(
                         .testTag(testTag)
                         .semantics { contentDescription = label }
                 )
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DistanceSplitChoice(splitMeters: Int, onSplitChange: (Int) -> Unit) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.settings_distance_cue_split)) },
+        trailingContent = {
+            SingleChoiceSegmentedButtonRow {
+                DISTANCE_CUE_SPLITS.forEachIndexed { index, meters ->
+                    SegmentedButton(
+                        selected = meters == splitMeters,
+                        onClick = { onSplitChange(meters) },
+                        shape = SegmentedButtonDefaults.itemShape(index, DISTANCE_CUE_SPLITS.size),
+                        modifier = Modifier.testTag("segment_distance_split_$meters")
+                    ) {
+                        Text(
+                            stringResource(
+                                if (meters == 500) R.string.settings_distance_split_500m
+                                else R.string.settings_distance_split_1km
+                            )
+                        )
+                    }
+                }
             }
         }
     )

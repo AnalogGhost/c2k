@@ -55,6 +55,8 @@ class UserPreferences(private val context: Context) {
         val COUNTDOWN_WARNING_2_ENABLED = booleanPreferencesKey("countdown_warning_2_enabled")
         val PERIODIC_TIME_CUES         = booleanPreferencesKey("periodic_time_cues")
         val PERIODIC_TIME_CUE_INTERVAL = intPreferencesKey("periodic_time_cue_interval")
+        val DISTANCE_CUES              = booleanPreferencesKey("distance_cues")
+        val DISTANCE_CUE_SPLIT_METERS  = intPreferencesKey("distance_cue_split_meters")
         val WEIGHT_KG                = floatPreferencesKey("weight_kg")
         val WEIGHT_UNIT              = stringPreferencesKey("weight_unit")
         val GPS_DISTANCES_RECOMPUTED = booleanPreferencesKey("gps_distances_recomputed")
@@ -179,6 +181,21 @@ class UserPreferences(private val context: Context) {
     suspend fun setPeriodicTimeCueInterval(seconds: Int) =
         context.dataStore.edit { it[PERIODIC_TIME_CUE_INTERVAL] = seconds }
 
+    val distanceCues: Flow<Boolean> = data
+        .map { it[DISTANCE_CUES] ?: false }
+
+    suspend fun setDistanceCues(enabled: Boolean) =
+        context.dataStore.edit { it[DISTANCE_CUES] = enabled }
+
+    /** Distance between spoken distance-and-pace updates, in metres: one of [DISTANCE_CUE_SPLITS]. */
+    val distanceCueSplitMeters: Flow<Int> = data
+        .map { prefs -> prefs[DISTANCE_CUE_SPLIT_METERS]?.takeIf { it in DISTANCE_CUE_SPLITS } ?: 1000 }
+
+    suspend fun setDistanceCueSplitMeters(meters: Int) {
+        require(meters in DISTANCE_CUE_SPLITS) { "Unsupported split: $meters m" }
+        context.dataStore.edit { it[DISTANCE_CUE_SPLIT_METERS] = meters }
+    }
+
     val treadmillMode: Flow<Boolean> = data
         .map { it[TREADMILL_MODE] ?: false }
 
@@ -246,6 +263,9 @@ class UserPreferences(private val context: Context) {
             it.remove(PROGRESSION_DISMISSED_AT)
         }
 }
+
+/** The split lengths Settings offers for distance-and-pace updates, in metres. */
+val DISTANCE_CUE_SPLITS = listOf(500, 1000)
 
 /** A week the runner chose to repeat, and when, so only workouts run since then count toward it. */
 data class RepeatedWeek(val programId: String, val week: Int, val sinceMillis: Long)

@@ -32,6 +32,7 @@ internal object ToneCues {
             is TtsAnnouncement.NextInterval,
             is TtsAnnouncement.IntervalMidpoint,
             is TtsAnnouncement.PeriodicTimeRemaining,
+            is TtsAnnouncement.DistanceSplit,
             TtsAnnouncement.Halfway,
             TtsAnnouncement.LastRunInterval -> null
         }

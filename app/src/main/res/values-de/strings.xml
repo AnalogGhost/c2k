@@ -261,6 +261,11 @@
     <string name="settings_mid_interval_cues">Motivation während des Laufens</string>
     <string name="settings_periodic_time_cues">Regelmäßige Zeitansage</string>
     <string name="settings_periodic_time_cue_interval">Ansageintervall</string>
+    <string name="settings_distance_cues">Distanz- und Tempoansagen</string>
+    <string name="settings_distance_cues_subtitle">Bei jedem Abschnitt angesagt, solange GPS den Lauf aufzeichnet</string>
+    <string name="settings_distance_cue_split">Ansage alle</string>
+    <string name="settings_distance_split_500m">500 m</string>
+    <string name="settings_distance_split_1km">1 km</string>
     <string name="settings_keep_screen_on">Bildschirm während des Trainings an lassen</string>
     <string name="settings_vibration_enabled">Vibrieren bei Intervallwechsel</string>
     <string name="settings_vibration_strength">Vibrationsstärke</string>
@@ -326,6 +331,16 @@
     <string name="tts_last_run">Letzter Laufabschnitt, gib alles!</string>
     <string name="tts_duration_min_sec">%1$s und %2$s</string>
     <string name="tts_time_remaining">Noch %1$s</string>
+    <plurals name="tts_distance_km">
+        <item quantity="one">%d Kilometer</item>
+        <item quantity="other">%d Kilometer</item>
+    </plurals>
+    <plurals name="tts_distance_m">
+        <item quantity="one">%d Meter</item>
+        <item quantity="other">%d Meter</item>
+    </plurals>
+    <string name="tts_distance_km_m">%1$s %2$s</string>
+    <string name="tts_distance_split_pace">%1$s. Tempo %2$s pro Kilometer</string>
     <plurals name="tts_duration_minutes">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minuten</item>
