@@ -64,7 +64,6 @@ import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.VibrationStrength
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import com.hackerapps.c2k.engine.tts.TtsDiagnosticResult
-import java.text.DecimalFormatSymbols
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -668,10 +667,7 @@ private fun WeightSetting(
                         value = weightText,
                         onValueChange = { newText ->
                             pendingText = newText
-                            val parsed = newText.toFloatOrNull()
-                            if (parsed != null && parsed > 0f) {
-                                onWeightChange(weightUnit.toKg(parsed))
-                            }
+                            parseWeightKg(newText, weightUnit)?.let(onWeightChange)
                         },
                         placeholder = { Text(stringResource(R.string.settings_weight_not_set)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
@@ -713,15 +709,6 @@ private fun WeightSetting(
             }
         }
     )
-}
-
-private fun formatWeight(value: Float): String {
-    // "%.1f".format(...) renders using the default locale's decimal separator (a comma in
-    // Russian and many others), but this always trimmed a literal '.' — so a whole-number value
-    // like 103 became "103,0" -> trimEnd('0') -> "103," -> trimEnd('.') is a no-op on a comma,
-    // leaving the dangling separator on screen. Trim whatever character the locale actually used.
-    val separator = DecimalFormatSymbols.getInstance().decimalSeparator
-    return "%.1f".format(value).trimEnd('0').trimEnd(separator)
 }
 
 @Composable

@@ -12,4 +12,9 @@ enum class WeightUnit(val labelRes: Int, private val kgPerUnit: Float) {
 
     fun toKg(native: Float) = native * kgPerUnit
     fun fromKg(kg: Float) = kg / kgPerUnit
+
+    companion object {
+        /** Unknown or corrupt stored values (say, from a newer build) fall back to kg, not a crash. */
+        fun fromStored(value: String?): WeightUnit = entries.firstOrNull { it.name == value } ?: KG
+    }
 }

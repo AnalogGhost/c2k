@@ -189,7 +189,7 @@ class UserPreferences(private val context: Context) {
         .map { it[WEIGHT_KG] }
 
     val weightUnit: Flow<WeightUnit> = data
-        .map { WeightUnit.valueOf(it[WEIGHT_UNIT] ?: WeightUnit.KG.name) }
+        .map { WeightUnit.fromStored(it[WEIGHT_UNIT]) }
 
     suspend fun setWeightKg(kg: Float) =
         context.dataStore.edit { it[WEIGHT_KG] = kg }
