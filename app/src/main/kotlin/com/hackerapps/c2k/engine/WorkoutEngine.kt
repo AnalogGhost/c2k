@@ -60,52 +60,66 @@ class WorkoutEngine(
     private var intervalIndex = 0
     private val intervals = day.intervals
 
+    // Guards every piece of mutable interval/pause state and every _state write. pause()/resume()
+    // arrive on the main thread while the tick loop runs on a background dispatcher; without one
+    // lock, a tick that had already passed the isPaused check could publish Active over a fresh
+    // Paused, leaving the engine paused behind a UI that shows it running (Pause then no-ops).
+    private val lock = Any()
+
     private val warnedCountdowns = mutableSetOf<Int>()
     private var midpointAnnounced = false
     private var lastPeriodicCueElapsed = -1
     // Set from the service thread, consumed by the tick loop (see skipWarmupOrCooldown).
-    @Volatile private var skipRequested = false
+    private var skipRequested = false
 
     fun start(sessionId: Long) {
-        this.sessionId = sessionId
-        intervalIndex = 0
-        sessionStartMs = clock()
-        intervalStartMs = sessionStartMs
-        isPaused = false
-        skipRequested = false
-        warnedCountdowns.clear()
-        midpointAnnounced = false
-        lastPeriodicCueElapsed = -1
-        announceInterval(intervalIndex)
+        synchronized(lock) {
+            this.sessionId = sessionId
+            intervalIndex = 0
+            sessionStartMs = clock()
+            intervalStartMs = sessionStartMs
+            isPaused = false
+            skipRequested = false
+            warnedCountdowns.clear()
+            midpointAnnounced = false
+            lastPeriodicCueElapsed = -1
+            announceInterval(intervalIndex)
+        }
         tickJob = scope.launch { runLoop() }
     }
 
     fun pause() {
-        if (isPaused) return
-        val current = _state.value as? WorkoutState.Active ?: return
-        isPaused = true
-        pausedAt = clock()
-        _state.value = WorkoutState.Paused(current)
+        synchronized(lock) {
+            if (isPaused) return
+            val current = _state.value as? WorkoutState.Active ?: return
+            isPaused = true
+            pausedAt = clock()
+            _state.value = WorkoutState.Paused(current)
+        }
     }
 
     fun resume() {
-        if (!isPaused) return
-        val pauseDuration = clock() - pausedAt
-        sessionStartMs += pauseDuration
-        intervalStartMs += pauseDuration
-        isPaused = false
-        val snapshot = (_state.value as? WorkoutState.Paused)?.snapshot ?: return
-        _state.value = snapshot
+        synchronized(lock) {
+            if (!isPaused) return
+            val pauseDuration = clock() - pausedAt
+            sessionStartMs += pauseDuration
+            intervalStartMs += pauseDuration
+            isPaused = false
+            val snapshot = (_state.value as? WorkoutState.Paused)?.snapshot ?: return
+            _state.value = snapshot
+        }
     }
 
     /**
      * Ends the current warm-up or cool-down early; ignored while paused and during any other
-     * interval. Only raises a flag, which the tick loop applies: all interval state stays on that
-     * one thread, so a request landing just as an interval changes naturally can't cut the
-     * following interval short.
+     * interval. Only raises a flag, which the tick loop applies under the engine lock, so a
+     * request landing just as an interval changes naturally can't cut the following interval
+     * short.
      */
     fun skipWarmupOrCooldown() {
-        if (!isPaused) skipRequested = true
+        synchronized(lock) {
+            if (!isPaused) skipRequested = true
+        }
     }
 
     fun stop() {
@@ -117,101 +131,108 @@ class WorkoutEngine(
     private suspend fun runLoop() {
         while (true) {
             delay(200)
-            if (isPaused) continue
-
-            val now = clock()
-            val sessionElapsed = ((now - sessionStartMs) / 1000).toInt()
-
-            if (skipRequested) {
-                skipRequested = false
-                val skippable = intervals[intervalIndex]
-                if (skippable.type == IntervalType.WARMUP || skippable.type == IntervalType.COOLDOWN) {
-                    // Backdate the interval start so the normal end-of-interval path below runs:
-                    // announcement and warning reset, or completion for a final cool-down.
-                    intervalStartMs = now - skippable.durationSeconds * 1000L
-                }
-            }
-            val intervalElapsed = ((now - intervalStartMs) / 1000).toInt()
-
-            val currentInterval = intervals[intervalIndex]
-            val remaining = currentInterval.durationSeconds - intervalElapsed
-
-            if (remaining <= 0) {
-                intervalIndex++
-                if (intervalIndex >= intervals.size) {
-                    // Pin a final Active frame to 0 before completing. When the screen is locked
-                    // the UI's lifecycle-aware collector is suspended and freezes on the last
-                    // Active value it received; without this it stays showing 1-3s left (the last
-                    // tick before the boundary) even though the workout is already done.
-                    _state.value = WorkoutState.Active(
-                        currentInterval = currentInterval,
-                        nextInterval = null,
-                        intervalIndex = intervalIndex - 1,
-                        totalIntervals = intervals.size,
-                        remainingRunIntervals = remainingRunIntervals(intervalIndex - 1),
-                        secondsRemainingInInterval = 0,
-                        elapsedSessionSeconds = sessionElapsed,
-                        sessionId = sessionId
-                    )
-                    if (ttsEnabled) tts.announce(TtsAnnouncement.WorkoutComplete)
-                    _state.value = WorkoutState.Completed(sessionId, sessionElapsed)
-                    tickJob?.cancel()
-                    return
-                }
-                intervalStartMs = now
-                warnedCountdowns.clear()
-                midpointAnnounced = false
-                lastPeriodicCueElapsed = -1
-                announceInterval(intervalIndex)
-                continue
-            }
-
-            if (countdownWarnings && ttsEnabled &&
-                remaining in warningThresholds && remaining !in warnedCountdowns
-            ) {
-                warnedCountdowns.add(remaining)
-                tts.announce(TtsAnnouncement.CountdownWarning(remaining))
-                if (remaining == warningThresholds.last()) {
-                    // Look-ahead: the smallest threshold is the last warning before the interval
-                    // ends, so it also announces what's coming next.
-                    if (intervalIndex + 1 < intervals.size) {
-                        tts.announce(
-                            TtsAnnouncement.NextInterval(intervals[intervalIndex + 1]),
-                            queueAdd = true
-                        )
-                    }
-                }
-            }
-
-            if (periodicTimeCues && ttsEnabled && periodicTimeCueIntervalSeconds > 0 &&
-                intervalElapsed > 0 && intervalElapsed % periodicTimeCueIntervalSeconds == 0 &&
-                intervalElapsed != lastPeriodicCueElapsed
-            ) {
-                lastPeriodicCueElapsed = intervalElapsed
-                tts.announce(TtsAnnouncement.PeriodicTimeRemaining(remaining), queueAdd = true)
-            }
-
-            if (midIntervalCues && ttsEnabled &&
-                currentInterval.type == IntervalType.RUN &&
-                currentInterval.durationSeconds >= 60 &&
-                intervalElapsed >= currentInterval.durationSeconds / 2 &&
-                !midpointAnnounced
-            ) {
-                midpointAnnounced = true
-                tts.announce(TtsAnnouncement.IntervalMidpoint(intervalIndex), queueAdd = true)
-            }
-
-            _state.value = WorkoutState.Active(
-                currentInterval = intervals[intervalIndex],
-                nextInterval = intervals.getOrNull(intervalIndex + 1),
-                intervalIndex = intervalIndex,
-                totalIntervals = intervals.size,
-                remainingRunIntervals = remainingRunIntervals(intervalIndex),
-                secondsRemainingInInterval = remaining,
-                elapsedSessionSeconds = sessionElapsed,
-                sessionId = sessionId
-            )
+            if (!synchronized(lock) { tick() }) return
         }
+    }
+
+    /** One tick of the loop, run under [lock]. Returns false once the workout has completed. */
+    private fun tick(): Boolean {
+        if (isPaused) return true
+
+        val now = clock()
+        val sessionElapsed = ((now - sessionStartMs) / 1000).toInt()
+
+        if (skipRequested) {
+            skipRequested = false
+            val skippable = intervals[intervalIndex]
+            if (skippable.type == IntervalType.WARMUP || skippable.type == IntervalType.COOLDOWN) {
+                // Backdate the interval start so the normal end-of-interval path below runs:
+                // announcement and warning reset, or completion for a final cool-down.
+                intervalStartMs = now - skippable.durationSeconds * 1000L
+            }
+        }
+        val intervalElapsed = ((now - intervalStartMs) / 1000).toInt()
+
+        val currentInterval = intervals[intervalIndex]
+        val remaining = currentInterval.durationSeconds - intervalElapsed
+
+        if (remaining <= 0) {
+            intervalIndex++
+            if (intervalIndex >= intervals.size) {
+                // Pin a final Active frame to 0 before completing. When the screen is locked
+                // the UI's lifecycle-aware collector is suspended and freezes on the last
+                // Active value it received; without this it stays showing 1-3s left (the last
+                // tick before the boundary) even though the workout is already done.
+                _state.value = WorkoutState.Active(
+                    currentInterval = currentInterval,
+                    nextInterval = null,
+                    intervalIndex = intervalIndex - 1,
+                    totalIntervals = intervals.size,
+                    remainingRunIntervals = remainingRunIntervals(intervalIndex - 1),
+                    secondsRemainingInInterval = 0,
+                    elapsedSessionSeconds = sessionElapsed,
+                    sessionId = sessionId
+                )
+                if (ttsEnabled) tts.announce(TtsAnnouncement.WorkoutComplete)
+                _state.value = WorkoutState.Completed(sessionId, sessionElapsed)
+                return false
+            }
+            intervalStartMs = now
+            warnedCountdowns.clear()
+            midpointAnnounced = false
+            lastPeriodicCueElapsed = -1
+            announceInterval(intervalIndex)
+            return true
+        }
+
+        // A threshold equal to the interval's length would fire on the first tick and flush
+        // the interval-start cue (warnings don't queue), so only warn once time has passed.
+        if (countdownWarnings && ttsEnabled && remaining < currentInterval.durationSeconds &&
+            remaining in warningThresholds && remaining !in warnedCountdowns
+        ) {
+            warnedCountdowns.add(remaining)
+            tts.announce(TtsAnnouncement.CountdownWarning(remaining))
+            if (remaining == warningThresholds.last()) {
+                // Look-ahead: the smallest threshold is the last warning before the interval
+                // ends, so it also announces what's coming next.
+                if (intervalIndex + 1 < intervals.size) {
+                    tts.announce(
+                        TtsAnnouncement.NextInterval(intervals[intervalIndex + 1]),
+                        queueAdd = true
+                    )
+                }
+            }
+        }
+
+        if (periodicTimeCues && ttsEnabled && periodicTimeCueIntervalSeconds > 0 &&
+            intervalElapsed > 0 && intervalElapsed % periodicTimeCueIntervalSeconds == 0 &&
+            intervalElapsed != lastPeriodicCueElapsed
+        ) {
+            lastPeriodicCueElapsed = intervalElapsed
+            tts.announce(TtsAnnouncement.PeriodicTimeRemaining(remaining), queueAdd = true)
+        }
+
+        if (midIntervalCues && ttsEnabled &&
+            currentInterval.type == IntervalType.RUN &&
+            currentInterval.durationSeconds >= 60 &&
+            intervalElapsed >= currentInterval.durationSeconds / 2 &&
+            !midpointAnnounced
+        ) {
+            midpointAnnounced = true
+            tts.announce(TtsAnnouncement.IntervalMidpoint(intervalIndex), queueAdd = true)
+        }
+
+        _state.value = WorkoutState.Active(
+            currentInterval = intervals[intervalIndex],
+            nextInterval = intervals.getOrNull(intervalIndex + 1),
+            intervalIndex = intervalIndex,
+            totalIntervals = intervals.size,
+            remainingRunIntervals = remainingRunIntervals(intervalIndex),
+            secondsRemainingInInterval = remaining,
+            elapsedSessionSeconds = sessionElapsed,
+            sessionId = sessionId
+        )
+        return true
     }
 
     private fun remainingRunIntervals(index: Int): Int =

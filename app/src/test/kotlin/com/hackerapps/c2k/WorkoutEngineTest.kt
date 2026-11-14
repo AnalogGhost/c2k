@@ -533,4 +533,96 @@ class WorkoutEngineTest {
         assertEquals(IntervalType.WARMUP, s.currentInterval.type)
         engine.stop()
     }
+
+    @Test
+    fun threshold_equal_to_interval_does_not_flush_interval_start() = testScope.runTest {
+        val engine = makeEngine(
+            Interval(IntervalType.WALK, 60),
+            Interval(IntervalType.RUN, 30),
+            Interval(IntervalType.WALK, 60),
+            countdownWarnings = true,
+            countdownWarningSeconds1 = 30,
+            countdownWarningSeconds2 = 5
+        )
+        engine.start(1L)
+        advanceTimeBy(60_500)  // into the 30 s run
+        val runStart = announcements.indexOfLast {
+            it is TtsAnnouncement.IntervalStart && it.interval.type == IntervalType.RUN
+        }
+        assertTrue("Run start should be announced", runStart >= 0)
+        // Nothing may follow the run's start cue on its first tick: a "30 seconds" warning there
+        // would flush the start cue before it is spoken.
+        assertTrue(
+            "No countdown warning at the run's first second",
+            announcements.drop(runStart + 1).none { it == TtsAnnouncement.CountdownWarning(30) }
+        )
+        // The 30 s warning still fires in the 60 s walk that follows.
+        advanceTimeBy(30_000 + 30_500)
+        assertTrue(announcements.drop(runStart + 1).any { it == TtsAnnouncement.CountdownWarning(30) })
+        engine.stop()
+    }
+
+    @Test
+    fun pause_during_a_slow_tick_is_not_overwritten_by_that_tick() {
+        // Real threads, like production: the tick loop on Dispatchers.Default, pause() on another
+        // thread. A countdown warning blocks inside announce(), after the tick has passed its
+        // isPaused check but before it publishes Active; pause() arrives meanwhile, and that
+        // tick must not then publish Active over the Paused state.
+        val announceEntered = java.util.concurrent.CountDownLatch(1)
+        val releaseAnnounce = java.util.concurrent.CountDownLatch(1)
+        val blockingTts = object : TtsInterface {
+            override val isAvailable = true
+            override fun announce(a: TtsAnnouncement, queueAdd: Boolean) {
+                if (a is TtsAnnouncement.CountdownWarning) {
+                    announceEntered.countDown()
+                    releaseAnnounce.await(5, java.util.concurrent.TimeUnit.SECONDS)
+                }
+            }
+            override fun shutdown() {}
+        }
+        val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Default)
+        val engine = WorkoutEngine(
+            day = WorkoutDay(
+                week = 1, day = 1,
+                intervals = listOf(Interval(IntervalType.RUN, 12), Interval(IntervalType.WALK, 60))
+            ),
+            tts = blockingTts,
+            ttsEnabled = true,
+            countdownWarnings = true,
+            countdownWarningSeconds1 = 10,
+            countdownWarning2Enabled = false,
+            midIntervalCues = false,
+            scope = scope,
+            clock = { System.nanoTime() / 1_000_000 }
+        )
+        try {
+            engine.start(1L)
+            // The engine must be Active before pause() can apply; wait for the first frame.
+            val deadline = System.nanoTime() + 5_000_000_000L
+            while (engine.state.value !is WorkoutState.Active && System.nanoTime() < deadline) {
+                Thread.sleep(10)
+            }
+            assertTrue("Engine should reach Active", engine.state.value is WorkoutState.Active)
+            assertTrue(
+                "Tick should block in the 10 s warning",
+                announceEntered.await(5, java.util.concurrent.TimeUnit.SECONDS)
+            )
+            val pauser = Thread { engine.pause() }.apply { start() }
+            Thread.sleep(100)  // let pause() reach the engine while the tick is still blocked
+            releaseAnnounce.countDown()
+            pauser.join(5_000)
+            Thread.sleep(600)  // a few more ticks: a lost pause would surface as Active
+            assertTrue(
+                "Expected Paused, was ${engine.state.value}",
+                engine.state.value is WorkoutState.Paused
+            )
+            engine.resume()
+            Thread.sleep(400)
+            assertTrue("Resume must still work", engine.state.value is WorkoutState.Active)
+        } finally {
+            releaseAnnounce.countDown()
+            engine.stop()
+            scope.coroutineContext[kotlinx.coroutines.Job]?.cancel()
+        }
+    }
 }
