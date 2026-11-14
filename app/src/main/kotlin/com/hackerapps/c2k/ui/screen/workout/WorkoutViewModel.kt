@@ -8,6 +8,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,7 +26,33 @@ import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.location.LocationUpdate
 import com.hackerapps.c2k.service.WorkoutService
 
-class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
+/** What the workout screen's start request should do; see [startDecision]. */
+internal enum class StartDecision { START, RECONNECT, LEAVE }
+
+/**
+ * Decides what a start request from the workout screen does. The screen asks every time its
+ * composition is (re)created, so after a rotation, a theme or font change, or process death it
+ * asks again for a workout it already started; starting again there would silently run a second,
+ * hidden workout.
+ *
+ * - [startedHere]: this ViewModel instance already started the workout (configuration change).
+ * - [startedBefore]: the saved state says a workout was started from this screen, which is how a
+ *   ViewModel recreated after process death knows.
+ * - [serviceRunning]: a workout is live in the service.
+ */
+internal fun startDecision(startedHere: Boolean, startedBefore: Boolean, serviceRunning: Boolean): StartDecision =
+    when {
+        startedHere -> StartDecision.RECONNECT
+        // Process death took the service (same process, START_NOT_STICKY) and its workout with
+        // it; there's nothing to show, and re-running the workout isn't what the user asked for.
+        startedBefore -> if (serviceRunning) StartDecision.RECONNECT else StartDecision.LEAVE
+        else -> StartDecision.START
+    }
+
+class WorkoutViewModel(
+    app: Application,
+    private val savedState: SavedStateHandle
+) : AndroidViewModel(app) {
 
     private val prefs = UserPreferences(app)
 
@@ -86,6 +113,7 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
     private var currentDay: Int = 0
 
     private var isBound = false
+    private var startedHere = false
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
@@ -128,7 +156,32 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
         isBound = true
     }
 
-    fun startWorkout(programId: String, week: Int, day: Int) {
+    /** Starts the workout, or reconnects to it; see [startDecision]. */
+    internal fun startWorkout(programId: String, week: Int, day: Int): StartDecision {
+        val decision = startDecision(
+            startedHere = startedHere,
+            startedBefore = savedState.get<Boolean>(KEY_STARTED) == true,
+            serviceRunning = WorkoutService.isRunning.value
+        )
+        when (decision) {
+            StartDecision.START -> {
+                startedHere = true
+                savedState[KEY_STARTED] = true
+                launchWorkout(programId, week, day)
+            }
+            StartDecision.RECONNECT -> {
+                startedHere = true
+                currentProgramId = programId
+                currentWeek = week
+                currentDay = day
+                bind()
+            }
+            StartDecision.LEAVE -> Unit
+        }
+        return decision
+    }
+
+    private fun launchWorkout(programId: String, week: Int, day: Int) {
         currentProgramId = programId
         currentWeek = week
         currentDay = day
@@ -198,6 +251,10 @@ class WorkoutViewModel(app: Application) : AndroidViewModel(app) {
                 _showBatteryPrompt.value = true
             }
         }
+    }
+
+    internal companion object {
+        const val KEY_STARTED = "workout_started"
     }
 
     override fun onCleared() {

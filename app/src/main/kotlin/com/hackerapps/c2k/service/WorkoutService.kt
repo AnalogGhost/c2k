@@ -22,6 +22,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -188,6 +189,14 @@ class WorkoutService : Service() {
     private val _gpsActive = MutableStateFlow(false)
 
     private var workoutRunning = false
+    // True from the moment a workout completes until its teardown finishes (the final cue can
+    // take up to COMPLETION_SPEECH_TIMEOUT_MS). Only touched on the main thread, like
+    // workoutRunning, so a START can't slip between the two.
+    private var finishing = false
+    // A START that arrived while finishing; run once the previous session is torn down, instead
+    // of being dropped (or tearing down the new session along with the old one).
+    private var pendingStart: Intent? = null
+    private var destroyed = false
     // Guards cleanup() against running twice. @Volatile + @Synchronized on cleanup() because the
     // completion-speech wait means cleanup() can now be reached concurrently from the completion
     // collector (Dispatchers.Default) and handleStop()/onDestroy() (main thread).
@@ -220,49 +229,42 @@ class WorkoutService : Service() {
             ACTION_PAUSE  -> if (::engine.isInitialized) { engine.pause(); locationProvider.pause() }
             ACTION_RESUME -> if (::engine.isInitialized) { engine.resume(); locationProvider.resume() }
             ACTION_SKIP_WARMUP_COOLDOWN -> if (::engine.isInitialized) engine.skipWarmupOrCooldown()
-            ACTION_STOP   -> handleStop()
+            ACTION_STOP   -> handleStop(startId)
         }
         return START_NOT_STICKY
     }
 
     private fun handleStart(intent: Intent) {
+        if (finishing) {
+            // The previous workout has already left the foreground, and this START came through
+            // startForegroundService(), so the service must go foreground again now or the OS
+            // kills the app. The workout itself starts once the old one is torn down.
+            if (startForegroundFor(intent)) pendingStart = intent else stopSelf()
+            return
+        }
+        // Already foreground with a live session: the OS doesn't need another startForeground().
         if (workoutRunning) return
 
         val programId = intent.getStringExtra(EXTRA_PROGRAM_ID) ?: return
         val week      = intent.getIntExtra(EXTRA_WEEK, -1).takeIf { it >= 0 } ?: return
         val day       = intent.getIntExtra(EXTRA_DAY, -1).takeIf { it >= 0 } ?: return
 
+        // This instance may have run a workout already (a bound client keeps the service alive
+        // past stopSelf()). Clear that session's leftovers, or cleanup() would stay a no-op for
+        // this one, leaking GPS, TTS and the wake lock, and bound clients would see its result.
+        cleanedUp = false
+        workoutStateFlow.value = WorkoutState.Idle
+        locationProvider = NoOpLocationProvider()
+        _gpsActive.value = false
+
         workoutRunning = true
         isRunning.value = true
         currentWorkout.value = WorkoutInfo(programId, week, day)
         acquireWakeLock()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            val hasActivityRecognition = ContextCompat.checkSelfPermission(
-                this, android.Manifest.permission.ACTIVITY_RECOGNITION
-            ) == PackageManager.PERMISSION_GRANTED
-            val hasLocation = ContextCompat.checkSelfPermission(
-                this, android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-            // Read treadmill mode synchronously from the intent extra set by the service starter;
-            // prefs aren't available yet (setup coroutine hasn't run), so WorkoutViewModel embeds it.
-            val treadmill = intent.getBooleanExtra(EXTRA_TREADMILL_MODE, false)
-            val type = foregroundServiceType(hasActivityRecognition, hasLocation, treadmill)
-            val notification = buildNotification(getString(R.string.workout_starting))
-            try {
-                if (type != 0) startForeground(NOTIFICATION_ID, notification, type)
-                else startForeground(NOTIFICATION_ID, notification)
-            } catch (e: SecurityException) {
-                // Last-resort net: neither permission granted (or the platform validates some
-                // other type requirement we don't know about) shouldn't be able to crash the
-                // whole process — abort this start cleanly instead. This is the exact crash
-                // reported from the Play Store (SecurityException out of handleStart -> startForeground).
-                Log.e(TAG, "startForeground rejected for type=$type, aborting workout start", e)
-                cleanup()
-                stopSelf()
-                return
-            }
-        } else {
-            startForeground(NOTIFICATION_ID, buildNotification(getString(R.string.workout_starting)))
+        if (!startForegroundFor(intent)) {
+            cleanup()
+            stopSelf()
+            return
         }
 
         val workoutDay = testWorkoutDayOverride ?: Programs.byId(programId).weeks[week - 1][day - 1]
@@ -369,6 +371,9 @@ class WorkoutService : Service() {
                         }
                         is WorkoutState.Paused -> updateNotificationPaused()
                         is WorkoutState.Completed -> {
+                            // Mark finishing on the main thread, where START and STOP are handled,
+                            // so neither can interleave with the end of the session below.
+                            withContext(Dispatchers.Main + NonCancellable) { finishing = true }
                             try {
                                 if (vibratePhone) {
                                     VibrationPlayer.play(
@@ -376,12 +381,16 @@ class WorkoutService : Service() {
                                         VibrationPatterns.forCompletion(vibrationStrength)
                                     )
                                 }
-                                sessionRepository.finishSession(
-                                    sessionId = state.sessionId,
-                                    durationSeconds = state.elapsedSessionSeconds,
-                                    distanceMeters = locationProvider.totalDistanceMeters,
-                                    completed = true
-                                )
+                                // NonCancellable: losing this write would record a finished
+                                // workout as abandoned and hold back progression.
+                                withContext(NonCancellable) {
+                                    sessionRepository.finishSession(
+                                        sessionId = state.sessionId,
+                                        durationSeconds = state.elapsedSessionSeconds,
+                                        distanceMeters = locationProvider.totalDistanceMeters,
+                                        completed = true
+                                    )
+                                }
                             } finally {
                                 // Drop the ongoing (non-swipable) notification and swap in a
                                 // dismissible completion one right away, in a finally so it happens
@@ -410,7 +419,7 @@ class WorkoutService : Service() {
                                 // After cleanup(), which cancels the interval notification: this one
                                 // is meant to still be on the watch once the service is gone.
                                 if (notifyWatch) postCompletionCue()
-                                stopSelf()
+                                withContext(Dispatchers.Main + NonCancellable) { endFinishing() }
                             }
                         }
                         is WorkoutState.Idle -> { /* initial state — no action needed */ }
@@ -433,7 +442,56 @@ class WorkoutService : Service() {
         }
     }
 
-    private fun handleStop() {
+    /**
+     * Puts the service in the foreground for a START [intent], with the types its permissions
+     * allow. Returns false if the OS rejected that, in which case the start must be abandoned.
+     */
+    private fun startForegroundFor(intent: Intent): Boolean {
+        val notification = buildNotification(getString(R.string.workout_starting))
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(NOTIFICATION_ID, notification)
+            return true
+        }
+        val hasActivityRecognition = ContextCompat.checkSelfPermission(
+            this, android.Manifest.permission.ACTIVITY_RECOGNITION
+        ) == PackageManager.PERMISSION_GRANTED
+        val hasLocation = ContextCompat.checkSelfPermission(
+            this, android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+        // Read treadmill mode synchronously from the intent extra set by the service starter;
+        // prefs aren't available yet (setup coroutine hasn't run), so WorkoutViewModel embeds it.
+        val treadmill = intent.getBooleanExtra(EXTRA_TREADMILL_MODE, false)
+        val type = foregroundServiceType(hasActivityRecognition, hasLocation, treadmill)
+        return try {
+            if (type != 0) startForeground(NOTIFICATION_ID, notification, type)
+            else startForeground(NOTIFICATION_ID, notification)
+            true
+        } catch (e: SecurityException) {
+            // Last-resort net: neither permission granted (or the platform validates some other
+            // type requirement we don't know about) shouldn't be able to crash the whole process
+            // — abort this start cleanly instead. This is the exact crash reported from the Play
+            // Store (SecurityException out of handleStart -> startForeground).
+            Log.e(TAG, "startForeground rejected for type=$type, aborting workout start", e)
+            false
+        }
+    }
+
+    /** Main thread. Ends the completion teardown: start the workout queued meanwhile, or stop. */
+    private fun endFinishing() {
+        finishing = false
+        if (destroyed) return
+        val next = pendingStart
+        pendingStart = null
+        if (next != null) handleStart(next) else stopSelf()
+    }
+
+    private fun handleStop(startId: Int) {
+        if (finishing) {
+            // The workout already completed and is being saved and torn down; a Stop tapped on
+            // the notification in that window must not cancel the save. Drop any queued start.
+            pendingStart = null
+            return
+        }
         val distance = locationProvider.totalDistanceMeters
 
         if (!::engine.isInitialized) {
@@ -443,7 +501,7 @@ class WorkoutService : Service() {
             // after the service was supposed to have stopped.
             sessionJob?.cancel()
             cleanup()
-            stopSelf()
+            stopSelf(startId)
             return
         }
 
@@ -471,7 +529,7 @@ class WorkoutService : Service() {
         cleanup()
 
         if (sessionId < 0) {
-            stopSelf()
+            stopSelf(startId)
             return
         }
 
@@ -483,7 +541,9 @@ class WorkoutService : Service() {
                 distanceMeters = distance,
                 completed = false
             )
-            stopSelf()
+            // Only if no command arrived since this Stop: a workout started while the save was
+            // in flight lives on this same instance, and a bare stopSelf() would kill it.
+            stopSelf(startId)
         }
     }
 
@@ -502,6 +562,7 @@ class WorkoutService : Service() {
     }
 
     override fun onDestroy() {
+        destroyed = true
         super.onDestroy()
         cleanup()
         serviceScope.cancel()

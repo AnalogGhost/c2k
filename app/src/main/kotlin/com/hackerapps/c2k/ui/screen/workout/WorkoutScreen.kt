@@ -41,6 +41,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,13 +96,13 @@ fun WorkoutScreen(
     val personalBest by vm.personalBest.collectAsStateWithLifecycle()
     val weightKg by vm.weightKg.collectAsStateWithLifecycle()
 
-    var notificationPermissionDone by remember { mutableStateOf(false) }
+    var notificationPermissionDone by rememberSaveable { mutableStateOf(false) }
     // Needed every workout, GPS or not — WorkoutService always starts as a "health" foreground
     // service type (see WorkoutService.handleStart), which Android 14+ requires this for.
-    var activityRecognitionPermissionDone by remember { mutableStateOf(false) }
+    var activityRecognitionPermissionDone by rememberSaveable { mutableStateOf(false) }
     // Location is only asked for when the workout will use GPS: not with GPS tracking off or in
     // treadmill mode.
-    var locationPermissionDone by remember { mutableStateOf(false) }
+    var locationPermissionDone by rememberSaveable { mutableStateOf(false) }
     val permissionResolved = locationPermissionDone || locationNeeded == false
     var showStopDialog by remember { mutableStateOf(false) }
 
@@ -117,7 +118,11 @@ fun WorkoutScreen(
     }
 
     LaunchedEffect(activityRecognitionPermissionDone, permissionResolved) {
-        if (activityRecognitionPermissionDone && permissionResolved) vm.startWorkout(programId, week, day)
+        // Runs again whenever the screen is recreated; the ViewModel turns that into a
+        // reconnect, or sends the user home when process death ended the workout.
+        if (activityRecognitionPermissionDone && permissionResolved &&
+            vm.startWorkout(programId, week, day) == StartDecision.LEAVE
+        ) onFinished()
     }
 
     BackHandler {
