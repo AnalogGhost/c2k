@@ -22,7 +22,11 @@ fi
 trap restore_local_properties EXIT
 printf 'sdk.dir=/opt/android-sdk\n' > "$PROJECT_DIR/local.properties"
 
+# DOCKER_NETWORK=host shares the host's network. Needed behind a VPN whose MTU is below Docker's
+# 1500 (e.g. 1420): large SDK downloads from the container's own network get reset partway and
+# fail as "unknown archive". Only affects downloads, never the build output.
 docker run --rm \
+  ${DOCKER_NETWORK:+--network "$DOCKER_NETWORK"} \
   -v "$PROJECT_DIR:/workspace:z" \
   -v "$GRADLE_CACHE_DIR:/root/.gradle:z" \
   -e JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 \
