@@ -123,6 +123,15 @@ class WorkoutService : Service() {
         @VisibleForTesting
         var testSessionRepositoryOverride: SessionRepository? = null
 
+        // Stand in for GPS and the voice, so tests can feed distance and see which cues play.
+        // The location override is used only where the real GPS would be (location permission
+        // granted, GPS on, not treadmill mode), so the choice between GPS and none stays tested.
+        @VisibleForTesting
+        var testLocationProviderOverride: LocationProvider? = null
+
+        @VisibleForTesting
+        var testCuePlayerOverride: CuePlayer? = null
+
         // Pure so it can be unit-tested on the JVM without a device — the OS kills any process
         // whose currently-granted runtime permission gets revoked mid-session, which made an
         // earlier instrumented version of this check (revoking ACTIVITY_RECOGNITION/location on
@@ -335,7 +344,7 @@ class WorkoutService : Service() {
             ) == PackageManager.PERMISSION_GRANTED
 
             withContext(Dispatchers.Main) {
-                cuePlayer = when (cueStyle) {
+                cuePlayer = testCuePlayerOverride ?: when (cueStyle) {
                     CueStyle.VOICE -> TtsManager(this@WorkoutService, speechRate, ttsVolume)
                     CueStyle.TONES -> TonePlayer(
                         this@WorkoutService,
@@ -346,7 +355,7 @@ class WorkoutService : Service() {
             }
 
             locationProvider = if (!treadmillMode && gpsEnabled && hasLocationPermission)
-                GpsLocationProvider(this@WorkoutService)
+                testLocationProviderOverride ?: GpsLocationProvider(this@WorkoutService)
             else
                 NoOpLocationProvider()
 
