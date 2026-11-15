@@ -113,6 +113,14 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
+// TranslationIntegrityTest reads the string files straight from disk; declaring them as inputs
+// makes a strings-only change rerun the unit tests instead of reusing the last result.
+tasks.withType<Test>().configureEach {
+    inputs.files(fileTree("src/main/res") { include("values*/strings.xml") })
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+        .withPropertyName("translations")
+}
+
 // MigrationTest builds each past database version from its exported schema JSON.
 android.sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
 
