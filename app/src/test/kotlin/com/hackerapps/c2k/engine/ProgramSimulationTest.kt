@@ -120,19 +120,17 @@ class ProgramSimulationTest {
     }
 
     @Test
-    fun a_slow_clock_overruns_by_at_most_one_tick_per_interval_change() {
-        // Each interval change waits for the next tick, and the engine starts the next interval
-        // from that tick, dropping the overshoot (review item S10). Measured on this 214 ms tick:
-        // about 2 s over a 26-minute, 18-interval workout. This bounds it so it can't grow; when
-        // the overshoot is carried into the next interval instead, tighten it to a single tick.
+    fun a_slow_clock_does_not_stretch_the_workout() {
+        // Each interval change lands on a tick, a little after the boundary. The engine carries
+        // that overshoot into the next interval, so the workout as a whole overruns by at most
+        // the final tick. Before that, a 26-minute, 18-interval day ran about 2 s over.
         val tickMs = 214.0
         check(allDays.flatMap { (name, day) ->
             val run = simulate(day, tickMs)
             val overMs = run.elapsedMs - day.totalDurationSeconds * 1000L
-            val boundMs = day.intervals.size * tickMs
             listOfNotNull(
-                "$name ran $overMs ms over its ${day.totalDurationSeconds} s plan, more than ${boundMs.toLong()} ms"
-                    .takeIf { overMs < 0 || overMs > boundMs }
+                "$name ran $overMs ms over its ${day.totalDurationSeconds} s plan"
+                    .takeIf { overMs < 0 || overMs > tickMs }
             )
         })
     }

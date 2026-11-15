@@ -23,6 +23,8 @@ class WorkoutEngineTest {
     private val testScope = TestScope(testDispatcher)
 
     private val announcements = mutableListOf<TtsAnnouncement>()
+    // Added to the virtual clock to make it jump, as when the phone freezes between two ticks.
+    private var clockJumpMs = 0L
 
     // WorkoutComplete is announced synchronously in between the engine's final Active(0) write
     // and its Completed write (see WorkoutEngine.runLoop), with no suspension point in between —
@@ -66,7 +68,7 @@ class WorkoutEngineTest {
             periodicTimeCueIntervalSeconds = periodicTimeCueIntervalSeconds,
             scope = testScope,
             // Virtual clock: testScope.currentTime advances with advanceTimeBy()
-            clock = { testScope.testScheduler.currentTime }
+            clock = { testScope.testScheduler.currentTime + clockJumpMs }
         ).also { engineUnderTest = it }
 
     @Test
@@ -101,6 +103,41 @@ class WorkoutEngineTest {
         advanceTimeBy(2_500)  // 2.5s → 2s warmup finishes
         val s = engine.state.value as WorkoutState.Active
         assertEquals(IntervalType.RUN, s.currentInterval.type)
+    }
+
+    // Ticks fall every 200 ms of virtual time; an interval change shows from the tick after it.
+
+    @Test
+    fun a_late_tick_at_an_interval_change_is_taken_from_the_next_interval() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 10), Interval(IntervalType.WALK, 10))
+        engine.start(1L)
+        advanceTimeBy(9_900)
+        clockJumpMs = 250  // from here every tick lands 250 ms late, the boundary one included
+        advanceTimeBy(400)
+        assertEquals(IntervalType.WALK, (engine.state.value as WorkoutState.Active).currentInterval.type)
+
+        // Timed from the boundary, the walk ends on the 19.8 s tick (clock 20.05 s). Timed from
+        // the late tick, it would run 250 ms longer, to the next one.
+        advanceTimeBy(9_600)
+        assertTrue("Ended late: ${engine.state.value}", engine.state.value is WorkoutState.Completed)
+        assertEquals(20, (engine.state.value as WorkoutState.Completed).elapsedSessionSeconds)
+    }
+
+    @Test
+    fun after_a_long_stall_the_next_interval_still_runs_in_full() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 10), Interval(IntervalType.WALK, 10))
+        engine.start(1L)
+        advanceTimeBy(9_100)
+        clockJumpMs = 5_000  // frozen for 5 s across the boundary
+        advanceTimeBy(400)
+        assertEquals(IntervalType.WALK, (engine.state.value as WorkoutState.Active).currentInterval.type)
+
+        // Carrying the 4.2 s overshoot would cut the walk to under 6 s.
+        advanceTimeBy(9_000)
+        val later = engine.state.value as? WorkoutState.Active
+        assertEquals("The walk should still be running", IntervalType.WALK, later?.currentInterval?.type)
+        assertEquals(1, later!!.secondsRemainingInInterval)
+        engine.stop()
     }
 
     @Test

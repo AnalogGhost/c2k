@@ -177,7 +177,12 @@ class WorkoutEngine(
                 _state.value = WorkoutState.Completed(sessionId, sessionElapsed)
                 return false
             }
-            intervalStartMs = now
+            // Start the next interval at the boundary, not at this tick, so the few milliseconds
+            // each tick lands late don't add up over a workout (about 2 s on a 30-minute one).
+            // After a longer stall (the phone briefly frozen), start it now instead: the runner
+            // hears the cue late but still gets the whole interval.
+            val boundaryMs = intervalStartMs + currentInterval.durationSeconds * 1000L
+            intervalStartMs = if (now - boundaryMs <= MAX_CARRIED_OVERSHOOT_MS) boundaryMs else now
             warnedCountdowns.clear()
             midpointAnnounced = false
             lastPeriodicCueElapsed = -1
@@ -233,6 +238,11 @@ class WorkoutEngine(
             sessionId = sessionId
         )
         return true
+    }
+
+    private companion object {
+        // Up to this much lateness at an interval change is taken from the next interval.
+        const val MAX_CARRIED_OVERSHOOT_MS = 1_000L
     }
 
     private fun remainingRunIntervals(index: Int): Int =
