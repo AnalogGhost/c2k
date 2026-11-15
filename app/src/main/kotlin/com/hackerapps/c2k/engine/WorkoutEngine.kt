@@ -88,25 +88,29 @@ class WorkoutEngine(
         tickJob = scope.launch { runLoop() }
     }
 
-    fun pause() {
+    /** Pauses a running workout. Returns false, changing nothing, if it wasn't running. */
+    fun pause(): Boolean {
         synchronized(lock) {
-            if (isPaused) return
-            val current = _state.value as? WorkoutState.Active ?: return
+            if (isPaused) return false
+            val current = _state.value as? WorkoutState.Active ?: return false
             isPaused = true
             pausedAt = clock()
             _state.value = WorkoutState.Paused(current)
+            return true
         }
     }
 
-    fun resume() {
+    /** Resumes a paused workout. Returns false, changing nothing, if it wasn't paused. */
+    fun resume(): Boolean {
         synchronized(lock) {
-            if (!isPaused) return
+            if (!isPaused) return false
             val pauseDuration = clock() - pausedAt
             sessionStartMs += pauseDuration
             intervalStartMs += pauseDuration
             isPaused = false
-            val snapshot = (_state.value as? WorkoutState.Paused)?.snapshot ?: return
+            val snapshot = (_state.value as? WorkoutState.Paused)?.snapshot ?: return true
             _state.value = snapshot
+            return true
         }
     }
 

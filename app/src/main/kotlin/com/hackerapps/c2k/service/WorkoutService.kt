@@ -92,7 +92,11 @@ class WorkoutService : Service() {
         // stale cue in the shade.
         private const val CUE_TIMEOUT_MS   = 10_000L
         private const val WAKELOCK_TAG     = "C2K::WorkoutLock"
-        private const val WAKELOCK_TIMEOUT = 90 * 60 * 1000L
+        // Renewed at every checkpoint and on resume, so it only runs out if the service stops
+        // making progress (or stays paused that long, when nothing needs the CPU). A fixed 90
+        // minutes used to run out during a paused 70-minute 10K workout.
+        @VisibleForTesting
+        internal var wakeLockTimeoutMs = 10 * 60 * 1000L
         // Upper bound on how long completion waits for the final spoken cue before tearing down.
         private const val COMPLETION_SPEECH_TIMEOUT_MS = 8_000L
         // How often a running workout's time and distance are saved, so a run the app is closed
@@ -263,8 +267,15 @@ class WorkoutService : Service() {
             // arriving and accumulating into totalDistanceMeters for the entire duration of the
             // pause, even though the paused time is correctly excluded from elapsedSessionSeconds
             // — silently inflating the recorded distance for any run with a real-world pause.
-            ACTION_PAUSE  -> if (::engine.isInitialized) { engine.pause(); locationProvider.pause() }
-            ACTION_RESUME -> if (::engine.isInitialized) { engine.resume(); locationProvider.resume() }
+            // GPS follows only an actual pause or resume. A command the engine ignores (a second
+            // Resume, a Pause before the workout is running) must not touch it: a stray resume()
+            // drops the last fix and loses a stretch of route, and a stray pause() stops GPS for
+            // the rest of the run.
+            ACTION_PAUSE  -> if (::engine.isInitialized && engine.pause()) locationProvider.pause()
+            ACTION_RESUME -> if (::engine.isInitialized && engine.resume()) {
+                locationProvider.resume()
+                renewWakeLock()
+            }
             ACTION_SKIP_WARMUP_COOLDOWN -> if (::engine.isInitialized) engine.skipWarmupOrCooldown()
             ACTION_STOP   -> handleStop(startId)
         }
@@ -404,6 +415,7 @@ class WorkoutService : Service() {
             // the scope's handler and the next checkpoint tries again.
             fun checkpoint(snapshot: WorkoutState.Active) {
                 lastCheckpointSeconds = snapshot.elapsedSessionSeconds
+                renewWakeLock()
                 val distance = locationProvider.totalDistanceMeters
                 launch {
                     sessionRepository.checkpointSession(snapshot.sessionId, snapshot.elapsedSessionSeconds, distance)
@@ -640,7 +652,16 @@ class WorkoutService : Service() {
     private fun acquireWakeLock() {
         wakeLock = (getSystemService(Context.POWER_SERVICE) as PowerManager)
             .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG)
-        wakeLock.acquire(WAKELOCK_TIMEOUT)
+            // Not reference counted: each renewal replaces the timeout rather than stacking
+            // holds that cleanup()'s single release() would leave behind.
+            .apply { setReferenceCounted(false) }
+        wakeLock.acquire(wakeLockTimeoutMs)
+    }
+
+    /** Pushes the wake lock's timeout out again; never re-takes it once the session is cleaned up. */
+    @Synchronized
+    private fun renewWakeLock() {
+        if (!cleanedUp && ::wakeLock.isInitialized) wakeLock.acquire(wakeLockTimeoutMs)
     }
 
     // ── Notification ──────────────────────────────────────────────────────────

@@ -105,6 +105,20 @@ class WorkoutEngineTest {
         assertEquals(IntervalType.RUN, s.currentInterval.type)
     }
 
+    @Test
+    fun pause_and_resume_report_whether_they_changed_anything() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.RUN, 60))
+        assertEquals("Nothing to pause before the start", false, engine.pause())
+        engine.start(1L)
+        advanceTimeBy(300)
+        assertEquals("Not paused, so nothing to resume", false, engine.resume())
+        assertEquals(true, engine.pause())
+        assertEquals("Already paused", false, engine.pause())
+        assertEquals(true, engine.resume())
+        assertEquals("Already running", false, engine.resume())
+        engine.stop()
+    }
+
     // Ticks fall every 200 ms of virtual time; an interval change shows from the tick after it.
 
     @Test

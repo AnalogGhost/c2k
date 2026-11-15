@@ -181,6 +181,27 @@ class WorkoutServiceGpsTest {
     }
 
     @Test
+    fun pause_and_resume_commands_the_workout_ignores_leave_gps_alone() {
+        val binder = startAndWaitForGps()
+
+        // Resume while already running: before the fix this dropped GPS's last fix, losing the
+        // next stretch of route.
+        sendAction(WorkoutService.ACTION_RESUME)
+        sendAction(WorkoutService.ACTION_PAUSE)
+        assertTrue(waitUntil { binder.getWorkoutState().value is WorkoutState.Paused })
+        sendAction(WorkoutService.ACTION_PAUSE)  // a second Pause
+        sendAction(WorkoutService.ACTION_RESUME)
+        assertTrue(waitUntil { binder.getWorkoutState().value is WorkoutState.Active })
+        sendAction(WorkoutService.ACTION_RESUME)  // a second Resume
+
+        // Commands are handled in order on the main thread; one more round trip flushes them.
+        sendAction(WorkoutService.ACTION_PAUSE)
+        assertTrue(waitUntil { binder.getWorkoutState().value is WorkoutState.Paused })
+        assertEquals("GPS pauses", 2, gps.pauses)
+        assertEquals("GPS resumes", 1, gps.resumes)
+    }
+
+    @Test
     fun a_finished_run_is_saved_with_its_gps_distance() {
         WorkoutService.testWorkoutDayOverride = WorkoutDay(
             week = 1, day = 1, intervals = listOf(Interval(IntervalType.RUN, 4))
@@ -243,8 +264,10 @@ class WorkoutServiceGpsTest {
 
         override fun start() { started = true; paused = false }
         override fun stop() { stopped = true }
-        override fun pause() { paused = true }
-        override fun resume() { paused = false }
+        @Volatile var pauses = 0
+        @Volatile var resumes = 0
+        override fun pause() { paused = true; pauses++ }
+        override fun resume() { paused = false; resumes++ }
     }
 
     /** Records each cue and whether it was queued (true) or interrupted what was playing (false). */
