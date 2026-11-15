@@ -1,0 +1,5 @@
+• Neu: Distanz und Tempo alle 500 m oder 1 km. Einstellungen → Distanz- und Tempoansagen.
+• Ein Lauf, den Android durch Schließen der App abbricht, bleibt erhalten.
+• Lässt Android ein Training nicht starten, erklärt C2K, warum und was hilft.
+• Mit TalkBack lassen sich Trainings im Verlauf löschen.
+• Behoben: GPS erst während des Laufs eingeschaltet, Dezimalkomma beim Gewicht, Pause wirkte manchmal nicht, beendete Trainings starteten neu, lange Trainings bei ausgeschaltetem Bildschirm.

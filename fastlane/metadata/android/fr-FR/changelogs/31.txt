@@ -1,0 +1,5 @@
+• Nouveau : distance et allure tous les 500 m ou 1 km. Paramètres → Annonces de distance et d'allure.
+• Une course interrompue quand Android ferme l'app est conservée.
+• Si Android empêche une séance de démarrer, C2K explique pourquoi et comment y remédier.
+• TalkBack peut supprimer des séances dans l'Historique.
+• Corrigé : GPS activé en cours de course, virgule décimale du poids, Pause parfois ignorée, séances terminées qui redémarraient, longues séances écran éteint.

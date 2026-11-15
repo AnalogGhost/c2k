@@ -1,0 +1,5 @@
+• Novo: distância e ritmo a cada 500 m ou 1 km. Configurações → Avisos de distância e ritmo.
+• Uma corrida interrompida quando o Android fecha o app agora é mantida.
+• Se o Android não deixar um treino começar, o C2K explica o motivo e como resolver.
+• Com o TalkBack é possível apagar treinos no Histórico.
+• Corrigido: GPS ligado no meio da corrida, vírgula decimal no peso, Pausa às vezes ignorada, treinos concluídos que recomeçavam e treinos longos com a tela apagada.

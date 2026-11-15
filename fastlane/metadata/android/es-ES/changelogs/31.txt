@@ -1,0 +1,5 @@
+• Nuevo: distancia y ritmo cada 500 m o 1 km. Configuración → Avisos de distancia y ritmo.
+• Una carrera cortada porque Android cierra la app ahora se guarda.
+• Si Android no deja empezar un entrenamiento, C2K explica por qué y cómo solucionarlo.
+• Con TalkBack se pueden borrar entrenamientos del Historial.
+• Corregido: GPS activado a mitad de carrera, coma decimal en el peso, Pausa ignorada a veces, entrenamientos terminados que se reiniciaban y entrenamientos largos con la pantalla apagada.

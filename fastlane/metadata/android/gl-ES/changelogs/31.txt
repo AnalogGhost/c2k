@@ -1,0 +1,5 @@
+• Novo: distancia e ritmo cada 500 m ou 1 km. Axustes → Avisos de distancia e ritmo.
+• Unha carreira cortada porque Android pecha a app agora gárdase.
+• Se Android non deixa comezar un adestramento, C2K explica por que e como arranxalo.
+• Con TalkBack pódense borrar adestramentos do Historial.
+• Corrixido: GPS activado a metade da carreira, coma decimal no peso, Pausa ignorada ás veces, adestramentos rematados que se reiniciaban e adestramentos longos coa pantalla apagada.

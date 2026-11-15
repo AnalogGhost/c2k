@@ -1,0 +1,5 @@
+• New: hear your distance and pace every 500 m or 1 km. Settings → Distance and pace updates.
+• A run cut short when Android closes the app is now kept.
+• If Android won't let a workout start, C2K explains why and how to fix it.
+• TalkBack can delete workouts in History.
+• Fixed: GPS switched on mid-run, decimal commas in weight, Pause sometimes ignored, finished workouts restarting, long workouts with the screen off.

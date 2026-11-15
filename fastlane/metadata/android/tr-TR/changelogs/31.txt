@@ -1,0 +1,5 @@
+• Yeni: her 500 m veya 1 km'de mesafe ve tempo. Ayarlar → Mesafe ve tempo bildirimleri.
+• Android uygulamayı kapattığı için yarıda kalan koşu artık saklanır.
+• Android bir antrenmanın başlamasına izin vermezse C2K nedenini ve çözümünü açıklar.
+• TalkBack ile Geçmiş'teki antrenmanlar silinebilir.
+• Düzeltildi: koşu sırasında açılan GPS, kiloda ondalık virgül, bazen çalışmayan Duraklat, yeniden başlayan biten antrenmanlar ve ekran kapalıyken uzun antrenmanlar.
