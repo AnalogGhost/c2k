@@ -8,7 +8,7 @@ as HTML with the copy from captions.json, and renders it with headless Chrome in
 fastlane/metadata/android-play/<locale>/images/phoneScreenshots at 1080x1920.
 
 Usage: python3 tools/store-screenshots/build.py [locale ...]
-Set CHROME to the Chrome binary if it isn't in the default macOS location.
+Set CHROME to the Chrome binary if it isn't the macOS app or on PATH.
 """
 import html
 import json
@@ -24,7 +24,13 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 RAW = ROOT / "fastlane/metadata/android"
 OUT = ROOT / "fastlane/metadata/android-play"
-CHROME = os.environ.get("CHROME", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+MAC_CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+# CHROME wins; otherwise the macOS app, or a Chrome/Chromium on PATH (Linux).
+CHROME = os.environ.get("CHROME") or next(
+    (c for c in [MAC_CHROME] + [shutil.which(n) for n in
+     ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser")]
+     if c and os.path.exists(c)),
+    MAC_CHROME)
 
 WIDTH, HEIGHT = 1080, 1920
 BACKGROUND = "#14324F"

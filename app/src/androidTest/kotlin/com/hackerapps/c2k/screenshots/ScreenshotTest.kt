@@ -135,6 +135,9 @@ class ScreenshotTest {
             prefs.setSkipWarmup(true)
             prefs.setSkipCooldown(false)
             prefs.clearProgression()
+            // 01_home's continue button needs a current program. Set it rather than rely on one
+            // left on the device: a fresh install (the device tests uninstall the app) has none.
+            prefs.setLastProgramId(PROGRAM_ID)
             seedHistory()
         }
     }
