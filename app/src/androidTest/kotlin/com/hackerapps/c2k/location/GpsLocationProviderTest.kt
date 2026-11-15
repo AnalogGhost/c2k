@@ -80,11 +80,22 @@ class GpsLocationProviderTest {
         return condition()
     }
 
+    /**
+     * Sets the mock GPS on or off and waits until the platform reports it. The switch applies
+     * asynchronously, and in a full suite run it was occasionally dropped, so it's re-sent while
+     * waiting. This is test setup, not the behaviour under test.
+     */
+    private fun setGpsEnabled(enabled: Boolean) = assertTrue(
+        "Mock GPS should report ${if (enabled) "on" else "off"}",
+        waitUntil(10_000) {
+            locationManager.setTestProviderEnabled(gps, enabled)
+            locationManager.isProviderEnabled(gps) == enabled
+        }
+    )
+
     @Test
     fun switching_location_on_after_the_start_still_tracks_the_run() {
-        locationManager.setTestProviderEnabled(gps, false)
-        // The switch applies asynchronously; start only once the platform reports GPS off.
-        assertTrue("GPS should report off", waitUntil { !locationManager.isProviderEnabled(gps) })
+        setGpsEnabled(false)
         val gpsProvider = GpsLocationProvider(context).also { provider = it }
         gpsProvider.start()
         assertFalse("Location is off at the start", gpsProvider.availability.value)
@@ -105,8 +116,7 @@ class GpsLocationProviderTest {
 
     @Test
     fun switching_location_off_mid_run_is_reported() {
-        locationManager.setTestProviderEnabled(gps, true)
-        assertTrue("GPS should report on", waitUntil { locationManager.isProviderEnabled(gps) })
+        setGpsEnabled(true)
         val gpsProvider = GpsLocationProvider(context).also { provider = it }
         gpsProvider.start()
         assertTrue(gpsProvider.availability.value)
