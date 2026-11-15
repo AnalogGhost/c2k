@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CI runs lint with warnings as errors. Each entry here is a reviewed exception, with the reason. -->
+<lint>
+    <!-- Dependabot proposes version bumps; lint's own version notices would fail every build. -->
+    <issue id="GradleDependency" severity="ignore" />
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
+    <issue id="NewerVersionAvailable" severity="ignore" />
+
+    <!-- The first-workout prompt to exempt C2K from battery optimisation is a deliberate,
+         already-shipped choice ("For reliable workouts…"). Revisit if Play review objects. -->
+    <issue id="BatteryLife" severity="ignore" />
+
+    <!-- Storage permissions in the debug manifest are only for screenshot capture (screengrab). -->
+    <issue id="ScopedStorage">
+        <ignore path="src/debug/AndroidManifest.xml" />
+    </issue>
+
+    <!-- localeConfig is ignored below API 33 by design; older versions use the in-app picker. -->
+    <issue id="UnusedAttribute">
+        <ignore regexp="localeConfig" />
+    </issue>
+
+    <!-- "Wochen in Folge" (weeks in a row) is correct German; "infolge" means "as a result of". -->
+    <issue id="Typos">
+        <ignore path="src/main/res/values-de/strings.xml" />
+    </issue>
+</lint>

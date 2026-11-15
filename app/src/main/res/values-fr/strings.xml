@@ -17,10 +17,12 @@
     <string name="progression_title">Cette séance vous semble difficile ?</string>
     <plurals name="progression_body_repeat_week">
         <item quantity="one">Vous avez arrêté cette séance avant la fin %1$d fois. Refaire la semaine %2$d peut vous aider à vous y préparer.</item>
+        <item quantity="many">Vous avez arrêté cette séance avant la fin %1$d fois. Refaire la semaine %2$d peut vous aider à vous y préparer.</item>
         <item quantity="other">Vous avez arrêté cette séance avant la fin %1$d fois. Refaire la semaine %2$d peut vous aider à vous y préparer.</item>
     </plurals>
     <plurals name="progression_body_pre_c25k">
         <item quantity="one">Vous avez arrêté cette séance avant la fin %1$d fois. Pre-C25K commence par des courses de 30 secondes et vous ramène vers Couch to 5K.</item>
+        <item quantity="many">Vous avez arrêté cette séance avant la fin %1$d fois. Pre-C25K commence par des courses de 30 secondes et vous ramène vers Couch to 5K.</item>
         <item quantity="other">Vous avez arrêté cette séance avant la fin %1$d fois. Pre-C25K commence par des courses de 30 secondes et vous ramène vers Couch to 5K.</item>
     </plurals>
     <string name="progression_action_repeat_week">Refaire la semaine %1$d</string>

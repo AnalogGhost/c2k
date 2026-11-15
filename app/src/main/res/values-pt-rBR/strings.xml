@@ -17,10 +17,12 @@
     <string name="progression_title">Este treino está difícil?</string>
     <plurals name="progression_body_repeat_week">
         <item quantity="one">Você parou este treino antes do fim %1$d vez. Repetir a semana %2$d pode ajudar você a se preparar.</item>
+        <item quantity="many">Você parou este treino antes do fim %1$d vezes. Repetir a semana %2$d pode ajudar você a se preparar.</item>
         <item quantity="other">Você parou este treino antes do fim %1$d vezes. Repetir a semana %2$d pode ajudar você a se preparar.</item>
     </plurals>
     <plurals name="progression_body_pre_c25k">
         <item quantity="one">Você parou este treino antes do fim %1$d vez. O Pre-C25K começa com corridas de 30 segundos e leva você de volta ao Couch to 5K.</item>
+        <item quantity="many">Você parou este treino antes do fim %1$d vezes. O Pre-C25K começa com corridas de 30 segundos e leva você de volta ao Couch to 5K.</item>
         <item quantity="other">Você parou este treino antes do fim %1$d vezes. O Pre-C25K começa com corridas de 30 segundos e leva você de volta ao Couch to 5K.</item>
     </plurals>
     <string name="progression_action_repeat_week">Repetir semana %1$d</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">C2K</string>
 
     <!-- Programs -->
@@ -30,7 +30,8 @@
         <item quantity="one">%1$d-week streak 🔥</item>
         <item quantity="other">%1$d-week streak 🔥</item>
     </plurals>
-    <string name="home_program_weeks">%1$d weeks</string>
+    <!-- Not plurals: every program is several weeks long, and "kcal" never changes form. -->
+    <string name="home_program_weeks" tools:ignore="PluralsCandidate">%1$d weeks</string>
 
     <!-- Program select screen -->
     <string name="program_week_label">Week %1$d</string>
@@ -96,7 +97,7 @@
     <string name="workout_start_failed_back">Back</string>
     <string name="workout_new_best">New personal best!</string>
     <string name="workout_previous_best">Previous best: %1$s</string>
-    <string name="workout_calories_burned">%1$d kcal burned (estimate)</string>
+    <string name="workout_calories_burned" tools:ignore="PluralsCandidate">%1$d kcal burned (estimate)</string>
     <string name="workout_calories_hint">Set your weight in Settings to see calories burned</string>
 
     <!-- History screen -->

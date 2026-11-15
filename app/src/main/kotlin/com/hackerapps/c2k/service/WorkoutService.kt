@@ -1,5 +1,6 @@
 package com.hackerapps.c2k.service
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -134,6 +135,9 @@ class WorkoutService : Service() {
         // "location" is OR'd in on top of "health" only when this session is actually going to
         // track GPS, since a foreground service that accesses location must include the
         // "location" type or the OS blocks the location access outright.
+        // The type constants are plain ints copied in at compile time, so reading them is safe on
+        // any API level; the caller only uses the result on API 34+.
+        @SuppressLint("InlinedApi")
         @VisibleForTesting
         internal fun foregroundServiceType(
             hasActivityRecognition: Boolean,

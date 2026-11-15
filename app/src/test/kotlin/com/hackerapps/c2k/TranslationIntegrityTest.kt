@@ -85,6 +85,8 @@ class TranslationIntegrityTest {
     /** CLDR plural categories Android selects from for each language; a missing one falls back to English. */
     private fun requiredQuantities(locale: String): Set<String> = when (locale.removePrefix("values-").substringBefore('-')) {
         "ru" -> setOf("one", "few", "many", "other")
+        // "many" is for large round numbers (1 000 000 de jours); without it Android uses English.
+        "es", "fr", "pt" -> setOf("one", "many", "other")
         else -> setOf("one", "other")
     }
 

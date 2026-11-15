@@ -56,6 +56,13 @@ android {
         }
     }
 
+    lint {
+        // Every warning fails the check; reviewed exceptions live in lint.xml with their reasons.
+        warningsAsErrors = true
+        abortOnError = true
+        checkDependencies = false
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true

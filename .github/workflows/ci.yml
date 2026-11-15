@@ -17,8 +17,13 @@ jobs:
           java-version: '21'
           cache: gradle
 
+      # Both store versions: they share code but not every source set and manifest.
       - name: Run unit tests
-        run: ./gradlew testFossDebugUnitTest --console=plain
+        run: ./gradlew testFossDebugUnitTest testPlayDebugUnitTest --console=plain
+
+      # Warnings fail the build; reviewed exceptions are in app/lint.xml with their reasons.
+      - name: Run Android Lint
+        run: ./gradlew lintFossDebug lintPlayDebug --console=plain
 
       # The release lane's checks (changelogs, git state, tag cleanup, signing arguments).
       # Also fails a version bump that lands without a changelog in every listing locale.
@@ -30,7 +35,9 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: unit-test-report
-          path: app/build/reports/tests/testFossDebugUnitTest/
+          path: |
+            app/build/reports/tests/
+            app/build/reports/lint-results-*.html
 
   instrumented-test:
     runs-on: ubuntu-latest
