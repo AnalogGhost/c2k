@@ -1,0 +1,1 @@
+• La exportación de rutas ahora envía un archivo .gpx que pueden abrir apps de mapas como OsmAnd y Organic Maps.

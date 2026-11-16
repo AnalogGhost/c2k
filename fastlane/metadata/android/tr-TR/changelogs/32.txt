@@ -1,0 +1,1 @@
+• Rota dışa aktarma artık OsmAnd ve Organic Maps gibi harita uygulamalarının açabildiği bir .gpx dosyası gönderiyor.

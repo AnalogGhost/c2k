@@ -1,0 +1,1 @@
+• L'export de parcours envoie désormais un fichier .gpx que les apps de cartes comme OsmAnd et Organic Maps peuvent ouvrir.
