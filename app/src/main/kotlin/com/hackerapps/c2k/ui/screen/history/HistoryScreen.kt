@@ -163,12 +163,10 @@ fun HistoryScreen(
                         onDelete = { vm.deleteSession(session.id) },
                         onExportGpx = { hasRoute ->
                             if (hasRoute) {
-                                vm.buildGpx(session) { gpx ->
-                                    val intent = Intent(Intent.ACTION_SEND).apply {
-                                        type = "application/gpx+xml"
-                                        putExtra(Intent.EXTRA_SUBJECT, "C2K route W${session.week}D${session.day}")
-                                        putExtra(Intent.EXTRA_TEXT, gpx)
-                                    }
+                                vm.exportGpxFile(session) { file ->
+                                    val intent = GpxExport.shareIntent(
+                                        context, file, "C2K route W${session.week}D${session.day}"
+                                    )
                                     context.startActivity(
                                         Intent.createChooser(intent, context.getString(R.string.history_export_gpx_chooser))
                                     )

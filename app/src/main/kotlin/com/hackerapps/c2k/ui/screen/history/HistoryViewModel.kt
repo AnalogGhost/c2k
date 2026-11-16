@@ -3,6 +3,8 @@ package com.hackerapps.c2k.ui.screen.history
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -19,6 +21,7 @@ import com.hackerapps.c2k.engine.MonthlySummaryCalculator
 import com.hackerapps.c2k.engine.StreakCalculator
 import com.hackerapps.c2k.engine.WeeklySummary
 import com.hackerapps.c2k.engine.WeeklySummaryCalculator
+import java.io.File
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -72,10 +75,14 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch { repo.deleteSession(sessionId) }
     }
 
-    fun buildGpx(session: WorkoutSessionEntity, onResult: (String) -> Unit) {
+    /** Writes the session's route to a .gpx file and hands it back on the main thread. */
+    fun exportGpxFile(session: WorkoutSessionEntity, onResult: (File) -> Unit) {
         viewModelScope.launch {
             val points = repo.getRoutePoints(session.id)
-            onResult(generateGpx(session, points))
+            val file = withContext(Dispatchers.IO) {
+                GpxExport.writeFile(getApplication(), session, generateGpx(session, points))
+            }
+            onResult(file)
         }
     }
 
