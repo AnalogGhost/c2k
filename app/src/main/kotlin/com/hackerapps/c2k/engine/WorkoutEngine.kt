@@ -69,8 +69,9 @@ class WorkoutEngine(
     private val warnedCountdowns = mutableSetOf<Int>()
     private var midpointAnnounced = false
     private var lastPeriodicCueElapsed = -1
-    // Set from the service thread, consumed by the tick loop (see skipWarmupOrCooldown).
-    private var skipRequested = false
+    // Net intervals to move, set from the service thread and consumed by the tick loop (see
+    // skipToNextInterval and skipToPreviousInterval).
+    private var pendingSkip = 0
 
     fun start(sessionId: Long) {
         synchronized(lock) {
@@ -79,7 +80,7 @@ class WorkoutEngine(
             sessionStartMs = clock()
             intervalStartMs = sessionStartMs
             isPaused = false
-            skipRequested = false
+            pendingSkip = 0
             warnedCountdowns.clear()
             midpointAnnounced = false
             lastPeriodicCueElapsed = -1
@@ -115,14 +116,25 @@ class WorkoutEngine(
     }
 
     /**
-     * Ends the current warm-up or cool-down early; ignored while paused and during any other
-     * interval. Only raises a flag, which the tick loop applies under the engine lock, so a
-     * request landing just as an interval changes naturally can't cut the following interval
-     * short.
+     * Ends the current interval and starts the next; on the last interval this completes the
+     * workout. Ignored while paused. Only records the request, which the tick loop applies under
+     * the engine lock, so a tap landing just as an interval changes naturally moves one interval,
+     * not two.
      */
-    fun skipWarmupOrCooldown() {
+    fun skipToNextInterval() {
         synchronized(lock) {
-            if (!isPaused) skipRequested = true
+            if (!isPaused) pendingSkip++
+        }
+    }
+
+    /**
+     * Starts the previous interval again from the beginning, so a runner can repeat a run they
+     * had the legs for. Restarts the first interval when there's none before it. Ignored while
+     * paused.
+     */
+    fun skipToPreviousInterval() {
+        synchronized(lock) {
+            if (!isPaused) pendingSkip--
         }
     }
 
@@ -146,13 +158,16 @@ class WorkoutEngine(
         val now = clock()
         val sessionElapsed = ((now - sessionStartMs) / 1000).toInt()
 
-        if (skipRequested) {
-            skipRequested = false
-            val skippable = intervals[intervalIndex]
-            if (skippable.type == IntervalType.WARMUP || skippable.type == IntervalType.COOLDOWN) {
-                // Backdate the interval start so the normal end-of-interval path below runs:
-                // announcement and warning reset, or completion for a final cool-down.
-                intervalStartMs = now - skippable.durationSeconds * 1000L
+        if (pendingSkip != 0) {
+            val target = intervalIndex + pendingSkip
+            pendingSkip = 0
+            if (target >= intervals.size) {
+                // Past the end: backdate the last interval so the end-of-interval path below
+                // completes the workout.
+                intervalIndex = intervals.lastIndex
+                intervalStartMs = now - intervals[intervalIndex].durationSeconds * 1000L
+            } else {
+                beginInterval(target.coerceAtLeast(0), startMs = now)
             }
         }
         val intervalElapsed = ((now - intervalStartMs) / 1000).toInt()
@@ -186,11 +201,10 @@ class WorkoutEngine(
             // After a longer stall (the phone briefly frozen), start it now instead: the runner
             // hears the cue late but still gets the whole interval.
             val boundaryMs = intervalStartMs + currentInterval.durationSeconds * 1000L
-            intervalStartMs = if (now - boundaryMs <= MAX_CARRIED_OVERSHOOT_MS) boundaryMs else now
-            warnedCountdowns.clear()
-            midpointAnnounced = false
-            lastPeriodicCueElapsed = -1
-            announceInterval(intervalIndex)
+            beginInterval(
+                intervalIndex,
+                startMs = if (now - boundaryMs <= MAX_CARRIED_OVERSHOOT_MS) boundaryMs else now
+            )
             return true
         }
 
@@ -251,6 +265,15 @@ class WorkoutEngine(
 
     private fun remainingRunIntervals(index: Int): Int =
         intervals.drop(index).count { it.type == IntervalType.RUN }
+
+    private fun beginInterval(index: Int, startMs: Long) {
+        intervalIndex = index
+        intervalStartMs = startMs
+        warnedCountdowns.clear()
+        midpointAnnounced = false
+        lastPeriodicCueElapsed = -1
+        announceInterval(index)
+    }
 
     private fun announceInterval(index: Int) {
         if (!ttsEnabled) return

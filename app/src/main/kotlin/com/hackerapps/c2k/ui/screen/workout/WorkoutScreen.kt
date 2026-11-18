@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -214,7 +215,8 @@ fun WorkoutScreen(
                     treadmillMode = treadmillMode,
                     isLandscape = isLandscape,
                     onPause = { vm.pause() },
-                    onSkipWarmupOrCooldown = { vm.skipWarmupOrCooldown() },
+                    onPreviousInterval = { vm.skipToPreviousInterval() },
+                    onNextInterval = { vm.skipToNextInterval() },
                     onStop = { showStopDialog = true }
                 )
                 is WorkoutState.Paused -> PausedWorkoutContent(
@@ -308,7 +310,8 @@ private fun ActiveWorkoutContent(
     treadmillMode: Boolean,
     isLandscape: Boolean,
     onPause: () -> Unit,
-    onSkipWarmupOrCooldown: () -> Unit,
+    onPreviousInterval: () -> Unit,
+    onNextInterval: () -> Unit,
     onStop: () -> Unit
 ) {
     val ringColor = intervalColor(state.currentInterval.type)
@@ -416,20 +419,30 @@ private fun ActiveWorkoutContent(
                     Text(stringResource(R.string.workout_stop))
                 }
             }
-            val skipLabel = when (state.currentInterval.type) {
+            val nextLabel = when (state.currentInterval.type) {
                 IntervalType.WARMUP -> R.string.workout_skip_warmup
                 IntervalType.COOLDOWN -> R.string.workout_skip_cooldown
-                else -> null
+                else -> R.string.workout_skip_next
             }
-            if (skipLabel != null) {
-                Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 TextButton(
-                    onClick = onSkipWarmupOrCooldown,
-                    modifier = Modifier.testTag("workout_skip_phase_button")
+                    onClick = onPreviousInterval,
+                    // Nothing comes before the first interval.
+                    enabled = state.intervalIndex > 0,
+                    modifier = Modifier.testTag("workout_skip_previous_button")
+                ) {
+                    Icon(Icons.Default.SkipPrevious, contentDescription = null)
+                    Spacer(Modifier.width(4.dp))
+                    Text(stringResource(R.string.workout_skip_back))
+                }
+                TextButton(
+                    onClick = onNextInterval,
+                    modifier = Modifier.testTag("workout_skip_next_button")
                 ) {
                     Icon(Icons.Default.SkipNext, contentDescription = null)
                     Spacer(Modifier.width(4.dp))
-                    Text(stringResource(skipLabel))
+                    Text(stringResource(nextLabel))
                 }
             }
         }

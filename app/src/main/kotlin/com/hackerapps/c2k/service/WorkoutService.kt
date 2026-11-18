@@ -71,7 +71,8 @@ class WorkoutService : Service() {
         const val ACTION_PAUSE  = "com.hackerapps.c2k.action.PAUSE"
         const val ACTION_RESUME = "com.hackerapps.c2k.action.RESUME"
         const val ACTION_STOP   = "com.hackerapps.c2k.action.STOP"
-        const val ACTION_SKIP_WARMUP_COOLDOWN = "com.hackerapps.c2k.action.SKIP_WARMUP_COOLDOWN"
+        const val ACTION_SKIP_NEXT     = "com.hackerapps.c2k.action.SKIP_NEXT"
+        const val ACTION_SKIP_PREVIOUS = "com.hackerapps.c2k.action.SKIP_PREVIOUS"
 
         const val EXTRA_PROGRAM_ID    = "program_id"
         const val EXTRA_WEEK          = "week"
@@ -276,7 +277,8 @@ class WorkoutService : Service() {
                 locationProvider.resume()
                 renewWakeLock()
             }
-            ACTION_SKIP_WARMUP_COOLDOWN -> if (::engine.isInitialized) engine.skipWarmupOrCooldown()
+            ACTION_SKIP_NEXT     -> if (::engine.isInitialized) engine.skipToNextInterval()
+            ACTION_SKIP_PREVIOUS -> if (::engine.isInitialized) engine.skipToPreviousInterval()
             ACTION_STOP   -> handleStop(startId)
         }
         return START_NOT_STICKY

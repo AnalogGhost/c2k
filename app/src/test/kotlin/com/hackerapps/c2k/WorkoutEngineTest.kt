@@ -508,62 +508,100 @@ class WorkoutEngineTest {
         engine.stop()
     }
 
-    @Test
-    fun skipping_warmup_starts_the_first_run_immediately() = testScope.runTest {
-        val engine = makeEngine(
-            Interval(IntervalType.WARMUP, 300),
-            Interval(IntervalType.RUN, 60),
-            Interval(IntervalType.COOLDOWN, 300)
-        )
-        engine.start(1L)
-        advanceTimeBy(300)
-        engine.skipWarmupOrCooldown()
-        advanceTimeBy(500)
+    private fun skipDay() = arrayOf(
+        Interval(IntervalType.WARMUP, 300),
+        Interval(IntervalType.RUN, 60),
+        Interval(IntervalType.WALK, 90),
+        Interval(IntervalType.COOLDOWN, 300)
+    )
 
-        val s = engine.state.value as WorkoutState.Active
-        assertEquals(IntervalType.RUN, s.currentInterval.type)
-        assertTrue(announcements.any {
+    private fun active(engine: WorkoutEngine) = engine.state.value as WorkoutState.Active
+
+    @Test
+    fun skipping_forward_starts_the_next_interval_in_full() = testScope.runTest {
+        val engine = makeEngine(*skipDay())
+        engine.start(1L)
+        advanceTimeBy(20_100)
+        engine.skipToNextInterval()
+        advanceTimeBy(200)
+
+        assertEquals(1, active(engine).intervalIndex)
+        assertEquals(60, active(engine).secondsRemainingInInterval)
+        assertEquals(1, announcements.count {
             it is TtsAnnouncement.IntervalStart && it.interval.type == IntervalType.RUN
         })
-        assertEquals("Session time keeps counting real time, not the skipped warm-up",
-            0, s.elapsedSessionSeconds)
+
+        // A run can be skipped as well as the warm-up.
+        engine.skipToNextInterval()
+        advanceTimeBy(200)
+        assertEquals(IntervalType.WALK, active(engine).currentInterval.type)
+        assertEquals("Session time keeps counting real time, not what was skipped",
+            20, active(engine).elapsedSessionSeconds)
         engine.stop()
     }
 
     @Test
-    fun skip_is_ignored_outside_warmup_and_cooldown() = testScope.runTest {
-        val engine = makeEngine(
-            Interval(IntervalType.RUN, 60),
-            Interval(IntervalType.WALK, 60)
-        )
+    fun skipping_back_repeats_the_previous_interval_from_the_start() = testScope.runTest {
+        val engine = makeEngine(*skipDay())
+        engine.start(1L)
+        advanceTimeBy(370_100)  // 10 s into the walk
+        assertEquals(IntervalType.WALK, active(engine).currentInterval.type)
+
+        engine.skipToPreviousInterval()
+        advanceTimeBy(200)
+        assertEquals(1, active(engine).intervalIndex)
+        assertEquals(60, active(engine).secondsRemainingInInterval)
+        assertEquals(2, announcements.count {
+            it is TtsAnnouncement.IntervalStart && it.interval.type == IntervalType.RUN
+        })
+
+        // The repeated run then hands over to the walk as usual.
+        advanceTimeBy(60_400)
+        assertEquals(IntervalType.WALK, active(engine).currentInterval.type)
+        assertEquals(90, active(engine).secondsRemainingInInterval)
+        engine.stop()
+    }
+
+    @Test
+    fun skipping_back_on_the_first_interval_restarts_it() = testScope.runTest {
+        val engine = makeEngine(*skipDay())
+        engine.start(1L)
+        advanceTimeBy(100_100)
+        engine.skipToPreviousInterval()
+        advanceTimeBy(200)
+
+        assertEquals(0, active(engine).intervalIndex)
+        assertEquals(300, active(engine).secondsRemainingInInterval)
+        engine.stop()
+    }
+
+    @Test
+    fun taps_between_ticks_add_up() = testScope.runTest {
+        val engine = makeEngine(*skipDay())
         engine.start(1L)
         advanceTimeBy(300)
-        engine.skipWarmupOrCooldown()
-        advanceTimeBy(1_000)
+        engine.skipToNextInterval()
+        engine.skipToNextInterval()
+        advanceTimeBy(200)
+        assertEquals(IntervalType.WALK, active(engine).currentInterval.type)
 
-        val s = engine.state.value as WorkoutState.Active
-        assertEquals(0, s.intervalIndex)
-        assertEquals(IntervalType.RUN, s.currentInterval.type)
+        engine.skipToPreviousInterval()
+        engine.skipToNextInterval()
+        advanceTimeBy(200)
+        assertEquals(IntervalType.WALK, active(engine).currentInterval.type)
         engine.stop()
     }
 
     @Test
-    fun skipping_the_final_cooldown_completes_the_workout() = testScope.runTest {
-        val engine = makeEngine(
-            Interval(IntervalType.RUN, 2),
-            Interval(IntervalType.COOLDOWN, 300)
-        )
+    fun skipping_past_the_last_interval_completes_the_workout() = testScope.runTest {
+        val engine = makeEngine(*skipDay())
         engine.start(1L)
-        advanceTimeBy(2_500)  // RUN is over, cool-down has begun
-        assertEquals(
-            IntervalType.COOLDOWN,
-            (engine.state.value as WorkoutState.Active).currentInterval.type
-        )
-        engine.skipWarmupOrCooldown()
-        advanceTimeBy(500)
+        advanceTimeBy(1_100)
+        repeat(skipDay().size + 1) { engine.skipToNextInterval() }
+        advanceTimeBy(200)
 
         assertTrue(engine.state.value is WorkoutState.Completed)
-        assertTrue(announcements.any { it is TtsAnnouncement.WorkoutComplete })
+        assertEquals(1, announcements.count { it is TtsAnnouncement.WorkoutComplete })
     }
 
     @Test
@@ -575,7 +613,7 @@ class WorkoutEngineTest {
         engine.start(1L)
         advanceTimeBy(500)
         engine.pause()
-        engine.skipWarmupOrCooldown()
+        engine.skipToNextInterval()
         advanceTimeBy(1_000)
         engine.resume()
         advanceTimeBy(1_000)

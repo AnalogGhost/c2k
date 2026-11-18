@@ -374,7 +374,7 @@ class WorkoutServiceNotificationTest {
     }
 
     @Test
-    fun skip_action_ends_the_final_cooldown_and_completes_the_workout() {
+    fun skip_next_action_ends_the_final_cooldown_and_completes_the_workout() {
         WorkoutService.testWorkoutDayOverride = WorkoutDay(
             week = 1, day = 1,
             intervals = listOf(Interval(IntervalType.RUN, 1), Interval(IntervalType.COOLDOWN, 300))
@@ -388,7 +388,7 @@ class WorkoutServiceNotificationTest {
         )
 
         context.startService(
-            Intent(context, WorkoutService::class.java).setAction(WorkoutService.ACTION_SKIP_WARMUP_COOLDOWN)
+            Intent(context, WorkoutService::class.java).setAction(WorkoutService.ACTION_SKIP_NEXT)
         )
 
         // The cool-down is 5 minutes; a completion notification within seconds means it was skipped.

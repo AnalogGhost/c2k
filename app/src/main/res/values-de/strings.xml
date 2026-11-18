@@ -70,6 +70,8 @@
     <string name="workout_stop">Beenden</string>
     <string name="workout_skip_warmup">Aufwärmen überspringen</string>
     <string name="workout_skip_cooldown">Abkühlen überspringen</string>
+    <string name="workout_skip_back">Zurück</string>
+    <string name="workout_skip_next">Weiter</string>
     <string name="workout_elapsed">Verstrichen: %1$s</string>
     <string name="workout_interval_progress">Intervall %1$d von %2$d</string>
     <string name="workout_next_interval">Nächstes: %1$s %2$s</string>

@@ -219,10 +219,15 @@ class WorkoutViewModel(
         )
     }
 
-    fun skipWarmupOrCooldown() {
+    fun skipToNextInterval() {
         getApplication<Application>().startService(
-            Intent(getApplication(), WorkoutService::class.java)
-                .setAction(WorkoutService.ACTION_SKIP_WARMUP_COOLDOWN)
+            Intent(getApplication(), WorkoutService::class.java).setAction(WorkoutService.ACTION_SKIP_NEXT)
+        )
+    }
+
+    fun skipToPreviousInterval() {
+        getApplication<Application>().startService(
+            Intent(getApplication(), WorkoutService::class.java).setAction(WorkoutService.ACTION_SKIP_PREVIOUS)
         )
     }
 
