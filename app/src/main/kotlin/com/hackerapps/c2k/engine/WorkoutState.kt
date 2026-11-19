@@ -19,5 +19,13 @@ sealed class WorkoutState {
 
     data class Paused(val snapshot: Active) : WorkoutState()
 
-    data class Completed(val sessionId: Long, val elapsedSessionSeconds: Int) : WorkoutState()
+    /**
+     * [skippedRun]: a run interval was never run to its end, so the workout doesn't count toward
+     * the runner's progress.
+     */
+    data class Completed(
+        val sessionId: Long,
+        val elapsedSessionSeconds: Int,
+        val skippedRun: Boolean = false
+    ) : WorkoutState()
 }

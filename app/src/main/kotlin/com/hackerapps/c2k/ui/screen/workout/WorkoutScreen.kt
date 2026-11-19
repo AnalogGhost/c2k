@@ -576,7 +576,10 @@ private fun CompletedContent(
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            stringResource(R.string.workout_complete_message),
+            stringResource(
+                if (state.skippedRun) R.string.workout_skipped_run_not_counted
+                else R.string.workout_complete_message
+            ),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )

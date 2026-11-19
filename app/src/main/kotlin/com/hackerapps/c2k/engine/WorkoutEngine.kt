@@ -72,6 +72,9 @@ class WorkoutEngine(
     // Net intervals to move, set from the service thread and consumed by the tick loop (see
     // skipToNextInterval and skipToPreviousInterval).
     private var pendingSkip = 0
+    // Run intervals that ran to their end. Skipping one leaves it out; running it again after
+    // going back puts it in, so only runs never finished count against the workout.
+    private val finishedRuns = mutableSetOf<Int>()
 
     fun start(sessionId: Long) {
         synchronized(lock) {
@@ -81,6 +84,7 @@ class WorkoutEngine(
             intervalStartMs = sessionStartMs
             isPaused = false
             pendingSkip = 0
+            finishedRuns.clear()
             warnedCountdowns.clear()
             midpointAnnounced = false
             lastPeriodicCueElapsed = -1
@@ -158,6 +162,7 @@ class WorkoutEngine(
         val now = clock()
         val sessionElapsed = ((now - sessionStartMs) / 1000).toInt()
 
+        var skippedToEnd = false
         if (pendingSkip != 0) {
             val target = intervalIndex + pendingSkip
             pendingSkip = 0
@@ -166,6 +171,7 @@ class WorkoutEngine(
                 // completes the workout.
                 intervalIndex = intervals.lastIndex
                 intervalStartMs = now - intervals[intervalIndex].durationSeconds * 1000L
+                skippedToEnd = true
             } else {
                 beginInterval(target.coerceAtLeast(0), startMs = now)
             }
@@ -176,6 +182,7 @@ class WorkoutEngine(
         val remaining = currentInterval.durationSeconds - intervalElapsed
 
         if (remaining <= 0) {
+            if (currentInterval.type == IntervalType.RUN && !skippedToEnd) finishedRuns.add(intervalIndex)
             intervalIndex++
             if (intervalIndex >= intervals.size) {
                 // Pin a final Active frame to 0 before completing. When the screen is locked
@@ -193,7 +200,10 @@ class WorkoutEngine(
                     sessionId = sessionId
                 )
                 if (ttsEnabled) tts.announce(TtsAnnouncement.WorkoutComplete)
-                _state.value = WorkoutState.Completed(sessionId, sessionElapsed)
+                val skippedRun = intervals.indices.any {
+                    intervals[it].type == IntervalType.RUN && it !in finishedRuns
+                }
+                _state.value = WorkoutState.Completed(sessionId, sessionElapsed, skippedRun)
                 return false
             }
             // Start the next interval at the boundary, not at this tick, so the few milliseconds

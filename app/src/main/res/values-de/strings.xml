@@ -72,6 +72,7 @@
     <string name="workout_skip_cooldown">Abkühlen überspringen</string>
     <string name="workout_skip_back">Zurück</string>
     <string name="workout_skip_next">Weiter</string>
+    <string name="workout_skipped_run_not_counted">Du hast einen Lauf übersprungen, deshalb zählt dieses Training nicht für deinen Fortschritt. Wiederhole es, wenn du bereit bist.</string>
     <string name="workout_elapsed">Verstrichen: %1$s</string>
     <string name="workout_interval_progress">Intervall %1$d von %2$d</string>
     <string name="workout_next_interval">Nächstes: %1$s %2$s</string>

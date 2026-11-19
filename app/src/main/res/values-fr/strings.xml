@@ -77,6 +77,7 @@
     <string name="workout_skip_cooldown">Ignorer la récupération</string>
     <string name="workout_skip_back">Précédent</string>
     <string name="workout_skip_next">Suivant</string>
+    <string name="workout_skipped_run_not_counted">Vous avez sauté une course, cette séance ne compte donc pas dans votre progression. Refaites-la quand vous le souhaitez.</string>
     <string name="workout_elapsed">Écoulé : %1$s</string>
     <string name="workout_interval_progress">Intervalle %1$d sur %2$d</string>
     <string name="workout_next_interval">Suivant : %1$s %2$s</string>

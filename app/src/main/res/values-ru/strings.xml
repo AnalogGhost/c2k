@@ -82,6 +82,7 @@
     <string name="workout_skip_cooldown">Пропустить заминку</string>
     <string name="workout_skip_back">Назад</string>
     <string name="workout_skip_next">Далее</string>
+    <string name="workout_skipped_run_not_counted">Вы пропустили пробежку, поэтому эта тренировка не засчитывается в ваш прогресс. Повторите её, когда будете готовы.</string>
     <string name="workout_elapsed">Прошло: %1$s</string>
     <string name="workout_interval_progress">Интервал %1$d из %2$d</string>
     <string name="workout_next_interval">Далее: %1$s %2$s</string>

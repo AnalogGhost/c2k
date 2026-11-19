@@ -463,13 +463,15 @@ class WorkoutService : Service() {
                                     )
                                 }
                                 // NonCancellable: losing this write would record a finished
-                                // workout as abandoned and hold back progression.
+                                // workout as abandoned and hold back progression. A skipped run
+                                // means the day's work wasn't done: it's saved as an early stop,
+                                // so the runner repeats the day rather than moving on.
                                 withContext(NonCancellable) {
                                     sessionRepository.finishSession(
                                         sessionId = state.sessionId,
                                         durationSeconds = state.elapsedSessionSeconds,
                                         distanceMeters = locationProvider.totalDistanceMeters,
-                                        completed = true
+                                        completed = !state.skippedRun
                                     )
                                 }
                             } finally {

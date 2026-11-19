@@ -74,6 +74,7 @@
     <string name="workout_skip_cooldown">Skip cool-down</string>
     <string name="workout_skip_back">Previous</string>
     <string name="workout_skip_next">Next</string>
+    <string name="workout_skipped_run_not_counted">You skipped a run, so this workout won\'t count toward your progress. Run it again when you\'re ready.</string>
     <string name="workout_elapsed">Elapsed: %1$s</string>
     <string name="workout_interval_progress">Interval %1$d of %2$d</string>
     <string name="workout_next_interval">Next: %1$s %2$s</string>

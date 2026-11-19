@@ -73,6 +73,7 @@
     <string name="workout_skip_cooldown">Omitir arrefecemento</string>
     <string name="workout_skip_back">Anterior</string>
     <string name="workout_skip_next">Seguinte</string>
+    <string name="workout_skipped_run_not_counted">Saltaches unha carreira, así que este adestramento non conta para o teu progreso. Repíteo cando queiras.</string>
     <string name="workout_elapsed">Tempo: %1$s</string>
     <string name="workout_interval_progress">Intervalo %1$d de %2$d</string>
     <string name="workout_next_interval">Seguinte: %1$s %2$s</string>

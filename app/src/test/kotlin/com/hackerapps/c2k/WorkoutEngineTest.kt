@@ -13,6 +13,7 @@ import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.engine.tts.TtsAnnouncement
 import com.hackerapps.c2k.engine.tts.TtsInterface
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -621,6 +622,63 @@ class WorkoutEngineTest {
         val s = engine.state.value as WorkoutState.Active
         assertEquals(IntervalType.WARMUP, s.currentInterval.type)
         engine.stop()
+    }
+
+    private fun skippedRun(engine: WorkoutEngine) =
+        (engine.state.value as WorkoutState.Completed).skippedRun
+
+    @Test
+    fun a_workout_run_in_full_has_no_skipped_run() = testScope.runTest {
+        val engine = makeEngine(*skipDay())
+        engine.start(1L)
+        advanceTimeBy(751_000)
+        assertFalse(skippedRun(engine))
+    }
+
+    @Test
+    fun skipping_a_run_marks_the_workout() = testScope.runTest {
+        val engine = makeEngine(*skipDay())
+        engine.start(1L)
+        advanceTimeBy(310_100)  // 10 s into the run
+        engine.skipToNextInterval()
+        advanceTimeBy(400_000)
+        assertTrue(skippedRun(engine))
+    }
+
+    @Test
+    fun skipping_past_the_end_with_a_run_left_marks_the_workout() = testScope.runTest {
+        val engine = makeEngine(Interval(IntervalType.WALK, 60), Interval(IntervalType.RUN, 60))
+        engine.start(1L)
+        advanceTimeBy(70_100)  // into the final run
+        engine.skipToNextInterval()
+        advanceTimeBy(200)
+        assertTrue(skippedRun(engine))
+    }
+
+    @Test
+    fun a_run_skipped_then_run_again_counts() = testScope.runTest {
+        val engine = makeEngine(*skipDay())
+        engine.start(1L)
+        advanceTimeBy(310_100)
+        engine.skipToNextInterval()
+        advanceTimeBy(1_000)
+        engine.skipToPreviousInterval()  // back to the run, and this time run it all
+        advanceTimeBy(500_000)
+        assertFalse(skippedRun(engine))
+    }
+
+    @Test
+    fun skipping_the_warmup_walks_and_cooldown_still_counts() = testScope.runTest {
+        val engine = makeEngine(*skipDay())
+        engine.start(1L)
+        advanceTimeBy(100)
+        engine.skipToNextInterval()  // warm-up
+        advanceTimeBy(60_400)        // the run, in full
+        engine.skipToNextInterval()  // walk
+        advanceTimeBy(400)
+        engine.skipToNextInterval()  // cool-down
+        advanceTimeBy(200)
+        assertFalse(skippedRun(engine))
     }
 
     @Test
