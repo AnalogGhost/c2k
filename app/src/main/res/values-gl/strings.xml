@@ -403,4 +403,19 @@
     <string name="coaching_5ki_w4">Adestramento combinados: intervalos longos cunha carreira ao final. A forza necesaria para a carreira.</string>
     <string name="coaching_5ki_w6">Dous segmentos de 15 minutos — traballo aeróbico sólido que se traduce directamente nun 5K máis rápido.</string>
     <string name="coaching_5ki_w8">Carreira de graduación: 30 minutos a ritmo de 5K. Mira que lonxe chegaches — congratúlate!.</string>
+
+    <!-- Backup export and import -->
+    <string name="settings_backup">Copia de seguranza</string>
+    <string name="settings_backup_caption">Garda o teu historial de adestramentos e rutas nun ficheiro, ou engade adestramentos desde un. Non inclúe os axustes.</string>
+    <string name="settings_backup_export">Exportar</string>
+    <string name="settings_backup_import">Importar</string>
+    <string name="backup_export_done">Copia de seguranza gardada</string>
+    <string name="backup_export_failed">Non se puido gardar a copia de seguranza</string>
+    <string name="backup_import_nothing_new">Non hai adestramentos novos nesta copia</string>
+    <string name="backup_import_failed">Este ficheiro non é unha copia de seguranza de C2K</string>
+    <string name="backup_import_too_new">Esta copia é dunha versión máis recente de C2K. Actualiza a app e téntao de novo.</string>
+    <plurals name="backup_import_done">
+        <item quantity="one">%1$d adestramento importado</item>
+        <item quantity="other">%1$d adestramentos importados</item>
+    </plurals>
 </resources>

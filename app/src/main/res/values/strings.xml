@@ -404,4 +404,19 @@
     <string name="coaching_5ki_w4">Combination workout: longer intervals with a finishing run. This builds race stamina.</string>
     <string name="coaching_5ki_w6">Two 15-minute runs — solid aerobic work that will translate directly to a faster 5K.</string>
     <string name="coaching_5ki_w8">Graduation run: 30 minutes at 5K effort. See how far you get — it should feel good.</string>
+
+    <!-- Backup export and import -->
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backup_caption">Save your workout history and routes to a file, or add workouts from one. Settings aren\'t included.</string>
+    <string name="settings_backup_export">Export</string>
+    <string name="settings_backup_import">Import</string>
+    <string name="backup_export_done">Backup saved</string>
+    <string name="backup_export_failed">Couldn\'t save the backup</string>
+    <string name="backup_import_nothing_new">No new workouts in this backup</string>
+    <string name="backup_import_failed">This file isn\'t a C2K backup</string>
+    <string name="backup_import_too_new">This backup is from a newer version of C2K. Update the app and try again.</string>
+    <plurals name="backup_import_done">
+        <item quantity="one">%1$d workout imported</item>
+        <item quantity="other">%1$d workouts imported</item>
+    </plurals>
 </resources>

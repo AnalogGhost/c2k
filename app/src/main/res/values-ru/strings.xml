@@ -425,4 +425,21 @@
     <string name="coaching_5ki_w4">Комбинированная тренировка: более продолжительные интервалы с бегом на финише. Это улучшает выносливость при соревновательном беге.</string>
     <string name="coaching_5ki_w6">2 пятнадцатиминутных пробежки — достойная аэробная нагрузка, которая напрямую приведёт к более быстрому бегу на 5 км.</string>
     <string name="coaching_5ki_w8">Выпускной забег: 30 минут при усилиях как при беге на 5 км. Узнайте, насколько далеко вы пробежите — должно ощущаться здорово.</string>
+
+    <!-- Backup export and import -->
+    <string name="settings_backup">Резервная копия</string>
+    <string name="settings_backup_caption">Сохраните историю тренировок и маршруты в файл или добавьте тренировки из файла. Настройки не сохраняются.</string>
+    <string name="settings_backup_export">Экспорт</string>
+    <string name="settings_backup_import">Импорт</string>
+    <string name="backup_export_done">Резервная копия сохранена</string>
+    <string name="backup_export_failed">Не удалось сохранить резервную копию</string>
+    <string name="backup_import_nothing_new">В этой копии нет новых тренировок</string>
+    <string name="backup_import_failed">Этот файл не является резервной копией C2K</string>
+    <string name="backup_import_too_new">Эта копия создана более новой версией C2K. Обновите приложение и попробуйте снова.</string>
+    <plurals name="backup_import_done">
+        <item quantity="one">Импортирована %1$d тренировка</item>
+        <item quantity="few">Импортировано %1$d тренировки</item>
+        <item quantity="many">Импортировано %1$d тренировок</item>
+        <item quantity="other">Импортировано %1$d тренировки</item>
+    </plurals>
 </resources>

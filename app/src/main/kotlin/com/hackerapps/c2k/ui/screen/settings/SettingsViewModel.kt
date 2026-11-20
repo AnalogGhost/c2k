@@ -1,6 +1,12 @@
 package com.hackerapps.c2k.ui.screen.settings
 
 import android.app.Application
+import android.net.Uri
+import com.hackerapps.c2k.C2KApp
+import com.hackerapps.c2k.data.backup.Backup
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
@@ -62,6 +68,54 @@ class SettingsViewModel @JvmOverloads constructor(
     }
 
     private val prefs = UserPreferences(app)
+    private val sessions = (app as C2KApp).sessionRepository
+
+    // The outcome of the last export or import, shown once by the screen and then cleared.
+    private val _backupMessage = MutableStateFlow<String?>(null)
+    val backupMessage = _backupMessage.asStateFlow()
+
+    fun backupMessageShown() {
+        _backupMessage.value = null
+    }
+
+    fun exportBackup(uri: Uri) {
+        viewModelScope.launch {
+            val app = getApplication<Application>()
+            _backupMessage.value = try {
+                val text = sessions.exportBackup().encode()
+                withContext(Dispatchers.IO) {
+                    // "wt" truncates, so saving over a longer, older backup leaves no tail behind.
+                    val out = app.contentResolver.openOutputStream(uri, "wt")
+                        ?: error("no output stream")
+                    out.use { it.write(text.toByteArray(Charsets.UTF_8)) }
+                }
+                app.getString(R.string.backup_export_done)
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                app.getString(R.string.backup_export_failed)
+            }
+        }
+    }
+
+    fun importBackup(uri: Uri) {
+        viewModelScope.launch {
+            val app = getApplication<Application>()
+            _backupMessage.value = try {
+                val text = withContext(Dispatchers.IO) {
+                    val input = app.contentResolver.openInputStream(uri) ?: error("no input stream")
+                    input.use { it.readBytes().toString(Charsets.UTF_8) }
+                }
+                val added = sessions.importBackup(Backup.decode(text))
+                if (added == 0) app.getString(R.string.backup_import_nothing_new)
+                else app.resources.getQuantityString(R.plurals.backup_import_done, added, added)
+            } catch (e: Backup.NewerBackupException) {
+                app.getString(R.string.backup_import_too_new)
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                app.getString(R.string.backup_import_failed)
+            }
+        }
+    }
 
     val ttsEnabled = prefs.ttsEnabled
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)

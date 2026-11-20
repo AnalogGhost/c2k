@@ -405,4 +405,19 @@
     <string name="coaching_5ki_w4">Kombinasyon antrenmanı: bitiriş koşusu ile daha uzun aralıklar. Bu, yarış dayanıklılığı kazandırır.</string>
     <string name="coaching_5ki_w6">İki adet 15 dakikalık koşu — doğrudan daha hızlı bir 5K\'ya dönüşecek sağlam aerobik çalışma.</string>
     <string name="coaching_5ki_w8">Mezuniyet koşusu: 5K yarış eforunda 30 dakika. Ne kadar ilerleyebildiğinizi görün — harika hissettirmeli.</string>
+
+    <!-- Backup export and import -->
+    <string name="settings_backup">Yedek</string>
+    <string name="settings_backup_caption">Antrenman geçmişinizi ve rotalarınızı bir dosyaya kaydedin ya da bir dosyadan antrenman ekleyin. Ayarlar dahil değildir.</string>
+    <string name="settings_backup_export">Dışa aktar</string>
+    <string name="settings_backup_import">İçe aktar</string>
+    <string name="backup_export_done">Yedek kaydedildi</string>
+    <string name="backup_export_failed">Yedek kaydedilemedi</string>
+    <string name="backup_import_nothing_new">Bu yedekte yeni antrenman yok</string>
+    <string name="backup_import_failed">Bu dosya bir C2K yedeği değil</string>
+    <string name="backup_import_too_new">Bu yedek C2K\'nın daha yeni bir sürümünden. Uygulamayı güncelleyip tekrar deneyin.</string>
+    <plurals name="backup_import_done">
+        <item quantity="one">%1$d antrenman içe aktarıldı</item>
+        <item quantity="other">%1$d antrenman içe aktarıldı</item>
+    </plurals>
 </resources>

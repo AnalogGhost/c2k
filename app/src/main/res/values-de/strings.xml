@@ -400,4 +400,19 @@
     <string name="coaching_5ki_w4">Kombi-Training: längere Intervalle mit einem Schlusslauf. Das baut Renn-Ausdauer auf.</string>
     <string name="coaching_5ki_w6">Zwei 15-Minuten-Läufe — solide aerobe Arbeit, die sich direkt in ein schnelleres 5K übersetzt.</string>
     <string name="coaching_5ki_w8">Abschlusslauf: 30 Minuten im 5K-Tempo. Schau, wie weit du kommst — es sollte sich gut anfühlen.</string>
+
+    <!-- Backup export and import -->
+    <string name="settings_backup">Sicherung</string>
+    <string name="settings_backup_caption">Speichere deinen Trainingsverlauf und deine Routen in einer Datei oder füge Trainings aus einer Datei hinzu. Einstellungen sind nicht enthalten.</string>
+    <string name="settings_backup_export">Exportieren</string>
+    <string name="settings_backup_import">Importieren</string>
+    <string name="backup_export_done">Sicherung gespeichert</string>
+    <string name="backup_export_failed">Die Sicherung konnte nicht gespeichert werden</string>
+    <string name="backup_import_nothing_new">Keine neuen Trainings in dieser Sicherung</string>
+    <string name="backup_import_failed">Diese Datei ist keine C2K-Sicherung</string>
+    <string name="backup_import_too_new">Diese Sicherung stammt aus einer neueren Version von C2K. Aktualisiere die App und versuche es erneut.</string>
+    <plurals name="backup_import_done">
+        <item quantity="one">%1$d Training importiert</item>
+        <item quantity="other">%1$d Trainings importiert</item>
+    </plurals>
 </resources>

@@ -5,6 +5,11 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SegmentedButton
 import android.content.ActivityNotFoundException
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.hackerapps.c2k.data.backup.Backup
+import java.time.LocalDate
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
@@ -102,7 +107,21 @@ fun SettingsScreen(
     val weightKg             by vm.weightKg.collectAsStateWithLifecycle()
     val weightUnit           by vm.weightUnit.collectAsStateWithLifecycle()
     val currentLanguageTag   by vm.currentLanguageTag.collectAsStateWithLifecycle()
+    val backupMessage        by vm.backupMessage.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    val exportBackup = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument(Backup.MIME_TYPE)
+    ) { uri -> uri?.let(vm::exportBackup) }
+    val importBackup = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri -> uri?.let(vm::importBackup) }
+    LaunchedEffect(backupMessage) {
+        backupMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            vm.backupMessageShown()
+        }
+    }
 
     DisposableEffect(vm) {
         onDispose { vm.stopVoiceTest() }
@@ -414,6 +433,31 @@ fun SettingsScreen(
                 onWeightChange = vm::setWeightKg,
                 onUnitChange = vm::setWeightUnit
             )
+            HorizontalDivider()
+            BackupSetting(
+                onExport = { exportBackup.launch(Backup.fileName(LocalDate.now())) },
+                // Some file managers label .json files as plain text or untyped.
+                onImport = { importBackup.launch(arrayOf(Backup.MIME_TYPE, "text/plain", "application/octet-stream")) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun BackupSetting(onExport: () -> Unit, onImport: () -> Unit) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.settings_backup)) },
+        supportingContent = { Text(stringResource(R.string.settings_backup_caption)) }
+    )
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+    ) {
+        OutlinedButton(onClick = onExport, modifier = Modifier.testTag("button_export_backup")) {
+            Text(stringResource(R.string.settings_backup_export))
+        }
+        OutlinedButton(onClick = onImport, modifier = Modifier.testTag("button_import_backup")) {
+            Text(stringResource(R.string.settings_backup_import))
         }
     }
 }

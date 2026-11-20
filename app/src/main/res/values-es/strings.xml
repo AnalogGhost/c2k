@@ -412,4 +412,20 @@
     <string name="coaching_5ki_w4">Entrenamiento combiando: los intervalos largos con una carrera final. Aumenta la vitalidad.</string>
     <string name="coaching_5ki_w6">Dos carreras de 15 minutos — un trabajo aeróbico sólido que se traduce directamente a un 5K más rápido.</string>
     <string name="coaching_5ki_w8">Carrera de graduación: 30 minutos en un esfuerzo de 5K. Aprecia lo lejos que has llegado — disfruta de haberlo conseguido.</string>
+
+    <!-- Backup export and import -->
+    <string name="settings_backup">Copia de seguridad</string>
+    <string name="settings_backup_caption">Guarda tu historial de entrenamientos y rutas en un archivo, o añade entrenamientos desde uno. No incluye los ajustes.</string>
+    <string name="settings_backup_export">Exportar</string>
+    <string name="settings_backup_import">Importar</string>
+    <string name="backup_export_done">Copia de seguridad guardada</string>
+    <string name="backup_export_failed">No se pudo guardar la copia de seguridad</string>
+    <string name="backup_import_nothing_new">No hay entrenamientos nuevos en esta copia</string>
+    <string name="backup_import_failed">Este archivo no es una copia de seguridad de C2K</string>
+    <string name="backup_import_too_new">Esta copia es de una versión más reciente de C2K. Actualiza la app e inténtalo de nuevo.</string>
+    <plurals name="backup_import_done">
+        <item quantity="one">%1$d entrenamiento importado</item>
+        <item quantity="many">%1$d entrenamientos importados</item>
+        <item quantity="other">%1$d entrenamientos importados</item>
+    </plurals>
 </resources>

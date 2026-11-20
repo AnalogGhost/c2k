@@ -1,11 +1,14 @@
 package com.hackerapps.c2k.data.repository
 
+import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import com.hackerapps.c2k.data.backup.Backup
 import com.hackerapps.c2k.data.db.AppDatabase
 import com.hackerapps.c2k.data.db.dao.CompletedDay
 import com.hackerapps.c2k.data.db.entity.RoutePointEntity
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
+import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.location.DistanceCalculator
 
 // Open so instrumented tests can substitute a subclass that fails finishSession() on demand,
@@ -119,4 +122,70 @@ open class SessionRepository(private val db: AppDatabase) {
 
     suspend fun resetProgress(programId: String) =
         db.sessionDao().deleteByProgramId(programId)
+
+    /** Every workout and its route, oldest first, for the runner to keep as a file. */
+    suspend fun exportBackup(exportedAt: Long = System.currentTimeMillis()): Backup = Backup(
+        exportedAt = exportedAt,
+        sessions = db.sessionDao().getAll().sortedBy { it.startedAt }.map { session ->
+            Backup.Session(
+                programId = session.programId,
+                week = session.week,
+                day = session.day,
+                startedAt = session.startedAt,
+                completedAt = session.completedAt,
+                durationSeconds = session.durationSeconds,
+                distanceMeters = session.distanceMeters.toDouble(),
+                completed = session.completed,
+                route = db.routePointDao().getRoute(session.id).map {
+                    Backup.Point(
+                        latitude = it.latitude,
+                        longitude = it.longitude,
+                        altitudeMeters = it.altitudeMeters,
+                        speedMps = it.speedMps?.toDouble(),
+                        recordedAt = it.recordedAt
+                    )
+                }
+            )
+        }
+    )
+
+    /**
+     * Adds a backup's workouts to the history, all or none. Merges rather than replaces: a workout
+     * already here (same program and start time) is skipped, so importing the same file twice, or
+     * into a phone that's already been used, does no harm. Workouts from a program this version
+     * doesn't have are skipped too. Returns how many workouts were added.
+     */
+    suspend fun importBackup(backup: Backup): Int = db.withTransaction {
+        val existing = db.sessionDao().getAll().map { it.programId to it.startedAt }.toMutableSet()
+        val knownPrograms = Programs.all().map { it.programId }.toSet()
+        var added = 0
+        for (session in backup.sessions) {
+            if (session.programId !in knownPrograms || session.week < 1 || session.day < 1) continue
+            if (!existing.add(session.programId to session.startedAt)) continue
+            val id = db.sessionDao().insert(
+                WorkoutSessionEntity(
+                    programId = session.programId,
+                    week = session.week,
+                    day = session.day,
+                    startedAt = session.startedAt,
+                    completedAt = session.completedAt,
+                    durationSeconds = session.durationSeconds,
+                    distanceMeters = session.distanceMeters.toFloat(),
+                    completed = session.completed
+                )
+            )
+            db.routePointDao().insertAll(session.route.map {
+                RoutePointEntity(
+                    sessionId = id,
+                    latitude = it.latitude,
+                    longitude = it.longitude,
+                    altitudeMeters = it.altitudeMeters,
+                    speedMps = it.speedMps?.toFloat(),
+                    recordedAt = it.recordedAt
+                )
+            })
+            added++
+        }
+        added
+    }
 }
