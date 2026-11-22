@@ -1,0 +1,3 @@
+• Neu: Mit Zurück und Weiter springst du während des Trainings zwischen den Intervallen.
+• Ein Training zählt nur als geschafft, wenn du jedes Laufintervall läufst. Zurückgehen und eins wiederholen ist in Ordnung, eins überspringen nicht.
+• Neu: Sichere deinen Trainingsverlauf in einer Datei und stelle ihn wieder her, auch auf einem neuen Telefon. Einstellungen → Sicherung. Sicherungen von Android und iPhone funktionieren in beiden Apps.

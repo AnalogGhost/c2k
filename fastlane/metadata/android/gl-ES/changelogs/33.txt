@@ -1,0 +1,3 @@
+• Novo: avanza ou retrocede entre intervalos durante o adestramento con Anterior e Seguinte.
+• Un adestramento só conta como feito se corres todos os intervalos de carreira. Volver atrás para repetir un está ben; saltar un, non.
+• Novo: garda o teu historial de adestramentos nun ficheiro e restáurao, mesmo nun teléfono novo. Axustes → Copia de seguranza. As copias de Android e iPhone funcionan nas dúas apps.

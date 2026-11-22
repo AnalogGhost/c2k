@@ -1,0 +1,3 @@
+• Nouveau : passez d'un intervalle à l'autre pendant la séance avec Précédent et Suivant.
+• Une séance ne compte comme terminée que si vous courez chaque intervalle de course. Revenir en arrière pour en refaire un est permis, en sauter un ne l'est pas.
+• Nouveau : enregistrez votre historique dans un fichier et restaurez-le, même sur un nouveau téléphone. Paramètres → Sauvegarde. Les sauvegardes Android et iPhone fonctionnent dans les deux apps.

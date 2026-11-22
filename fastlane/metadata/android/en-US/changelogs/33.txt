@@ -1,0 +1,3 @@
+• New: skip forwards or back through intervals during a workout with Previous and Next.
+• A workout counts as done only if you run every run interval. Going back to repeat one is fine; skipping one is not.
+• New: save your workout history to a file and restore it, even on a new phone. Settings → Backup. Android and iPhone backups work in either app.

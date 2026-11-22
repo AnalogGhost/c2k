@@ -1,0 +1,3 @@
+• Yeni: antrenman sırasında Önceki ve Sonraki ile aralıklar arasında ileri veya geri geç.
+• Bir antrenman ancak her koşu aralığını koşarsan tamamlanmış sayılır. Geri dönüp birini tekrarlamak olur, birini atlamak olmaz.
+• Yeni: antrenman geçmişini bir dosyaya kaydet ve geri yükle, yeni bir telefonda bile. Ayarlar → Yedek. Android ve iPhone yedekleri iki uygulamada da çalışır.

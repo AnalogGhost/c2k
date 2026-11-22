@@ -1,0 +1,3 @@
+• Novo: avance ou volte entre os intervalos durante o treino com Anterior e Próximo.
+• Um treino só conta como concluído se você correr todos os intervalos de corrida. Voltar para repetir um tudo bem; pular um, não.
+• Novo: salve seu histórico de treinos em um arquivo e restaure-o, até em um celular novo. Configurações → Backup. Backups do Android e do iPhone funcionam nos dois apps.
