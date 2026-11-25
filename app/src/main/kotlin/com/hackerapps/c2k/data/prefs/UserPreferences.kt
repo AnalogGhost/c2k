@@ -42,6 +42,8 @@ class UserPreferences(private val context: Context) {
         val KEEP_SCREEN_ON     = booleanPreferencesKey("keep_screen_on")
         val LAST_PROGRAM_ID          = stringPreferencesKey("last_program_id")
         val BATTERY_PROMPT_DISMISSED = booleanPreferencesKey("battery_prompt_dismissed")
+        // Set once week 3 has been celebrated, so the share/rate card never comes round again.
+        val WEEK_THREE_CELEBRATED    = booleanPreferencesKey("week3_celebrated")
         val VIBRATION_ENABLED        = booleanPreferencesKey("vibration_enabled")
         val VIBRATION_STRENGTH       = stringPreferencesKey("vibration_strength")
         val SMARTWATCH_CUES          = booleanPreferencesKey("smartwatch_cues")
@@ -99,6 +101,9 @@ class UserPreferences(private val context: Context) {
     val batteryPromptDismissed: Flow<Boolean> = data
         .map { it[BATTERY_PROMPT_DISMISSED] ?: false }
 
+    val weekThreeCelebrated: Flow<Boolean> = data
+        .map { it[WEEK_THREE_CELEBRATED] ?: false }
+
     val vibrationEnabled: Flow<Boolean> = data
         .map { it[VIBRATION_ENABLED] ?: false }
 
@@ -135,6 +140,9 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setBatteryPromptDismissed() =
         context.dataStore.edit { it[BATTERY_PROMPT_DISMISSED] = true }
+
+    suspend fun setWeekThreeCelebrated() =
+        context.dataStore.edit { it[WEEK_THREE_CELEBRATED] = true }
 
     val ttsSpeechRate: Flow<Float> = data
         .map { it[TTS_SPEECH_RATE] ?: 1.0f }

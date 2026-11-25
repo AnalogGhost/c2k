@@ -45,11 +45,17 @@ android {
     flavorDimensions += "store"
 
     productFlavors {
+        // STORE_URL opens the app's page in the store it came from, for "Rate C2K";
+        // STORE_WEB_URL is the browser fallback when nothing handles STORE_URL.
         create("foss") {
             dimension = "store"
+            buildConfigField("String", "STORE_URL", "\"https://f-droid.org/packages/com.hackerapps.c2k/\"")
+            buildConfigField("String", "STORE_WEB_URL", "\"https://f-droid.org/packages/com.hackerapps.c2k/\"")
         }
         create("play") {
             dimension = "store"
+            buildConfigField("String", "STORE_URL", "\"market://details?id=com.hackerapps.c2k\"")
+            buildConfigField("String", "STORE_WEB_URL", "\"https://play.google.com/store/apps/details?id=com.hackerapps.c2k\"")
             if (localProps["storeFile"] != null) {
                 signingConfig = signingConfigs.getByName("release")
             }

@@ -419,4 +419,14 @@
         <item quantity="one">%1$d workout imported</item>
         <item quantity="other">%1$d workouts imported</item>
     </plurals>
+
+    <!-- Celebration after finishing a program or week 3, and the Rate C2K link -->
+    <string name="celebration_title">You finished %1$s!</string>
+    <string name="celebration_message">You\'ve done every workout in the program. Congratulations!</string>
+    <string name="celebration_share">Share</string>
+    <string name="celebration_share_text">I just finished %1$s with C2K, a free open-source running coach with no ads or tracking: https://hackerapps.com/apps/c2k/</string>
+    <string name="settings_rate">Rate C2K</string>
+    <string name="celebration_week_three_title">Week 3 done!</string>
+    <string name="celebration_week_three_message">If C2K is helping, sharing or rating it helps other beginners find it.</string>
+    <string name="celebration_share_text_week_three">I\'m three weeks into %1$s with C2K, a free open-source running coach with no ads or tracking: https://hackerapps.com/apps/c2k/</string>
 </resources>

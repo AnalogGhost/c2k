@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
@@ -71,6 +72,9 @@ import com.hackerapps.c2k.ui.component.RequestActivityRecognitionPermission
 import com.hackerapps.c2k.ui.component.RequestLocationPermission
 import com.hackerapps.c2k.ui.component.RequestNotificationPermission
 import com.hackerapps.c2k.ui.programNameRes
+import com.hackerapps.c2k.engine.Celebration
+import com.hackerapps.c2k.utils.openStorePage
+import com.hackerapps.c2k.utils.shareText
 import com.hackerapps.c2k.ui.screen.workout.components.IntervalRing
 import com.hackerapps.c2k.ui.theme.GreenText
 import com.hackerapps.c2k.ui.theme.intervalTextColor
@@ -101,6 +105,7 @@ fun WorkoutScreen(
     val hasGpsLock by vm.hasGpsLock.collectAsStateWithLifecycle()
     val personalBest by vm.personalBest.collectAsStateWithLifecycle()
     val weightKg by vm.weightKg.collectAsStateWithLifecycle()
+    val celebration by vm.celebration.collectAsStateWithLifecycle()
 
     var notificationPermissionDone by rememberSaveable { mutableStateOf(false) }
     // Needed every workout, GPS or not — WorkoutService always starts as a "health" foreground
@@ -230,6 +235,10 @@ fun WorkoutScreen(
                     distanceMeters = distanceMeters,
                     personalBest = personalBest,
                     weightKg = weightKg,
+                    celebration = celebration,
+                    programName = programName,
+                    onShare = { text -> context.shareText(text) },
+                    onRate = { context.openStorePage() },
                     onDone = onFinished
                 )
                 else -> if (startFailed) {
@@ -561,15 +570,25 @@ private fun CompletedContent(
     distanceMeters: Float,
     personalBest: WorkoutSessionEntity?,
     weightKg: Float?,
+    celebration: Celebration?,
+    programName: String,
+    onShare: (String) -> Unit,
+    onRate: () -> Unit,
     onDone: () -> Unit
 ) {
+    val finishedProgram = celebration == Celebration.PROGRAM_FINISHED
+    val shareText = stringResource(
+        if (finishedProgram) R.string.celebration_share_text else R.string.celebration_share_text_week_three,
+        programName
+    )
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         // Column only centers each Text's own bounding box — a Text that wraps to multiple lines
         // (a longer translation, or a narrow screen) still left-aligns its lines by default
         // unless textAlign is set explicitly, which looked inconsistent next to everything else
         // on this screen being centered.
         Text(
-            stringResource(R.string.workout_complete_title),
+            if (finishedProgram) stringResource(R.string.celebration_title, programName)
+            else stringResource(R.string.workout_complete_title),
             style = MaterialTheme.typography.headlineLarge,
             color = GreenText,
             textAlign = TextAlign.Center
@@ -577,8 +596,11 @@ private fun CompletedContent(
         Spacer(Modifier.height(8.dp))
         Text(
             stringResource(
-                if (state.skippedRun) R.string.workout_skipped_run_not_counted
-                else R.string.workout_complete_message
+                when {
+                    state.skippedRun -> R.string.workout_skipped_run_not_counted
+                    finishedProgram -> R.string.celebration_message
+                    else -> R.string.workout_complete_message
+                }
             ),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
@@ -632,7 +654,46 @@ private fun CompletedContent(
             )
         }
 
+        if (celebration == Celebration.WEEK_THREE) {
+            Spacer(Modifier.height(24.dp))
+            Card(modifier = Modifier.fillMaxWidth().testTag("celebration_week_three")) {
+                Column(
+                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        stringResource(R.string.celebration_week_three_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        stringResource(R.string.celebration_week_three_message),
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center
+                    )
+                    Row {
+                        TextButton(onClick = { onShare(shareText) }, modifier = Modifier.testTag("celebration_share_button")) {
+                            Text(stringResource(R.string.celebration_share))
+                        }
+                        TextButton(onClick = onRate, modifier = Modifier.testTag("celebration_rate_button")) {
+                            Text(stringResource(R.string.settings_rate))
+                        }
+                    }
+                }
+            }
+        }
+
         Spacer(Modifier.height(32.dp))
+        if (finishedProgram) {
+            OutlinedButton(onClick = { onShare(shareText) }, modifier = Modifier.testTag("celebration_share_button")) {
+                Text(stringResource(R.string.celebration_share))
+            }
+            TextButton(onClick = onRate, modifier = Modifier.testTag("celebration_rate_button")) {
+                Text(stringResource(R.string.settings_rate))
+            }
+            Spacer(Modifier.height(8.dp))
+        }
         Button(onClick = onDone) {
             Text(stringResource(R.string.workout_done))
         }

@@ -418,4 +418,14 @@
         <item quantity="one">%1$d adestramento importado</item>
         <item quantity="other">%1$d adestramentos importados</item>
     </plurals>
+
+    <!-- Celebration after finishing a program or week 3, and the Rate C2K link -->
+    <string name="celebration_title">Remataches %1$s!</string>
+    <string name="celebration_message">Fixeches todos os adestramentos do programa. Parabéns!</string>
+    <string name="celebration_share">Compartir</string>
+    <string name="celebration_share_text">Acabo de rematar %1$s con C2K, un adestrador de carreira gratuíto e de código aberto, sen anuncios nin rastrexo: https://hackerapps.com/apps/c2k/</string>
+    <string name="settings_rate">Valorar C2K</string>
+    <string name="celebration_week_three_title">Semana 3 feita!</string>
+    <string name="celebration_week_three_message">Se C2K che está a axudar, compartilo ou valoralo axuda a outros principiantes a atopalo.</string>
+    <string name="celebration_share_text_week_three">Levo tres semanas de %1$s con C2K, un adestrador de carreira gratuíto e de código aberto, sen anuncios nin rastrexo: https://hackerapps.com/apps/c2k/</string>
 </resources>

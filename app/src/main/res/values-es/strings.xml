@@ -428,4 +428,14 @@
         <item quantity="many">%1$d entrenamientos importados</item>
         <item quantity="other">%1$d entrenamientos importados</item>
     </plurals>
+
+    <!-- Celebration after finishing a program or week 3, and the Rate C2K link -->
+    <string name="celebration_title">¡Has terminado %1$s!</string>
+    <string name="celebration_message">Has completado todos los entrenamientos del programa. ¡Enhorabuena!</string>
+    <string name="celebration_share">Compartir</string>
+    <string name="celebration_share_text">Acabo de terminar %1$s con C2K, un entrenador de carrera gratuito y de código abierto, sin anuncios ni rastreo: https://hackerapps.com/apps/c2k/</string>
+    <string name="settings_rate">Valorar C2K</string>
+    <string name="celebration_week_three_title">¡Semana 3 completada!</string>
+    <string name="celebration_week_three_message">Si C2K te está ayudando, compartirlo o valorarlo ayuda a otros principiantes a encontrarlo.</string>
+    <string name="celebration_share_text_week_three">Llevo tres semanas de %1$s con C2K, un entrenador de carrera gratuito y de código abierto, sin anuncios ni rastreo: https://hackerapps.com/apps/c2k/</string>
 </resources>

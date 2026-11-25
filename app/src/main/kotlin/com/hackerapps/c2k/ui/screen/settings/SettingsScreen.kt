@@ -14,6 +14,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +58,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalContext
+import com.hackerapps.c2k.utils.openStorePage
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -438,6 +440,12 @@ fun SettingsScreen(
                 onExport = { exportBackup.launch(Backup.fileName(LocalDate.now())) },
                 // Some file managers label .json files as plain text or untyped.
                 onImport = { importBackup.launch(arrayOf(Backup.MIME_TYPE, "text/plain", "application/octet-stream")) }
+            )
+            HorizontalDivider()
+            // A plain link to the store page; no in-app review library, so F-Droid builds stay free.
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_rate)) },
+                modifier = Modifier.clickable { context.openStorePage() }.testTag("button_rate")
             )
         }
     }

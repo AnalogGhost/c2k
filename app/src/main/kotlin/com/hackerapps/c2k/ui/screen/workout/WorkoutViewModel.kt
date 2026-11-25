@@ -21,7 +21,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
+import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.prefs.UserPreferences
+import com.hackerapps.c2k.engine.Celebration
+import com.hackerapps.c2k.engine.CelebrationTrigger
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.location.LocationUpdate
 import com.hackerapps.c2k.service.WorkoutService
@@ -110,6 +113,11 @@ class WorkoutViewModel(
     private val _personalBest = MutableStateFlow<WorkoutSessionEntity?>(null)
     val personalBest: StateFlow<WorkoutSessionEntity?> = _personalBest.asStateFlow()
 
+    private val _celebration = MutableStateFlow<Celebration?>(null)
+    /** Set once a finished workout completes a program or, the first time, week 3. */
+    val celebration: StateFlow<Celebration?> = _celebration.asStateFlow()
+    private var celebrationChecked = false
+
     // Stored when startWorkout is called so CompletedContent can look up prior best
     private var currentProgramId: String = ""
     private var currentWeek: Int = 0
@@ -135,6 +143,7 @@ class WorkoutViewModel(
                     _workoutState.value = state
                     if (state is WorkoutState.Completed && currentProgramId.isNotEmpty()) {
                         loadPersonalBest()
+                        checkCelebration(state)
                     }
                 }
             }
@@ -251,6 +260,20 @@ class WorkoutViewModel(
             val best = repo.getBestForDay(currentProgramId, currentWeek, currentDay)
             // Only show if the best is a different session (not the one we just completed)
             _personalBest.value = if (best != null && best.id != currentSessionId) best else null
+        }
+    }
+
+    private fun checkCelebration(state: WorkoutState.Completed) {
+        if (celebrationChecked) return
+        celebrationChecked = true
+        val week = currentWeek
+        viewModelScope.launch {
+            val result = CelebrationTrigger.celebration(
+                state, Programs.byId(currentProgramId), week, currentDay,
+                weekThreeCelebrated = prefs.weekThreeCelebrated.first()
+            )
+            if (CelebrationTrigger.usesUpWeekThree(result, week)) prefs.setWeekThreeCelebrated()
+            _celebration.value = result
         }
     }
 
