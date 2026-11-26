@@ -1,1 +1,1 @@
-Açık kaynaklı C25K/C210K koşu antrenörü. Reklamsız, takipsiz.
+Yeni başlayanlar için çevrimdışı koşu antrenörü: 5K ve 10K, sesli yönlendirme.

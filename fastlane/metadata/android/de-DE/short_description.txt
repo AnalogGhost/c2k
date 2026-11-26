@@ -1,1 +1,1 @@
-Open-Source C25K/C210K-Lauftrainer. Keine Werbung, kein Tracking.
+Offline-Lauftrainer für Einsteiger, für 5K und 10K, mit Sprachansagen.

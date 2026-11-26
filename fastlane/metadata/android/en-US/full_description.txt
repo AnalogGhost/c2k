@@ -1,4 +1,4 @@
-C2K is an offline running trainer that guides you from the couch to running 5K, 10K, and beyond. Follow a clear plan, hear hands-free coaching, and keep your progress private — with no ads and no tracking.
+C2K is an offline running coach that takes beginners from the couch to running 5K, 10K, and beyond. All six training programs are included, with no subscription, no in-app purchases, and no account. Voice cues coach you through every workout without looking at your phone, and your workouts stay on your device unless you export a backup. C2K is free and open source, with no ads and no tracking.
 
 Programs:
 • Pre-C25K — 3-week gentle starter for absolute beginners
@@ -20,8 +20,10 @@ Features:
 • GPS tracking (optional) — records distance and pace; works without GPS too
 • Treadmill mode — indoor runs without GPS
 • Skip the warm-up or cool-down — in Settings, or with one tap during a workout
+• Move between intervals — skip ahead, or go back to repeat a run, during a workout
 • Workout history — weekly streak, session log, totals, best pace, longest run and calorie estimates
 • Progress tracking — remembers which weeks and days you've completed, with the option to reset
+• Backup — save your workout history and routes to a file, and import it on a new phone
 • Step back when it's tough — stop the same workout early twice and C2K suggests repeating the week before
 • In-app running guide — FAQ covering pacing, gear, and terminology
 • Available in 8 languages — English, German, Spanish, French, Galician, Portuguese (Brazil), Russian, Turkish

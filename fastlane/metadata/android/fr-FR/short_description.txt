@@ -1,1 +1,1 @@
-Entraîneur de course C25K/C210K open-source. Sans publicité, sans suivi.
+Coach de course hors ligne pour débutants, du 5 km au 10 km, avec guidage vocal.

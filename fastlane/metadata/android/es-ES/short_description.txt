@@ -1,1 +1,1 @@
-Corre con C25K/C210K, app libre y de código abierto. Sin anuncios ni rastreo.
+Entrenador de carrera sin conexión para empezar: 5K y 10K, con avisos por voz.

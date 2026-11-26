@@ -1,4 +1,4 @@
-C2K es una app de entrenamiento para Android, libre y de código abierto, que te guía desde el nivel más básico hasta correr 5K, 10K y más allá — no te rastrea y no tiene publicidad.
+C2K es un entrenador de carrera sin conexión que lleva a principiantes desde el sofá hasta correr 5K, 10K y más allá. Incluye los seis programas de entrenamiento, sin suscripción, sin compras dentro de la app y sin cuenta. Las indicaciones por voz te guían en cada entrenamiento sin tener que mirar el móvil, y tus entrenamientos se quedan en tu dispositivo salvo que exportes una copia de seguridad. C2K es gratuito y de código abierto, sin anuncios ni rastreo.
 
 Programas:
 • Pre-C25K — inicio suave de 3 semanas para principiantes absolutos
@@ -20,8 +20,10 @@ Características:
 • Registro con GPS (opcional) — graba la distancia y ritmo; funciona igualmente sin GPS
 • Modo cinta de correr — para entrenar en interiores sin GPS
 • Omite el calentamiento o el enfriamiento — en Ajustes o con un toque durante el entrenamiento
+• Muévete entre intervalos — avanza, o vuelve atrás para repetir una carrera, durante el entrenamiento
 • Historial de entrenamientos — racha semanal, registro de sesiones, totales, mejor ritmo, carrera más larga y calorías estimadas
 • Seguimiento de progreso — registra cuantos días y semanas has completado, con opción de reiniciar
+• Copia de seguridad — guarda tu historial y tus rutas en un archivo e impórtalo en un móvil nuevo
 • Un paso atrás cuando cuesta — si dejas el mismo entrenamiento a medias dos veces, C2K te sugiere repetir la semana anterior
 • Guía de carrera integrada — preguntas frecuentes sobre ritmo, equipo y terminología
 • Disponible en 8 idiomas — inglés, alemán, español, francés, gallego, portugués (Brasil), ruso, turco

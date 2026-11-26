@@ -1,4 +1,4 @@
-C2K, koltuğunuzdan 5K, 10K ve ötesine koşmanıza rehberlik eden ücretsiz ve açık kaynaklı bir Android koşu antrenörüdür — reklamsız ve takipsiz.
+C2K, yeni başlayanları koltuktan 5K, 10K ve ötesine taşıyan çevrimdışı bir koşu antrenörüdür. Altı antrenman programının hepsi dahildir; abonelik, uygulama içi satın alma ve hesap yoktur. Sesli yönlendirmeler telefona bakmanıza gerek kalmadan her antrenmanda size eşlik eder ve antrenmanlarınız siz bir yedek dışa aktarmadıkça cihazınızda kalır. C2K ücretsiz ve açık kaynaklıdır; reklam ve takip yoktur.
 
 Programlar:
 • 5K Ön Hazırlık — Tam yeni başlayanlar için 3 haftalık hafif başlangıç
@@ -20,8 +20,10 @@ Programlar:
 • GPS takibi (isteğe bağlı) — mesafe ve tempoyu kaydeder; GPS olmadan da çalışır
 • Koşu bandı modu — GPS olmadan kapalı alan koşuları
 • Isınmayı veya soğumayı atlayın — Ayarlar'dan veya antrenman sırasında tek dokunuşla
+• Aralıklar arasında geçiş — antrenman sırasında ileri atlayın ya da bir koşuyu tekrarlamak için geri dönün
 • Antrenman geçmişi — haftalık seri, oturum günlüğü, toplamlar, en iyi tempo, en uzun koşu ve kalori tahminleri
 • İlerleme takibi — tamamladığınız haftaları ve günleri hatırlar, sıfırlama seçeneği sunar
+• Yedekleme — antrenman geçmişinizi ve rotalarınızı bir dosyaya kaydedin, yeni bir telefona aktarın
 • Zorlandığınızda bir adım geri — aynı antrenmanı iki kez erken bırakırsanız C2K bir önceki haftayı tekrarlamayı önerir
 • Uygulama içi koşu rehberi — tempo, ekipman ve terimleri kapsayan SSS
 • 8 dilde kullanılabilir — İngilizce, Almanca, İspanyolca, Fransızca, Galiçyaca, Portekizce (Brezilya), Rusça, Türkçe
