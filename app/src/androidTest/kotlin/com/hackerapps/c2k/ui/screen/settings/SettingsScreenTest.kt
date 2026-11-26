@@ -140,6 +140,15 @@ class SettingsScreenTest {
     }
 
     @Test
+    fun a_rate_row_links_to_the_store() {
+        setContent()
+        composeRule.onNodeWithTag("button_rate").performScrollTo()
+            .assertExists()
+            .assert(SemanticsMatcher.keyIsDefined(SemanticsActions.OnClick))
+        composeRule.onNodeWithText(string(R.string.settings_rate)).assertExists()
+    }
+
+    @Test
     fun clicking_a_toggle_switches_its_state() {
         setContent()
         composeRule.onNodeWithTag("toggle_gps_enabled").assertIsOn()

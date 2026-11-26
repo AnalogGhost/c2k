@@ -24,7 +24,7 @@ import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.engine.Celebration
-import com.hackerapps.c2k.engine.CelebrationTrigger
+import com.hackerapps.c2k.engine.CelebrationCheck
 import com.hackerapps.c2k.engine.WorkoutState
 import com.hackerapps.c2k.location.LocationUpdate
 import com.hackerapps.c2k.service.WorkoutService
@@ -116,7 +116,10 @@ class WorkoutViewModel(
     private val _celebration = MutableStateFlow<Celebration?>(null)
     /** Set once a finished workout completes a program or, the first time, week 3. */
     val celebration: StateFlow<Celebration?> = _celebration.asStateFlow()
-    private var celebrationChecked = false
+    private val celebrationCheck = CelebrationCheck(
+        isWeekThreeCelebrated = { prefs.weekThreeCelebrated.first() },
+        markWeekThreeCelebrated = { prefs.setWeekThreeCelebrated() }
+    )
 
     // Stored when startWorkout is called so CompletedContent can look up prior best
     private var currentProgramId: String = ""
@@ -264,16 +267,11 @@ class WorkoutViewModel(
     }
 
     private fun checkCelebration(state: WorkoutState.Completed) {
-        if (celebrationChecked) return
-        celebrationChecked = true
+        val programId = currentProgramId
         val week = currentWeek
+        val day = currentDay
         viewModelScope.launch {
-            val result = CelebrationTrigger.celebration(
-                state, Programs.byId(currentProgramId), week, currentDay,
-                weekThreeCelebrated = prefs.weekThreeCelebrated.first()
-            )
-            if (CelebrationTrigger.usesUpWeekThree(result, week)) prefs.setWeekThreeCelebrated()
-            _celebration.value = result
+            _celebration.value = celebrationCheck.check(state, Programs.byId(programId), week, day)
         }
     }
 

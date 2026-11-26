@@ -565,7 +565,7 @@ private fun PausedWorkoutContent(
 }
 
 @Composable
-private fun CompletedContent(
+internal fun CompletedContent(
     state: WorkoutState.Completed,
     distanceMeters: Float,
     personalBest: WorkoutSessionEntity?,
