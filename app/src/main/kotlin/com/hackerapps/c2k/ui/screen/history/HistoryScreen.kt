@@ -330,7 +330,7 @@ private fun StatsSectionLabel(text: String) {
 }
 
 @Composable
-private fun StatItem(value: String, label: String) {
+internal fun StatItem(value: String, label: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(value, style = MaterialTheme.typography.titleLarge)
         Text(
@@ -487,7 +487,7 @@ private fun buildCsv(sessions: List<WorkoutSessionEntity>): String {
     return (listOf(header) + rows).joinToString("\n")
 }
 
-private fun formatDuration(totalSeconds: Int): String {
+internal fun formatDuration(totalSeconds: Int): String {
     val h = totalSeconds / 3600
     val m = (totalSeconds % 3600) / 60
     val s = totalSeconds % 60

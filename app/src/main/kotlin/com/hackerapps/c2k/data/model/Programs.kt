@@ -26,6 +26,15 @@ object Programs {
         else     -> error("Unknown program: $id")
     }
 
+    /** The programs to suggest once the program [after] is finished, the closest fit first. */
+    fun nextPrograms(after: String): List<String> = when (after) {
+        ID_PRE_C25K -> listOf(ID_C25K)
+        ID_C25K -> listOf(ID_B210K, ID_5KI)
+        ID_B210K, ID_C210K -> listOf(ID_OHR, ID_5KI)
+        ID_5KI -> listOf(ID_B210K)
+        else -> emptyList()
+    }
+
     fun all(): List<WorkoutPlan> = listOf(PreC25K, C25K, C210K, B210K, OneHourRunner, FiveKImprover)
 
     // ── helpers ──────────────────────────────────────────────────────────────

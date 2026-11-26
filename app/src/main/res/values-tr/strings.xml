@@ -424,6 +424,8 @@
     <!-- Celebration after finishing a program or week 3, and the Rate C2K link -->
     <string name="celebration_title">%1$s programını bitirdin!</string>
     <string name="celebration_message">Programdaki her antrenmanı tamamladın. Tebrikler!</string>
+    <string name="celebration_totals">Program toplamı</string>
+    <string name="celebration_next_title">Daha fazlasına hazır mısınız?</string>
     <string name="celebration_share">Paylaş</string>
     <string name="celebration_share_text">C2K ile %1$s programını bitirdim. C2K reklamsız, takipsiz, ücretsiz ve açık kaynaklı bir koşu koçu: https://hackerapps.com/apps/c2k/</string>
     <string name="settings_rate">C2K\'yı değerlendir</string>

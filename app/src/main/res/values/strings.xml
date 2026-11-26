@@ -423,6 +423,8 @@
     <!-- Celebration after finishing a program or week 3, and the Rate C2K link -->
     <string name="celebration_title">You finished %1$s!</string>
     <string name="celebration_message">You\'ve done every workout in the program. Congratulations!</string>
+    <string name="celebration_totals">Program totals</string>
+    <string name="celebration_next_title">Ready for more?</string>
     <string name="celebration_share">Share</string>
     <string name="celebration_share_text">I just finished %1$s with C2K, a free open-source running coach with no ads or tracking: https://hackerapps.com/apps/c2k/</string>
     <string name="settings_rate">Rate C2K</string>

@@ -94,6 +94,9 @@ open class SessionRepository(private val db: AppDatabase) {
         db.sessionDao().observeCompletedDays(programId)
             .map { list -> list.map { it.week to it.day }.toSet() }
 
+    suspend fun getSessions(programId: String): List<WorkoutSessionEntity> =
+        db.sessionDao().getAll().filter { it.programId == programId }
+
     suspend fun getBestForDay(programId: String, week: Int, day: Int): WorkoutSessionEntity? =
         db.sessionDao().getBestByDay(programId, week, day)
 

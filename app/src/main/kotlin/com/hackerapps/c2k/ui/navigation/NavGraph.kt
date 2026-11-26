@@ -73,7 +73,10 @@ fun NavGraph() {
                 programId = args.getString("programId")!!,
                 week      = args.getInt("week"),
                 day       = args.getInt("day"),
-                onFinished = { navController.popBackStack(Routes.HOME, inclusive = false) }
+                onFinished = { navController.popBackStack(Routes.HOME, inclusive = false) },
+                onOpenProgram = { programId ->
+                    navController.navigate(Routes.program(programId)) { popUpTo(Routes.HOME) }
+                }
             )
         }
 

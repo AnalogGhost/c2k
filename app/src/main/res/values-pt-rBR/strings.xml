@@ -433,6 +433,8 @@
     <!-- Celebration after finishing a program or week 3, and the Rate C2K link -->
     <string name="celebration_title">Você concluiu %1$s!</string>
     <string name="celebration_message">Você fez todos os treinos do programa. Parabéns!</string>
+    <string name="celebration_totals">Total do programa</string>
+    <string name="celebration_next_title">Quer mais?</string>
     <string name="celebration_share">Compartilhar</string>
     <string name="celebration_share_text">Acabei de concluir %1$s com o C2K, um treinador de corrida gratuito e de código aberto, sem anúncios nem rastreamento: https://hackerapps.com/apps/c2k/</string>
     <string name="settings_rate">Avaliar o C2K</string>

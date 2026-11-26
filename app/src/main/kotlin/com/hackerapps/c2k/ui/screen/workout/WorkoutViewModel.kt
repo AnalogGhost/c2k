@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
+import com.hackerapps.c2k.data.model.ProgramSummary
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.engine.Celebration
@@ -116,6 +117,10 @@ class WorkoutViewModel(
     private val _celebration = MutableStateFlow<Celebration?>(null)
     /** Set once a finished workout completes a program or, the first time, week 3. */
     val celebration: StateFlow<Celebration?> = _celebration.asStateFlow()
+    private val _programSummary = MutableStateFlow<ProgramSummary?>(null)
+    /** The whole program's totals, once a finished workout completes it. */
+    val programSummary: StateFlow<ProgramSummary?> = _programSummary.asStateFlow()
+
     private val celebrationCheck = CelebrationCheck(
         isWeekThreeCelebrated = { prefs.weekThreeCelebrated.first() },
         markWeekThreeCelebrated = { prefs.setWeekThreeCelebrated() }
@@ -271,7 +276,15 @@ class WorkoutViewModel(
         val week = currentWeek
         val day = currentDay
         viewModelScope.launch {
-            _celebration.value = celebrationCheck.check(state, Programs.byId(programId), week, day)
+            val result = celebrationCheck.check(state, Programs.byId(programId), week, day)
+            _celebration.value = result
+            if (result == Celebration.PROGRAM_FINISHED) {
+                val repo = (getApplication<Application>() as C2KApp).sessionRepository
+                _programSummary.value = ProgramSummary.of(
+                    repo.getSessions(programId), programId, state.sessionId,
+                    state.elapsedSessionSeconds, _distanceMeters.value
+                )
+            }
         }
     }
 

@@ -72,6 +72,13 @@ import com.hackerapps.c2k.ui.component.RequestActivityRecognitionPermission
 import com.hackerapps.c2k.ui.component.RequestLocationPermission
 import com.hackerapps.c2k.ui.component.RequestNotificationPermission
 import com.hackerapps.c2k.ui.programNameRes
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.ui.res.pluralStringResource
+import com.hackerapps.c2k.data.model.ProgramSummary
+import com.hackerapps.c2k.data.model.Programs
+import com.hackerapps.c2k.ui.programDescRes
+import com.hackerapps.c2k.ui.screen.history.StatItem
+import com.hackerapps.c2k.ui.screen.history.formatDuration
 import com.hackerapps.c2k.engine.Celebration
 import com.hackerapps.c2k.utils.openStorePage
 import com.hackerapps.c2k.utils.shareText
@@ -89,6 +96,7 @@ fun WorkoutScreen(
     week: Int,
     day: Int,
     onFinished: () -> Unit,
+    onOpenProgram: (String) -> Unit,
     vm: WorkoutViewModel = viewModel()
 ) {
     val context = LocalContext.current
@@ -97,6 +105,7 @@ fun WorkoutScreen(
     val pace by vm.currentPaceMinPerKm.collectAsStateWithLifecycle()
     val keepScreenOn by vm.keepScreenOn.collectAsStateWithLifecycle()
     val treadmillMode by vm.treadmillMode.collectAsStateWithLifecycle()
+    val programSummary by vm.programSummary.collectAsStateWithLifecycle()
     val locationNeeded by vm.locationNeeded.collectAsStateWithLifecycle()
     val showBatteryPrompt by vm.showBatteryPrompt.collectAsStateWithLifecycle()
     val startFailed by vm.startFailed.collectAsStateWithLifecycle()
@@ -237,6 +246,9 @@ fun WorkoutScreen(
                     weightKg = weightKg,
                     celebration = celebration,
                     programName = programName,
+                    programSummary = programSummary,
+                    nextPrograms = Programs.nextPrograms(after = programId),
+                    onOpenProgram = onOpenProgram,
                     onShare = { text -> context.shareText(text) },
                     onRate = { context.openStorePage() },
                     onDone = onFinished
@@ -572,6 +584,9 @@ internal fun CompletedContent(
     weightKg: Float?,
     celebration: Celebration?,
     programName: String,
+    programSummary: ProgramSummary?,
+    nextPrograms: List<String>,
+    onOpenProgram: (String) -> Unit,
     onShare: (String) -> Unit,
     onRate: () -> Unit,
     onDone: () -> Unit
@@ -652,6 +667,65 @@ internal fun CompletedContent(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
+        }
+
+        if (finishedProgram && programSummary != null) {
+            Spacer(Modifier.height(24.dp))
+            Text(
+                stringResource(R.string.celebration_totals),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+            )
+            Spacer(Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth().testTag("celebration_totals"),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                StatItem(
+                    value = programSummary.workouts.toString(),
+                    label = pluralStringResource(R.plurals.history_stats_workouts, programSummary.workouts)
+                )
+                if (programSummary.distanceMeters > 0f) {
+                    StatItem(
+                        value = "%.1f".format(programSummary.distanceMeters / 1000f),
+                        label = stringResource(R.string.history_stats_km)
+                    )
+                }
+                StatItem(
+                    value = formatDuration(programSummary.durationSeconds),
+                    label = stringResource(R.string.history_stats_time)
+                )
+            }
+        }
+
+        if (finishedProgram && nextPrograms.isNotEmpty()) {
+            Spacer(Modifier.height(24.dp))
+            Text(stringResource(R.string.celebration_next_title), style = MaterialTheme.typography.titleMedium)
+            for (id in nextPrograms) {
+                Spacer(Modifier.height(8.dp))
+                OutlinedCard(
+                    onClick = { onOpenProgram(id) },
+                    modifier = Modifier.fillMaxWidth().testTag("celebration_next_$id")
+                ) {
+                    Column(
+                        modifier = Modifier.padding(12.dp).fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            programNameRes(id)?.let { stringResource(it) } ?: id,
+                            style = MaterialTheme.typography.titleSmall,
+                            textAlign = TextAlign.Center
+                        )
+                        programDescRes(id)?.let {
+                            Text(
+                                stringResource(it),
+                                style = MaterialTheme.typography.bodySmall,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         if (celebration == Celebration.WEEK_THREE) {
