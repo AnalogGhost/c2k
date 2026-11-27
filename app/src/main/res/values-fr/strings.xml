@@ -435,6 +435,10 @@
     <string name="celebration_message">Vous avez fait toutes les séances du programme. Félicitations !</string>
     <string name="celebration_totals">Total du programme</string>
     <string name="celebration_next_title">Envie d\'aller plus loin ?</string>
+    <string name="share_card_title">Partager la séance</string>
+    <string name="share_card_your_photo">Votre photo</string>
+    <string name="share_card_sticker">Autocollant</string>
+    <string name="share_card_background">Arrière-plan %1$d</string>
     <string name="celebration_share">Partager</string>
     <string name="celebration_share_text">Je viens de terminer %1$s avec C2K, un coach de course gratuit et open source, sans pub ni pistage : https://hackerapps.com/apps/c2k/</string>
     <string name="settings_rate">Noter C2K</string>

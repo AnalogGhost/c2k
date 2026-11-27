@@ -22,6 +22,8 @@ import kotlinx.coroutines.launch
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.model.ProgramSummary
+import com.hackerapps.c2k.ui.share.OutlinePoint
+import com.hackerapps.c2k.ui.share.RouteOutline
 import com.hackerapps.c2k.data.model.Programs
 import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.engine.Celebration
@@ -253,6 +255,10 @@ class WorkoutViewModel(
             Intent(getApplication(), WorkoutService::class.java).setAction(WorkoutService.ACTION_STOP)
         )
     }
+
+    /** The workout's GPS track as an outline for the share image; empty without GPS. */
+    suspend fun routeOutline(sessionId: Long): List<OutlinePoint> =
+        RouteOutline.normalized((getApplication<Application>() as C2KApp).sessionRepository.getRoutePoints(sessionId))
 
     fun dismissBatteryPrompt() {
         _showBatteryPrompt.value = false

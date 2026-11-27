@@ -22,6 +22,10 @@ import com.hackerapps.c2k.data.prefs.UserPreferences
 import com.hackerapps.c2k.data.prefs.WeightUnit
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.performScrollToNode
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -52,6 +56,13 @@ class HistoryScreenTest {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
+
+    // Sessions come after the summary cards, so on a small screen they start below the fold and
+    // the lazy list hasn't composed them yet.
+    private fun scrollTo(matcher: SemanticsMatcher) {
+        composeRule.onNode(hasScrollToNodeAction()).performScrollToNode(matcher)
+        composeRule.onNode(matcher).assertExists()
+    }
 
     private fun repo() =
         (ApplicationProvider.getApplicationContext<Application>() as C2KApp).sessionRepository
@@ -112,7 +123,7 @@ class HistoryScreenTest {
         setContent()
 
         composeRule.waitUntilAssertion {
-            composeRule.onNodeWithText(string(R.string.history_week_day, 2, 3), substring = true).assertExists()
+            scrollTo(hasText(string(R.string.history_week_day, 2, 3), substring = true))
         }
     }
 
@@ -124,9 +135,7 @@ class HistoryScreenTest {
         }
         setContent()
         val label = string(R.string.history_week_day, 2, 3)
-        composeRule.waitUntilAssertion {
-            composeRule.onNodeWithText(label, substring = true).assertExists()
-        }
+        composeRule.waitUntilAssertion { scrollTo(hasText(label, substring = true)) }
 
         // What TalkBack's actions menu offers: the "Delete" action on the session.
         val session = composeRule.onNode(
@@ -156,9 +165,7 @@ class HistoryScreenTest {
             repo().finishSession(id, durationSeconds = 600, distanceMeters = 1000f, completed = true)
         }
         setContent()
-        composeRule.waitUntilAssertion {
-            composeRule.onNodeWithContentDescription(string(R.string.cd_completed)).assertExists()
-        }
+        composeRule.waitUntilAssertion { scrollTo(hasContentDescription(string(R.string.cd_completed))) }
     }
 
     @Test

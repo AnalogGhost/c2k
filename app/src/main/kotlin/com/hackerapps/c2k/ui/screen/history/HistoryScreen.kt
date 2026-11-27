@@ -61,6 +61,8 @@ import com.hackerapps.c2k.ui.programNameRes
 import com.hackerapps.c2k.ui.theme.GreenText
 import com.hackerapps.c2k.ui.theme.RunOrangeText
 import com.hackerapps.c2k.ui.theme.RunOrange
+import com.hackerapps.c2k.ui.share.ShareCardDialog
+import com.hackerapps.c2k.ui.share.ShareCardStats
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -78,6 +80,16 @@ fun HistoryScreen(
     val monthlySummary by vm.monthlySummary.collectAsStateWithLifecycle()
     val weightKg by vm.weightKg.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    var shareTarget by remember { mutableStateOf<WorkoutSessionEntity?>(null) }
+
+    shareTarget?.let { session ->
+        ShareCardDialog(
+            stats = ShareCardStats.of(session),
+            loadRoute = { vm.routeOutline(session.id) },
+            message = null,
+            onDismiss = { shareTarget = null }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -161,6 +173,7 @@ fun HistoryScreen(
                         session = session,
                         weightKg = weightKg,
                         onDelete = { vm.deleteSession(session.id) },
+                        onShare = { shareTarget = session },
                         onExportGpx = { hasRoute ->
                             if (hasRoute) {
                                 vm.exportGpxFile(session) { file ->
@@ -347,6 +360,7 @@ private fun SwipeToDeleteSession(
     session: WorkoutSessionEntity,
     weightKg: Float?,
     onDelete: () -> Unit,
+    onShare: () -> Unit,
     onExportGpx: (hasRoute: Boolean) -> Unit
 ) {
     var showConfirm by remember { mutableStateOf(false) }
@@ -403,7 +417,8 @@ private fun SwipeToDeleteSession(
         SessionCard(
             session = session,
             weightKg = weightKg,
-            onExportGpx = { onExportGpx(session.distanceMeters > 0f) }
+            onExportGpx = { onExportGpx(session.distanceMeters > 0f) },
+            onShare = onShare
         )
     }
 }
@@ -412,7 +427,8 @@ private fun SwipeToDeleteSession(
 private fun SessionCard(
     session: WorkoutSessionEntity,
     weightKg: Float?,
-    onExportGpx: () -> Unit
+    onExportGpx: () -> Unit,
+    onShare: () -> Unit
 ) {
     val nameRes = programNameRes(session.programId)
     val displayName = nameRes?.let { stringResource(it) } ?: session.programId
@@ -450,6 +466,13 @@ private fun SessionCard(
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
+                }
+                IconButton(onClick = onShare, modifier = Modifier.testTag("history_share")) {
+                    Icon(
+                        Icons.Default.Share,
+                        contentDescription = stringResource(R.string.share_card_title),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
             Spacer(Modifier.height(4.dp))

@@ -31,6 +31,7 @@ class CompletedContentTest {
 
     private val shared = mutableListOf<String>()
     private var rated = 0
+    private var sharedImages = 0
     private val opened = mutableListOf<String>()
 
     // The workout screen scrolls its content, so the buttons can sit below a small test screen.
@@ -51,6 +52,7 @@ class CompletedContentTest {
             nextPrograms = nextPrograms,
             onOpenProgram = { opened += it },
             onShare = { shared += it },
+            onShareImage = { sharedImages++ },
             onRate = { rated++ },
             onDone = {}
         ) }
@@ -63,9 +65,9 @@ class CompletedContentTest {
         composeRule.onNodeWithText(string(R.string.celebration_message)).assertExists()
         composeRule.onNodeWithTag("celebration_week_three").assertDoesNotExist()
 
-        composeRule.onNodeWithTag("celebration_share_button").performScrollTo().performClick()
+        composeRule.onNodeWithTag("workout_share_button").performScrollTo().performClick()
         composeRule.onNodeWithTag("celebration_rate_button").performScrollTo().performClick()
-        assertEquals(listOf(string(R.string.celebration_share_text, "5K to 50K")), shared)
+        assertEquals(1, sharedImages)
         assertEquals(1, rated)
     }
 
@@ -100,12 +102,14 @@ class CompletedContentTest {
     }
 
     @Test
-    fun an_ordinary_workout_has_no_share_or_rate() {
+    fun an_ordinary_workout_can_be_shared_but_has_no_rate() {
         show(celebration = null)
         composeRule.onNodeWithText(string(R.string.workout_complete_title)).assertExists()
         composeRule.onNodeWithTag("celebration_week_three").assertDoesNotExist()
         composeRule.onNodeWithTag("celebration_totals").assertDoesNotExist()
         composeRule.onNodeWithTag("celebration_share_button").assertDoesNotExist()
         composeRule.onNodeWithTag("celebration_rate_button").assertDoesNotExist()
+        composeRule.onNodeWithTag("workout_share_button").performScrollTo().performClick()
+        assertEquals(1, sharedImages)
     }
 }

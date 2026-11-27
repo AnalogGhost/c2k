@@ -434,6 +434,10 @@
     <string name="celebration_message">Has completado todos los entrenamientos del programa. ¡Enhorabuena!</string>
     <string name="celebration_totals">Total del programa</string>
     <string name="celebration_next_title">¿Quieres más?</string>
+    <string name="share_card_title">Compartir entrenamiento</string>
+    <string name="share_card_your_photo">Tu foto</string>
+    <string name="share_card_sticker">Pegatina</string>
+    <string name="share_card_background">Fondo %1$d</string>
     <string name="celebration_share">Compartir</string>
     <string name="celebration_share_text">Acabo de terminar %1$s con C2K, un entrenador de carrera gratuito y de código abierto, sin anuncios ni rastreo: https://hackerapps.com/apps/c2k/</string>
     <string name="settings_rate">Valorar C2K</string>

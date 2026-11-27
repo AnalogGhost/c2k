@@ -21,6 +21,8 @@ import com.hackerapps.c2k.engine.MonthlySummaryCalculator
 import com.hackerapps.c2k.engine.StreakCalculator
 import com.hackerapps.c2k.engine.WeeklySummary
 import com.hackerapps.c2k.engine.WeeklySummaryCalculator
+import com.hackerapps.c2k.ui.share.OutlinePoint
+import com.hackerapps.c2k.ui.share.RouteOutline
 import java.io.File
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
@@ -74,6 +76,10 @@ class HistoryViewModel(app: Application) : AndroidViewModel(app) {
     fun deleteSession(sessionId: Long) {
         viewModelScope.launch { repo.deleteSession(sessionId) }
     }
+
+    /** The session's GPS track as an outline for the share image; empty without GPS. */
+    suspend fun routeOutline(sessionId: Long): List<OutlinePoint> =
+        RouteOutline.normalized(repo.getRoutePoints(sessionId))
 
     /** Writes the session's route to a .gpx file and hands it back on the main thread. */
     fun exportGpxFile(session: WorkoutSessionEntity, onResult: (File) -> Unit) {

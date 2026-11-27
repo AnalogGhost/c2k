@@ -426,6 +426,10 @@
     <string name="celebration_message">Programdaki her antrenmanı tamamladın. Tebrikler!</string>
     <string name="celebration_totals">Program toplamı</string>
     <string name="celebration_next_title">Daha fazlasına hazır mısınız?</string>
+    <string name="share_card_title">Antrenmanı paylaş</string>
+    <string name="share_card_your_photo">Fotoğrafınız</string>
+    <string name="share_card_sticker">Çıkartma</string>
+    <string name="share_card_background">Arka plan %1$d</string>
     <string name="celebration_share">Paylaş</string>
     <string name="celebration_share_text">C2K ile %1$s programını bitirdim. C2K reklamsız, takipsiz, ücretsiz ve açık kaynaklı bir koşu koçu: https://hackerapps.com/apps/c2k/</string>
     <string name="settings_rate">C2K\'yı değerlendir</string>

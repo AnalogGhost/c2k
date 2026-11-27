@@ -82,6 +82,8 @@ import com.hackerapps.c2k.ui.screen.history.formatDuration
 import com.hackerapps.c2k.engine.Celebration
 import com.hackerapps.c2k.utils.openStorePage
 import com.hackerapps.c2k.utils.shareText
+import com.hackerapps.c2k.ui.share.ShareCardDialog
+import com.hackerapps.c2k.ui.share.ShareCardStats
 import com.hackerapps.c2k.ui.screen.workout.components.IntervalRing
 import com.hackerapps.c2k.ui.theme.GreenText
 import com.hackerapps.c2k.ui.theme.intervalTextColor
@@ -125,9 +127,26 @@ fun WorkoutScreen(
     var locationPermissionDone by rememberSaveable { mutableStateOf(false) }
     val permissionResolved = locationPermissionDone || locationNeeded == false
     var showStopDialog by remember { mutableStateOf(false) }
+    var showShareCard by remember { mutableStateOf(false) }
 
     val nameResId = remember(programId) { programNameRes(programId) }
     val programName = nameResId?.let { stringResource(it) } ?: programId
+
+    val completed = workoutState as? WorkoutState.Completed
+    if (showShareCard && completed != null) {
+        val finished = celebration == Celebration.PROGRAM_FINISHED
+        val endedAt = remember(completed.sessionId) { System.currentTimeMillis() }
+        ShareCardDialog(
+            stats = ShareCardStats(
+                programId = programId, week = week, day = day, finishedProgram = finished,
+                durationSeconds = completed.elapsedSessionSeconds, distanceMeters = distanceMeters,
+                startedAt = endedAt
+            ),
+            loadRoute = { vm.routeOutline(completed.sessionId) },
+            message = if (finished) stringResource(R.string.celebration_share_text, programName) else null,
+            onDismiss = { showShareCard = false }
+        )
+    }
 
     if (!notificationPermissionDone) {
         RequestNotificationPermission { notificationPermissionDone = true }
@@ -250,6 +269,7 @@ fun WorkoutScreen(
                     nextPrograms = Programs.nextPrograms(after = programId),
                     onOpenProgram = onOpenProgram,
                     onShare = { text -> context.shareText(text) },
+                    onShareImage = { showShareCard = true },
                     onRate = { context.openStorePage() },
                     onDone = onFinished
                 )
@@ -588,6 +608,7 @@ internal fun CompletedContent(
     nextPrograms: List<String>,
     onOpenProgram: (String) -> Unit,
     onShare: (String) -> Unit,
+    onShareImage: () -> Unit = {},
     onRate: () -> Unit,
     onDone: () -> Unit
 ) {
@@ -759,10 +780,10 @@ internal fun CompletedContent(
         }
 
         Spacer(Modifier.height(32.dp))
+        OutlinedButton(onClick = onShareImage, modifier = Modifier.testTag("workout_share_button")) {
+            Text(stringResource(R.string.celebration_share))
+        }
         if (finishedProgram) {
-            OutlinedButton(onClick = { onShare(shareText) }, modifier = Modifier.testTag("celebration_share_button")) {
-                Text(stringResource(R.string.celebration_share))
-            }
             TextButton(onClick = onRate, modifier = Modifier.testTag("celebration_rate_button")) {
                 Text(stringResource(R.string.settings_rate))
             }

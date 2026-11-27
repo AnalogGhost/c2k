@@ -2,4 +2,6 @@
 <paths>
     <!-- Exported GPX routes, shared through FileProvider so map apps receive a real .gpx file -->
     <cache-path name="exports" path="exports/" />
+    <!-- Share images, shared through FileProvider as a PNG -->
+    <cache-path name="share" path="share/" />
 </paths>
