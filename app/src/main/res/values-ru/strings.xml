@@ -452,6 +452,7 @@
     <string name="share_card_your_photo">Ваше фото</string>
     <string name="share_card_sticker">Стикер</string>
     <string name="share_card_background">Фон %1$d</string>
+    <string name="share_card_close">Закрыть</string>
     <string name="celebration_share">Поделиться</string>
     <string name="celebration_share_text">Я только что завершил(а) программу «%1$s» в C2K — бесплатном тренере по бегу с открытым кодом, без рекламы и слежки: https://hackerapps.com/apps/c2k/</string>
     <string name="settings_rate">Оценить C2K</string>

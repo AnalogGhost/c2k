@@ -429,6 +429,7 @@
     <string name="share_card_your_photo">Your photo</string>
     <string name="share_card_sticker">Sticker</string>
     <string name="share_card_background">Background %1$d</string>
+    <string name="share_card_close">Close</string>
     <string name="celebration_share">Share</string>
     <string name="celebration_share_text">I just finished %1$s with C2K, a free open-source running coach with no ads or tracking: https://hackerapps.com/apps/c2k/</string>
     <string name="settings_rate">Rate C2K</string>

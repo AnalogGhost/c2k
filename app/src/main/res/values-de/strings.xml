@@ -425,6 +425,7 @@
     <string name="share_card_your_photo">Dein Foto</string>
     <string name="share_card_sticker">Sticker</string>
     <string name="share_card_background">Hintergrund %1$d</string>
+    <string name="share_card_close">Schließen</string>
     <string name="celebration_share">Teilen</string>
     <string name="celebration_share_text">Ich habe gerade %1$s mit C2K geschafft, einem kostenlosen Open-Source-Lauftrainer ohne Werbung und Tracking: https://hackerapps.com/apps/c2k/</string>
     <string name="settings_rate">C2K bewerten</string>

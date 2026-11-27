@@ -7,7 +7,8 @@
     {"name": "04_step_back", "main": "08_progression", "back": "02_program"},
     {"name": "05_music", "main": "07_settings", "back": "04_workout"},
     {"name": "06_watch", "main": "watch:phone", "watch": "watch:watch"},
-    {"name": "07_progress", "main": "05_history", "back": "01_home"}
+    {"name": "07_progress", "main": "05_history", "back": "01_home"},
+    {"name": "08_share", "main": "09_share", "back": "05_history"}
   ],
   "copy": {
     "en-US": [
@@ -17,7 +18,8 @@
       ["Tough week?|{Step back.}", "Stop the same workout early twice and C2K suggests the week before."],
       ["Cues over|your {music.}", "Voice, chimes or vibration. Your music dips, then returns."],
       ["Your watch|{buzzes too.}", "Alerts arrive as notifications. No watch app needed."],
-      ["See how|far you've|{come.}", "Streaks, weekly totals and personal bests."]
+      ["See how|far you've|{come.}", "Streaks, weekly totals and personal bests."],
+      ["Share|{your run.}", "Your stats and route on a photo, made on your phone."]
     ],
     "de-DE": [
       ["{Laufen.}|Gehen.|Wiederholen.", "Vom Sofa zu 5 km, mit Ansagen für jeden Wechsel."],
@@ -26,7 +28,8 @@
       ["Zu hart?|{Woche wiederholen.}", "Brichst du dasselbe Training zweimal ab, schlägt C2K die Woche davor vor."],
       ["Ansagen über|deiner {Musik.}", "Stimme, Signaltöne oder Vibration. Die Musik wird leiser und kommt zurück."],
       ["Auch deine|Uhr {vibriert.}", "Hinweise kommen als Benachrichtigung. Keine Uhr-App nötig."],
-      ["Dein Fortschritt|auf einen {Blick.}", "Serien, Wochensummen und Bestleistungen."]
+      ["Dein Fortschritt|auf einen {Blick.}", "Serien, Wochensummen und Bestleistungen."],
+      ["Teile|{deinen Lauf.}", "Werte und Strecke auf einem Foto, erstellt auf deinem Handy."]
     ],
     "es-ES": [
       ["{Corre.}|Camina.|Repite.", "Del sofá a los 5K, con avisos que te dicen cuándo cambiar."],
@@ -35,7 +38,8 @@
       ["¿Semana dura?|{Da un paso atrás.}", "Si dejas el mismo entrenamiento a medias dos veces, C2K te sugiere la semana anterior."],
       ["Avisos sobre|tu {música.}", "Voz, tonos o vibración. Tu música baja y luego vuelve."],
       ["Tu reloj|{también vibra.}", "Los avisos llegan como notificaciones. Sin app para el reloj."],
-      ["Mira cuánto|has {avanzado.}", "Rachas, totales semanales y mejores marcas."]
+      ["Mira cuánto|has {avanzado.}", "Rachas, totales semanales y mejores marcas."],
+      ["Comparte|{tu carrera.}", "Tus datos y tu ruta sobre una foto, creada en tu móvil."]
     ],
     "fr-FR": [
       ["{Courez.}|Marchez.|Recommencez.", "Du canapé au 5 km, avec des signaux qui vous disent quand changer."],
@@ -44,7 +48,8 @@
       ["Semaine dure ?|{Un pas en arrière.}", "Arrêtez deux fois la même séance avant la fin et C2K propose la semaine précédente."],
       ["Des signaux|sur votre {musique.}", "Voix, tonalités ou vibration. Votre musique baisse, puis revient."],
       ["Votre montre|{vibre aussi.}", "Les alertes arrivent en notifications. Aucune app de montre requise."],
-      ["Voyez le|chemin {parcouru.}", "Séries, totaux hebdomadaires et records personnels."]
+      ["Voyez le|chemin {parcouru.}", "Séries, totaux hebdomadaires et records personnels."],
+      ["Partagez|{votre course.}", "Vos stats et votre parcours sur une photo, créée sur votre téléphone."]
     ],
     "gl-ES": [
       ["{Corre.}|Camiña.|Repite.", "Do sofá aos 5K, con avisos que che din cando cambiar."],
@@ -53,7 +58,8 @@
       ["Semana dura?|{Dá un paso atrás.}", "Se deixas o mesmo adestramento a medias dúas veces, C2K suxire a semana anterior."],
       ["Avisos sobre|a túa {música.}", "Voz, tons ou vibración. A túa música baixa e despois volve."],
       ["O teu reloxo|{tamén vibra.}", "Os avisos chegan como notificacións. Sen app para o reloxo."],
-      ["Mira canto|{avanzaches.}", "Xeiras, totais semanais e mellores marcas."]
+      ["Mira canto|{avanzaches.}", "Xeiras, totais semanais e mellores marcas."],
+      ["Comparte|{a túa carreira.}", "Os teus datos e a túa ruta nunha foto, creada no teu móbil."]
     ],
     "pt-BR": [
       ["{Corra.}|Caminhe.|Repita.", "Do sofá aos 5K, com avisos que dizem quando trocar."],
@@ -62,7 +68,8 @@
       ["Semana difícil?|{Dê um passo atrás.}", "Interrompa o mesmo treino cedo duas vezes e o C2K sugere a semana anterior."],
       ["Avisos sobre|sua {música.}", "Voz, tons ou vibração. Sua música abaixa e depois volta."],
       ["Seu relógio|{vibra também.}", "Os alertas chegam como notificações. Sem app no relógio."],
-      ["Veja até onde|você {chegou.}", "Sequências, totais semanais e recordes pessoais."]
+      ["Veja até onde|você {chegou.}", "Sequências, totais semanais e recordes pessoais."],
+      ["Compartilhe|{sua corrida.}", "Seus dados e seu percurso numa foto, criada no seu celular."]
     ],
     "ru-RU": [
       ["{Бег.}|Шаг.|Повтор.", "От дивана до 5 км: подсказки скажут, когда сменить темп."],
@@ -71,7 +78,8 @@
       ["Тяжёлая неделя?|{Шаг назад.}", "Дважды прервёте одну и ту же тренировку — C2K предложит предыдущую неделю."],
       ["Подсказки|поверх {музыки.}", "Голос, сигналы или вибрация. Музыка стихает, а потом возвращается."],
       ["Часы тоже|{вибрируют.}", "Оповещения приходят как уведомления. Приложение для часов не нужно."],
-      ["Ваш прогресс|{как на ладони.}", "Серии, недельные итоги и личные рекорды."]
+      ["Ваш прогресс|{как на ладони.}", "Серии, недельные итоги и личные рекорды."],
+      ["Поделитесь|{пробежкой.}", "Результаты и маршрут на фото, созданном на вашем телефоне."]
     ],
     "tr-TR": [
       ["{Koş.}|Yürü.|Tekrarla.", "Kanepeden 5K'ya, ne zaman geçeceğini söyleyen uyarılarla."],
@@ -80,7 +88,8 @@
       ["Zor bir hafta mı?|{Bir adım geri.}", "Aynı antrenmanı iki kez erken bırakırsan C2K bir önceki haftayı önerir."],
       ["Uyarılar|müziğin {üstünde.}", "Ses, ton veya titreşim. Müzik kısılır, sonra geri gelir."],
       ["Saatin de|{titreşir.}", "Uyarılar bildirim olarak gelir. Saat uygulaması gerekmez."],
-      ["Ne kadar|ilerlediğini|{gör.}", "Seriler, haftalık toplamlar ve kişisel rekorlar."]
+      ["Ne kadar|ilerlediğini|{gör.}", "Seriler, haftalık toplamlar ve kişisel rekorlar."],
+      ["Koşunu|{paylaş.}", "İstatistiklerin ve rotan bir fotoğrafta, telefonunda hazırlanır."]
     ]
   }
 }

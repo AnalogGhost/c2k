@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -16,6 +17,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.hackerapps.c2k.C2KApp
 import com.hackerapps.c2k.R
+import com.hackerapps.c2k.data.db.entity.RoutePointEntity
 import com.hackerapps.c2k.data.db.entity.WorkoutSessionEntity
 import com.hackerapps.c2k.data.prefs.CueStyle
 import com.hackerapps.c2k.data.prefs.UserPreferences
@@ -28,6 +30,8 @@ import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.math.cos
+import kotlin.math.sin
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.locale.LocaleTestRule
@@ -61,7 +65,7 @@ private fun ComposeTestRule.waitUntilAssertion(timeoutMillis: Long = 15_000, ass
 
 /**
  * Drives the real app through MainActivity to capture the store-listing screenshots
- * (01_home .. 08_progression) via fastlane screengrab, across every locale in Screengrabfile.
+ * (01_home .. 09_share) via fastlane screengrab, across every locale in Screengrabfile.
  *
  * Not a correctness test — screen-by-screen behavior is already covered elsewhere in this
  * androidTest source set. This just needs the app to look right along one realistic path.
@@ -164,7 +168,26 @@ class ScreenshotTest {
         )
         sessionDao().insert(completedSession(week = 1, day = 1, startedAt = now - 14 * MS_PER_DAY))
         sessionDao().insert(completedSession(week = 1, day = 2, startedAt = now - 7 * MS_PER_DAY))
-        sessionDao().insert(completedSession(week = 1, day = 3, startedAt = now - 5 * MS_PER_HOUR))
+        val latest = sessionDao().insert(completedSession(week = 1, day = 3, startedAt = now - 5 * MS_PER_HOUR))
+        seedRoute(latest, startedAt = now - 5 * MS_PER_HOUR)
+    }
+
+    // An uneven loop round a park for the newest workout, so 09_share has a route outline to draw.
+    // Made-up points, nothing recorded.
+    private suspend fun seedRoute(sessionId: Long, startedAt: Long) {
+        val points = (0..360).map { i ->
+            val t = i / 360.0 * 2 * Math.PI
+            val r = 0.0042 + 0.0009 * sin(3 * t) + 0.0005 * cos(5 * t)
+            RoutePointEntity(
+                sessionId = sessionId,
+                latitude = 51.5045 + r * sin(t),
+                longitude = -0.1520 + 1.6 * r * cos(t),
+                altitudeMeters = null,
+                speedMps = 2.2f,
+                recordedAt = startedAt + i * 5_000L
+            )
+        }
+        (app() as C2KApp).database.routePointDao().insertAll(points)
     }
 
     // Two attempts at the next workout that ended early, which is what makes Home offer
@@ -244,6 +267,17 @@ class ScreenshotTest {
             composeRule.onNodeWithText(string(R.string.history_stats_pace)).assertExists()
         }
         capture("05_history")
+
+        // The share image for the newest workout, the first in the list.
+        composeRule.onAllNodesWithTag("history_share")[0].performScrollTo().performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("share_card_preview").assertExists()
+        }
+        capture("09_share")
+        composeRule.onNodeWithTag("share_card_close").performClick()
+        composeRule.waitUntilAssertion {
+            composeRule.onNodeWithTag("share_card_dialog").assertDoesNotExist()
+        }
         composeRule.onNodeWithContentDescription(string(R.string.nav_back)).performClick()
 
         composeRule.onNodeWithContentDescription(string(R.string.guide_title)).performClick()

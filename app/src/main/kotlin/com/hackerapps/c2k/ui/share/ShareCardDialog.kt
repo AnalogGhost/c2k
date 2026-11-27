@@ -90,10 +90,12 @@ fun ShareCardDialog(
     val scope = rememberCoroutineScope()
     var background by remember { mutableStateOf<ShareBackground>(ShareBackground.Photo(1)) }
     var customPhoto by remember { mutableStateOf<Bitmap?>(null) }
-    val route by produceState(emptyList<OutlinePoint>()) { value = loadRoute() }
+    // Null until loaded, so the first image already has the route rather than redrawing with it.
+    val route by produceState<List<OutlinePoint>?>(null) { value = loadRoute() }
     val rendered by produceState<Bitmap?>(null, background, customPhoto, route) {
+        val loaded = route ?: return@produceState
         value = withContext(Dispatchers.Default) {
-            ShareCardRenderer.render(context, stats, route, background, customPhoto)
+            ShareCardRenderer.render(context, stats, loaded, background, customPhoto)
         }
     }
     val thumbnails by produceState(emptyMap<Int, ImageBitmap>()) {
@@ -124,8 +126,8 @@ fun ShareCardDialog(
         Box(modifier = Modifier.fillMaxSize().testTag("share_card_dialog")) {
             Column(modifier = Modifier.fillMaxSize().systemBarsPadding().padding(vertical = 8.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 4.dp)) {
-                    IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.workout_done))
+                    IconButton(onClick = onDismiss, modifier = Modifier.testTag("share_card_close")) {
+                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.share_card_close))
                     }
                     Text(stringResource(R.string.share_card_title), style = MaterialTheme.typography.titleLarge)
                 }
@@ -134,7 +136,8 @@ fun ShareCardDialog(
                     contentAlignment = Alignment.Center
                 ) {
                     val image = rendered
-                    if (image == null) {
+                    // Waits for the picker's thumbnails too, so the preview never shows blank tiles.
+                    if (image == null || thumbnails.isEmpty()) {
                         CircularProgressIndicator()
                     } else {
                         Image(
