@@ -1,0 +1,2 @@
+• Yeni: herhangi bir antrenmanı süresi, mesafesi, temposu ve rotasıyla bir resim olarak paylaş. Kendi fotoğrafını, bir rengi, 13 hazır fotoğraftan birini veya şeffaf bir çıkartma seç.
+• Bir programı bitirdiğinde artık tüm programın toplamlarını ve sırada ne koşabileceğine dair bir öneri görüyorsun.
